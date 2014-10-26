@@ -72,7 +72,7 @@ namespace QuIDE.Properties {
         /// <summary>
         ///   Looks up a localized string similar to QuIDE - Quantum Integrated Development Environment
         ///Version: 1.0.0
-        ///2014.
+        ///© 2014 Joanna Patrzyk, Bartłomiej Patrzyk.
         /// </summary>
         public static string AboutText {
             get {
