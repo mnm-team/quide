@@ -1,0 +1,561 @@
+﻿<!--
+    This file is part of QuIDE.
+
+    QuIDE - The Quantum IDE
+    Copyright (C) 2014  Joanna Patrzyk, Bartłomiej Patrzyk
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see<http://www.gnu.org/licenses/> .
+ -->
+<Window x:Class="QuIDE.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"
+    xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+    xmlns:ae="http://icsharpcode.net/sharpdevelop/avalonedit"
+    xmlns:p="clr-namespace:QuIDE.Properties"
+    xmlns:Helpers="clr-namespace:QuIDE.Helpers"
+    xmlns:ViewModels="clr-namespace:QuIDE.ViewModels"
+    xmlns:Controls="clr-namespace:QuIDE.Controls"
+    xmlns:l="clr-namespace:QuIDE"
+    mc:Ignorable="d"
+    Title="QuIDE - Quantum Integrated Development Environment"
+    Closing="Window_Closing"
+        d:DesignWidth="1000"
+        Width="1000"
+        Height="500">
+
+    <Window.Resources>
+        <xcad:GenericTheme x:Key="GenericTheme" />
+        <Style x:Key="DefaultButton" TargetType="Button" />
+        <Style x:Key="FlatButton" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" TargetType="Button" />
+        <Style x:Key="FlatRadioButton" BasedOn="{StaticResource {x:Static ToolBar.RadioButtonStyleKey}}" TargetType="RadioButton" />
+        <Style x:Key="FlatComboBox" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}" TargetType="ComboBox" />
+    </Window.Resources>
+
+    <Window.CommandBindings>
+        <CommandBinding Command="New"
+                            Executed="New_Executed"
+                            CanExecute="Always_CanExecute"/>
+        <CommandBinding Command="Open"
+                            Executed="Open_Executed"
+                            CanExecute="Always_CanExecute"/>
+        <CommandBinding Command="Save"
+                            Executed="Save_Executed"
+                            CanExecute="Always_CanExecute"/>
+        <CommandBinding Command="SaveAs"
+                            Executed="SaveAs_Executed"
+                            CanExecute="Always_CanExecute"/>
+        <CommandBinding Command="{x:Static NavigationCommands.FirstPage}"
+                                                        Executed="Restart_Executed"
+                                                        CanExecute="Always_CanExecute"/>
+        <CommandBinding Command="{x:Static NavigationCommands.PreviousPage}"
+                                                        Executed="PrevStep_Executed"
+                                                        CanExecute="Always_CanExecute"/>
+        <CommandBinding Command="{x:Static NavigationCommands.NextPage}"
+                                                        Executed="NextStep_Executed"
+                                                        CanExecute="Always_CanExecute"/>
+        <CommandBinding Command="{x:Static NavigationCommands.LastPage}"
+                                                        Executed="RunToEnd_Executed"
+                                                        CanExecute="Always_CanExecute"/>
+        <CommandBinding Command="{x:Static ViewModels:HomeVM.CalculatorCommand}"
+                        Executed="Calculator_Executed"
+                        CanExecute="Always_CanExecute" />
+        <CommandBinding Command="{x:Static ViewModels:HomeVM.AboutCommand}"
+                        Executed="About_Executed"
+                        CanExecute="Always_CanExecute" />
+        
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Command="New" Key="N" Modifiers="Control"/>
+        <KeyBinding Command="Open" Key="O" Modifiers="Control"/>
+        <KeyBinding Command="Save" Key="S" Modifiers="Control"/>
+        <KeyBinding Command="SaveAs" Key="S" Modifiers="Control+Alt"/>
+        <KeyBinding Command="FirstPage" Key="F5" />
+        <KeyBinding Command="PreviousPage" Key="F6" />
+        <KeyBinding Command="NextPage" Key="F7" />
+        <KeyBinding Command="LastPage" Key="F8" />
+        <KeyBinding Command="FirstPage" Key="MediaStop" />
+        <KeyBinding Command="PreviousPage" Key="MediaPreviousTrack" />
+        <KeyBinding Command="NextPage" Key="MediaNextTrack" />
+        <KeyBinding Command="LastPage" Key="MediaPlayPause" />
+        <KeyBinding Command="{x:Static ViewModels:HomeVM.CalculatorCommand}"
+                    Key="K" Modifiers="Control" />
+    </Window.InputBindings>
+
+    <DockPanel  x:Name="LayoutRoot" 
+                d:DataContext="{Binding Source={d:DesignInstance Type=ViewModels:HomeVM, IsDesignTimeCreatable=True}}" >
+
+        <DockPanel 
+            DockPanel.Dock="Top"
+            LastChildFill="False">
+            <ToolBarTray DockPanel.Dock="Left">
+                <ToolBar>
+                    <Button Command="New" ToolTip="{x:Static p:Resources.New}">
+                        <Image Source="/QuIDE;component/Images/NewFile_6276.png" Width="16"/>
+                    </Button>
+                    <Button Command="Open" ToolTip="{x:Static p:Resources.Open}">
+                        <Image Source="/QuIDE;component/Images/Open_6529.png" Width="16"/>
+                    </Button>
+                    <Button Command="Save" ToolTip="{x:Static p:Resources.Save}">
+                        <Image Source="/QuIDE;component/Images/Save_6530.png" Width="16"/>
+                    </Button>
+                    <Button Command="SaveAs" ToolTip="{x:Static p:Resources.SaveAs}">
+                        <Image Source="/QuIDE;component/Images/SaveAs.png" Width="16"/>
+                    </Button>
+
+                    <Separator Margin="5,2"/>
+
+                    <Button Command="{Binding PrintCommand}" ToolTip="{x:Static p:Resources.Print}">
+                        <Image Source="/QuIDE;component/Images/Print_11009.png" Width="16"/>
+                    </Button>
+
+                    <Separator Margin="5,2"/>
+
+                    <Button Command="{Binding CutCommand}" ToolTip="{x:Static p:Resources.Cut}">
+                        <Image Source="/QuIDE;component/Images/Cut_6523.png" Width="16"/>
+                    </Button>
+                    <Button Command="{Binding CopyCommand}" ToolTip="{x:Static p:Resources.Copy}">
+                        <Image Source="/QuIDE;component/Images/Copy_6524.png" Width="16"/>
+                    </Button>
+                    <Button Command="{Binding PasteCommand}" ToolTip="{x:Static p:Resources.Paste}">
+                        <Image Source="/QuIDE;component/Images/Paste_6520.png" Width="16"/>
+                    </Button>
+
+                    <Separator Margin="5,2" />
+
+                    <Button Command="{Binding GenerateFromCodeCommand}" ToolTip="{x:Static p:Resources.GenerateFromCode}">
+                        <Border
+                            BorderBrush="DimGray"
+                            BorderThickness="1"
+                            Padding="3">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/QuIDE;component/Images/BuildSolution_104.png" Width="16" />
+                                <TextBlock Text="{x:Static p:Resources.ToCircuit}"
+                                                               Margin="0"/>
+                            </StackPanel>
+                        </Border>
+                    </Button>
+
+                    <Button Command="{Binding RunInConsoleCommand}" ToolTip="{x:Static p:Resources.RunInConsole}">
+                        <Border
+                            BorderBrush="DimGray"
+                            BorderThickness="1"
+                            Padding="3">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/QuIDE;component/Images/Console.png" Width="16" />
+                                <TextBlock Text="{x:Static p:Resources.InConsole}"
+                                                               Margin="0"/>
+                            </StackPanel>
+                        </Border>
+                    </Button>
+                </ToolBar>
+            </ToolBarTray>
+
+            <Button
+                DockPanel.Dock="Right"
+                ToolTip="{x:Static p:Resources.ShowAbout}"
+                Style="{StaticResource FlatButton}"
+                Command="{x:Static ViewModels:HomeVM.AboutCommand}">
+                <Border
+                            BorderBrush="DimGray"
+                            BorderThickness="1"
+                            Padding="3">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/QuIDE;component/Images/Information.png" Width="16" />
+                        <TextBlock Text="{x:Static p:Resources.About}"
+                                                               Margin="0"/>
+                    </StackPanel>
+                </Border>
+            </Button>
+
+            <Button
+                DockPanel.Dock="Right"
+                ToolTip="{x:Static p:Resources.ShowCalculator}"
+                Style="{StaticResource FlatButton}"
+                Command="{x:Static ViewModels:HomeVM.CalculatorCommand}">
+                <Border
+                            BorderBrush="DimGray"
+                            BorderThickness="1"
+                            Padding="3">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/QuIDE;component/Images/Calculator.png" Width="16" />
+                        <TextBlock Text="{x:Static p:Resources.Calculator}"
+                                                               Margin="0"/>
+                    </StackPanel>
+                </Border>
+            </Button>
+
+        </DockPanel>
+        
+        
+        
+
+        <xcad:DockingManager
+            AllowMixedOrientation="True">
+            <xcad:LayoutRoot>
+                <xcad:LayoutPanel Orientation="Horizontal">
+                    <xcad:LayoutPanel Orientation="Vertical" DockWidth="700">
+
+                        <xcad:LayoutDocumentPane
+                            x:Name="DocumentPane"
+                            DockHeight="250">
+                        </xcad:LayoutDocumentPane>
+
+                        <xcad:LayoutAnchorablePane DockHeight="250">
+                            <xcad:LayoutAnchorable Title="{x:Static p:Resources.CircuitDesigner}"
+                                                   CanClose="False" 
+                                                   CanHide="False"
+                                                   x:Name="CircuitTab">
+                                <DockPanel>
+                                    <DockPanel.CommandBindings>
+                                        <CommandBinding Command="Cut"
+                                                        Executed="Cut_Executed"
+                                                        CanExecute="Always_CanExecute"/>
+                                        <CommandBinding Command="Copy"
+                                                        Executed="Copy_Executed"
+                                                        CanExecute="Always_CanExecute"/>
+                                        <CommandBinding Command="Paste"
+                                                        Executed="Paste_Executed"
+                                                        CanExecute="Always_CanExecute"/>
+                                        <CommandBinding Command="Delete"
+                                                        Executed="Delete_Executed"
+                                                        CanExecute="Always_CanExecute"/>
+                                    </DockPanel.CommandBindings>
+                                    <DockPanel.InputBindings>
+                                        <KeyBinding Command="Cut" Key="X" Modifiers="Ctrl"/>
+                                        <KeyBinding Command="Copy" Key="C" Modifiers="Ctrl"/>
+                                        <KeyBinding Command="Paste" Key="V" Modifiers="Ctrl"/>
+                                        <KeyBinding Command="Delete" Key="Delete" />
+                                        
+                                    </DockPanel.InputBindings>
+                                    
+                                    <ToolBarTray DockPanel.Dock="Top">
+
+                                        <ToolBar Band="0" >
+
+                                            <Button x:Name="restart" ToolTip="{x:Static p:Resources.Restart}"
+                                                    PreviewGotKeyboardFocus="restart_PreviewGotKeyboardFocus">
+                                                <Image Source="/QuIDE;component/Images/GotoFirstRow_287.png" Width="16"/>
+                                            </Button>
+                                            <Button x:Name="prev" ToolTip="{x:Static p:Resources.PrevStep}"
+                                                    PreviewGotKeyboardFocus="prev_PreviewGotKeyboardFocus">
+                                                <Image Source="/QuIDE;component/Images/MovePrevious_7195.png" Width="16"/>
+                                            </Button>
+                                            <Button x:Name="next" ToolTip="{x:Static p:Resources.NextStep}"
+                                                    PreviewGotKeyboardFocus="next_PreviewGotKeyboardFocus">
+                                                <Image Source="/QuIDE;component/Images/GotoNextRow_289.png" Width="16" />
+                                            </Button>
+                                            <Button x:Name="run" ToolTip="{x:Static p:Resources.Run}"
+                                                    PreviewGotKeyboardFocus="run_PreviewGotKeyboardFocus">
+                                                <Image Source="/QuIDE;component/Images/GotoLastRow_288.png" Width="16" />
+                                            </Button>
+
+                                            <Separator Margin="5,2"/>
+
+                                            <Button x:Name="generateCode" ToolTip="{x:Static p:Resources.GenerateCode}"
+                                                    Click="generateCode_Click">
+                                                <Border
+                                                    BorderBrush="DimGray"
+                                                    BorderThickness="1"
+                                                    Padding="3">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image Source="/QuIDE;component/Images/ResultstoFile_9946.png" Width="16" />
+                                                        <TextBlock Text="{x:Static p:Resources.ToCode}"
+                                                               Margin="0"/>
+                                                    </StackPanel>
+                                                </Border>
+                                            </Button>
+                                        </ToolBar>
+
+                                        <ToolBar Band="0" BandIndex="1">
+                                            <Button x:Name="clear" ToolTip="{x:Static p:Resources.ClearCircuit}"
+                                                    PreviewGotKeyboardFocus="clear_PreviewGotKeyboardFocus">
+                                                <Border BorderBrush="DimGray"
+                                                        BorderThickness="1">
+                                                    <TextBlock Text="{x:Static p:Resources.ClearAll}"
+                                                               Margin="3"/>
+                                                </Border>
+                                            </Button>
+
+                                            <Button x:Name="delete" ToolTip="{x:Static p:Resources.ClearSelection}"
+                                                    PreviewGotKeyboardFocus="delete_PreviewGotKeyboardFocus">
+                                                <Image Source="/QuIDE;component/Images/Clearallrequests_8816.png" Width="16" Margin="2"/>
+                                            </Button>
+
+                                            <Button x:Name="cut" ToolTip="{x:Static p:Resources.Cut}"
+                                                    PreviewGotKeyboardFocus="cut_PreviewGotKeyboardFocus">
+                                                <Image Source="/QuIDE;component/Images/Cut_6523.png" Width="16"/>
+                                            </Button>
+                                            <Button x:Name="copy" ToolTip="{x:Static p:Resources.Copy}"
+                                                    PreviewGotKeyboardFocus="copy_PreviewGotKeyboardFocus">
+                                                <Image Source="/QuIDE;component/Images/Copy_6524.png" Width="16"/>
+                                            </Button>
+                                            <Button x:Name="paste" ToolTip="{x:Static p:Resources.Paste}"
+                                                    PreviewGotKeyboardFocus="paste_PreviewGotKeyboardFocus">
+                                                <Image Source="/QuIDE;component/Images/Paste_6520.png" Width="16"/>
+                                            </Button>
+                                        </ToolBar>
+
+                                        <ToolBar Band="1">
+                                            <!--<RadioButton 
+                                                GroupName="Actions" 
+                                                IsChecked="True"
+                                                CommandParameter="Pointer"
+                                                PreviewGotKeyboardFocus="RadioButton_PreviewGotKeyboardFocus"
+                                                ToolTip="{x:Static p:Resources.Pointer}">
+                                                <Image Source="/QuIDE;component/Images/PointerHS.png" Width="16" Margin="2"/>
+                                            </RadioButton>-->
+                                            <RadioButton 
+                                                IsChecked="True"
+                                                GroupName="Actions" 
+                                                CommandParameter="Selection"
+                                                PreviewGotKeyboardFocus="RadioButton_PreviewGotKeyboardFocus"
+                                                ToolTip="{x:Static p:Resources.Selection}">
+                                                <Image Source="/QuIDE;component/Images/Pointer_6127.png" Width="16" Margin="2"/>
+                                            </RadioButton>
+                                            <RadioButton GroupName="Actions"
+                                                         CommandParameter="Empty"
+                                                         PreviewGotKeyboardFocus="RadioButton_PreviewGotKeyboardFocus"
+                                                         ToolTip="{x:Static p:Resources.EraseGate}">
+                                                <Image Source="/QuIDE;component/Images/Clearallrequests_8816.png" Width="16" Margin="2"/>
+                                            </RadioButton>
+                                            <RadioButton GroupName="Actions"
+                                                         CommandParameter="Hadamard"
+                                                         PreviewGotKeyboardFocus="RadioButton_PreviewGotKeyboardFocus"
+                                                         ToolTip="{x:Static p:Resources.Hadamard}">
+                                                <Rectangle Width="28" Height="20"
+                               Fill="{StaticResource ToolH}" />
+                                            </RadioButton>
+                                            <RadioButton GroupName="Actions"
+                                                         CommandParameter="Control"
+                                                         PreviewGotKeyboardFocus="RadioButton_PreviewGotKeyboardFocus"
+                                                         ToolTip="{x:Static p:Resources.AddControl}">
+                                                <Rectangle Width="28" Height="20"
+                        Fill="{StaticResource ToolC}" />
+                                            </RadioButton>
+                                            <RadioButton GroupName="Actions"
+                                                         CommandParameter="SigmaX"
+                                                         PreviewGotKeyboardFocus="RadioButton_PreviewGotKeyboardFocus"
+                                                         ToolTip="{x:Static p:Resources.SigmaX}">
+                                                <Rectangle Width="28" Height="20"
+                               Fill="{StaticResource ToolX}" />
+                                            </RadioButton>
+                                            <RadioButton GroupName="Actions"
+                                                         CommandParameter="SigmaY"
+                                                         PreviewGotKeyboardFocus="RadioButton_PreviewGotKeyboardFocus"
+                                                         ToolTip="{x:Static p:Resources.SigmaY}">
+                                                <Rectangle Width="28" Height="20"
+                               Fill="{StaticResource ToolY}" />
+                                            </RadioButton>
+                                            <RadioButton GroupName="Actions"
+                                                         CommandParameter="SigmaZ"
+                                                         PreviewGotKeyboardFocus="RadioButton_PreviewGotKeyboardFocus"
+                                                         ToolTip="{x:Static p:Resources.SigmaZ}">
+                                                <Rectangle Width="28" Height="20"
+                        Fill="{StaticResource ToolZ}" />
+                                            </RadioButton>
+                                            <RadioButton GroupName="Actions"
+                                                         CommandParameter="SqrtX"
+                                                         PreviewGotKeyboardFocus="RadioButton_PreviewGotKeyboardFocus"
+                                                         ToolTip="{x:Static p:Resources.SqrtX}">
+                                                <Rectangle Width="28" Height="20"
+                        Fill="{StaticResource ToolSqrtX}" />
+                                            </RadioButton>
+                                            <RadioButton GroupName="Actions"
+                                                         CommandParameter="RotateX"
+                                                         PreviewGotKeyboardFocus="RadioButton_PreviewGotKeyboardFocus"
+                                                         ToolTip="{x:Static p:Resources.RotateX}">
+                                                <Rectangle Width="28" Height="20"
+                        Fill="{StaticResource ToolRotateX}" />
+                                            </RadioButton>
+                                            <RadioButton GroupName="Actions"
+                                                         CommandParameter="RotateY"
+                                                         PreviewGotKeyboardFocus="RadioButton_PreviewGotKeyboardFocus"
+                                                         ToolTip="{x:Static p:Resources.RotateY}">
+                                                <Rectangle Width="28" Height="20"
+                        Fill="{StaticResource ToolRotateY}" />
+                                            </RadioButton>
+                                            <RadioButton GroupName="Actions"
+                                                         CommandParameter="RotateZ"
+                                                         PreviewGotKeyboardFocus="RadioButton_PreviewGotKeyboardFocus"
+                                                         ToolTip="{x:Static p:Resources.RotateZ}">
+                                                <Rectangle Width="28" Height="20"
+                        Fill="{StaticResource ToolRotateZ}" />
+                                            </RadioButton>
+                                            <RadioButton GroupName="Actions"
+                                                         CommandParameter="PhaseKick"
+                                                         PreviewGotKeyboardFocus="RadioButton_PreviewGotKeyboardFocus"
+                                                         ToolTip="{x:Static p:Resources.PhaseKick}">
+                                                <Rectangle Width="28"
+                               Height="20"
+                        Fill="{StaticResource ToolPhaseKick}" />
+                                            </RadioButton>
+                                            <RadioButton GroupName="Actions"
+                                                         CommandParameter="PhaseScale"
+                                                         PreviewGotKeyboardFocus="RadioButton_PreviewGotKeyboardFocus"
+                                                         ToolTip="{x:Static p:Resources.PhaseScale}">
+                                                <Rectangle Width="28"
+                               Height="20"
+                        Fill="{StaticResource ToolPhaseScale}" />
+                                            </RadioButton>
+                                            <RadioButton GroupName="Actions"
+                                                         CommandParameter="CPhaseShift"
+                                                         PreviewGotKeyboardFocus="RadioButton_PreviewGotKeyboardFocus"
+                                                         ToolTip="{x:Static p:Resources.CPhaseShift}">
+                                                <Rectangle Width="28"
+                               Height="20"
+                        Fill="{StaticResource ToolCPhaseShift}" />
+                                            </RadioButton>
+                                            <RadioButton GroupName="Actions"
+                                                         CommandParameter="InvCPhaseShift"
+                                                         PreviewGotKeyboardFocus="RadioButton_PreviewGotKeyboardFocus"
+                                                         ToolTip="{x:Static p:Resources.InvCPhaseShift}">
+                                                <Rectangle Width="28"
+                               Height="20"
+                        Fill="{StaticResource ToolInvCPhaseShift}" />
+                                            </RadioButton>
+                                            <RadioButton GroupName="Actions"
+                                                         CommandParameter="Unitary"
+                                                         PreviewGotKeyboardFocus="RadioButton_PreviewGotKeyboardFocus"
+                                                         ToolTip="{x:Static p:Resources.Unitary}">
+                                                <Rectangle Width="28"
+                               Height="20"
+                        Fill="{StaticResource ToolU}" />
+                                            </RadioButton>
+                                            <RadioButton GroupName="Actions"
+                                                         CommandParameter="Measure"
+                                                         PreviewGotKeyboardFocus="RadioButton_PreviewGotKeyboardFocus"
+                                                         ToolTip="{x:Static p:Resources.Measure}">
+                                                <Rectangle Width="28"
+                               Height="20"
+                        Fill="{StaticResource ToolMeasure}" />
+                                            </RadioButton>
+                                        </ToolBar>
+                                        <ToolBar Band="0" BandIndex="2">
+                                            <RadioButton 
+                                                GroupName="Actions" 
+                                                CommandParameter="Ungroup"
+                                                PreviewGotKeyboardFocus="RadioButton_PreviewGotKeyboardFocus"
+                                                ToolTip="{x:Static p:Resources.UngroupTip}">
+                                                <Border BorderBrush="DimGray"
+                                                        BorderThickness="1">
+                                                    <TextBlock Text="{x:Static p:Resources.Ungroup}"
+                                                               Margin="3"/>
+                                                </Border>
+                                            </RadioButton>
+
+                                            <Button 
+                                                x:Name="group"
+                                                PreviewGotKeyboardFocus="group_PreviewGotKeyboardFocus"
+                                                ToolTip="{x:Static p:Resources.GroupTip}">
+                                                <Border BorderBrush="DimGray"
+                                                        BorderThickness="1">
+                                                    <TextBlock Text="{x:Static p:Resources.Group}"
+                                                               Margin="3"/>
+                                                </Border>
+                                            </Button>
+
+                                            <Separator Margin="5,2" />
+                                            
+                                            <RadioButton GroupName="Actions"
+                                                     x:Name="compositeTool"
+                                                         ToolTip="{x:Static p:Resources.Composite}"
+                                                         Checked="compositeTool_Checked">
+                                                <Grid>
+                                                    <ComboBox
+                                                                    x:Name="cb"
+                                                                    Height="20"
+                                                                    Width="170"
+                                                                    ItemsSource="{Binding CompositeTools}"
+                                                                    Style="{StaticResource FlatComboBox}"
+                                                                    IsTextSearchCaseSensitive="False"
+                                                        SelectionChanged="compositeTool_SelectionChanged">
+                                                    </ComboBox>
+                                                    <TextBlock 
+                                                        x:Name="tb"
+                                                        VerticalAlignment="Center"
+                                                        IsHitTestVisible="False"
+                                                        Padding="3"
+                                                        Text="{x:Static p:Resources.SelectCompositeGate}">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding ElementName=cb, Path=SelectedItem}" Value="{x:Null}">
+                                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </Grid>
+                                            </RadioButton>
+                                        </ToolBar>
+                                    </ToolBarTray>
+                                    <Controls:CircuitGrid x:Name="circuitGrid" DataContext="{Binding CircuitGrid}"
+                                           HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" />
+                                </DockPanel>
+                            </xcad:LayoutAnchorable>
+
+                            <xcad:LayoutAnchorable Title="{x:Static p:Resources.ConsoleOutput}"
+                                                   CanClose="False"
+                                                   CanHide="False"
+                                                   x:Name="ConsoleTab">
+                                <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                                    <TextBox
+                                        IsReadOnly="True"
+                                        Text="{Binding ConsoleOutput, Mode=OneWay}"
+                                        FontFamily="Consolas"
+                                        Background="{DynamicResource {x:Static SystemColors.InfoBrushKey}}"
+                                        Foreground="{DynamicResource {x:Static SystemColors.InfoTextBrushKey}}"/>
+                                </ScrollViewer>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+
+                    </xcad:LayoutPanel>
+                    <xcad:LayoutPanel Orientation="Vertical" 
+                                      DockWidth="300">
+
+                        <xcad:LayoutAnchorablePane DockHeight=".9*">
+                            <xcad:LayoutAnchorable CanClose="False" 
+                                               CanHide="False"
+                                               Title="{x:Static p:Resources.Output}">
+                                <Controls:OutputGrid x:Name="outputGrid" DataContext="{Binding OutputGrid}"
+                                           HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" />
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+
+                        <xcad:LayoutAnchorablePane DockHeight="240">
+                            <xcad:LayoutAnchorable CanClose="False" 
+                                               CanHide="False"
+                                               Title="{x:Static p:Resources.Properties}">
+                                <ScrollViewer>
+                                    <Controls:PropertiesPane 
+                                    x:Name="propertiesPane" 
+                                    DataContext="{Binding PropertiesPane}"
+                                    HorizontalAlignment="Stretch" 
+                                    Margin="0" 
+                                    VerticalAlignment="Stretch" />
+                                </ScrollViewer>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+                    </xcad:LayoutPanel>
+
+                </xcad:LayoutPanel>
+
+            </xcad:LayoutRoot>
+        </xcad:DockingManager>
+    </DockPanel>
+</Window>

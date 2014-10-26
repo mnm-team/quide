@@ -1,0 +1,606 @@
+﻿<!--
+    This file is part of QuIDE.
+
+    QuIDE - The Quantum IDE
+    Copyright (C) 2014  Joanna Patrzyk, Bartłomiej Patrzyk
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see<http://www.gnu.org/licenses/> .
+ -->
+
+<UserControl x:Class="QuIDE.Controls.PropertiesPane"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:p="clr-namespace:QuIDE.Properties"
+    xmlns:ViewModels="clr-namespace:QuIDE.ViewModels"
+    xmlns:Controls="clr-namespace:QuIDE.Controls"
+    xmlns:Helpers="clr-namespace:QuIDE.Helpers"
+    mc:Ignorable="d"
+             UseLayoutRounding="True">
+
+    <UserControl.Resources>
+        <Helpers:AmplitudeColorConverter x:Key="AmplitudeToColor" />
+        <Helpers:ComplexConverter x:Key="ComplexToString" />
+        <Style x:Key="DefaultButton" TargetType="Button" />
+        <Style x:Key="FlatRadioButton" BasedOn="{StaticResource {x:Static ToolBar.RadioButtonStyleKey}}" TargetType="RadioButton" />
+        <Style x:Key="FlatButton" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" TargetType="Button" />
+        <Style x:Key="FlatComboBox" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}" TargetType="ComboBox" />
+    </UserControl.Resources>
+
+    <Grid x:Name="LayoutRoot"
+          Background="White"
+          d:DataContext="{Binding Source={d:DesignInstance Type=ViewModels:PropertiesVM, IsDesignTimeCreatable=True}}">
+        <Grid x:Name="StatePane"
+              Visibility="{Binding StatePaneVisibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="{x:Static p:Resources.Value}"
+               Margin="3"
+                       Grid.Column="0"
+                       Grid.Row="1"
+               HorizontalAlignment="Left"/>
+            <TextBlock Text="{Binding Value}"
+                   Margin="3"
+                   Grid.Column="1"
+                   Grid.Row="1"
+                   HorizontalAlignment="Left"/>
+            <TextBlock Text="{x:Static p:Resources.Qubits}"
+                   Margin="3"
+                   Grid.Column="0"
+                   Grid.Row="2"
+                   HorizontalAlignment="Left"/>
+            <TextBlock Text="{Binding Qubits}"
+                   Margin="3"
+                   Grid.Column="1"
+                   Grid.Row="2"
+                   HorizontalAlignment="Left"/>
+            <TextBlock Text="{x:Static p:Resources.Probability}"
+                   Margin="3"
+                   Grid.Column="0"
+                   Grid.Row="3"
+                   HorizontalAlignment="Left"/>
+            <TextBlock Text="{Binding Probability}"
+                   Margin="3"
+                   Grid.Column="1"
+                   Grid.Row="3"
+                   HorizontalAlignment="Left"/>
+            <TextBlock Text="{x:Static p:Resources.Amplitude}"
+                   Visibility="{Binding AmplitudeVisibility}"
+                       Margin="3"
+                   Grid.Column="0"
+                   Grid.Row="4"
+                   HorizontalAlignment="Left"/>
+            <TextBlock Text="{Binding Amplitude}"
+                       Visibility="{Binding AmplitudeVisibility}"
+                   Margin="3"
+                   Grid.Column="1"
+                   Grid.Row="4"
+                   HorizontalAlignment="Left"/>
+            <Canvas  
+                Visibility="{Binding AmplitudeVisibility}"
+                Grid.Row="0"
+                 Grid.ColumnSpan="2"
+                 Width="180"
+                 Height="180"
+                 Background="{DynamicResource ComplexPlane}"
+                 Opacity="0.75"
+                 Margin="5">
+                <Line 
+                Canvas.Top="90"
+                Canvas.Left="90"
+                Stroke="Black"
+                  StrokeStartLineCap="Round"
+                  StrokeEndLineCap="Triangle"
+                  StrokeThickness="4"
+                  X1="0"
+                  Y1="0"
+                  X2="{Binding LineX2}"
+                  Y2="{Binding LineY2}" />
+                <Polygon 
+                Canvas.Top="90"
+                Canvas.Left="90"
+                Points="60,-6 75,0, 60,6" 
+                Stroke="Black" 
+                Fill="Black">
+                    <Polygon.RenderTransform>
+                        <RotateTransform Angle="{Binding Phase}" />
+                    </Polygon.RenderTransform>
+                </Polygon>
+            </Canvas>
+
+        </Grid>
+
+        <Grid x:Name="RotateGatePane"
+              Visibility="{Binding RotateGateVisibility}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="10" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
+            <TextBlock
+                Grid.ColumnSpan="2"
+                Margin="5,3"
+                Text="{x:Static p:Resources.AngleValue}" />
+
+            <RadioButton
+                x:Name="Deg"
+                Grid.Column="2"
+                    GroupName="Unit"
+                    IsChecked="True"
+                Command="{Binding SelectUnitCommand}"
+                CommandParameter="Deg"
+                    Content=" [ &#x00b0; ] "
+                    Style="{StaticResource FlatRadioButton}">
+            </RadioButton>
+            <RadioButton
+                Grid.Column="3"
+                    GroupName="Unit"
+                    IsChecked="{Binding Rad, Mode=TwoWay}"
+                Command="{Binding SelectUnitCommand}"
+                CommandParameter="Rad"
+                    Content="[rad]"
+                    Style="{StaticResource FlatRadioButton}">
+            </RadioButton>
+
+            <Grid
+                Grid.Row="1"
+                Grid.ColumnSpan="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                Margin="5,3"
+                VerticalAlignment="Center"
+                    FontFamily="Times New Roman"
+                    FontStyle="Italic"
+                    Text="&#x03b3; = "/>
+                <TextBox
+                Margin="0,3"
+                Grid.Column="1"
+                Text="{Binding Gamma, Mode=TwoWay}" />
+                <ComboBox
+                Margin="1,3"
+                Padding="10,0"
+                Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
+                Grid.Column="2"
+                SelectionChanged="ComboBox_SelectionChanged"
+                    FontFamily="Times New Roman"
+                    FontStyle="Italic"
+                >
+                    <ComboBoxItem
+                        Content="{x:Static p:Resources.Pi}"/>
+                    <ComboBoxItem
+                        Content="{x:Static p:Resources.Pi_2}"/>
+                    <ComboBoxItem
+                        Content="{x:Static p:Resources.Pi_3}"/>
+                    <ComboBoxItem
+                        Content="{x:Static p:Resources.Pi_4}"/>
+                    <ComboBoxItem
+                        Content="{x:Static p:Resources.Pi_6}"/>
+                    <ComboBoxItem
+                        Content="{x:Static p:Resources.Pi_8}"/>
+                </ComboBox>
+            </Grid>
+            <Button
+                x:Name="ApplyGamma"
+                Grid.Row="2"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                Margin="0, 3"
+                Style="{StaticResource DefaultButton}"
+                Content="{x:Static p:Resources.Apply}"
+                Command="{Binding ApplyGammaCommand}"/>
+            <TextBlock
+                Grid.Row="3"
+                Grid.ColumnSpan="3"
+                Margin="5, 10, 5, 10"
+                Text="{x:Static p:Resources.OperationMatrix}" />
+            <Image
+                Margin="5,0"
+                Stretch="None"
+                HorizontalAlignment="Left"
+                Grid.Row="4"
+                Grid.ColumnSpan="5"
+                RenderOptions.BitmapScalingMode="NearestNeighbor"
+                Source="{Binding ImageSource}" 
+                /> 
+            
+        </Grid>
+
+        <Grid x:Name="PhaseShiftPane"
+              Visibility="{Binding PhaseShiftVisibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="10" />
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock
+                Margin="5,3"
+                Grid.Row="0"
+                VerticalAlignment="Center"
+                    FontFamily="Times New Roman"
+                    FontStyle="Italic"
+                    Text="k = "/>
+            <TextBox
+                Margin="3"
+                Grid.Row="0"
+                Grid.Column="1"
+                Grid.ColumnSpan="2"
+                Text="{Binding PhaseDist, Mode=TwoWay}" />
+
+            <Button
+                Grid.Row="1"
+                Grid.Column="2"
+                Margin="3"
+                Content="{x:Static p:Resources.Apply}"
+                Command="{Binding ApplyDistCommand}"
+                Style="{StaticResource DefaultButton}"
+                Width="{Binding ElementName=ApplyGamma, Path=ActualWidth}"/>
+
+            <TextBlock
+                Grid.Row="2"
+                Grid.ColumnSpan="2"
+                Margin="5, 10, 5, 10"
+                Text="{x:Static p:Resources.OperationMatrix}" />
+
+            <Image
+                Grid.Row="3"
+                Grid.ColumnSpan="4"
+                Margin="5,0"
+                Stretch="None"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                RenderOptions.BitmapScalingMode="NearestNeighbor"
+                Source="{Binding ImageSource}" 
+                />
+        </Grid>
+
+        <Grid x:Name="GatePane"
+              Visibility="{Binding GatePaneVisibility}">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Margin="5, 10, 5, 10"
+                Text="{x:Static p:Resources.OperationMatrix}" />
+
+            <Image
+                Grid.Row="1"
+                Margin="5,0"
+                Stretch="None"
+                MaxWidth="300"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                RenderOptions.BitmapScalingMode="NearestNeighbor"
+                Source="{Binding ImageSource}" 
+                />
+        </Grid>
+        
+        <Grid x:Name="UnitaryPane"
+              Visibility="{Binding UnitaryPaneVisibility}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock 
+                Text="{x:Static p:Resources.OperationMatrix}" 
+                Margin="2"
+                Grid.ColumnSpan="4"/>
+            
+            <TextBlock
+                Grid.Row="1"
+                Grid.RowSpan="2"
+                Margin="2"
+                VerticalAlignment="Center"
+                FontFamily="Times New Roman"
+                FontStyle="Italic"
+                Text="U = " />
+            
+            <TextBox x:Name="a00" 
+                     MinWidth="100"
+                     Margin="2"
+                     Grid.Row="1"
+                     Grid.Column="1"
+                     TextChanged="a_TextChanged">
+                <TextBox.Text>
+                    <Binding Path="A00Text" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <ViewModels:ComplexValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox x:Name="a01" 
+                     MinWidth="100"
+                     Margin="2"
+                     Grid.Row="1"
+                     Grid.Column="2"
+                     TextChanged="a_TextChanged">
+                <TextBox.Text>
+                    <Binding Path="A01Text" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <ViewModels:ComplexValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox x:Name="a10" 
+                     MinWidth="100"
+                     Margin="2"
+                     Grid.Row="2"
+                     Grid.Column="1"
+                     TextChanged="a_TextChanged">
+                <TextBox.Text>
+                    <Binding Path="A10Text" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <ViewModels:ComplexValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox x:Name="a11" 
+                     MinWidth="100"
+                     Margin="2"
+                     Grid.Row="2"
+                     Grid.Column="2"
+                     TextChanged="a_TextChanged">
+                <TextBox.Text>
+                    <Binding Path="A11Text" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <ViewModels:ComplexValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            
+            <TextBlock
+                Grid.Row="3"
+                Grid.ColumnSpan="4"
+                Margin="0,5"
+                Foreground="Red"
+                Text="{Binding ValidationMessage}" />
+            
+            <StackPanel
+                Margin="2,20,2,2"
+                HorizontalAlignment="Right"
+                Grid.Row="4"
+                Grid.ColumnSpan="4"
+                Orientation="Horizontal">
+                <Button
+                    x:Name="ApplyButton"
+                    Margin="2,0"
+                    IsEnabled="False"
+                    Content="{x:Static p:Resources.Apply}"
+                    Command="{Binding ApplyMatrixCommand}"
+                    Style="{StaticResource DefaultButton}"
+                    Width="{Binding ElementName=ApplyGamma, Path=ActualWidth}">
+                </Button>
+                <Button
+                    Margin="2,0"
+                    Content="{x:Static p:Resources.Cancel}"
+                    Command="{Binding CancelMatrixCommand}"
+                    Style="{StaticResource DefaultButton}"
+                    Width="{Binding ElementName=ApplyGamma, Path=ActualWidth}"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid x:Name="CompositePane"
+              Visibility="{Binding CompositePaneVisibility}">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="10"/>
+            </Grid.ColumnDefinitions>
+
+
+            <StackPanel 
+            Grid.Row="0"
+                Grid.Column="1"
+                Grid.ColumnSpan="4"
+            Orientation="Vertical">
+                <TextBlock 
+                    Margin="0,3"
+                HorizontalAlignment="Stretch"
+                Text="{x:Static p:Resources.SelectMethod}" />
+                <ListBox
+                x:Name="methodBox"
+                    Margin="0,3"
+                HorizontalAlignment="Stretch"
+            ItemsSource="{Binding Candidates}"
+            SelectionMode="Single"
+            SelectionChanged="methodBox_SelectionChanged"/>
+            </StackPanel>
+
+            <ItemsControl
+                Grid.Row="1"
+                Grid.Column="3"
+            ItemsSource="{Binding Parameters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBox 
+                            Height="23"
+                            Margin="0, 3"
+                            HorizontalAlignment="Stretch"
+                            Text="{Binding ValueString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <ItemsControl
+                Grid.Row="1"
+                Grid.Column="4"
+            ItemsSource="{Binding Parameters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button 
+                            Click="addParam_Click"
+                            Height="23"
+                            Margin="3,3,0,3"
+                            Style="{StaticResource DefaultButton}"
+                                Visibility="{Binding VarParamsVisibility}"
+                                Content="{x:Static p:Resources.AddParam}"
+                                Width="Auto"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <ItemsControl
+                Grid.Row="1"
+                Grid.Column="1"
+            ItemsSource="{Binding Parameters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock 
+                            Height="23"
+                            VerticalAlignment="Center"
+                            Margin="0, 3"
+                            Text="{Binding TypeString}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <ItemsControl
+                Grid.Row="1"
+                Grid.Column="2"
+            ItemsSource="{Binding Parameters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock 
+                            Height="23"
+                            VerticalAlignment="Center"
+                            Margin="10, 3"
+                            Text="{Binding Name}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Rectangle
+                x:Name="widthRef"
+                Grid.Row="2"
+                Grid.Column="1"
+                Grid.ColumnSpan="4" />
+
+            <ItemsControl
+                Grid.Row="2"
+                Grid.Column="1"
+                Grid.ColumnSpan="3"
+                ItemsSource="{Binding Parameters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" 
+                                    Width="{Binding ElementName=widthRef, Path=ActualWidth}"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock
+                            Margin="0, 3"
+                            TextWrapping="Wrap"
+                            Foreground="Red"
+                            Text="{Binding ValidationMessage}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Button
+                Grid.Row="2"
+                Grid.Column="4"
+                VerticalAlignment="Top"
+                    Margin="2,0"
+                    IsEnabled="{Binding IsValid}"
+                    Content="{x:Static p:Resources.Apply}"
+                    Command="{Binding ApplyParamsCommand}"
+                    Style="{StaticResource DefaultButton}">
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>

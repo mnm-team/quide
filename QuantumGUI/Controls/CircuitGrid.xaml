@@ -1,0 +1,281 @@
+﻿<!--
+    This file is part of QuIDE.
+
+    QuIDE - The Quantum IDE
+    Copyright (C) 2014  Joanna Patrzyk, Bartłomiej Patrzyk
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see<http://www.gnu.org/licenses/> .
+ -->
+
+<UserControl x:Class="QuIDE.Controls.CircuitGrid"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:p="clr-namespace:QuIDE.Properties"
+    xmlns:ViewModels="clr-namespace:QuIDE.ViewModels"
+    xmlns:Controls="clr-namespace:QuIDE.Controls"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <Style x:Key="DefaultButton" TargetType="Button" />
+    </UserControl.Resources>
+
+    <Grid x:Name="LayoutRoot" Background="White"
+          d:DataContext="{Binding Source={d:DesignInstance Type=ViewModels:CircuitGridVM, IsDesignTimeCreatable=True}}"
+          PreviewMouseWheel="LayoutRoot_PreviewMouseWheel">
+
+        <Border Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+            <Grid x:Name="mainGrid" Background="White">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <ScrollViewer x:Name="RegisterScroll"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Hidden"
+                              ScrollChanged="RegisterScroll_ScrollChanged">
+                    <StackPanel Orientation="Vertical">
+                        <ItemsControl x:Name="registerItemsControl" Background="White" Grid.Column="0" ItemsSource="{Binding Registers}" 
+                              Margin="0,0,0,0">
+                            <ItemsControl.LayoutTransform>
+                                <ScaleTransform CenterX="0" CenterY="0"
+                            ScaleX="{Binding ScaleFactor}" ScaleY="{Binding ScaleFactor}" />
+                            </ItemsControl.LayoutTransform>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,0,0">
+                                    </StackPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <ItemsControl ItemsSource="{Binding Qubits}" 
+                                              Margin="0">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                                                    Margin="0" Background="White">
+                                                    <StackPanel.RenderTransform>
+                                                        <ScaleTransform ScaleX="1" ScaleY="-1" 
+                                                                CenterY="{Binding ScaleCenterY}"/>
+                                                    </StackPanel.RenderTransform>
+                                                </StackPanel>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal"
+                                                            Background="#FFFFFFFF"
+                                                            IsEnabled="{Binding IsEnabled}">
+                                                    <StackPanel.ContextMenu>
+                                                        <ContextMenu>
+                                                            <MenuItem Header="{x:Static p:Resources.Edit}"
+                                                                      Command="{Binding EditRegisterCommand}"/>
+                                                            <MenuItem Header="{x:Static p:Resources.InsertQubitAbove}"
+                                                                      Command="{Binding InsertQubitAboveCommand}"/>
+                                                            <MenuItem Header="{x:Static p:Resources.InsertQubitBelow}"
+                                                                      Command="{Binding InsertQubitBelowCommand}"/>
+                                                            <MenuItem Header="{x:Static p:Resources.InsertRegisterAbove}"
+                                                                      Command="{Binding InsertRegisterAboveCommand}"/>
+                                                            <MenuItem Header="{x:Static p:Resources.InsertRegisterBelow}"
+                                                                      Command="{Binding InsertRegisterBelowCommand}"/>
+                                                            <Separator />
+                                                            <MenuItem Header="{x:Static p:Resources.DeleteQubit}"
+                                                                      Command="{Binding DeleteQubitCommand}"/>
+                                                            <MenuItem Header="{x:Static p:Resources.DeleteRegister}"
+                                                                      Command="{Binding DeleteRegisterCommand}"/>
+                                                        </ContextMenu>
+                                                    </StackPanel.ContextMenu>
+                                                    <StackPanel.RenderTransform>
+                                                        <ScaleTransform ScaleX="1" ScaleY="-1">
+                                                            <ScaleTransform.CenterY>
+                                                                <Binding Source="{x:Static ViewModels:CircuitGridVM.QubitScaleCenter}" />
+                                                            </ScaleTransform.CenterY>
+                                                        </ScaleTransform>
+                                                    </StackPanel.RenderTransform>
+                                                    <Rectangle 
+                                                    Width="5" 
+                                                    Height="{x:Static ViewModels:CircuitGridVM.QubitSize}"
+                                                    Fill="{DynamicResource ImgQubitBegin}" />
+                                                    <TextBlock 
+                                                    Text="{Binding RegisterName}"
+                                                    FontSize="30"
+                                                    FontFamily="Times New Roman"
+                                                    FontStyle="Oblique"
+                                                    VerticalAlignment="Center" />
+                                                    <TextBlock 
+                                                    Text="{Binding Index}"
+                                                    FontSize="20"
+                                                    FontFamily="Times New Roman"
+                                                    FontStyle="Oblique"
+                                                    VerticalAlignment="Bottom"/>
+                                                    <Rectangle 
+                                                    Width="20" 
+                                                    Height="{x:Static ViewModels:CircuitGridVM.QubitSize}"
+                                                    Fill="{DynamicResource ImgQubitEnd}" />
+                                                    <TextBlock 
+                                                    Text="= "
+                                                    FontSize="30"
+                                                    FontFamily="Times New Roman"
+                                                    FontStyle="Oblique"
+                                                    VerticalAlignment="Center" />
+                                                    <Button VerticalAlignment="Top" Padding="0"
+                                                    Command="{Binding ChangeValueCommand}"
+                                                        ToolTip="{x:Static p:Resources.FlipBit}">
+                                                        <Rectangle 
+                                                    Width="{x:Static ViewModels:CircuitGridVM.QubitSize}" 
+                                                    Height="{x:Static ViewModels:CircuitGridVM.QubitSize}"
+                                                    Fill="{Binding QubitImage}" />
+                                                    </Button>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Rectangle
+                            Fill="White"
+                            Height="{x:Static SystemParameters.HorizontalScrollBarHeight}"/>
+                    </StackPanel>
+                </ScrollViewer>
+                <ScrollViewer x:Name="GatesScroll"
+                              Grid.Column="1"
+                                  HorizontalScrollBarVisibility="Visible"
+                                  VerticalScrollBarVisibility="Visible"
+                                  ScrollChanged="GatesScroll_ScrollChanged">
+                    <ItemsControl x:Name="stepItemsControl" 
+                                  Background="White" 
+                                  ItemsSource="{Binding Steps}" 
+                                  Margin="0,0,0,0">
+                        <ItemsControl.LayoutTransform>
+                            <ScaleTransform CenterX="0" CenterY="0"
+                            ScaleX="{Binding ScaleFactor}" ScaleY="{Binding ScaleFactor}" />
+                        </ItemsControl.LayoutTransform>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel
+                                    Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,0,0" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="Transparent" BorderThickness="0" Background="{DynamicResource HighLightColorBrush}" Padding="0">
+                                    <ItemsControl ItemsSource="{Binding Gates}" 
+                                              Margin="0,0,0,0">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Stretch" 
+                                                    Margin="{Binding StepMargin}" Background="White" >
+                                                    <StackPanel.RenderTransform>
+                                                        <ScaleTransform ScaleX="1" ScaleY="-1" 
+                                                                CenterY="{Binding ScaleCenterY}"/>
+                                                    </StackPanel.RenderTransform>
+                                                </StackPanel>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button VerticalAlignment="Top" Padding="0"
+                                                    IsEnabled="{Binding IsEnabled}"
+                                                    PreviewMouseLeftButtonDown="GateButton_MouseDown"
+                                                    AllowDrop="True"
+                                                    Drop="GateButton_Drop"
+                                                        DragEnter="GateButton_DragEnter"
+                                                        DragOver="GateButton_DragOver">
+                                                    <Button.ContextMenu>
+                                                        <ContextMenu>
+                                                            <MenuItem Header="{x:Static p:Resources.InsertQubitAbove}"
+                                                                      Command="{Binding InsertRowAboveCommand}" />
+                                                            <MenuItem Header="{x:Static p:Resources.InsertQubitBelow}"
+                                                                      Command="{Binding InsertRowBelowCommand}" />
+                                                            <MenuItem Header="{x:Static p:Resources.InsertColumnLeft}"
+                                                                      Command="{Binding InsertColumnLeftCommand}" />
+                                                            <MenuItem Header="{x:Static p:Resources.InsertColumnRight}"
+                                                                      Command="{Binding InsertColumnRightCommand}" />
+                                                            <Separator />
+                                                            <MenuItem Header="{x:Static p:Resources.DeleteQubit}"
+                                                                      Command="{Binding DeleteRowCommand}" />
+                                                            <MenuItem Header="{x:Static p:Resources.DeleteColumn}"
+                                                                      Command="{Binding DeleteColumnCommand}" />
+                                                        </ContextMenu>
+                                                    </Button.ContextMenu>
+                                                    <Grid>
+                                                        <Rectangle
+                                                            Fill="{DynamicResource HighLightColorBrush}"
+                                                            Opacity="{Binding SelectionOpacity}"/>
+                                                        <Border Margin="0"
+                                                    Background="{Binding BackgroundImage}"
+                                                    Width="{x:Static ViewModels:CircuitGridVM.GateWidth}" 
+                                                    Height="{x:Static ViewModels:CircuitGridVM.QubitSize}">
+                                                            <Border Margin="0"
+                                                        Height="{Binding GateHeight}"
+                                                        Background="{Binding GateImage}">
+                                                                <Canvas
+                                                                    RenderTransformOrigin="0.5, 0.5">
+                                                                    <Viewbox MaxWidth="{Binding GateTextHeight}"
+                                                                             MaxHeight="{x:Static ViewModels:CircuitGridVM.GateHeight}"
+                                                                             Canvas.Top="{x:Static ViewModels:CircuitGridVM.GateTextCanvasTop}">
+                                                                        <TextBlock
+                                                                            Margin="2"
+                                                                        FontFamily="Cambria" 
+                                                                            FontStyle="Italic"
+                                                                    Text="{Binding GateText}">
+                                                                        </TextBlock>
+                                                                    </Viewbox>
+                                                                    <Canvas.RenderTransform>
+                                                                        <TransformGroup>
+                                                                            <RotateTransform Angle="90" />
+                                                                            <TranslateTransform X="0" Y="{x:Static ViewModels:CircuitGridVM.GateTextTranslate}" />
+                                                                        </TransformGroup>
+                                                                    </Canvas.RenderTransform>
+                                                                </Canvas>
+                                                            </Border>
+                                                        </Border>
+                                                    </Grid>
+                                                    <Button.RenderTransform>
+                                                        <ScaleTransform ScaleX="1" ScaleY="-1">
+                                                            <ScaleTransform.CenterY>
+                                                                <Binding Source="{x:Static ViewModels:CircuitGridVM.QubitScaleCenter}" />
+                                                            </ScaleTransform.CenterY>
+                                                        </ScaleTransform>
+                                                    </Button.RenderTransform>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+                <Canvas
+                    x:Name="drawing"
+                    Grid.Column="1"
+                    AllowDrop="True"
+                    Drop="drawing_Drop">
+                    <Canvas.LayoutTransform>
+                        <ScaleTransform CenterX="0" CenterY="0"
+                            ScaleX="{Binding ScaleFactor}" ScaleY="{Binding ScaleFactor}" />
+                    </Canvas.LayoutTransform>
+                </Canvas>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
