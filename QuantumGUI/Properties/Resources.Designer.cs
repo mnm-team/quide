@@ -978,7 +978,7 @@ namespace QuIDE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sqare Root of Not Gate.
+        ///   Looks up a localized string similar to Square Root of Not Gate.
         /// </summary>
         public static string SqrtX {
             get {
@@ -987,7 +987,7 @@ namespace QuIDE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Amplitude of the state. It is a complex number, which sqared magnitude gives the probability of the state..
+        ///   Looks up a localized string similar to Amplitude of the state. It is a complex number, which squared magnitude gives the probability of the state..
         /// </summary>
         public static string StateAmplitude {
             get {
