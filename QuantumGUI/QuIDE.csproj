@@ -94,10 +94,10 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>E13C97CDFF2DF9B2B5F8549AF7BE2D21FB77273E</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>832F280BEDE5229A5178908A004E624CCE046F39</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>QuantumGUI_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>QuIDE_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -328,6 +328,7 @@
     </None>
     <AppDesigner Include="Properties\" />
     <None Include="QuantumGUI_TemporaryKey.pfx" />
+    <None Include="QuIDE_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
