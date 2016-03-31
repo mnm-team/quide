@@ -349,10 +349,10 @@
     <value>Sigma Z Gate</value>
   </data>
   <data name="SqrtX" xml:space="preserve">
-    <value>Sqare Root of Not Gate</value>
+    <value>Square Root of Not Gate</value>
   </data>
   <data name="StateAmplitude" xml:space="preserve">
-    <value>Amplitude of the state. It is a complex number, which sqared magnitude gives the probability of the state.</value>
+    <value>Amplitude of the state. It is a complex number, which squared magnitude gives the probability of the state.</value>
   </data>
   <data name="StateProbability" xml:space="preserve">
     <value>Probability of the state. The bar's length represents probability value. Color represents the phase of state's amplitude (which is complex number).</value>
