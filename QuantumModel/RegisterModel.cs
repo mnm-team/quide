@@ -154,14 +154,19 @@ namespace QuantumModel
 
         internal void AddNewQubit()
         {
-            int newRow = _qubits.Count;
             QubitModel newQubit = QubitModel.Zero;
-            _qubits.Add(newQubit);
+            var qubits = _qubits.ToList();
+            qubits.Add(newQubit);       // copy which dont fire the onCollectionChanged event
+            UpdateInitStates(qubits);
+            _qubits.Add(newQubit);      // this fires the onCollectionChanged event, which causes view rerendering, so we need to updateInitStates before that
         }
 
         internal void InsertQubit(int position)
         {
             QubitModel newQubit = QubitModel.Zero;
+            var qubits = _qubits.ToList();
+            qubits.Insert(position, newQubit);
+            UpdateInitStates(qubits);
             _qubits.Insert(position, newQubit);
         }
 
@@ -200,14 +205,18 @@ namespace QuantumModel
             return letter.ToString();
         }
 
-        private void UpdateInitStates()
+        private void UpdateInitStates(IList<QubitModel> qubits = null)
         {
+            if(qubits == null)
+            {
+                qubits = _qubits;
+            }
             ulong initValue = 0;
             ulong pow2 = 1;
-            int width = _qubits.Count;
+            int width = qubits.Count;
             for (int j = 0; j < width; j++)
             {
-                if (_qubits[j] == QubitModel.One)
+                if (qubits[j] == QubitModel.One)
                 {
                     initValue += pow2;
                 }
