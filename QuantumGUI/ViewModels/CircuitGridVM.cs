@@ -53,6 +53,15 @@ namespace QuIDE.ViewModels
             }
         }
 
+        public event RoutedEventHandler QubitsChanged;
+        private void OnQubitsChanged()
+        {
+            if (QubitsChanged != null)
+            {
+                QubitsChanged(this, new RoutedEventArgs());
+            }
+        }
+
         #endregion // Events
 
 
@@ -284,9 +293,16 @@ namespace QuIDE.ViewModels
             ObservableCollection<RegisterVM> registers = new ObservableCollection<RegisterVM>();
             for (int i = 0; i < _model.Registers.Count; i++)
             {
-                registers.Add(new RegisterVM(_model, i));
+                RegisterVM reg = new RegisterVM(_model, i);
+                reg.QubitsChanged += registers_QubitsChanged;
+                registers.Add(reg);
             }
             return registers;
+        }
+
+        private void registers_QubitsChanged(object sender, RoutedEventArgs e)
+        {
+            OnQubitsChanged();
         }
 
         private ObservableCollection<StepVM> CreateStepsFromModel()
@@ -352,8 +368,7 @@ namespace QuIDE.ViewModels
         }
 
         private void Registers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            RegisterModel reg;
+        {  
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
@@ -362,8 +377,9 @@ namespace QuIDE.ViewModels
                         int newRow = e.NewStartingIndex;
                         if (item is RegisterModel)
                         {
-                            reg = (RegisterModel)item;
-                            Registers.Insert(newRow, new RegisterVM(_model, newRow));
+                            RegisterVM reg = new RegisterVM(_model, newRow);
+                            reg.QubitsChanged += registers_QubitsChanged;
+                            Registers.Insert(newRow, reg);
                             for (int i = newRow + 1; i < _registers.Count; i++)
                             {
                                 _registers[i].IncrementIndex();
@@ -412,6 +428,7 @@ namespace QuIDE.ViewModels
                     break;
             }
             OnPropertyChanged("ScaleCenterY");
+            OnSelectionChanged();
         }
 
         #endregion // Private Helpers

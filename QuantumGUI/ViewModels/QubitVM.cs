@@ -240,6 +240,7 @@ namespace QuIDE.ViewModels
         public void ChangeValue(object parameter)
         {
             QubitModel old = Value;
+            _model.Registers[_registerIndex].ResetQubit(_rowIndex, old);
             if (old == QubitModel.Zero)
             {
                 Value = QubitModel.One;
@@ -248,7 +249,6 @@ namespace QuIDE.ViewModels
             {
                 Value = QubitModel.Zero;
             }
-            _model.Registers[_registerIndex].ResetQubit(_rowIndex, old);
         }
 
         public void InsertQubitAbove(object parameter)

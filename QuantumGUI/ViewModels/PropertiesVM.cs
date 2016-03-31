@@ -96,6 +96,9 @@ namespace QuIDE.ViewModels
         private ParameterVM[] _parameters;
         private DelegateCommand _applyParams;
 
+        private CircuitGridVM _trackedCircuitGrid;
+        private OutputGridVM _trackedOutputGrid;
+
         #endregion // Fields
 
 
@@ -109,7 +112,7 @@ namespace QuIDE.ViewModels
         public PropertiesVM(CircuitGridVM circuitGrid, OutputGridVM outputGrid)
         {
             SelectedObject = outputGrid.SelectedObject;
-            AddSelectionTracing(circuitGrid);
+            AddSelectionAndQubitsTracing(circuitGrid);
             AddSelectionTracing(outputGrid);
 
             CircuitEvaluator eval = CircuitEvaluator.GetInstance();
@@ -765,12 +768,21 @@ namespace QuIDE.ViewModels
 
         public void AddSelectionTracing(OutputGridVM outputGrid)
         {
-            outputGrid.SelectionChanged += outputGrid_SelectionChanged;
+            if(_trackedOutputGrid != outputGrid)
+            {
+                outputGrid.SelectionChanged += outputGrid_SelectionChanged;
+                _trackedOutputGrid = outputGrid;
+            }
         }
 
-        public void AddSelectionTracing(CircuitGridVM circuitGrid)
+        public void AddSelectionAndQubitsTracing(CircuitGridVM circuitGrid)
         {
-            circuitGrid.SelectionChanged += circuitGrid_SelectionChanged;
+            if(_trackedCircuitGrid != circuitGrid)
+            {
+                circuitGrid.SelectionChanged += circuitGrid_SelectionChanged;
+                circuitGrid.QubitsChanged += circuitGrid_QubitsChanged;
+                _trackedCircuitGrid = circuitGrid;
+            }
         }
 
         public void SelectUnit(object parameter)
@@ -897,6 +909,13 @@ namespace QuIDE.ViewModels
         {
             CircuitGridVM grid = sender as CircuitGridVM;
             SelectedObject = grid.SelectedObject;
+        }
+
+        private void circuitGrid_QubitsChanged(object sender, RoutedEventArgs e)
+        {
+            OnPropertyChanged("Value");
+            OnPropertyChanged("Qubits");
+            OnPropertyChanged("Probability");
         }
 
         private string GammaToString()

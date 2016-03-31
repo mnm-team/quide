@@ -78,6 +78,8 @@ namespace QuIDE.ViewModels
         private bool _showAll;
         private bool _scaleRelative;
 
+        private CircuitGridVM _trackedCircuitGrid;
+
         #endregion // Fields
 
 
@@ -312,10 +314,24 @@ namespace QuIDE.ViewModels
             }
         }
 
+        public void AddQubitsTracing(CircuitGridVM circuitGrid)
+        {
+            if(_trackedCircuitGrid != circuitGrid)
+            {
+                circuitGrid.QubitsChanged += circuitGrid_QubitsChanged;
+                _trackedCircuitGrid = circuitGrid;
+            }
+        }
+
         #endregion // Public Methods
 
 
         #region Private Helpers
+
+        private void circuitGrid_QubitsChanged(object sender, RoutedEventArgs e)
+        {
+            OnPropertyChanged("States");
+        }
 
         private void _model_OutputChanged(object sender, RoutedEventArgs e)
         {

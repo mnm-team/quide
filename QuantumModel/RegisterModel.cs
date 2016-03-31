@@ -41,8 +41,6 @@ namespace QuantumModel
 
         private Dictionary<ulong, Complex> _initStates;
 
-        //private bool _deactivateListener = false;
-
         #endregion // Fields
 
 
@@ -87,14 +85,12 @@ namespace QuantumModel
                 if (_qubits == null)
                 {
                     _qubits = CreateQubits(ComputerModel.InitialQubitsCount);
-                    //_qubits.CollectionChanged += _qubits_CollectionChanged;
                 }
                 return _qubits;
             }
             set
             {
                 _qubits = value;
-                //_qubits.CollectionChanged += _qubits_CollectionChanged;
             }
         }
 
@@ -204,37 +200,6 @@ namespace QuantumModel
             return letter.ToString();
         }
 
-        //private void _qubits_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        //{
-        //    if (!_deactivateListener)
-        //    {
-        //        switch (e.Action)
-        //        {
-        //            case NotifyCollectionChangedAction.Replace:
-        //                //List<QubitModel> tmp = new List<QubitModel>(_qubits);
-        //                QubitModel oldQubit = (QubitModel)(e.OldItems[0]);
-        //                if (oldQubit == QubitModel.Unknown)
-        //                {
-        //                    for (int i = 0; i < _qubits.Count; i++)
-        //                    {
-        //                        QubitModel q = _qubits[i];
-        //                        if (q == QubitModel.Unknown)
-        //                        {
-        //                            _qubits[i] = QubitModel.Zero;
-        //                        }
-        //                    }
-        //                    //Qubits = new ObservableCollection<QubitModel>(tmp);
-        //                    UpdateInitStates();
-        //                }
-        //                else
-        //                {
-        //                    UpdateInitStates(e.NewStartingIndex);
-        //                }
-        //                break;
-        //        }
-        //    }
-        //}
-
         private void UpdateInitStates()
         {
             ulong initValue = 0;
@@ -300,8 +265,6 @@ namespace QuantumModel
                 _initStates[0] = Complex.One;
             }
 
-            //_deactivateListener = true;
-
             if (_initStates.Count == 1)
             {
                 ulong tmpState = _initStates.Keys.First<ulong>();
@@ -332,7 +295,6 @@ namespace QuantumModel
                     _qubits[i] = QubitModel.Unknown;
                 }
             }
-            //_deactivateListener = false;
         }
 
         private ObservableCollection<QubitModel> CreateQubits(int initWidth)

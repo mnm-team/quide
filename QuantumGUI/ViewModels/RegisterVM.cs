@@ -38,6 +38,19 @@ namespace QuIDE.ViewModels
 {
     public class RegisterVM : ViewModelBase
     {
+        #region Events
+
+        public event RoutedEventHandler QubitsChanged;
+        private void OnQubitsChanged()
+        {
+            if (QubitsChanged != null)
+            {
+                QubitsChanged(this, new RoutedEventArgs());
+            }
+        }
+
+        #endregion // Events
+
         #region Fields
 
         private ComputerModel _model;
@@ -186,6 +199,7 @@ namespace QuIDE.ViewModels
             }
             OnPropertyChanged("ScaleCenterY");
             OnPropertyChanged("ButtonHeight");
+            OnQubitsChanged();
         }
 
         private void _model_StepChanged(object sender, RoutedEventArgs e)

@@ -187,6 +187,14 @@ namespace QuIDE.ViewModels
                 if (_circuitGridVM == null)
                 {
                     _circuitGridVM = new CircuitGridVM(_model);
+                    if (_propertiesVM != null)
+                    {
+                        _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
+                    }
+                    if (_outputGridVM != null)
+                    {
+                        _outputGridVM.AddQubitsTracing(_circuitGridVM);
+                    }
                 }
                 return _circuitGridVM;
             }
@@ -198,7 +206,11 @@ namespace QuIDE.ViewModels
                 _circuitGridVM = value;
                 if (_propertiesVM != null)
                 {
-                    _propertiesVM.AddSelectionTracing(_circuitGridVM);
+                    _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
+                }
+                if (_outputGridVM != null)
+                {
+                    _outputGridVM.AddQubitsTracing(_circuitGridVM);
                 }
                 base.OnPropertyChanged("CircuitGrid");
             }
@@ -212,6 +224,14 @@ namespace QuIDE.ViewModels
                 {
                     _outputGridVM = new OutputGridVM();
                     _outputGridVM.LoadModel(_model, _outputModel);
+                    if (_circuitGridVM != null)
+                    {
+                        _outputGridVM.AddQubitsTracing(_circuitGridVM);
+                    }
+                    if (_propertiesVM != null)
+                    {
+                        _propertiesVM.AddSelectionTracing(_outputGridVM);
+                    }
                 }
                 return _outputGridVM;
             }
@@ -221,6 +241,10 @@ namespace QuIDE.ViewModels
                     return;
 
                 _outputGridVM = value;
+                if (_circuitGridVM != null)
+                {
+                    _outputGridVM.AddQubitsTracing(_circuitGridVM);
+                }
                 if (_propertiesVM != null)
                 {
                     _propertiesVM.AddSelectionTracing(_outputGridVM);
@@ -236,6 +260,14 @@ namespace QuIDE.ViewModels
                 if (_propertiesVM == null)
                 {
                     _propertiesVM = new PropertiesVM(CircuitGrid, OutputGrid);
+                    if (_outputGridVM != null)
+                    {
+                        _propertiesVM.AddSelectionTracing(_outputGridVM);
+                    }
+                    if (_circuitGridVM != null)
+                    {
+                        _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
+                    }
                 }
                 return _propertiesVM;
             }
@@ -245,6 +277,14 @@ namespace QuIDE.ViewModels
                     return;
 
                 _propertiesVM = value;
+                if (_outputGridVM != null)
+                {
+                    _propertiesVM.AddSelectionTracing(_outputGridVM);
+                }
+                if (_circuitGridVM != null)
+                {
+                    _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
+                }
 
                 base.OnPropertyChanged("PropertiesPane");
             }
