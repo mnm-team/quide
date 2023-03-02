@@ -57,7 +57,7 @@ namespace Quantum
         /// </para>
         /// <para>
         /// The idea of root register is described in <see cref="QuantumComputer.GetRootRegister"/> ,
-        /// or in <see cref="Quantum.Register.GetAmplitudes"/>.
+        /// or in <see cref="Quantum.Register.GetAmplitudes()"/>.
         /// </para>
         /// </summary>
         public int OffsetToRoot
