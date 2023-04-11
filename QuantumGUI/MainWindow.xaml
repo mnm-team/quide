@@ -25,7 +25,7 @@
     xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"
     xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
     xmlns:ae="http://icsharpcode.net/sharpdevelop/avalonedit"
-    xmlns:p="clr-namespace:QuIDE.Properties"
+    xmlns:p="clr-namespace:QuIDE.Properties"    
     xmlns:Helpers="clr-namespace:QuIDE.Helpers"
     xmlns:ViewModels="clr-namespace:QuIDE.ViewModels"
     xmlns:Controls="clr-namespace:QuIDE.Controls"

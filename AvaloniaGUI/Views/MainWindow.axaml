@@ -1,0 +1,129 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:AvaloniaGUI.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:p="clr-namespace:AvaloniaGUI.Properties"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="AvaloniaGUI.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="QuIDE - Quantum Integrated Development Environment">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+    
+    <Window.Resources>
+        <!--xcad:GenericTheme x:Key="GenericTheme" />
+        <Style x:Key="DefaultButton" Selector="Button" />
+        <Style x:Key="FlatButton" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Selector="Button" />
+        <Style x:Key="FlatRadioButton" BasedOn="{StaticResource {x:Static ToolBar.RadioButtonStyleKey}}" Selector="RadioButton" />
+        <Style x:Key="FlatComboBox" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}" Selector="ComboBox" /-->
+    </Window.Resources>
+    
+    <DockPanel Name="LayoutRoot">
+        <DockPanel DockPanel.Dock="Top" LastChildFill="False">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                <Button Command="{Binding New}" ToolTip.Tip="{x:Static p:Resources.New}" HotKey="Ctrl+N">
+                    <Image Source="/Assets/Images/NewFile_6276.png" Width="16"/>  
+                </Button>
+                <Button Command="{Binding Open}" ToolTip.Tip="{x:Static p:Resources.Open}" HotKey="Ctrl+O">
+                    <Image Source="/Assets/Images/Open_6529.png" Width="16"/>
+                </Button>
+                <Button Command="{Binding Save}" ToolTip.Tip="{x:Static p:Resources.Save}" HotKey="Ctrl+S">
+                    <Image Source="/Assets/Images/Save_6530.png" Width="16"/>
+                </Button>
+                <Button Command="{Binding SaveAs}" ToolTip.Tip="{x:Static p:Resources.SaveAs}" HotKey="Ctrl+Alt+S">
+                    <Image Source="/Assets/Images/SaveAs.png" Width="16"/>
+                </Button>
+
+                <Separator Margin="5,2"/>
+
+                <Button Command="{Binding PrintCommand}" ToolTip.Tip="{x:Static p:Resources.Print}">
+                    <Image Source="/Assets/Images/Print_11009.png" Width="16"/>
+                </Button>
+
+                <Separator Margin="5,2"/>
+
+                <Button Command="{Binding CutCommand}" ToolTip.Tip="{x:Static p:Resources.Cut}">
+                    <Image Source="/Assets/Images/Cut_6523.png" Width="16"/>
+                </Button>
+                <Button Command="{Binding CopyCommand}" ToolTip.Tip="{x:Static p:Resources.Copy}">
+                    <Image Source="/Assets/Images/Copy_6524.png" Width="16"/>
+                </Button>
+                <Button Command="{Binding PasteCommand}" ToolTip.Tip="{x:Static p:Resources.Paste}">
+                    <Image Source="/Assets/Images/Paste_6520.png" Width="16"/>
+                </Button>
+
+                <Separator Margin="5,2" />
+
+                <Button Command="{Binding GenerateFromCodeCommand}" ToolTip.Tip="{x:Static p:Resources.GenerateFromCode}">
+                    <Border
+                        BorderBrush="DimGray"
+                        BorderThickness="1"
+                        Padding="3">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Assets/Images/BuildSolution_104.png" Width="16" />
+                            <TextBlock Text="{x:Static p:Resources.ToCircuit}"
+                                                           Margin="0"/>
+                        </StackPanel>
+                    </Border>
+                </Button>
+
+                <Button Command="{Binding RunInConsoleCommand}" ToolTip.Tip="{x:Static p:Resources.RunInConsole}">
+                    <Border
+                        BorderBrush="DimGray"
+                        BorderThickness="1"
+                        Padding="3">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Assets/Images/Console.png" Width="16" />
+                            <TextBlock Text="{x:Static p:Resources.InConsole}"
+                                                           Margin="0"/>
+                        </StackPanel>
+                    </Border>
+                </Button>
+            </StackPanel>
+            <Button
+                DockPanel.Dock="Right"
+                ToolTip.Tip="{x:Static p:Resources.ShowAbout}"
+                ><!--Command="{x:Static ViewModels:HomeVM.AboutCommand}"-->
+                <Border
+                            BorderBrush="DimGray"
+                            BorderThickness="1"
+                            Padding="3">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Assets/Images/Information.png" Width="16" />
+                        <TextBlock Text="{x:Static p:Resources.About}"
+                                   Margin="0"/>
+                    </StackPanel>
+                </Border>
+            </Button>
+            <Button
+                DockPanel.Dock="Right"
+                ToolTip.Tip="{x:Static p:Resources.ShowAbout}"
+                ><!--Command="{x:Static ViewModels:HomeVM.CalculatorCommand}"-->
+                <Border
+                            BorderBrush="DimGray"
+                            BorderThickness="1"
+                            Padding="3">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Assets/Images/Calculator.png" Width="16" />
+                        <TextBlock Text="{x:Static p:Resources.Calculator}"
+                                   Margin="0"/>
+                    </StackPanel>
+                </Border>
+            </Button>
+        </DockPanel>
+        
+        <!-- DockPanels: https://www.codeproject.com/Articles/5311587/UniDock-New-Multiplatform-Docking-Framework-Introd or 
+    https://github.com/wieslawsoltes/Dock -->
+        <DockPanel>
+            
+        </DockPanel>
+        
+    </DockPanel>
+
+</Window>
