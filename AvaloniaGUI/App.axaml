@@ -13,8 +13,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="Assets/Styles.xaml"/>
-                <!--ResourceInclude Source="Assets/Gates.xaml" /-->
+                <ResourceInclude Source="/Assets/Styles.xaml"/>
+                <!--ResourceInclude Source="/Assets/Gates.xaml" /-->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

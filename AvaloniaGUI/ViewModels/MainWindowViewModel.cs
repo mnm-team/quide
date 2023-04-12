@@ -1,4 +1,5 @@
-﻿using System.Reactive;
+﻿using System.Collections.Generic;
+using System.Reactive;
 using ReactiveUI;
 
 namespace AvaloniaGUI.ViewModels;
@@ -17,4 +18,8 @@ public class MainWindowViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> Calc { get; }
     public ReactiveCommand<Unit, Unit> About { get; }
     
+    
+    
+    public ReactiveCommand<Unit,Unit> GenerateCode { get; }
+    public List<string> CompositeTools { get; }
 }

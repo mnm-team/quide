@@ -1,0 +1,257 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:p="clr-namespace:AvaloniaGUI.Properties"
+             xmlns:viewModels="clr-namespace:AvaloniaGUI.ViewModels"
+             xmlns:controls="clr-namespace:AvaloniaGUI.Views.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="viewModels:CircuitDesignerViewModel"
+             x:Class="AvaloniaGUI.Views.CircuitDesigner">
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <viewModels:CircuitDesignerViewModel/>
+    </Design.DataContext>
+    
+    <DockPanel>
+        <!-- TODO: Necessary?? 
+        DockPanel.InputBindings>
+            <KeyBinding Command="Cut" Key="X" Modifiers="Ctrl"/>
+            <KeyBinding Command="Copy" Key="C" Modifiers="Ctrl"/>
+            <KeyBinding Command="Paste" Key="V" Modifiers="Ctrl"/>
+            <KeyBinding Command="Delete" Key="Delete" />
+            
+        </-->
+        <!-- TODO: 
+            toolbar in https://github.com/Splitwirez/Mechanism-for-Avalonia/-->
+        <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
+            <!-- First row -->
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal">
+                    
+                    <!-- TODO: 
+                    For most Buttons PreviewGotKeyboardFocus="<Command>_PreviewGotKeyboardFocus" removed-->
+                    
+                    <Button x:Name="restart" ToolTip.Tip="{x:Static p:Resources.Restart}">
+                        <Image Source="/Assets/Images/GotoFirstRow_287.png" Width="16"/>
+                    </Button>
+                    <Button x:Name="prev" ToolTip.Tip="{x:Static p:Resources.PrevStep}">
+                        <Image Source="/Assets/Images/MovePrevious_7195.png" Width="16"/>
+                    </Button>
+                    <Button x:Name="next" ToolTip.Tip="{x:Static p:Resources.NextStep}">
+                        <Image Source="/Assets/Images/GotoNextRow_289.png" Width="16" />
+                    </Button>
+                    <Button x:Name="run" ToolTip.Tip="{x:Static p:Resources.Run}">
+                        <Image Source="/Assets/Images/GotoLastRow_288.png" Width="16" />
+                    </Button>
+
+                    <Separator Margin="5,2"/>
+
+                    <Button x:Name="generateCode" ToolTip.Tip="{x:Static p:Resources.GenerateCode}"
+                            Command="{Binding $parent[viewModels:MainWindowViewModel].GenerateCode}">
+                        <Border
+                            BorderBrush="DimGray"
+                            BorderThickness="1"
+                            Padding="3">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Assets/Images/ResultstoFile_9946.png" Width="16" />
+                                <TextBlock Text="{x:Static p:Resources.ToCode}"
+                                       Margin="0"/>
+                            </StackPanel>
+                        </Border>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="clear" ToolTip.Tip="{x:Static p:Resources.ClearCircuit}">
+                        <Border BorderBrush="DimGray"
+                                BorderThickness="1">
+                            <TextBlock Text="{x:Static p:Resources.ClearAll}"
+                                       Margin="3"/>
+                        </Border>
+                    </Button>
+
+                    <Button x:Name="delete" ToolTip.Tip="{x:Static p:Resources.ClearSelection}">
+                        <Image Source="/Assets/Images/Clearallrequests_8816.png" Width="16" Margin="2"/>
+                    </Button>
+
+                    <Button x:Name="cut" ToolTip.Tip="{x:Static p:Resources.Cut}">
+                        <Image Source="/Assets/Images/Cut_6523.png" Width="16"/>
+                    </Button>
+                    <Button x:Name="copy" ToolTip.Tip="{x:Static p:Resources.Copy}">
+                        <Image Source="/Assets/Images/Copy_6524.png" Width="16"/>
+                    </Button>
+                    <Button x:Name="paste" ToolTip.Tip="{x:Static p:Resources.Paste}">
+                        <Image Source="/Assets/Images/Paste_6520.png" Width="16"/>
+                    </Button>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton 
+                        GroupName="Actions" 
+                        CommandParameter="Ungroup"
+                        ToolTip.Tip="{x:Static p:Resources.UngroupTip}">
+                        <Border BorderBrush="DimGray"
+                                BorderThickness="1">
+                            <TextBlock Text="{x:Static p:Resources.Ungroup}"
+                                       Margin="3"/>
+                        </Border>
+                    </RadioButton>
+
+                    <Button 
+                        x:Name="group"
+                        ToolTip.Tip="{x:Static p:Resources.GroupTip}">
+                        <Border BorderBrush="DimGray"
+                                BorderThickness="1">
+                            <TextBlock Text="{x:Static p:Resources.Group}"
+                                       Margin="3"/>
+                        </Border>
+                    </Button>
+
+                    <Separator Margin="5,2" />
+                    
+                    <RadioButton GroupName="Actions"
+                             x:Name="compositeTool"
+                                 ToolTip.Tip="{x:Static p:Resources.Composite}"
+                                 IsChecked="{Binding CompositeTool_Checked}">
+                        <Grid>
+                            <ComboBox
+                                            Name="cb"
+                                            Height="20"
+                                            Width="170"
+                                            Items="{Binding $parent[viewModels:MainWindowViewModel].CompositeTools}">
+                                            <!--Classes="{StaticResource FlatComboBox}"-->
+                                <!-- TODO: necessary?
+                                            SelectionChanged="CompositeTool_SelectionChanged"
+                                            IsTextSearchCaseSensitive="False"-->
+                            </ComboBox>
+                            <TextBox 
+                                x:Name="tb"
+                                VerticalAlignment="Center"
+                                IsHitTestVisible="False"
+                                Padding="3"
+                                Watermark="{x:Static p:Resources.SelectCompositeGate}"
+                                IsEnabled="False"
+                                Text="{Binding #cb.SelectedItem}">
+                            </TextBox>
+                        </Grid>
+                    </RadioButton>
+                </StackPanel>
+           </StackPanel> 
+
+            <StackPanel Orientation="Horizontal">
+                <RadioButton 
+                    IsChecked="True"
+                    GroupName="Actions" 
+                    CommandParameter="Selection"
+                    ToolTip.Tip="{x:Static p:Resources.Selection}">
+                    <Image Source="/Assets/Images/Pointer_6127.png" Width="16" Margin="2"/>
+                </RadioButton>
+                <RadioButton GroupName="Actions"
+                             CommandParameter="Empty"
+                             ToolTip.Tip="{x:Static p:Resources.EraseGate}">
+                    <Image Source="/Assets/Images/Clearallrequests_8816.png" Width="16" Margin="2"/>
+                </RadioButton>
+                <RadioButton GroupName="Actions"
+                             CommandParameter="Hadamard"
+                             ToolTip.Tip="{x:Static p:Resources.Hadamard}">
+                    <Rectangle Width="28" Height="20"
+                                Fill="{DynamicResource ToolH}" />
+                </RadioButton>
+                <RadioButton GroupName="Actions"
+                             CommandParameter="Control"
+                             ToolTip.Tip="{x:Static p:Resources.AddControl}">
+                    <Rectangle Width="28" Height="20"
+                                Fill="{DynamicResource ToolC}" />
+                </RadioButton>
+                <RadioButton GroupName="Actions"
+                             CommandParameter="SigmaX"
+                             ToolTip.Tip="{x:Static p:Resources.SigmaX}">
+                    <Rectangle Width="28" Height="20"
+                                Fill="{DynamicResource ToolX}" />
+                </RadioButton>
+                <RadioButton GroupName="Actions"
+                             CommandParameter="SigmaY"
+                             ToolTip.Tip="{x:Static p:Resources.SigmaY}">
+                    <Rectangle Width="28" Height="20"
+                                Fill="{DynamicResource ToolY}" />
+                </RadioButton>
+                <RadioButton GroupName="Actions"
+                             CommandParameter="SigmaZ"
+                             ToolTip.Tip="{x:Static p:Resources.SigmaZ}">
+                    <Rectangle Width="28" Height="20"
+                                Fill="{DynamicResource ToolZ}" />
+                </RadioButton>
+                <RadioButton GroupName="Actions"
+                             CommandParameter="SqrtX"
+                             ToolTip.Tip="{x:Static p:Resources.SqrtX}">
+                    <Rectangle Width="28" Height="20"
+                                Fill="{DynamicResource ToolSqrtX}" />
+                </RadioButton>
+                <RadioButton GroupName="Actions"
+                             CommandParameter="RotateX"
+                             ToolTip.Tip="{x:Static p:Resources.RotateX}">
+                    <Rectangle Width="28" Height="20"
+                                Fill="{DynamicResource ToolRotateX}" />
+                </RadioButton>
+                <RadioButton GroupName="Actions"
+                             CommandParameter="RotateY"
+                             ToolTip.Tip="{x:Static p:Resources.RotateY}">
+                    <Rectangle Width="28" Height="20"
+                                Fill="{DynamicResource ToolRotateY}" />
+                </RadioButton>
+                <RadioButton GroupName="Actions"
+                             CommandParameter="RotateZ"
+                             ToolTip.Tip="{x:Static p:Resources.RotateZ}">
+                    <Rectangle Width="28" Height="20"
+                                Fill="{DynamicResource ToolRotateZ}" />
+                </RadioButton>
+                <RadioButton GroupName="Actions"
+                             CommandParameter="PhaseKick"
+                             ToolTip.Tip="{x:Static p:Resources.PhaseKick}">
+                    <Rectangle Width="28"
+                                Height="20"
+                                Fill="{DynamicResource ToolPhaseKick}" />
+                </RadioButton>
+                <RadioButton GroupName="Actions"
+                             CommandParameter="PhaseScale"
+                             ToolTip.Tip="{x:Static p:Resources.PhaseScale}">
+                    <Rectangle Width="28"
+                                Height="20"
+                                Fill="{DynamicResource ToolPhaseScale}" />
+                </RadioButton>
+                <RadioButton GroupName="Actions"
+                             CommandParameter="CPhaseShift"
+                             ToolTip.Tip="{x:Static p:Resources.CPhaseShift}">
+                    <Rectangle Width="28"
+                                Height="20"
+                                Fill="{DynamicResource ToolCPhaseShift}" />
+                </RadioButton>
+                <RadioButton GroupName="Actions"
+                             CommandParameter="InvCPhaseShift"
+                             ToolTip.Tip="{x:Static p:Resources.InvCPhaseShift}">
+                    <Rectangle Width="28"
+                                Height="20"
+                                Fill="{DynamicResource ToolInvCPhaseShift}" />
+                </RadioButton>
+                <RadioButton GroupName="Actions"
+                             CommandParameter="Unitary"
+                             ToolTip.Tip="{x:Static p:Resources.Unitary}">
+                    <Rectangle Width="28"
+                                Height="20"
+                                Fill="{DynamicResource ToolU}" />
+                </RadioButton>
+                <RadioButton GroupName="Actions"
+                             CommandParameter="Measure"
+                             ToolTip.Tip="{x:Static p:Resources.Measure}">
+                    <Rectangle Width="28"
+                                Height="20"
+                                Fill="{DynamicResource ToolMeasure}" />
+                </RadioButton>
+            </StackPanel>
+        </StackPanel>
+        <controls:CircuitGrid x:Name="circuitGrid" DataContext="{Binding CircuitGrid}"
+               HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" />
+    </DockPanel>
+</UserControl>

@@ -86,4 +86,11 @@
     <ItemGroup>
       <Resource Include="Assets\Gates_files\image0.png" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Views\Controls\CircuitGrid.axaml.cs">
+        <DependentUpon>CircuitGrid.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
 </Project>

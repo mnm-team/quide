@@ -4,11 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:p="clr-namespace:AvaloniaGUI.Properties"
+        xmlns:local="using:AvaloniaGUI.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AvaloniaGUI.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="QuIDE - Quantum Integrated Development Environment">
+        Title="QuIDE - Quantum Integrated Development Environment"><!-- TODO: Title icon-->
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -16,8 +17,27 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
     
+    <!-- TODO: necessary?
+    Window.InputBindings>
+        <KeyBinding Command="New" Key="N" Modifiers="Control"/>
+        <KeyBinding Command="Open" Key="O" Modifiers="Control"/>
+        <KeyBinding Command="Save" Key="S" Modifiers="Control"/>
+        <KeyBinding Command="SaveAs" Key="S" Modifiers="Control+Alt"/>
+        <KeyBinding Command="FirstPage" Key="F5" />
+        <KeyBinding Command="PreviousPage" Key="F6" />
+        <KeyBinding Command="NextPage" Key="F7" />
+        <KeyBinding Command="LastPage" Key="F8" />
+        <KeyBinding Command="FirstPage" Key="MediaStop" />
+        <KeyBinding Command="PreviousPage" Key="MediaPreviousTrack" />
+        <KeyBinding Command="NextPage" Key="MediaNextTrack" />
+        <KeyBinding Command="LastPage" Key="MediaPlayPause" />
+        <KeyBinding Command="{x:Static ViewModels:HomeVM.CalculatorCommand}"
+                    Key="K" Modifiers="Control" />
+    </Window.InputBindings-->
+    
     <Window.Resources>
-        <!--xcad:GenericTheme x:Key="GenericTheme" />
+        <!-- TODO:
+        xcad:GenericTheme x:Key="GenericTheme" />
         <Style x:Key="DefaultButton" Selector="Button" />
         <Style x:Key="FlatButton" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Selector="Button" />
         <Style x:Key="FlatRadioButton" BasedOn="{StaticResource {x:Static ToolBar.RadioButtonStyleKey}}" Selector="RadioButton" />
@@ -26,6 +46,8 @@
     
     <DockPanel Name="LayoutRoot">
         <DockPanel DockPanel.Dock="Top" LastChildFill="False">
+            <!-- TODO: 
+            toolbar in https://github.com/Splitwirez/Mechanism-for-Avalonia/-->
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
                 <Button Command="{Binding New}" ToolTip.Tip="{x:Static p:Resources.New}" HotKey="Ctrl+N">
                     <Image Source="/Assets/Images/NewFile_6276.png" Width="16"/>  
@@ -89,7 +111,8 @@
             <Button
                 DockPanel.Dock="Right"
                 ToolTip.Tip="{x:Static p:Resources.ShowAbout}"
-                ><!--Command="{x:Static ViewModels:HomeVM.AboutCommand}"-->
+                ><!-- TODO: 
+                Style="{StaticResource FlatButton}" Command="{x:Static ViewModels:HomeVM.AboutCommand}"-->
                 <Border
                             BorderBrush="DimGray"
                             BorderThickness="1"
@@ -104,7 +127,8 @@
             <Button
                 DockPanel.Dock="Right"
                 ToolTip.Tip="{x:Static p:Resources.ShowAbout}"
-                ><!--Command="{x:Static ViewModels:HomeVM.CalculatorCommand}"-->
+                ><!-- TODO: 
+                Style="{StaticResource FlatButton}" Command="{x:Static ViewModels:HomeVM.CalculatorCommand}"-->
                 <Border
                             BorderBrush="DimGray"
                             BorderThickness="1"
@@ -121,7 +145,17 @@
         <!-- DockPanels: https://www.codeproject.com/Articles/5311587/UniDock-New-Multiplatform-Docking-Framework-Introd or 
     https://github.com/wieslawsoltes/Dock -->
         <DockPanel>
-            
+            <TabControl DockPanel.Dock="Bottom">
+                <TabItem Header="{x:Static p:Resources.CircuitDesigner}"
+                                       x:Name="CircuitTab">
+                                       <!-- TODO: 
+                                       CanClose="False" 
+                                       CanHide="False"-->
+                        <local:CircuitDesigner></local:CircuitDesigner>
+                    
+                </TabItem>
+                
+            </TabControl>
         </DockPanel>
         
     </DockPanel>
