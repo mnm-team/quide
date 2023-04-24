@@ -1,8 +1,36 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using System.Reactive;
 using ReactiveUI;
 
+#endregion
+
 namespace AvaloniaGUI.ViewModels;
+
+public enum ActionName
+{
+    Selection,
+    Pointer,
+    Empty,
+    Hadamard,
+    SigmaX,
+    SigmaY,
+    SigmaZ,
+    SqrtX,
+    PhaseKick,
+    PhaseScale,
+    CPhaseShift,
+    InvCPhaseShift,
+    RotateX,
+    RotateY,
+    RotateZ,
+    Unitary,
+    Control,
+    Measure,
+    Ungroup,
+    Composite
+}
 
 public class MainWindowViewModel : ViewModelBase
 {
@@ -17,9 +45,8 @@ public class MainWindowViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> NavLast { get; }
     public ReactiveCommand<Unit, Unit> Calc { get; }
     public ReactiveCommand<Unit, Unit> About { get; }
-    
-    
-    
-    public ReactiveCommand<Unit,Unit> GenerateCode { get; }
+
+
+    public ReactiveCommand<Unit, Unit> GenerateCode { get; }
     public List<string> CompositeTools { get; }
 }

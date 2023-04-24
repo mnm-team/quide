@@ -8,7 +8,9 @@
         <entry key="AvaloniaGUI/Assets/Styles.xaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
         <entry key="AvaloniaGUI/ViewModels/Controls/CircuitGrid.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
         <entry key="AvaloniaGUI/Views/CircuitDesigner.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
+        <entry key="AvaloniaGUI/Views/Controls/CircuitGrid.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
         <entry key="AvaloniaGUI/Views/CurcuitDesigner.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
+        <entry key="AvaloniaGUI/Views/Dialog/NewRegisterInput.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
         <entry key="AvaloniaGUI/Views/MainWindow.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
       </map>
     </option>

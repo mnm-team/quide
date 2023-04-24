@@ -93,4 +93,12 @@
         <SubType>Code</SubType>
       </Compile>
     </ItemGroup>
+
+    <ItemGroup>
+      <Page Include="Assets\Gates.xaml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Quantum\Quantum.csproj" />
+    </ItemGroup>
 </Project>

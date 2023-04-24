@@ -1,0 +1,111 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:AvaloniaGUI.ViewModels.Dialog"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:p="clr-namespace:AvaloniaGUI.Properties"
+             xmlns:codeHelpers="clr-namespace:AvaloniaGUI.CodeHelpers"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaGUI.Views.Dialog.NewRegisterInput"
+             x:DataType="vm:NewRegisterInputViewModel">
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:NewRegisterInputViewModel />
+    </Design.DataContext>
+
+    <UserControl.Resources>
+        <codeHelpers:ComplexConverter x:Key="ComplexToString" />
+        <codeHelpers:AmplitudeColorConverter x:Key="AmplitudeToColor" />
+        <Style x:Key="DefaultButton" Selector="Button" />
+    </UserControl.Resources>
+
+    <DockPanel>
+        <Grid
+            DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock
+                Text="{x:Static p:Resources.QubitsNumber}"
+                Margin="2"
+                VerticalAlignment="Center" />
+            <TextBox
+                x:Name="widthBox"
+                Grid.Column="1"
+                MinWidth="100"
+                Margin="2"
+                Text="{Binding Width, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Stretch" />
+        </Grid>
+        <TextBlock
+            DockPanel.Dock="Top"
+            Text="{x:Static p:Resources.InitState}"
+            Margin="2, 20, 2, 2"
+            VerticalAlignment="Center" />
+
+        <TextBlock
+            DockPanel.Dock="Bottom"
+            TextWrapping="Wrap"
+            Width="300"
+            Text="{x:Static p:Resources.AmplitudesNormalizationCaution}"
+            Margin="2, 20, 2, 2" />
+
+        <StackPanel
+            DockPanel.Dock="Bottom"
+            Orientation="Horizontal"
+            HorizontalAlignment="Right">
+            <Button
+                Margin="2"
+                MinWidth="50"
+                Style="{StaticResource DefaultButton}"
+                Content="Add"
+                Command="{Binding AddCommand}" />
+            <Button
+                x:Name="normalize"
+                Margin="2"
+                MinWidth="50"
+                Style="{StaticResource DefaultButton}"
+                Content="Normalize"
+                Command="{Binding NormalizeCommand}" />
+        </StackPanel>
+
+        <DataGrid
+            x:Name="statesGrid"
+            Margin="2"
+            Items="{Binding InitStates}"
+            AutoGenerateColumns="False"
+            CanUserResizeColumns="True"
+            CanUserAddRows="False"
+            CanUserDeleteRows="True"
+            CanUserSortColumns="True"
+            HorizontalGridLinesBrush="LightGray"
+            VerticalGridLinesBrush="LightGray"
+            IsEnabled="True"
+            IsReadOnly="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Header="{x:Static p:Resources.Value}">
+                    <DataGridTextColumn.Binding>
+                        <Binding Path="Value"
+                                 Mode="TwoWay" />
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Header="{x:Static p:Resources.Amplitude}">
+                    <DataGridTextColumn.Binding>
+                        <Binding Path="AmplitudeString"
+                                 Mode="TwoWay"
+                                 UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <ViewModels:ComplexValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

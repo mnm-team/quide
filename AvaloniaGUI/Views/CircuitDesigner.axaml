@@ -251,7 +251,7 @@
                 </RadioButton>
             </StackPanel>
         </StackPanel>
-        <controls:CircuitGrid x:Name="circuitGrid" DataContext="{Binding CircuitGrid}"
+        <controls:CircuitGrid x:Name="circuitGrid"
                HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" />
     </DockPanel>
 </UserControl>

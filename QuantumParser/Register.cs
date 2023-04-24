@@ -28,7 +28,6 @@ using System.Linq;
 using System.Net;
 using System.Numerics;
 using System.Text;
-using System.Windows;
 
 namespace QuantumParser
 {
