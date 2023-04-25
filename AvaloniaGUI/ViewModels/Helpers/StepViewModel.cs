@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Avalonia;
 using AvaloniaGUI.ViewModels.Controls;
-using AvaloniaGUI.ViewModels.MainModels;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel.Gates;
 

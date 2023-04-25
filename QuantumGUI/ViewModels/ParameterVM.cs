@@ -199,11 +199,11 @@ namespace QuIDE.ViewModels
             {
                 CircuitEvaluator eval = CircuitEvaluator.GetInstance();
 
-                if (type == typeof(QuantumParser.RegisterRef))
+                if (type == typeof(RegisterRef))
                 {
                     toReturn = eval.ResolveRegisterRef(text, _nextParamArray);
                 }
-                else if (type == typeof(QuantumParser.Register))
+                else if (type == typeof(Register))
                 {
                     toReturn = eval.ResolveRegister(text, _nextParamArray);
                 }

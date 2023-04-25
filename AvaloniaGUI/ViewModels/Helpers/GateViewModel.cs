@@ -12,10 +12,12 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using AvaloniaGUI.CodeHelpers;
 using AvaloniaGUI.ViewModels.Controls;
-using AvaloniaGUI.ViewModels.MainModels;
+using AvaloniaGUI.ViewModels.Dialog;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel.Gates;
+using AvaloniaGUI.ViewModels.MainModels.QuantumParser;
 using AvaloniaGUI.Views;
+using AvaloniaGUI.Views.Dialog;
 
 #endregion
 
@@ -604,7 +606,7 @@ public class GateViewModel : ViewModelBase
                     if (oldGate.Name == GateName.Empty)
                     {
                         MainWindow window = App.Current.MainWindow as MainWindow;
-                        GammaInputVM gammmaVM = new GammaInputVM();
+                        GammaInputViewModel gammmaVM = new GammaInputViewModel();
                         ICustomContentDialog dialog =
                             window.DialogManager.CreateCustomContentDialog(new GammaInput(gammmaVM),
                                 DialogMode.OkCancel);
@@ -646,7 +648,7 @@ public class GateViewModel : ViewModelBase
                     if (oldGate.Name == GateName.Empty)
                     {
                         MainWindow window1 = App.Current.MainWindow as MainWindow;
-                        MatrixInputVM matrixVM = new MatrixInputVM();
+                        MatrixInputViewModel matrixVM = new MatrixInputViewModel();
                         ICustomContentDialog dialog1 =
                             window1.DialogManager.CreateCustomContentDialog(new MatrixInput(matrixVM),
                                 DialogMode.OkCancel);
@@ -964,7 +966,7 @@ public class GateViewModel : ViewModelBase
                         if (_model.Steps[_column].HasPlace(pressedRow.OffsetToRoot, _row.OffsetToRoot))
                         {
                             MainWindow window1 = App.Current.MainWindow as MainWindow;
-                            PhaseDistInputVM vm = new PhaseDistInputVM();
+                            PhaseDistInputViewModel vm = new PhaseDistInputViewModel();
                             vm.DistText = Math.Abs(pressedRow.OffsetToRoot - _row.OffsetToRoot).ToString();
 
                             ICustomContentDialog dialog1 = window1.DialogManager.CreateCustomContentDialog(
@@ -998,7 +1000,7 @@ public class GateViewModel : ViewModelBase
                         if (_model.Steps[_column].HasPlace(pressedRow.OffsetToRoot, _row.OffsetToRoot))
                         {
                             MainWindow window1 = App.Current.MainWindow as MainWindow;
-                            PhaseDistInputVM vm = new PhaseDistInputVM();
+                            PhaseDistInputViewModel vm = new PhaseDistInputViewModel();
                             vm.DistText = Math.Abs(pressedRow.OffsetToRoot - _row.OffsetToRoot).ToString();
 
                             ICustomContentDialog dialog1 = window1.DialogManager.CreateCustomContentDialog(
@@ -1154,7 +1156,8 @@ public class GateViewModel : ViewModelBase
                         Dictionary<string, List<MethodInfo>> dict = eval.GetExtensionGates();
                         if (!string.IsNullOrWhiteSpace(MainWindowViewModel.SelectedComposite))
                         {
-                            ParametricInputVM vm = new ParametricInputVM(MainWindowViewModel.SelectedComposite, dict,
+                            ParametricInputViewModel vm = new ParametricInputViewModel(
+                                MainWindowViewModel.SelectedComposite, dict,
                                 _model.CompositeGates);
                             ParametricInput ci = new ParametricInput(vm);
                             ICustomContentDialog dialog1 = window1.DialogManager
