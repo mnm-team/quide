@@ -19,41 +19,37 @@
     along with this program.  If not, see<http://www.gnu.org/licenses/> .
  -->
 <ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-	<!--<VisualBrush x:Key="ImgEmpty" Stretch="Uniform">
-		<VisualBrush.Visual>
+	<Brush x:Key="ImgEmpty" Stretch="Uniform">
 			<DrawingGroup>
 				<DrawingGroup.Children>
 					<GeometryDrawing Brush="#1AFFFFFF" Geometry="F1 M 192,160L 288,160L 288,224L 192,224L 192,160 Z "/>
 					<GeometryDrawing Brush="#FFFFFFFF" Geometry="F1 M 192,192L 288,192">
 						<GeometryDrawing.Pen>
-							<Pen StartLineCap="Square" EndLineCap="Square" LineJoin="Round" Brush="#FF000000"/>
+							<Pen LineCap="Square" LineJoin="Round" Brush="#FF000000"/>
 						</GeometryDrawing.Pen>
 					</GeometryDrawing>
 				</DrawingGroup.Children>
 			</DrawingGroup>
-		</VisualBrush.Visual>
-	</VisualBrush>
-	<VisualBrush x:Key="ImgH" Stretch="Uniform">
-		<VisualBrush.Drawing>
+	</Brush>
+	<Brush x:Key="ImgH" Stretch="Uniform">
 			<DrawingGroup>
 				<DrawingGroup.Children>
 					<GeometryDrawing Brush="#1AFFFFFF" Geometry="F1 M 320,160L 416,160L 416,224L 320,224L 320,160 Z "/>
 					<GeometryDrawing Brush="#FFFFFFFF" Geometry="F1 M 320,192L 416,192">
 						<GeometryDrawing.Pen>
-							<Pen StartLineCap="Square" EndLineCap="Square" LineJoin="Round" Brush="#FF000000"/>
+							<Pen LineCap="Square" LineJoin="Round" Brush="#FF000000"/>
 						</GeometryDrawing.Pen>
 					</GeometryDrawing>
 					<GeometryDrawing Brush="#FFFFFFFF" Geometry="F1 M 348,172.001L 388,172.001L 388,212.001L 348,212.001L 348,172.001 Z ">
 						<GeometryDrawing.Pen>
-							<Pen StartLineCap="Square" EndLineCap="Square" LineJoin="Round" Brush="#FF000000"/>
+							<Pen LineCap="Square" LineJoin="Round" Brush="#FF000000"/>
 						</GeometryDrawing.Pen>
 					</GeometryDrawing>
 					<GeometryDrawing Brush="#FF000000" Geometry="F1 M 363.375,190.88L 373.215,190.88L 374.665,185.595C 374.955,184.565 375.1,183.766 375.1,183.2C 375.1,182.926 375.035,182.692 374.905,182.497C 374.775,182.302 374.575,182.157 374.305,182.062C 374.035,181.967 373.505,181.92 372.715,181.92L 372.87,181.28L 381.245,181.28L 381.055,181.92C 380.338,181.91 379.802,181.988 379.445,182.155C 378.945,182.388 378.575,182.69 378.335,183.06C 377.992,183.583 377.643,184.503 377.29,185.82L 373.61,198.8C 373.297,199.77 373.14,200.463 373.14,200.88C 373.14,201.243 373.278,201.517 373.555,201.702C 373.832,201.887 374.492,202.013 375.535,202.08L 375.36,202.72L 367.285,202.72L 367.505,202.08C 368.318,202.06 368.86,201.988 369.13,201.865C 369.547,201.681 369.848,201.446 370.035,201.16C 370.305,200.76 370.638,199.89 371.035,198.55L 372.94,191.84L 363.105,191.84L 361.13,198.8C 360.83,199.75 360.68,200.443 360.68,200.88C 360.68,201.243 360.815,201.517 361.085,201.702C 361.355,201.887 362.01,202.013 363.05,202.08L 362.925,202.72L 354.79,202.72L 354.995,202.08C 355.815,202.06 356.362,201.988 356.635,201.865C 357.052,201.681 357.358,201.446 357.555,201.16C 357.825,200.74 358.158,199.87 358.555,198.55L 362.185,185.605C 362.488,184.548 362.64,183.746 362.64,183.2C 362.64,182.926 362.575,182.692 362.445,182.497C 362.315,182.302 362.112,182.157 361.835,182.062C 361.558,181.967 361.02,181.92 360.22,181.92L 360.405,181.28L 368.63,181.28L 368.46,181.92C 367.76,181.91 367.243,181.988 366.91,182.155C 366.42,182.381 366.06,182.68 365.83,183.05C 365.52,183.543 365.177,184.475 364.8,185.845L 363.375,190.88 Z "/>
 				</DrawingGroup.Children>
 			</DrawingGroup>
-		</VisualBrush.Drawing>
-	</VisualBrush>
-	<VisualBrush x:Key="ImgUpNot" Stretch="Uniform">
+	</Brush>
+	<!--<VisualBrush x:Key="ImgUpNot" Stretch="Uniform">
 		<VisualBrush.Drawing>
 			<DrawingGroup>
 				<DrawingGroup.Children>
