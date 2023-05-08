@@ -24,7 +24,6 @@ public partial class CircuitGrid : UserControl
 
     public CircuitGrid()
     {
-        Drawing = this.FindControl<Canvas>("drawing");
         InitializeComponent();
     }
 
@@ -184,5 +183,6 @@ public partial class CircuitGrid : UserControl
     private void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);
+        Drawing = this.FindControl<Canvas>("drawing");
     }
 }
