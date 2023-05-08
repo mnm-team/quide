@@ -54,6 +54,12 @@ public class MainWindowViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> Calc { get; }
     public ReactiveCommand<Unit, Unit> About { get; }
 
+    // for key bindings
+    public ReactiveCommand<Unit, Unit> Cut { get; }
+    public ReactiveCommand<Unit, Unit> Copy { get; }
+    public ReactiveCommand<Unit, Unit> Paste { get; }
+    public ReactiveCommand<Unit, Unit> Delete { get; }
+
 
     #region Events
 

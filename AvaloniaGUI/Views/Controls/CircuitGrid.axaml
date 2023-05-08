@@ -32,10 +32,11 @@
                         <ItemsControl x:Name="registerItemsControl" Background="White"
                                       Items="{Binding Registers}"
                                       Margin="0,0,0,0">
-                            <ItemsControl.LayoutTransform>
-                                <ScaleTransform CenterX="0" CenterY="0"
-                                                ScaleX="{Binding ScaleFactor}" ScaleY="{Binding ScaleFactor}" />
-                            </ItemsControl.LayoutTransform>
+                            <ItemsControl.RenderTransform>
+                                <ScaleTransform
+                                    ScaleX="{Binding ScaleFactor}" ScaleY="{Binding ScaleFactor}" />
+                                <!-- TODO?: Value="0,0" CenterX="0" CenterY="0"/-->
+                            </ItemsControl.RenderTransform>
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Vertical" VerticalAlignment="Top"
@@ -53,8 +54,8 @@
                                                             HorizontalAlignment="Left"
                                                             Margin="0" Background="White">
                                                     <StackPanel.RenderTransform>
-                                                        <ScaleTransform ScaleX="1" ScaleY="-1"
-                                                                        CenterY="{Binding ScaleCenterY}" />
+                                                        <ScaleTransform ScaleX="1" ScaleY="-1" />
+                                                        <!--CenterY="{Binding ScaleCenterY}" /-->
                                                     </StackPanel.RenderTransform>
                                                 </StackPanel>
                                             </ItemsPanelTemplate>
@@ -87,14 +88,15 @@
                                                     </StackPanel.ContextMenu>
                                                     <StackPanel.RenderTransform>
                                                         <ScaleTransform ScaleX="1" ScaleY="-1">
-                                                            <ScaleTransform.CenterY>
-                                                                <Binding Source="{x:Static QubitScaleCenter}" />
-                                                            </ScaleTransform.CenterY>
+                                                            <!--<ScaleTransform.CenterY>
+                                                                <Binding
+                                                                    Source="{x:Static vm:CircuitGridViewModel.QubitScaleCenter}" />
+                                                            </ScaleTransform.CenterY>-->
                                                         </ScaleTransform>
                                                     </StackPanel.RenderTransform>
                                                     <Rectangle
                                                         Width="5"
-                                                        Height="{x:Static QubitSize}"
+                                                        Height="{x:Static vm:CircuitGridViewModel.QubitSize}"
                                                         Fill="{DynamicResource ImgQubitBegin}" />
                                                     <TextBlock
                                                         Text="{Binding RegisterName}"
@@ -110,7 +112,7 @@
                                                         VerticalAlignment="Bottom" />
                                                     <Rectangle
                                                         Width="20"
-                                                        Height="{x:Static QubitSize}"
+                                                        Height="{x:Static vm:CircuitGridViewModel.QubitSize}"
                                                         Fill="{DynamicResource ImgQubitEnd}" />
                                                     <TextBlock
                                                         Text="= "
@@ -122,8 +124,8 @@
                                                             Command="{Binding ChangeValueCommand}"
                                                             ToolTip.Tip="{x:Static p:Resources.FlipBit}">
                                                         <Rectangle
-                                                            Width="{x:Static QubitSize}"
-                                                            Height="{x:Static QubitSize}"
+                                                            Width="{x:Static vm:CircuitGridViewModel.QubitSize}"
+                                                            Height="{x:Static vm:CircuitGridViewModel.QubitSize}"
                                                             Fill="{Binding QubitImage}" />
                                                     </Button>
                                                 </StackPanel>
@@ -134,23 +136,24 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                         <Rectangle
-                            Fill="White"
-                            Height="{x:Static SystemParameters.HorizontalScrollBarHeight}" />
+                            Fill="White" />
+                        <!--Height="{x:Static SystemParameters.HorizontalScrollBarHeight}" /-->
                     </StackPanel>
                 </ScrollViewer>
                 <ScrollViewer x:Name="GatesScroll"
                               Grid.Column="1"
                               HorizontalScrollBarVisibility="Visible"
                               VerticalScrollBarVisibility="Visible"
+                              Offset="{Binding #RegisterScroll.Offset, Mode=TwoWay}"
                               ScrollChanged="GatesScroll_ScrollChanged">
                     <ItemsControl x:Name="stepItemsControl"
                                   Background="White"
                                   Items="{Binding Steps}"
                                   Margin="0,0,0,0">
-                        <ItemsControl.LayoutTransform>
-                            <ScaleTransform CenterX="0" CenterY="0"
-                                            ScaleX="{Binding ScaleFactor}" ScaleY="{Binding ScaleFactor}" />
-                        </ItemsControl.LayoutTransform>
+                        <ItemsControl.RenderTransform>
+                            <ScaleTransform ScaleX="{Binding ScaleFactor}" ScaleY="{Binding ScaleFactor}" />
+                            <!--CenterX="0" CenterY="0"/-->
+                        </ItemsControl.RenderTransform>
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel
@@ -170,8 +173,8 @@
                                                             HorizontalAlignment="Stretch"
                                                             Margin="{Binding StepMargin}" Background="White">
                                                     <StackPanel.RenderTransform>
-                                                        <ScaleTransform ScaleX="1" ScaleY="-1"
-                                                                        CenterY="{Binding ScaleCenterY}" />
+                                                        <ScaleTransform ScaleX="1" ScaleY="-1" />
+                                                        <!--CenterY="{Binding ScaleCenterY}" /-->
                                                     </StackPanel.RenderTransform>
                                                 </StackPanel>
                                             </ItemsPanelTemplate>
@@ -179,12 +182,12 @@
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <Button VerticalAlignment="Top" Padding="0"
-                                                        IsEnabled="{Binding IsEnabled}"
-                                                        PreviewMouseLeftButtonDown="GateButton_MouseDown"
-                                                        AllowDrop="True"
-                                                        Drop="GateButton_Drop"
+                                                        IsEnabled="{Binding IsEnabled}">
+                                                    <!--Drop="GateButton_Drop"
                                                         DragEnter="GateButton_DragEnter"
-                                                        DragOver="GateButton_DragOver">
+                                                        DragOver="GateButton_DragOver"
+                                                        PreviewMouseLeftButtonDown="GateButton_MouseDown"-->
+                                                    <!--AllowDrop="True"-->
                                                     <Button.ContextMenu>
                                                         <ContextMenu>
                                                             <MenuItem Header="{x:Static p:Resources.InsertQubitAbove}"
@@ -208,16 +211,16 @@
                                                             Opacity="{Binding SelectionOpacity}" />
                                                         <Border Margin="0"
                                                                 Background="{Binding BackgroundImage}"
-                                                                Width="{x:Static GateWidth}"
-                                                                Height="{x:Static QubitSize}">
+                                                                Width="{x:Static vm:CircuitGridViewModel.GateWidth}"
+                                                                Height="{x:Static vm:CircuitGridViewModel.QubitSize}">
                                                             <Border Margin="0"
                                                                     Height="{Binding GateHeight}"
                                                                     Background="{Binding GateImage}">
                                                                 <Canvas
                                                                     RenderTransformOrigin="0.5, 0.5">
                                                                     <Viewbox MaxWidth="{Binding GateTextHeight}"
-                                                                             MaxHeight="{x:Static GateHeight}"
-                                                                             Canvas.Top="{x:Static GateTextCanvasTop}">
+                                                                             MaxHeight="{x:Static vm:CircuitGridViewModel.GateHeight}"
+                                                                             Canvas.Top="{x:Static vm:CircuitGridViewModel.GateTextCanvasTop}">
                                                                         <TextBlock
                                                                             Margin="2"
                                                                             FontFamily="Cambria"
@@ -229,7 +232,7 @@
                                                                         <TransformGroup>
                                                                             <RotateTransform Angle="90" />
                                                                             <TranslateTransform X="0"
-                                                                                Y="{x:Static GateTextTranslate}" />
+                                                                                Y="{x:Static vm:CircuitGridViewModel.GateTextTranslate}" />
                                                                         </TransformGroup>
                                                                     </Canvas.RenderTransform>
                                                                 </Canvas>
@@ -238,9 +241,10 @@
                                                     </Grid>
                                                     <Button.RenderTransform>
                                                         <ScaleTransform ScaleX="1" ScaleY="-1">
-                                                            <ScaleTransform.CenterY>
-                                                                <Binding Source="{x:Static QubitScaleCenter}" />
-                                                            </ScaleTransform.CenterY>
+                                                            <!--<ScaleTransform.CenterY>
+                                                                <Binding
+                                                                    Source="{x:Static vm:CircuitGridViewModel.QubitScaleCenter}" />
+                                                            </ScaleTransform.CenterY>-->
                                                         </ScaleTransform>
                                                     </Button.RenderTransform>
                                                 </Button>
@@ -255,12 +259,12 @@
                 <Canvas
                     x:Name="drawing"
                     Grid.Column="1"
-                    AllowDrop="True"
-                    Drop="drawing_Drop">
-                    <Canvas.LayoutTransform>
-                        <ScaleTransform CenterX="0" CenterY="0"
-                                        ScaleX="{Binding ScaleFactor}" ScaleY="{Binding ScaleFactor}" />
-                    </Canvas.LayoutTransform>
+                    PointerReleased="drawing_Drop">
+                    <!--AllowDrop="True"-->
+                    <Canvas.RenderTransform>
+                        <ScaleTransform ScaleX="{Binding ScaleFactor}" ScaleY="{Binding ScaleFactor}" />
+                        <!--CenterX="0" CenterY="0"/-->
+                    </Canvas.RenderTransform>
                 </Canvas>
             </Grid>
         </Border>

@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:AvaloniaGUI.ViewModels.Dialog"
-             xmlns:p="clr-namespace:AvaloniaGUI.Properties"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:GammaInputViewModel"
              x:Class="AvaloniaGUI.Views.Dialog.GammaInput">
@@ -12,7 +11,7 @@
         <vm:GammaInputViewModel />
     </Design.DataContext>
 
-    <UserControl.Resources>
+    <!--<UserControl.Resources>
         <Style x:Key="DefaultButton" Selector="Button" />
         <Style x:Key="FlatRadioButton" BasedOn="{StaticResource {x:Static ToolBar.RadioButtonStyleKey}}"
                Selector="RadioButton" />
@@ -109,5 +108,5 @@
                     Content="{x:Static p:Resources.Pi_8}" />
             </ComboBox>
         </Grid>
-    </Grid>
+    </Grid>-->
 </UserControl>

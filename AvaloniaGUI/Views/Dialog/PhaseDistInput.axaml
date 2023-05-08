@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:AvaloniaGUI.ViewModels.Dialog"
-             xmlns:p="clr-namespace:AvaloniaGUI.Properties"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:PhaseDistInputViewModel"
              x:Class="AvaloniaGUI.Views.Dialog.PhaseDistInput">
@@ -12,7 +11,7 @@
         <vm:PhaseDistInputViewModel />
     </Design.DataContext>
 
-    <Grid>
+    <!--<Grid>
         <StackPanel Orientation="Horizontal"
                     VerticalAlignment="Bottom">
             <TextBlock Text="{x:Static p:Resources.DistValue}"
@@ -29,5 +28,5 @@
                 </TextBox.Text>
             </TextBox>
         </StackPanel>
-    </Grid>
+    </Grid>-->
 </UserControl>

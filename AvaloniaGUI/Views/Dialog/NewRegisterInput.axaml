@@ -3,8 +3,6 @@
              xmlns:vm="using:AvaloniaGUI.ViewModels.Dialog"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:p="clr-namespace:AvaloniaGUI.Properties"
-             xmlns:codeHelpers="clr-namespace:AvaloniaGUI.CodeHelpers"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AvaloniaGUI.Views.Dialog.NewRegisterInput"
              x:DataType="vm:NewRegisterInputViewModel">
@@ -12,7 +10,7 @@
         <vm:NewRegisterInputViewModel />
     </Design.DataContext>
 
-    <UserControl.Resources>
+    <!--<UserControl.Resources>
         <codeHelpers:ComplexConverter x:Key="ComplexToString" />
         <codeHelpers:AmplitudeColorConverter x:Key="AmplitudeToColor" />
         <Style x:Key="DefaultButton" Selector="Button" />
@@ -105,5 +103,5 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-    </DockPanel>
+    </DockPanel>-->
 </UserControl>

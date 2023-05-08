@@ -6,7 +6,6 @@ using System.Collections.Specialized;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaGUI.ViewModels.Helpers;
-using AvaloniaGUI.ViewModels.MainModels;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel;
 
 #endregion
@@ -182,16 +181,16 @@ public class CircuitGridViewModel : ViewModelBase
     public void LayoutRoot_PreviewMouseWheel(PointerWheelEventArgs e)
     {
         //TODO: avalonia pointer events and key gestures 
-        if (Keyboard.IsKeyDown(Key.LeftCtrl) ||
-            Keyboard.IsKeyDown(Key.RightCtrl))
-        {
-            double newScaleFactor = ScaleFactor;
-            newScaleFactor += (e.Delta.Length > 0) ? 0.1 : -0.1;
-            if (newScaleFactor >= _scaleFactorMin && newScaleFactor <= _scaleFactorMax)
-            {
-                ScaleFactor = newScaleFactor;
-            }
-        }
+        // if (Keyboard.IsKeyDown(Key.LeftCtrl) ||
+        //     Keyboard.IsKeyDown(Key.RightCtrl))
+        // {
+        //     double newScaleFactor = ScaleFactor;
+        //     newScaleFactor += (e.Delta.Length > 0) ? 0.1 : -0.1;
+        //     if (newScaleFactor >= _scaleFactorMin && newScaleFactor <= _scaleFactorMax)
+        //     {
+        //         ScaleFactor = newScaleFactor;
+        //     }
+        // }
     }
 
     #endregion // Public Methods

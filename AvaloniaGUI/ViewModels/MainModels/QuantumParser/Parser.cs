@@ -26,10 +26,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.Loader;
 using System.Text;
 using System.Text.RegularExpressions;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel;
 using AvaloniaGUI.ViewModels.MainModels.QuantumParser.Operations;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
 
 #endregion
 
@@ -48,53 +52,73 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
     {
         public Assembly CompileForRun(string code)
         {
-            CompilerResults compResults = CompilerResults(code);
+            Assembly compResults = CompilerResults(code);
 
-            return compResults.CompiledAssembly;
+            return compResults;
         }
 
         public Assembly CompileForBuild(string code)
         {
             code = Preprocess(code);
 
-            CompilerResults compResults = CompilerResults(code);
+            Assembly compResults = CompilerResults(code);
 
-            return compResults.CompiledAssembly;
+            return compResults;
         }
 
         // TODO: compilation with roselyn s. git stashes
-        private CompilerResults CompilerResults(string code)
+        private Assembly CompilerResults(string code)
         {
-            // Check for safety
-            Validate(code);
-
-            // Compiler and CompilerParameters
-            CSharpCodeProvider codeProvider = new CSharpCodeProvider();
-            CompilerParameters compParameters = new CompilerParameters();
-            // Add an assembly reference.
-            compParameters.ReferencedAssemblies.Add("System.dll");
-            compParameters.ReferencedAssemblies.Add("System.Core.dll");
-            compParameters.ReferencedAssemblies.Add("System.Numerics.dll");
-            compParameters.ReferencedAssemblies.Add("QuantumParser.dll");
-
-            compParameters.GenerateExecutable = true;
-            compParameters.GenerateInMemory = true;
-
-            // Compile the code
-            CompilerResults compResults = codeProvider.CompileAssemblyFromSource(compParameters, code);
-
-            if (compResults.Errors.Count > 0)
+            MetadataReference[] references = new MetadataReference[]
             {
-                StringBuilder builder = new StringBuilder("Compiler errors and warnings:\n\n");
-                foreach (CompilerError ce in compResults.Errors)
-                {
-                    builder.AppendLine(ce.ToString()).AppendLine();
-                }
+                MetadataReference.CreateFromFile(typeof(object).GetTypeInfo().Assembly.Location)
+            };
 
-                throw new Exception(builder.ToString());
-            }
+            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(code);
+            CSharpCompilation compilation = CSharpCompilation.Create(
+                "excelCsAssembly",
+                syntaxTrees: new[] { syntaxTree },
+                references: references,
+                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
-            return compResults;
+            MemoryStream ms = new MemoryStream();
+            EmitResult result = compilation.Emit(ms);
+            ms.Seek(0, SeekOrigin.Begin);
+            Assembly
+                assembly = AssemblyLoadContext.Default
+                    .LoadFromStream(ms); // throws BadImageFormatException but compiles
+
+            return assembly;
+            // Check for safety
+            // Validate(code);
+            //
+            // // Compiler and CompilerParameters
+            // CSharpCodeProvider codeProvider = new CSharpCodeProvider();
+            // CompilerParameters compParameters = new CompilerParameters();
+            // // Add an assembly reference.
+            // compParameters.ReferencedAssemblies.Add("System.dll");
+            // compParameters.ReferencedAssemblies.Add("System.Core.dll");
+            // compParameters.ReferencedAssemblies.Add("System.Numerics.dll");
+            // compParameters.ReferencedAssemblies.Add("QuantumParser.dll");
+            //
+            // compParameters.GenerateExecutable = true;
+            // compParameters.GenerateInMemory = true;
+            //
+            // // Compile the code
+            // CompilerResults compResults = codeProvider.CompileAssemblyFromSource(compParameters, code);
+            //
+            // if (compResults.Errors.Count > 0)
+            // {
+            //     StringBuilder builder = new StringBuilder("Compiler errors and warnings:\n\n");
+            //     foreach (CompilerError ce in compResults.Errors)
+            //     {
+            //         builder.AppendLine(ce.ToString()).AppendLine();
+            //     }
+            //
+            //     throw new Exception(builder.ToString());
+            // }
+            //
+            // return compResults;
         }
 
         public ComputerModel BuildModel(Assembly asm)

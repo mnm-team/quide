@@ -5,19 +5,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
-using System.Text;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Media;
 using AvaloniaGUI.CodeHelpers;
 using AvaloniaGUI.ViewModels.Controls;
-using AvaloniaGUI.ViewModels.Dialog;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel.Gates;
 using AvaloniaGUI.ViewModels.MainModels.QuantumParser;
-using AvaloniaGUI.Views;
-using AvaloniaGUI.Views.Dialog;
 
 #endregion
 
@@ -143,7 +140,7 @@ public class GateViewModel : ViewModelBase
         }
     }
 
-    public VisualBrush BackgroundImage
+    public ImageBrush BackgroundImage
     {
         get
         {
@@ -154,27 +151,27 @@ public class GateViewModel : ViewModelBase
                 {
                     if (_row.Equals(gate.Control.Value))
                     {
-                        return Application.Current.FindResource("ImgDownC") as VisualBrush;
+                        return Application.Current.FindResource("ImgDownC") as ImageBrush;
                     }
                     else
                     {
-                        return Application.Current.FindResource("ImgDown") as VisualBrush;
+                        return Application.Current.FindResource("ImgDown") as ImageBrush;
                     }
                 }
                 else if (_row.OffsetToRoot == gate.End)
                 {
                     if (_row.Equals(gate.Control.Value))
                     {
-                        return Application.Current.FindResource("ImgUpC") as VisualBrush;
+                        return Application.Current.FindResource("ImgUpC") as ImageBrush;
                     }
                     else
                     {
-                        return Application.Current.FindResource("ImgUp") as VisualBrush;
+                        return Application.Current.FindResource("ImgUp") as ImageBrush;
                     }
                 }
                 else
                 {
-                    return Application.Current.FindResource("ImgLine") as VisualBrush;
+                    return Application.Current.FindResource("ImgLine") as ImageBrush;
                 }
             }
             else if (gate is MultiControlledGate)
@@ -183,30 +180,30 @@ public class GateViewModel : ViewModelBase
                 {
                     if (_row.OffsetToRoot != gate.End)
                     {
-                        return Application.Current.FindResource("ImgDown") as VisualBrush;
+                        return Application.Current.FindResource("ImgDown") as ImageBrush;
                     }
                     else
                     {
-                        return Application.Current.FindResource("ImgEmpty") as VisualBrush;
+                        return Application.Current.FindResource("ImgEmpty") as ImageBrush;
                     }
                 }
                 else if (_row.OffsetToRoot == gate.End)
                 {
-                    return Application.Current.FindResource("ImgUp") as VisualBrush;
+                    return Application.Current.FindResource("ImgUp") as ImageBrush;
                 }
                 else
                 {
-                    return Application.Current.FindResource("ImgLine") as VisualBrush;
+                    return Application.Current.FindResource("ImgLine") as ImageBrush;
                 }
             }
             else
             {
-                return Application.Current.FindResource("ImgEmpty") as VisualBrush;
+                return Application.Current.FindResource("ImgEmpty") as ImageBrush;
             }
         }
     }
 
-    public VisualBrush GateImage
+    public ImageBrush GateImage
     {
         get
         {
@@ -224,73 +221,73 @@ public class GateViewModel : ViewModelBase
                 {
                     if (_row.OffsetToRoot == cg.End)
                     {
-                        return Application.Current.FindResource("ToolComposite") as VisualBrush;
+                        return Application.Current.FindResource("ToolComposite") as ImageBrush;
                     }
                     else
                     {
-                        return Application.Current.FindResource("DownComposite") as VisualBrush;
+                        return Application.Current.FindResource("DownComposite") as ImageBrush;
                     }
                 }
                 else if (_row.OffsetToRoot == cg.End)
                 {
-                    return Application.Current.FindResource("UpComposite") as VisualBrush;
+                    return Application.Current.FindResource("UpComposite") as ImageBrush;
                 }
                 else
                 {
-                    return Application.Current.FindResource("CenterComposite") as VisualBrush;
+                    return Application.Current.FindResource("CenterComposite") as ImageBrush;
                 }
             }
             else if (gate.Name == GateName.Measure)
             {
-                return Application.Current.FindResource("ToolMeasure") as VisualBrush;
+                return Application.Current.FindResource("ToolMeasure") as ImageBrush;
             }
             else if (_row.Equals(gate.Target))
             {
-                VisualBrush brush;
+                ImageBrush brush;
                 switch (gate.Name)
                 {
                     case GateName.Hadamard:
-                        brush = Application.Current.FindResource("ToolH") as VisualBrush;
+                        brush = Application.Current.FindResource("ToolH") as ImageBrush;
                         break;
                     case GateName.SigmaX:
-                        brush = Application.Current.FindResource("ToolX") as VisualBrush;
+                        brush = Application.Current.FindResource("ToolX") as ImageBrush;
                         break;
                     case GateName.SigmaY:
-                        brush = Application.Current.FindResource("ToolY") as VisualBrush;
+                        brush = Application.Current.FindResource("ToolY") as ImageBrush;
                         break;
                     case GateName.SigmaZ:
-                        brush = Application.Current.FindResource("ToolZ") as VisualBrush;
+                        brush = Application.Current.FindResource("ToolZ") as ImageBrush;
                         break;
                     case GateName.SqrtX:
-                        brush = Application.Current.FindResource("ToolSqrtX") as VisualBrush;
+                        brush = Application.Current.FindResource("ToolSqrtX") as ImageBrush;
                         break;
                     case GateName.RotateX:
-                        brush = Application.Current.FindResource("ToolRotateX") as VisualBrush;
+                        brush = Application.Current.FindResource("ToolRotateX") as ImageBrush;
                         break;
                     case GateName.RotateY:
-                        brush = Application.Current.FindResource("ToolRotateY") as VisualBrush;
+                        brush = Application.Current.FindResource("ToolRotateY") as ImageBrush;
                         break;
                     case GateName.RotateZ:
-                        brush = Application.Current.FindResource("ToolRotateZ") as VisualBrush;
+                        brush = Application.Current.FindResource("ToolRotateZ") as ImageBrush;
                         break;
                     case GateName.PhaseKick:
-                        brush = Application.Current.FindResource("ToolPhaseKick") as VisualBrush;
+                        brush = Application.Current.FindResource("ToolPhaseKick") as ImageBrush;
                         break;
                     case GateName.PhaseScale:
-                        brush = Application.Current.FindResource("ToolPhaseScale") as VisualBrush;
+                        brush = Application.Current.FindResource("ToolPhaseScale") as ImageBrush;
                         break;
                     case GateName.Unitary:
-                        brush = Application.Current.FindResource("ToolU") as VisualBrush;
+                        brush = Application.Current.FindResource("ToolU") as ImageBrush;
                         break;
                     case GateName.CNot:
                     case GateName.Toffoli:
-                        brush = Application.Current.FindResource("ImgNot") as VisualBrush;
+                        brush = Application.Current.FindResource("ImgNot") as ImageBrush;
                         break;
                     case GateName.CPhaseShift:
-                        brush = Application.Current.FindResource("ToolCPhaseShift") as VisualBrush;
+                        brush = Application.Current.FindResource("ToolCPhaseShift") as ImageBrush;
                         break;
                     case GateName.InvCPhaseShift:
-                        brush = Application.Current.FindResource("ToolInvCPhaseShift") as VisualBrush;
+                        brush = Application.Current.FindResource("ToolInvCPhaseShift") as ImageBrush;
                         break;
                     default:
                         return null;
@@ -303,11 +300,11 @@ public class GateViewModel : ViewModelBase
                 MultiControlledGate t = gate as MultiControlledGate;
                 if (t.Controls.Contains<RegisterRefModel>(_row))
                 {
-                    return Application.Current.FindResource("ImgC") as VisualBrush;
+                    return Application.Current.FindResource("ImgC") as ImageBrush;
                 }
                 else
                 {
-                    return Application.Current.FindResource("ImgLine") as VisualBrush;
+                    return Application.Current.FindResource("ImgLine") as ImageBrush;
                 }
             }
 
@@ -415,17 +412,16 @@ public class GateViewModel : ViewModelBase
         Refresh();
     }
 
-    public void SetGate(int pressedColumn, RegisterRefModel pressedRow, DragDropKeyStates keyStates)
+    public void SetGate(int pressedColumn, RegisterRefModel pressedRow, KeyModifiers keyStates)
     {
-        // TODO whats with action and DragDropKeyStates ?
         ActionName action = MainWindowViewModel.SelectedAction;
         Gate oldGate;
 
         // make selection
-        if (keyStates.HasFlag(DragDropKeyStates.ShiftKey))
+        if (keyStates.HasFlag(KeyModifiers.Shift))
         {
             // move selection
-            if (keyStates.HasFlag(DragDropKeyStates.ControlKey))
+            if (keyStates.HasFlag(KeyModifiers.Control))
             {
                 if (_model.IsSelected(pressedRow.OffsetToRoot, pressedColumn))
                 {
@@ -605,41 +601,41 @@ public class GateViewModel : ViewModelBase
                     oldGate = _model.Steps[_column].Gates[_row.OffsetToRoot];
                     if (oldGate.Name == GateName.Empty)
                     {
-                        MainWindow window = App.Current.MainWindow as MainWindow;
-                        GammaInputViewModel gammmaVM = new GammaInputViewModel();
-                        ICustomContentDialog dialog =
-                            window.DialogManager.CreateCustomContentDialog(new GammaInput(gammmaVM),
-                                DialogMode.OkCancel);
-                        dialog.Ok = () =>
-                        {
-                            double gamma = gammmaVM.Gamma;
-                            if (action == ActionName.RotateX)
-                            {
-                                _model.Steps[_column].SetGate(new RotateXGate(gamma, _row));
-                                _model.AddStepAfter(_column);
-                            }
-                            else if (action == ActionName.RotateY)
-                            {
-                                _model.Steps[_column].SetGate(new RotateYGate(gamma, _row));
-                                _model.AddStepAfter(_column);
-                            }
-                            else if (action == ActionName.RotateZ)
-                            {
-                                _model.Steps[_column].SetGate(new RotateZGate(gamma, _row));
-                                _model.AddStepAfter(_column);
-                            }
-                            else if (action == ActionName.PhaseKick)
-                            {
-                                _model.Steps[_column].SetGate(new PhaseKickGate(gamma, _row));
-                                _model.AddStepAfter(_column);
-                            }
-                            else
-                            {
-                                _model.Steps[_column].SetGate(new PhaseScaleGate(gamma, _row));
-                                _model.AddStepAfter(_column);
-                            }
-                        };
-                        dialog.Show();
+                        // MainWindow window = App.Current.MainWindow as MainWindow;
+                        // GammaInputViewModel gammmaVM = new GammaInputViewModel();
+                        // ICustomContentDialog dialog =
+                        //     window.DialogManager.CreateCustomContentDialog(new GammaInput(gammmaVM),
+                        //         DialogMode.OkCancel);
+                        // dialog.Ok = () =>
+                        // {
+                        //     double gamma = gammmaVM.Gamma;
+                        //     if (action == ActionName.RotateX)
+                        //     {
+                        //         _model.Steps[_column].SetGate(new RotateXGate(gamma, _row));
+                        //         _model.AddStepAfter(_column);
+                        //     }
+                        //     else if (action == ActionName.RotateY)
+                        //     {
+                        //         _model.Steps[_column].SetGate(new RotateYGate(gamma, _row));
+                        //         _model.AddStepAfter(_column);
+                        //     }
+                        //     else if (action == ActionName.RotateZ)
+                        //     {
+                        //         _model.Steps[_column].SetGate(new RotateZGate(gamma, _row));
+                        //         _model.AddStepAfter(_column);
+                        //     }
+                        //     else if (action == ActionName.PhaseKick)
+                        //     {
+                        //         _model.Steps[_column].SetGate(new PhaseKickGate(gamma, _row));
+                        //         _model.AddStepAfter(_column);
+                        //     }
+                        //     else
+                        //     {
+                        //         _model.Steps[_column].SetGate(new PhaseScaleGate(gamma, _row));
+                        //         _model.AddStepAfter(_column);
+                        //     }
+                        // };
+                        // dialog.Show();
                     }
 
                     break;
@@ -647,21 +643,21 @@ public class GateViewModel : ViewModelBase
                     oldGate = _model.Steps[_column].Gates[_row.OffsetToRoot];
                     if (oldGate.Name == GateName.Empty)
                     {
-                        MainWindow window1 = App.Current.MainWindow as MainWindow;
-                        MatrixInputViewModel matrixVM = new MatrixInputViewModel();
-                        ICustomContentDialog dialog1 =
-                            window1.DialogManager.CreateCustomContentDialog(new MatrixInput(matrixVM),
-                                DialogMode.OkCancel);
-                        dialog1.Ok = () =>
-                        {
-                            Complex[,] matrix = matrixVM.Matrix;
-                            if (matrix != null)
-                            {
-                                _model.Steps[_column].SetGate(new UnitaryGate(matrix, _row));
-                                _model.AddStepAfter(_column);
-                            }
-                        };
-                        dialog1.Show();
+                        // MainWindow window1 = App.Current.MainWindow as MainWindow;
+                        // MatrixInputViewModel matrixVM = new MatrixInputViewModel();
+                        // ICustomContentDialog dialog1 =
+                        //     window1.DialogManager.CreateCustomContentDialog(new MatrixInput(matrixVM),
+                        //         DialogMode.OkCancel);
+                        // dialog1.Ok = () =>
+                        // {
+                        //     Complex[,] matrix = matrixVM.Matrix;
+                        //     if (matrix != null)
+                        //     {
+                        //         _model.Steps[_column].SetGate(new UnitaryGate(matrix, _row));
+                        //         _model.AddStepAfter(_column);
+                        //     }
+                        // };
+                        // dialog1.Show();
                     }
 
                     break;
@@ -965,31 +961,31 @@ public class GateViewModel : ViewModelBase
                     {
                         if (_model.Steps[_column].HasPlace(pressedRow.OffsetToRoot, _row.OffsetToRoot))
                         {
-                            MainWindow window1 = App.Current.MainWindow as MainWindow;
-                            PhaseDistInputViewModel vm = new PhaseDistInputViewModel();
-                            vm.DistText = Math.Abs(pressedRow.OffsetToRoot - _row.OffsetToRoot).ToString();
-
-                            ICustomContentDialog dialog1 = window1.DialogManager.CreateCustomContentDialog(
-                                new PhaseDistInput(vm), DialogMode.OkCancel);
-                            dialog1.Ok = () =>
-                            {
-                                int? dist = vm.Dist;
-                                if (dist.HasValue)
-                                {
-                                    if (_row.Equals(pressedRow))
-                                    {
-                                        _model.Steps[_column].SetGate(new CPhaseShiftGate(dist.Value, _row));
-                                    }
-                                    else
-                                    {
-                                        _model.Steps[_column]
-                                            .SetGate(new CPhaseShiftGate(dist.Value, _row, pressedRow));
-                                    }
-
-                                    _model.AddStepAfter(_column);
-                                }
-                            };
-                            dialog1.Show();
+                            // MainWindow window1 = App.Current.MainWindow as MainWindow;
+                            // PhaseDistInputViewModel vm = new PhaseDistInputViewModel();
+                            // vm.DistText = Math.Abs(pressedRow.OffsetToRoot - _row.OffsetToRoot).ToString();
+                            //
+                            // ICustomContentDialog dialog1 = window1.DialogManager.CreateCustomContentDialog(
+                            //     new PhaseDistInput(vm), DialogMode.OkCancel);
+                            // dialog1.Ok = () =>
+                            // {
+                            //     int? dist = vm.Dist;
+                            //     if (dist.HasValue)
+                            //     {
+                            //         if (_row.Equals(pressedRow))
+                            //         {
+                            //             _model.Steps[_column].SetGate(new CPhaseShiftGate(dist.Value, _row));
+                            //         }
+                            //         else
+                            //         {
+                            //             _model.Steps[_column]
+                            //                 .SetGate(new CPhaseShiftGate(dist.Value, _row, pressedRow));
+                            //         }
+                            //
+                            //         _model.AddStepAfter(_column);
+                            //     }
+                            // };
+                            // dialog1.Show();
                         }
                     }
 
@@ -999,31 +995,31 @@ public class GateViewModel : ViewModelBase
                     {
                         if (_model.Steps[_column].HasPlace(pressedRow.OffsetToRoot, _row.OffsetToRoot))
                         {
-                            MainWindow window1 = App.Current.MainWindow as MainWindow;
-                            PhaseDistInputViewModel vm = new PhaseDistInputViewModel();
-                            vm.DistText = Math.Abs(pressedRow.OffsetToRoot - _row.OffsetToRoot).ToString();
-
-                            ICustomContentDialog dialog1 = window1.DialogManager.CreateCustomContentDialog(
-                                new PhaseDistInput(vm), DialogMode.OkCancel);
-                            dialog1.Ok = () =>
-                            {
-                                int? dist = vm.Dist;
-                                if (dist.HasValue)
-                                {
-                                    if (_row.Equals(pressedRow))
-                                    {
-                                        _model.Steps[_column].SetGate(new InvCPhaseShiftGate(dist.Value, _row));
-                                    }
-                                    else
-                                    {
-                                        _model.Steps[_column]
-                                            .SetGate(new InvCPhaseShiftGate(dist.Value, _row, pressedRow));
-                                    }
-
-                                    _model.AddStepAfter(_column);
-                                }
-                            };
-                            dialog1.Show();
+                            // MainWindow window1 = App.Current.MainWindow as MainWindow;
+                            // PhaseDistInputViewModel vm = new PhaseDistInputViewModel();
+                            // vm.DistText = Math.Abs(pressedRow.OffsetToRoot - _row.OffsetToRoot).ToString();
+                            //
+                            // ICustomContentDialog dialog1 = window1.DialogManager.CreateCustomContentDialog(
+                            //     new PhaseDistInput(vm), DialogMode.OkCancel);
+                            // dialog1.Ok = () =>
+                            // {
+                            //     int? dist = vm.Dist;
+                            //     if (dist.HasValue)
+                            //     {
+                            //         if (_row.Equals(pressedRow))
+                            //         {
+                            //             _model.Steps[_column].SetGate(new InvCPhaseShiftGate(dist.Value, _row));
+                            //         }
+                            //         else
+                            //         {
+                            //             _model.Steps[_column]
+                            //                 .SetGate(new InvCPhaseShiftGate(dist.Value, _row, pressedRow));
+                            //         }
+                            //
+                            //         _model.AddStepAfter(_column);
+                            //     }
+                            // };
+                            // dialog1.Show();
                         }
                     }
 
@@ -1095,11 +1091,11 @@ public class GateViewModel : ViewModelBase
                             string msg = "Unable to ungroup gate. Its parameters are invalid.\n" +
                                          "Inner exception:\n" +
                                          (ex.InnerException == null ? ex.Message : ex.InnerException.Message);
-                            MessageBox.Show(
-                                msg,
-                                "Unable to ungroup gate",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error);
+                            // MessageBox.Show(
+                            //     msg,
+                            //     "Unable to ungroup gate",
+                            //     MessageBoxButton.OK,
+                            //     MessageBoxImage.Error);
                         }
                     }
                     else if (oldGate.Name == GateName.Composite)
@@ -1149,67 +1145,66 @@ public class GateViewModel : ViewModelBase
                     oldGate = _model.Steps[_column].Gates[_row.OffsetToRoot];
                     if (oldGate.Name == GateName.Empty)
                     {
-                        MainWindow window1 = App.Current.MainWindow as MainWindow;
+                        //MainWindow window1 = App.Current.MainWindow as MainWindow;
 
                         CircuitEvaluator eval = CircuitEvaluator.GetInstance();
-                        //eval.InitFromModel(_model);
                         Dictionary<string, List<MethodInfo>> dict = eval.GetExtensionGates();
                         if (!string.IsNullOrWhiteSpace(MainWindowViewModel.SelectedComposite))
                         {
-                            ParametricInputViewModel vm = new ParametricInputViewModel(
-                                MainWindowViewModel.SelectedComposite, dict,
-                                _model.CompositeGates);
-                            ParametricInput ci = new ParametricInput(vm);
-                            ICustomContentDialog dialog1 = window1.DialogManager
-                                .CreateCustomContentDialog(ci, DialogMode.OkCancel);
-                            dialog1.Ok = () =>
-                            {
-                                try
-                                {
-                                    if (vm.IsValid)
-                                    {
-                                        if (vm.Method != null)
-                                        {
-                                            ParametricGate cg = eval.CreateParametricGate(vm.Method, vm.ParamValues);
-                                            _model.Steps[_column].SetGate(cg);
-                                            _model.AddStepAfter(_column);
-                                        }
-                                        else if (vm.CopositeGateTarget != null)
-                                        {
-                                            int minWidth = _model.MinWidthForComposite(vm.FunctionName);
-                                            if (vm.CopositeGateTarget.Value.Width < minWidth)
-                                            {
-                                                StringBuilder sb =
-                                                    new StringBuilder("Entered parameter has too small width.\n");
-                                                sb.Append("Entered width: ");
-                                                sb.Append(vm.CopositeGateTarget.Value.Width).AppendLine();
-                                                sb.Append("Minimum width: ");
-                                                sb.Append(minWidth).AppendLine();
-                                                throw new Exception(sb.ToString());
-                                            }
-                                            else
-                                            {
-                                                CompositeGate cg = new CompositeGate(vm.FunctionName,
-                                                    vm.CopositeGateTarget.Value);
-                                                _model.Steps[_column].SetGate(cg);
-                                                _model.AddStepAfter(_column);
-                                            }
-                                        }
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    string msg = "Unable to add gate. The parameters are invalid.\n" +
-                                                 "Inner exception:\n" +
-                                                 (ex.InnerException != null ? ex.InnerException.Message : ex.Message);
-                                    MessageBox.Show(
-                                        msg,
-                                        "Unable to add gate",
-                                        MessageBoxButton.OK,
-                                        MessageBoxImage.Error);
-                                }
-                            };
-                            dialog1.Show();
+                            // ParametricInputViewModel vm = new ParametricInputViewModel(
+                            //     MainWindowViewModel.SelectedComposite, dict,
+                            //     _model.CompositeGates);
+                            // ParametricInput ci = new ParametricInput(vm);
+                            // ICustomContentDialog dialog1 = window1.DialogManager
+                            //     .CreateCustomContentDialog(ci, DialogMode.OkCancel);
+                            // dialog1.Ok = () =>
+                            // {
+                            //     try
+                            //     {
+                            //         if (vm.IsValid)
+                            //         {
+                            //             if (vm.Method != null)
+                            //             {
+                            //                 ParametricGate cg = eval.CreateParametricGate(vm.Method, vm.ParamValues);
+                            //                 _model.Steps[_column].SetGate(cg);
+                            //                 _model.AddStepAfter(_column);
+                            //             }
+                            //             else if (vm.CopositeGateTarget != null)
+                            //             {
+                            //                 int minWidth = _model.MinWidthForComposite(vm.FunctionName);
+                            //                 if (vm.CopositeGateTarget.Value.Width < minWidth)
+                            //                 {
+                            //                     StringBuilder sb =
+                            //                         new StringBuilder("Entered parameter has too small width.\n");
+                            //                     sb.Append("Entered width: ");
+                            //                     sb.Append(vm.CopositeGateTarget.Value.Width).AppendLine();
+                            //                     sb.Append("Minimum width: ");
+                            //                     sb.Append(minWidth).AppendLine();
+                            //                     throw new Exception(sb.ToString());
+                            //                 }
+                            //                 else
+                            //                 {
+                            //                     CompositeGate cg = new CompositeGate(vm.FunctionName,
+                            //                         vm.CopositeGateTarget.Value);
+                            //                     _model.Steps[_column].SetGate(cg);
+                            //                     _model.AddStepAfter(_column);
+                            //                 }
+                            //             }
+                            //         }
+                            //     }
+                            //     catch (Exception ex)
+                            //     {
+                            //         string msg = "Unable to add gate. The parameters are invalid.\n" +
+                            //                      "Inner exception:\n" +
+                            //                      (ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+                            //         MessageBox.Show(
+                            //             msg,
+                            //             "Unable to add gate",
+                            //             MessageBoxButton.OK,
+                            //             MessageBoxImage.Error);
+                            //     }
+                            // };
+                            // dialog1.Show();
                         }
                     }
 
@@ -1281,7 +1276,6 @@ public class GateViewModel : ViewModelBase
         Gate oldGate = _model.Steps[_column].Gates[_row.OffsetToRoot];
         ParametricGate cg = oldGate as ParametricGate;
         CircuitEvaluator eval = CircuitEvaluator.GetInstance();
-        //eval.InitFromModel(_model);
         try
         {
             ParametricGate newCg = eval.CreateParametricGate(cg.Method, parameters);
@@ -1312,11 +1306,12 @@ public class GateViewModel : ViewModelBase
             string msg = "Unable to add gate. The parameters are invalid.\n" +
                          "Inner exception:\n" +
                          (ex.InnerException != null ? ex.InnerException.Message : ex.Message);
-            MessageBox.Show(
-                msg,
-                "Unable to add gate",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            // TODO: message box
+            // MessageBox.Show(
+            //     msg,
+            //     "Unable to add gate",
+            //     MessageBoxButton.OK,
+            //     MessageBoxImage.Error);
         }
     }
 

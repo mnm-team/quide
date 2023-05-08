@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:AvaloniaGUI.ViewModels.Dialog"
-             xmlns:p="clr-namespace:AvaloniaGUI.Properties"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:MatrixInputViewModel"
              x:Class="AvaloniaGUI.Views.Dialog.MatrixInput">
@@ -12,7 +11,7 @@
         <vm:MatrixInputViewModel />
     </Design.DataContext>
 
-    <UserControl.Resources>
+    <!--<UserControl.Resources>
         <Style x:Key="DefaultButton" Selector="Button" />
         <Style x:Key="FlatButton" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Selector="Button" />
     </UserControl.Resources>
@@ -102,5 +101,5 @@
             Text="{Binding ValidationMessage}"
             Margin="0,5"
             Foreground="Red" />
-    </Grid>
+    </Grid>-->
 </UserControl>

@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:AvaloniaGUI.ViewModels.Dialog"
-             xmlns:p="clr-namespace:AvaloniaGUI.Properties"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:ParametricInputViewModel"
              x:Class="AvaloniaGUI.Views.Dialog.ParametricInput">
@@ -12,7 +11,7 @@
         <vm:ParametricInputViewModel />
     </Design.DataContext>
 
-    <UserControl.Resources>
+    <!--<UserControl.Resources>
         <Style x:Key="FlatComboBox" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}" Selector="ComboBox" />
         <Style x:Key="DefaultButton" Selector="Button" />
     </UserControl.Resources>
@@ -180,5 +179,5 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
-    </DockPanel>
+    </DockPanel>-->
 </UserControl>
