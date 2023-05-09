@@ -251,7 +251,7 @@
                                     <RadioButton GroupName="Actions"
                                                  x:Name="compositeTool"
                                                  ToolTip.Tip="{x:Static p:Resources.Composite}"
-                                                 IsChecked="{Binding CompositeTool_Checked}">
+                                                 Checked="compositeTool_Checked">
                                         <Grid>
                                             <ComboBox
                                                 Name="cb"
@@ -292,7 +292,8 @@
                                 </RadioButton>
                                 <RadioButton GroupName="Actions"
                                              CommandParameter="Hadamard"
-                                             ToolTip.Tip="{x:Static p:Resources.Hadamard}">
+                                             ToolTip.Tip="{x:Static p:Resources.Hadamard}"
+                                             Foreground="{DynamicResource ToolH}">
                                     <Rectangle Width="28" Height="20"
                                                Fill="{DynamicResource ToolH}" />
                                 </RadioButton>
@@ -395,6 +396,34 @@
                 </TabItem>
 
             </TabControl>
+
+            <StackPanel>
+                <!--########################################### Editor #############################################-->
+                <Rectangle Width="28" Height="20"
+                           Fill="{DynamicResource ToolH}" />
+                <Rectangle Width="28" Height="20">
+                    <Rectangle.Fill>
+                        <VisualBrush>
+                            <VisualBrush.Visual>
+                                <Image>
+                                    <DrawingImage>
+                                        <DrawingGroup>
+                                            <GeometryDrawing Brush="#FFFFFFFF"
+                                                             Geometry="F1 M 1244,1068L 1284,1068L 1284,1108L 1244,1108L 1244,1068 Z ">
+                                                <GeometryDrawing.Pen>
+                                                    <Pen LineCap="Square" LineJoin="Round" Brush="#FF000000" />
+                                                </GeometryDrawing.Pen>
+                                            </GeometryDrawing>
+                                            <GeometryDrawing Brush="#FF000000"
+                                                             Geometry="F1 M 1259.38,1086.88L 1269.21,1086.88L 1270.67,1081.59C 1270.95,1080.56 1271.1,1079.77 1271.1,1079.2C 1271.1,1078.93 1271.04,1078.69 1270.91,1078.5C 1270.78,1078.3 1270.58,1078.16 1270.31,1078.06C 1270.04,1077.97 1269.51,1077.92 1268.71,1077.92L 1268.87,1077.28L 1277.24,1077.28L 1277.06,1077.92C 1276.34,1077.91 1275.8,1077.99 1275.44,1078.15C 1274.94,1078.39 1274.58,1078.69 1274.33,1079.06C 1273.99,1079.58 1273.64,1080.5 1273.29,1081.82L 1269.61,1094.8C 1269.3,1095.77 1269.14,1096.46 1269.14,1096.88C 1269.14,1097.24 1269.28,1097.52 1269.56,1097.7C 1269.83,1097.89 1270.49,1098.01 1271.54,1098.08L 1271.36,1098.72L 1263.29,1098.72L 1263.51,1098.08C 1264.32,1098.06 1264.86,1097.99 1265.13,1097.86C 1265.55,1097.68 1265.85,1097.45 1266.04,1097.16C 1266.31,1096.76 1266.64,1095.89 1267.04,1094.55L 1268.94,1087.84L 1259.1,1087.84L 1257.13,1094.8C 1256.83,1095.75 1256.68,1096.44 1256.68,1096.88C 1256.68,1097.24 1256.82,1097.52 1257.08,1097.7C 1257.35,1097.89 1258.01,1098.01 1259.05,1098.08L 1258.92,1098.72L 1250.79,1098.72L 1250.99,1098.08C 1251.82,1098.06 1252.36,1097.99 1252.64,1097.86C 1253.05,1097.68 1253.36,1097.45 1253.56,1097.16C 1253.83,1096.74 1254.16,1095.87 1254.56,1094.55L 1258.18,1081.6C 1258.49,1080.55 1258.64,1079.75 1258.64,1079.2C 1258.64,1078.93 1258.58,1078.69 1258.44,1078.5C 1258.32,1078.3 1258.11,1078.16 1257.83,1078.06C 1257.56,1077.97 1257.02,1077.92 1256.22,1077.92L 1256.41,1077.28L 1264.63,1077.28L 1264.46,1077.92C 1263.76,1077.91 1263.24,1077.99 1262.91,1078.15C 1262.42,1078.38 1262.06,1078.68 1261.83,1079.05C 1261.52,1079.54 1261.18,1080.47 1260.8,1081.84L 1259.38,1086.88 Z " />
+                                        </DrawingGroup>
+                                    </DrawingImage>
+                                </Image>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </StackPanel>
         </DockPanel>
 
     </DockPanel>
