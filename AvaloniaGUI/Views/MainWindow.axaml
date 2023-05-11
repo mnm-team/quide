@@ -170,16 +170,20 @@
                                     <!-- TODO: 
                                         For most Buttons PreviewGotKeyboardFocus="<Command>_PreviewGotKeyboardFocus" removed-->
 
-                                    <Button x:Name="restart" ToolTip.Tip="{x:Static p:Resources.Restart}">
+                                    <Button x:Name="restart" ToolTip.Tip="{x:Static p:Resources.Restart}"
+                                            Command="{Binding RestartCommand}">
                                         <Image Source="/Assets/Images/GotoFirstRow_287.png" Width="16" />
                                     </Button>
-                                    <Button x:Name="prev" ToolTip.Tip="{x:Static p:Resources.PrevStep}">
+                                    <Button x:Name="prev" ToolTip.Tip="{x:Static p:Resources.PrevStep}"
+                                            Command="{Binding PrevStepCommand}">
                                         <Image Source="/Assets/Images/MovePrevious_7195.png" Width="16" />
                                     </Button>
-                                    <Button x:Name="next" ToolTip.Tip="{x:Static p:Resources.NextStep}">
+                                    <Button x:Name="next" ToolTip.Tip="{x:Static p:Resources.NextStep}"
+                                            Command="{Binding NextStepCommand}">
                                         <Image Source="/Assets/Images/GotoNextRow_289.png" Width="16" />
                                     </Button>
-                                    <Button x:Name="run" ToolTip.Tip="{x:Static p:Resources.Run}">
+                                    <Button x:Name="run" ToolTip.Tip="{x:Static p:Resources.Run}"
+                                            Command="{Binding RunCommand}">
                                         <Image Source="/Assets/Images/GotoLastRow_288.png" Width="16" />
                                     </Button>
 
@@ -200,8 +204,10 @@
                                     </Button>
                                 </StackPanel>
 
+                                <!-- Utilities -->
                                 <StackPanel Orientation="Horizontal">
-                                    <Button x:Name="clear" ToolTip.Tip="{x:Static p:Resources.ClearCircuit}">
+                                    <Button x:Name="clear" ToolTip.Tip="{x:Static p:Resources.ClearCircuit}"
+                                            Command="{Binding ClearCircuitCommand}">
                                         <Border BorderBrush="DimGray"
                                                 BorderThickness="1">
                                             <TextBlock Text="{x:Static p:Resources.ClearAll}"
@@ -209,26 +215,32 @@
                                         </Border>
                                     </Button>
 
-                                    <Button x:Name="delete" ToolTip.Tip="{x:Static p:Resources.ClearSelection}">
+                                    <Button x:Name="delete" ToolTip.Tip="{x:Static p:Resources.ClearSelection}"
+                                            Command="{Binding DeleteGates}">
                                         <Image Source="/Assets/Images/Clearallrequests_8816.png" Width="16" Margin="2" />
                                     </Button>
 
-                                    <Button x:Name="cut" ToolTip.Tip="{x:Static p:Resources.Cut}">
+                                    <Button x:Name="cut" ToolTip.Tip="{x:Static p:Resources.Cut}"
+                                            Command="{Binding CutGatesCommand}">
                                         <Image Source="/Assets/Images/Cut_6523.png" Width="16" />
                                     </Button>
-                                    <Button x:Name="copy" ToolTip.Tip="{x:Static p:Resources.Copy}">
+                                    <Button x:Name="copy" ToolTip.Tip="{x:Static p:Resources.Copy}"
+                                            Command="{Binding CopyGatesCommand}">
                                         <Image Source="/Assets/Images/Copy_6524.png" Width="16" />
                                     </Button>
-                                    <Button x:Name="paste" ToolTip.Tip="{x:Static p:Resources.Paste}">
+                                    <Button x:Name="paste" ToolTip.Tip="{x:Static p:Resources.Paste}"
+                                            Command="{Binding PasteGatesCommand}">
                                         <Image Source="/Assets/Images/Paste_6520.png" Width="16" />
                                     </Button>
                                 </StackPanel>
 
+                                <!-- Composites -->
                                 <StackPanel Orientation="Horizontal">
                                     <RadioButton
                                         GroupName="Actions"
                                         CommandParameter="Ungroup"
-                                        ToolTip.Tip="{x:Static p:Resources.UngroupTip}">
+                                        ToolTip.Tip="{x:Static p:Resources.UngroupTip}"
+                                        Command="{Binding SelectActionCommand}">
                                         <Border BorderBrush="DimGray"
                                                 BorderThickness="1">
                                             <TextBlock Text="{x:Static p:Resources.Ungroup}"
@@ -238,7 +250,8 @@
 
                                     <Button
                                         x:Name="group"
-                                        ToolTip.Tip="{x:Static p:Resources.GroupTip}">
+                                        ToolTip.Tip="{x:Static p:Resources.GroupTip}"
+                                        Command="{Binding GroupCommand}">
                                         <Border BorderBrush="DimGray"
                                                 BorderThickness="1">
                                             <TextBlock Text="{x:Static p:Resources.Group}"
@@ -250,139 +263,148 @@
 
                                     <RadioButton GroupName="Actions"
                                                  x:Name="compositeTool"
-                                                 ToolTip.Tip="{x:Static p:Resources.Composite}"
-                                                 Checked="compositeTool_Checked">
+                                                 ToolTip.Tip="{x:Static p:Resources.Composite}">
                                         <Grid>
                                             <ComboBox
                                                 Name="cb"
                                                 Height="20"
                                                 Width="170"
-                                                Items="{Binding CompositeTools}">
+                                                Items="{Binding CompositeTools}"
+                                                SelectedItem="{Binding SelectedComposite}"
+                                                SelectionChanged="CompositeTool_SelectionChanged"
+                                                PlaceholderText="{x:Static p:Resources.SelectCompositeGate}">
                                                 <!--Classes="{StaticResource FlatComboBox}"-->
                                                 <!-- TODO: necessary?
-                                                                SelectionChanged="CompositeTool_SelectionChanged"
                                                                 IsTextSearchCaseSensitive="False"-->
                                             </ComboBox>
-                                            <TextBox
-                                                x:Name="tb"
-                                                VerticalAlignment="Center"
-                                                IsHitTestVisible="False"
-                                                Padding="3"
-                                                Watermark="{x:Static p:Resources.SelectCompositeGate}"
-                                                IsEnabled="False"
-                                                Text="{Binding #cb.SelectedItem}">
-                                            </TextBox>
                                         </Grid>
                                     </RadioButton>
                                 </StackPanel>
                             </StackPanel>
 
+                            <!-- Gates -->
                             <StackPanel Orientation="Horizontal">
                                 <RadioButton
                                     IsChecked="True"
                                     GroupName="Actions"
                                     CommandParameter="Selection"
-                                    ToolTip.Tip="{x:Static p:Resources.Selection}">
+                                    ToolTip.Tip="{x:Static p:Resources.Selection}"
+                                    Command="{Binding SelectActionCommand}">
                                     <Image Source="/Assets/Images/Pointer_6127.png" Width="16" Margin="2" />
                                 </RadioButton>
                                 <RadioButton GroupName="Actions"
                                              CommandParameter="Empty"
-                                             ToolTip.Tip="{x:Static p:Resources.EraseGate}">
+                                             ToolTip.Tip="{x:Static p:Resources.EraseGate}"
+                                             Command="{Binding SelectActionCommand}">
                                     <Image Source="/Assets/Images/Clearallrequests_8816.png" Width="16" Margin="2" />
                                 </RadioButton>
                                 <RadioButton GroupName="Actions"
                                              CommandParameter="Hadamard"
                                              ToolTip.Tip="{x:Static p:Resources.Hadamard}"
-                                             Foreground="{DynamicResource ToolH}">
+                                             Command="{Binding SelectActionCommand}">
                                     <Rectangle Width="28" Height="20"
                                                Fill="{DynamicResource ToolH}" />
                                 </RadioButton>
                                 <RadioButton GroupName="Actions"
                                              CommandParameter="Control"
-                                             ToolTip.Tip="{x:Static p:Resources.AddControl}">
+                                             ToolTip.Tip="{x:Static p:Resources.AddControl}"
+                                             Command="{Binding SelectActionCommand}">
                                     <Rectangle Width="28" Height="20"
                                                Fill="{DynamicResource ToolC}" />
                                 </RadioButton>
                                 <RadioButton GroupName="Actions"
                                              CommandParameter="SigmaX"
-                                             ToolTip.Tip="{x:Static p:Resources.SigmaX}">
+                                             ToolTip.Tip="{x:Static p:Resources.SigmaX}"
+                                             Command="{Binding SelectActionCommand}">
                                     <Rectangle Width="28" Height="20"
                                                Fill="{DynamicResource ToolX}" />
                                 </RadioButton>
                                 <RadioButton GroupName="Actions"
                                              CommandParameter="SigmaY"
-                                             ToolTip.Tip="{x:Static p:Resources.SigmaY}">
+                                             ToolTip.Tip="{x:Static p:Resources.SigmaY}"
+                                             Command="{Binding SelectActionCommand}">
                                     <Rectangle Width="28" Height="20"
                                                Fill="{DynamicResource ToolY}" />
                                 </RadioButton>
                                 <RadioButton GroupName="Actions"
                                              CommandParameter="SigmaZ"
-                                             ToolTip.Tip="{x:Static p:Resources.SigmaZ}">
+                                             ToolTip.Tip="{x:Static p:Resources.SigmaZ}"
+                                             Command="{Binding SelectActionCommand}">
                                     <Rectangle Width="28" Height="20"
                                                Fill="{DynamicResource ToolZ}" />
                                 </RadioButton>
                                 <RadioButton GroupName="Actions"
                                              CommandParameter="SqrtX"
-                                             ToolTip.Tip="{x:Static p:Resources.SqrtX}">
+                                             ToolTip.Tip="{x:Static p:Resources.SqrtX}"
+                                             Command="{Binding SelectActionCommand}">
                                     <Rectangle Width="28" Height="20"
                                                Fill="{DynamicResource ToolSqrtX}" />
                                 </RadioButton>
                                 <RadioButton GroupName="Actions"
                                              CommandParameter="RotateX"
-                                             ToolTip.Tip="{x:Static p:Resources.RotateX}">
+                                             ToolTip.Tip="{x:Static p:Resources.RotateX}"
+                                             Command="{Binding SelectActionCommand}">
                                     <Rectangle Width="28" Height="20"
                                                Fill="{DynamicResource ToolRotateX}" />
                                 </RadioButton>
                                 <RadioButton GroupName="Actions"
                                              CommandParameter="RotateY"
-                                             ToolTip.Tip="{x:Static p:Resources.RotateY}">
+                                             ToolTip.Tip="{x:Static p:Resources.RotateY}"
+                                             Command="{Binding SelectActionCommand}">
                                     <Rectangle Width="28" Height="20"
                                                Fill="{DynamicResource ToolRotateY}" />
                                 </RadioButton>
                                 <RadioButton GroupName="Actions"
                                              CommandParameter="RotateZ"
-                                             ToolTip.Tip="{x:Static p:Resources.RotateZ}">
+                                             ToolTip.Tip="{x:Static p:Resources.RotateZ}"
+                                             Command="{Binding SelectActionCommand}">
                                     <Rectangle Width="28" Height="20"
                                                Fill="{DynamicResource ToolRotateZ}" />
                                 </RadioButton>
                                 <RadioButton GroupName="Actions"
                                              CommandParameter="PhaseKick"
-                                             ToolTip.Tip="{x:Static p:Resources.PhaseKick}">
+                                             ToolTip.Tip="{x:Static p:Resources.PhaseKick}"
+                                             Command="{Binding SelectActionCommand}">
                                     <Rectangle Width="28"
                                                Height="20"
                                                Fill="{DynamicResource ToolPhaseKick}" />
                                 </RadioButton>
                                 <RadioButton GroupName="Actions"
                                              CommandParameter="PhaseScale"
-                                             ToolTip.Tip="{x:Static p:Resources.PhaseScale}">
+                                             ToolTip.Tip="{x:Static p:Resources.PhaseScale}"
+                                             Command="{Binding SelectActionCommand}">
                                     <Rectangle Width="28"
                                                Height="20"
                                                Fill="{DynamicResource ToolPhaseScale}" />
                                 </RadioButton>
                                 <RadioButton GroupName="Actions"
                                              CommandParameter="CPhaseShift"
-                                             ToolTip.Tip="{x:Static p:Resources.CPhaseShift}">
+                                             ToolTip.Tip="{x:Static p:Resources.CPhaseShift}"
+                                             Command="{Binding SelectActionCommand}">
                                     <Rectangle Width="28"
                                                Height="20"
                                                Fill="{DynamicResource ToolCPhaseShift}" />
                                 </RadioButton>
                                 <RadioButton GroupName="Actions"
                                              CommandParameter="InvCPhaseShift"
-                                             ToolTip.Tip="{x:Static p:Resources.InvCPhaseShift}">
+                                             ToolTip.Tip="{x:Static p:Resources.InvCPhaseShift}"
+                                             Command="{Binding SelectActionCommand}">
                                     <Rectangle Width="28"
                                                Height="20"
                                                Fill="{DynamicResource ToolInvCPhaseShift}" />
                                 </RadioButton>
                                 <RadioButton GroupName="Actions"
                                              CommandParameter="Unitary"
-                                             ToolTip.Tip="{x:Static p:Resources.Unitary}">
+                                             ToolTip.Tip="{x:Static p:Resources.Unitary}"
+                                             Command="{Binding SelectActionCommand}">
                                     <Rectangle Width="28"
                                                Height="20"
                                                Fill="{DynamicResource ToolU}" />
                                 </RadioButton>
                                 <RadioButton GroupName="Actions"
                                              CommandParameter="Measure"
-                                             ToolTip.Tip="{x:Static p:Resources.Measure}">
+                                             ToolTip.Tip="{x:Static p:Resources.Measure}"
+                                             Command="{Binding SelectActionCommand}">
                                     <Rectangle Width="28"
                                                Height="20"
                                                Fill="{DynamicResource ToolMeasure}" />

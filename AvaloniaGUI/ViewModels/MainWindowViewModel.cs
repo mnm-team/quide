@@ -168,9 +168,6 @@ public class MainWindowViewModel : ViewModelBase
 
     #endregion // Constructor
 
-
-    #region Presentation Properties
-
     public CircuitGridViewModel CircuitGrid
     {
         get
@@ -315,43 +312,6 @@ public class MainWindowViewModel : ViewModelBase
 
     public static string SelectedComposite { get; set; }
 
-    public static ICommand CalculatorCommand
-    {
-        get { return _calculatorCommand; }
-    }
-
-    //
-    public static ICommand AboutCommand
-    {
-        get { return _aboutCommand; }
-    }
-
-    public ICommand SelectActionCommand
-    {
-        get
-        {
-            if (_selectAction == null)
-            {
-                _selectAction = new DelegateCommand(SelectAction, x => true);
-            }
-
-            return _selectAction;
-        }
-    }
-
-    public ICommand GroupCommand
-    {
-        get
-        {
-            if (_group == null)
-            {
-                _group = new DelegateCommand(MakeComposite, x => true);
-            }
-
-            return _group;
-        }
-    }
-
     // public LayoutDocument ActiveTab
     // {
     //     get
@@ -380,6 +340,45 @@ public class MainWindowViewModel : ViewModelBase
         {
             //TODO:
             return null; //_consoleWriter.Text;
+        }
+    }
+
+
+    #region Commands
+
+    public static ICommand CalculatorCommand
+    {
+        get { return _calculatorCommand; }
+    }
+
+    public static ICommand AboutCommand
+    {
+        get { return _aboutCommand; }
+    }
+
+    public ICommand SelectActionCommand
+    {
+        get
+        {
+            if (_selectAction == null)
+            {
+                _selectAction = new DelegateCommand(SelectAction, x => true);
+            }
+
+            return _selectAction;
+        }
+    }
+
+    public ICommand GroupCommand
+    {
+        get
+        {
+            if (_group == null)
+            {
+                _group = new DelegateCommand(MakeComposite, x => true);
+            }
+
+            return _group;
         }
     }
 
@@ -578,10 +577,15 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    #endregion // Presentation Properties
+    #endregion // Commands
 
 
     #region Public Methods
+
+    public void CompositeSelected()
+    {
+        SelectAction("Composite");
+    }
 
     public void SelectAction(object parameter)
     {
@@ -747,7 +751,7 @@ public class MainWindowViewModel : ViewModelBase
         _model.Paste();
     }
 
-    public void DeleteGates(object parameter)
+    public void DeleteGates()
     {
         _model.Delete();
     }
