@@ -3,6 +3,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using Avalonia;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaGUI.ViewModels.Helpers;
@@ -143,14 +144,14 @@ public class CircuitGridViewModel : ViewModelBase
         get { return 64; }
     }
 
-    public static double QubitScaleCenter
+    public static RelativePoint QubitScaleCenter
     {
-        get { return QubitSize / 2; }
+        get { return new RelativePoint(0, QubitSize / 2, RelativeUnit.Absolute); }
     }
 
     public double ScaleCenterY
     {
-        get { return _model.TotalWidth * QubitScaleCenter; }
+        get { return _model.TotalWidth * QubitScaleCenter.Point.Y; }
     }
 
     public double ScaleFactor

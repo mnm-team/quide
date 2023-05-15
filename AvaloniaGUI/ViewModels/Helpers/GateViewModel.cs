@@ -140,7 +140,7 @@ public class GateViewModel : ViewModelBase
         }
     }
 
-    public ImageBrush BackgroundImage
+    public VisualBrush BackgroundImage
     {
         get
         {
@@ -151,27 +151,27 @@ public class GateViewModel : ViewModelBase
                 {
                     if (_row.Equals(gate.Control.Value))
                     {
-                        return Application.Current.FindResource("ImgDownC") as ImageBrush;
+                        return Application.Current.FindResource("ImgDownC") as VisualBrush;
                     }
                     else
                     {
-                        return Application.Current.FindResource("ImgDown") as ImageBrush;
+                        return Application.Current.FindResource("ImgDown") as VisualBrush;
                     }
                 }
                 else if (_row.OffsetToRoot == gate.End)
                 {
                     if (_row.Equals(gate.Control.Value))
                     {
-                        return Application.Current.FindResource("ImgUpC") as ImageBrush;
+                        return Application.Current.FindResource("ImgUpC") as VisualBrush;
                     }
                     else
                     {
-                        return Application.Current.FindResource("ImgUp") as ImageBrush;
+                        return Application.Current.FindResource("ImgUp") as VisualBrush;
                     }
                 }
                 else
                 {
-                    return Application.Current.FindResource("ImgLine") as ImageBrush;
+                    return Application.Current.FindResource("ImgLine") as VisualBrush;
                 }
             }
             else if (gate is MultiControlledGate)
@@ -180,30 +180,30 @@ public class GateViewModel : ViewModelBase
                 {
                     if (_row.OffsetToRoot != gate.End)
                     {
-                        return Application.Current.FindResource("ImgDown") as ImageBrush;
+                        return Application.Current.FindResource("ImgDown") as VisualBrush;
                     }
                     else
                     {
-                        return Application.Current.FindResource("ImgEmpty") as ImageBrush;
+                        return Application.Current.FindResource("ImgEmpty") as VisualBrush;
                     }
                 }
                 else if (_row.OffsetToRoot == gate.End)
                 {
-                    return Application.Current.FindResource("ImgUp") as ImageBrush;
+                    return Application.Current.FindResource("ImgUp") as VisualBrush;
                 }
                 else
                 {
-                    return Application.Current.FindResource("ImgLine") as ImageBrush;
+                    return Application.Current.FindResource("ImgLine") as VisualBrush;
                 }
             }
             else
             {
-                return Application.Current.FindResource("ImgEmpty") as ImageBrush;
+                return Application.Current.FindResource("ImgEmpty") as VisualBrush;
             }
         }
     }
 
-    public ImageBrush GateImage
+    public VisualBrush GateImage
     {
         get
         {
@@ -221,73 +221,73 @@ public class GateViewModel : ViewModelBase
                 {
                     if (_row.OffsetToRoot == cg.End)
                     {
-                        return Application.Current.FindResource("ToolComposite") as ImageBrush;
+                        return Application.Current.FindResource("ToolComposite") as VisualBrush;
                     }
                     else
                     {
-                        return Application.Current.FindResource("DownComposite") as ImageBrush;
+                        return Application.Current.FindResource("DownComposite") as VisualBrush;
                     }
                 }
                 else if (_row.OffsetToRoot == cg.End)
                 {
-                    return Application.Current.FindResource("UpComposite") as ImageBrush;
+                    return Application.Current.FindResource("UpComposite") as VisualBrush;
                 }
                 else
                 {
-                    return Application.Current.FindResource("CenterComposite") as ImageBrush;
+                    return Application.Current.FindResource("CenterComposite") as VisualBrush;
                 }
             }
             else if (gate.Name == GateName.Measure)
             {
-                return Application.Current.FindResource("ToolMeasure") as ImageBrush;
+                return Application.Current.FindResource("ToolMeasure") as VisualBrush;
             }
             else if (_row.Equals(gate.Target))
             {
-                ImageBrush brush;
+                VisualBrush brush;
                 switch (gate.Name)
                 {
                     case GateName.Hadamard:
-                        brush = Application.Current.FindResource("ToolH") as ImageBrush;
+                        brush = Application.Current.FindResource("ToolH") as VisualBrush;
                         break;
                     case GateName.SigmaX:
-                        brush = Application.Current.FindResource("ToolX") as ImageBrush;
+                        brush = Application.Current.FindResource("ToolX") as VisualBrush;
                         break;
                     case GateName.SigmaY:
-                        brush = Application.Current.FindResource("ToolY") as ImageBrush;
+                        brush = Application.Current.FindResource("ToolY") as VisualBrush;
                         break;
                     case GateName.SigmaZ:
-                        brush = Application.Current.FindResource("ToolZ") as ImageBrush;
+                        brush = Application.Current.FindResource("ToolZ") as VisualBrush;
                         break;
                     case GateName.SqrtX:
-                        brush = Application.Current.FindResource("ToolSqrtX") as ImageBrush;
+                        brush = Application.Current.FindResource("ToolSqrtX") as VisualBrush;
                         break;
                     case GateName.RotateX:
-                        brush = Application.Current.FindResource("ToolRotateX") as ImageBrush;
+                        brush = Application.Current.FindResource("ToolRotateX") as VisualBrush;
                         break;
                     case GateName.RotateY:
-                        brush = Application.Current.FindResource("ToolRotateY") as ImageBrush;
+                        brush = Application.Current.FindResource("ToolRotateY") as VisualBrush;
                         break;
                     case GateName.RotateZ:
-                        brush = Application.Current.FindResource("ToolRotateZ") as ImageBrush;
+                        brush = Application.Current.FindResource("ToolRotateZ") as VisualBrush;
                         break;
                     case GateName.PhaseKick:
-                        brush = Application.Current.FindResource("ToolPhaseKick") as ImageBrush;
+                        brush = Application.Current.FindResource("ToolPhaseKick") as VisualBrush;
                         break;
                     case GateName.PhaseScale:
-                        brush = Application.Current.FindResource("ToolPhaseScale") as ImageBrush;
+                        brush = Application.Current.FindResource("ToolPhaseScale") as VisualBrush;
                         break;
                     case GateName.Unitary:
-                        brush = Application.Current.FindResource("ToolU") as ImageBrush;
+                        brush = Application.Current.FindResource("ToolU") as VisualBrush;
                         break;
                     case GateName.CNot:
                     case GateName.Toffoli:
-                        brush = Application.Current.FindResource("ImgNot") as ImageBrush;
+                        brush = Application.Current.FindResource("ImgNot") as VisualBrush;
                         break;
                     case GateName.CPhaseShift:
-                        brush = Application.Current.FindResource("ToolCPhaseShift") as ImageBrush;
+                        brush = Application.Current.FindResource("ToolCPhaseShift") as VisualBrush;
                         break;
                     case GateName.InvCPhaseShift:
-                        brush = Application.Current.FindResource("ToolInvCPhaseShift") as ImageBrush;
+                        brush = Application.Current.FindResource("ToolInvCPhaseShift") as VisualBrush;
                         break;
                     default:
                         return null;
@@ -300,11 +300,11 @@ public class GateViewModel : ViewModelBase
                 MultiControlledGate t = gate as MultiControlledGate;
                 if (t.Controls.Contains<RegisterRefModel>(_row))
                 {
-                    return Application.Current.FindResource("ImgC") as ImageBrush;
+                    return Application.Current.FindResource("ImgC") as VisualBrush;
                 }
                 else
                 {
-                    return Application.Current.FindResource("ImgLine") as ImageBrush;
+                    return Application.Current.FindResource("ImgLine") as VisualBrush;
                 }
             }
 

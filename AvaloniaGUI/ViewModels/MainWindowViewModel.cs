@@ -584,7 +584,7 @@ public class MainWindowViewModel : ViewModelBase
 
     public void CompositeSelected()
     {
-        SelectAction("Composite");
+        SelectedAction = ActionName.Composite;
     }
 
     public void SelectAction(object parameter)

@@ -3,6 +3,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using Avalonia;
 using Avalonia.Interactivity;
 using AvaloniaGUI.ViewModels.Controls;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel;
@@ -73,9 +74,13 @@ public class RegisterViewModel : ViewModelBase
         get { return Qubits.Count * CircuitGridViewModel.QubitSize; }
     }
 
-    public double ScaleCenterY
+    public RelativePoint ScaleCenterY
     {
-        get { return Qubits.Count * CircuitGridViewModel.QubitScaleCenter; }
+        get
+        {
+            return new RelativePoint(0, Qubits.Count * CircuitGridViewModel.QubitScaleCenter.Point.Y,
+                RelativeUnit.Absolute);
+        }
     }
 
     public bool AddQubitEnabled

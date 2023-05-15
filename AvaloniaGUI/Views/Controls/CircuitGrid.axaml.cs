@@ -45,6 +45,7 @@ public partial class CircuitGrid : UserControl
         //     shiftPressed = true;
         // }
 
+        // perform drag drop operation for control gate
         if (MainWindowViewModel.SelectedAction == ActionName.Control && !shiftPressed)
         {
             Button button = source as Button;
@@ -81,13 +82,15 @@ public partial class CircuitGrid : UserControl
             line.StrokeThickness = 1;
             Drawing.Children.Add(line);
 
-            Action emptyDelegate = delegate { };
+            //Action emptyDelegate = delegate { };
             //Drawing.Dispatcher.Invoke(emptyDelegate, DispatcherPriority.Render);
         }
 
         GateViewModel vm = source.DataContext as GateViewModel;
-        Tuple<int, RegisterRefModel> data = new Tuple<int, RegisterRefModel>(vm.Column, vm.Row);
-        //DragDrop.DoDragDrop(source, data, DragDropEffects.All);
+
+        // fetch grid with gates to draw
+        IDataObject data = new Tuple<int, RegisterRefModel>(vm.Column, vm.Row) as IDataObject;
+        DragDrop.DoDragDrop(e, data, DragDropEffects.Link);
     }
 
     void ctrlPoint_Drop(object? sender, PointerEventArgs pointerEventArgs)
@@ -96,7 +99,7 @@ public partial class CircuitGrid : UserControl
         Drawing.Children.Clear();
     }
 
-    private void drawing_Drop(object? sender, PointerReleasedEventArgs pointerReleasedEventArgs)
+    private void drawing_Drop(object? sender, DragEventArgs e)
     {
         line = null;
         Drawing.Children.Clear();
@@ -106,7 +109,7 @@ public partial class CircuitGrid : UserControl
     {
         if (e.Data.Contains(typeof(Tuple<int, RegisterRefModel>).ToString()))
         {
-            e.DragEffects = DragDropEffects.Move; //All
+            e.DragEffects = DragDropEffects.Link; //All
         }
         else
         {
@@ -126,18 +129,18 @@ public partial class CircuitGrid : UserControl
         }
     }
 
-    private void GateButton_Drop(object? sender, DragEventArgs e)
+    private void GateButton_Drop(object sender, DragEventArgs e)
     {
         Control target = sender as Control;
 
         // check for Tuple<int, RegisterRefModel>
-        var dataFormat = typeof(Tuple<int, RegisterRefModel>).ToString();
+        var dataFormat = typeof(Tuple<int, RegisterRefModel>);
 
-        if (!e.Data.Contains(dataFormat))
+        if (e.Source.GetType() != dataFormat)
             return;
 
         Tuple<int, RegisterRefModel> data =
-            e.Data.Get(dataFormat) as Tuple<int, RegisterRefModel>;
+            e.Source as Tuple<int, RegisterRefModel>;
         GateViewModel vm = target.DataContext as GateViewModel;
 
         vm.SetGate(data.Item1, data.Item2, e.KeyModifiers);

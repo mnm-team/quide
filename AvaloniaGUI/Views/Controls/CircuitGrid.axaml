@@ -28,14 +28,17 @@
                               HorizontalScrollBarVisibility="Disabled"
                               VerticalScrollBarVisibility="Hidden">
                     <!--ScrollChanged="RegisterScroll_ScrollChanged"-->
+
+                    <!-- Qubit view -->
                     <StackPanel Orientation="Vertical">
                         <ItemsControl x:Name="registerItemsControl" Background="White"
                                       Items="{Binding Registers}"
-                                      Margin="0,0,0,0">
+                                      Margin="0,0,0,0"
+                                      RenderTransformOrigin="0,0">
                             <ItemsControl.RenderTransform>
                                 <ScaleTransform
                                     ScaleX="{Binding ScaleFactor}" ScaleY="{Binding ScaleFactor}" />
-                                <!-- TODO?: Value="0,0" CenterX="0" CenterY="0"/-->
+                                <!-- CenterX="0" CenterY="0"/-->
                             </ItemsControl.RenderTransform>
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -52,7 +55,8 @@
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Vertical" VerticalAlignment="Top"
                                                             HorizontalAlignment="Left"
-                                                            Margin="0" Background="White">
+                                                            Margin="0" Background="White"
+                                                            RenderTransformOrigin="{Binding ScaleCenterY}">
                                                     <StackPanel.RenderTransform>
                                                         <ScaleTransform ScaleX="1" ScaleY="-1" />
                                                         <!--CenterY="{Binding ScaleCenterY}" /-->
@@ -64,7 +68,9 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal"
                                                             Background="#FFFFFFFF"
-                                                            IsEnabled="{Binding IsEnabled}">
+                                                            IsEnabled="{Binding IsEnabled}"
+                                                            RenderTransformOrigin="{x:Static vm:CircuitGridViewModel.QubitScaleCenter}">
+                                                    <!-- Context menu -->
                                                     <StackPanel.ContextMenu>
                                                         <ContextMenu>
                                                             <MenuItem Header="{x:Static p:Resources.Edit}"
@@ -120,6 +126,8 @@
                                                         FontFamily="Times New Roman"
                                                         FontStyle="Oblique"
                                                         VerticalAlignment="Center" />
+
+                                                    <!-- Flip Qubit -->
                                                     <Button VerticalAlignment="Top" Padding="0"
                                                             Command="{Binding ChangeValueCommand}"
                                                             ToolTip.Tip="{x:Static p:Resources.FlipBit}">
@@ -135,9 +143,8 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                        <Rectangle
-                            Fill="White" />
-                        <!--Height="{x:Static SystemParameters.HorizontalScrollBarHeight}" /-->
+                        <!--<Rectangle
+                            Fill="White" Height="{Binding #GatesScroll.HorizontalScrollBarValue}" />-->
                     </StackPanel>
                 </ScrollViewer>
                 <ScrollViewer x:Name="GatesScroll"
@@ -146,10 +153,12 @@
                               VerticalScrollBarVisibility="Visible"
                               Offset="{Binding #RegisterScroll.Offset, Mode=TwoWay}"
                               ScrollChanged="GatesScroll_ScrollChanged">
+                    <!-- Circuit line view -->
                     <ItemsControl x:Name="stepItemsControl"
                                   Background="White"
                                   Items="{Binding Steps}"
-                                  Margin="0,0,0,0">
+                                  Margin="0,0,0,0"
+                                  RenderTransformOrigin="0,0">
                         <ItemsControl.RenderTransform>
                             <ScaleTransform ScaleX="{Binding ScaleFactor}" ScaleY="{Binding ScaleFactor}" />
                             <!--CenterX="0" CenterY="0"/-->
@@ -182,7 +191,12 @@
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <Button VerticalAlignment="Top" Padding="0"
-                                                        IsEnabled="{Binding IsEnabled}">
+                                                        IsEnabled="{Binding IsEnabled}"
+                                                        RenderTransformOrigin="{x:Static vm:CircuitGridViewModel.QubitScaleCenter}"
+                                                        DragDrop.AllowDrop="True"
+                                                        DragDrop.Drop="GateButton_Drop"
+                                                        DragDrop.DragEnter="GateButton_DragEnter"
+                                                        DragDrop.DragOver="GateButton_DragOver">
                                                     <!--Drop="GateButton_Drop"
                                                         DragEnter="GateButton_DragEnter"
                                                         DragOver="GateButton_DragOver"
@@ -259,7 +273,9 @@
                 <Canvas
                     x:Name="drawing"
                     Grid.Column="1"
-                    PointerReleased="drawing_Drop">
+                    DragDrop.AllowDrop="True"
+                    DragDrop.Drop="drawing_Drop"
+                    RenderTransformOrigin="0,0">
                     <!--AllowDrop="True"-->
                     <Canvas.RenderTransform>
                         <ScaleTransform ScaleX="{Binding ScaleFactor}" ScaleY="{Binding ScaleFactor}" />

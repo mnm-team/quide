@@ -165,11 +165,9 @@
                         <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
                             <!-- First row -->
                             <StackPanel Orientation="Horizontal">
+
+                                <!-- Execution -->
                                 <StackPanel Orientation="Horizontal">
-
-                                    <!-- TODO: 
-                                        For most Buttons PreviewGotKeyboardFocus="<Command>_PreviewGotKeyboardFocus" removed-->
-
                                     <Button x:Name="restart" ToolTip.Tip="{x:Static p:Resources.Restart}"
                                             Command="{Binding RestartCommand}">
                                         <Image Source="/Assets/Images/GotoFirstRow_287.png" Width="16" />

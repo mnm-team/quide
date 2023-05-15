@@ -178,21 +178,21 @@ public class QubitViewModel : ViewModelBase
         get { return _rowIndex; }
     }
 
-    public ImageBrush QubitImage
+    public VisualBrush QubitImage
     {
         get
         {
             if (Value == QubitModel.Zero)
             {
-                return Application.Current.FindResource("ImgQubit0") as ImageBrush;
+                return Application.Current.FindResource("ImgQubit0") as VisualBrush;
             }
             else if (Value == QubitModel.One)
             {
-                return Application.Current.FindResource("ImgQubit1") as ImageBrush;
+                return Application.Current.FindResource("ImgQubit1") as VisualBrush;
             }
             else
             {
-                return Application.Current.FindResource("ImgQubitMixed") as ImageBrush;
+                return Application.Current.FindResource("ImgQubitMixed") as VisualBrush;
             }
         }
     }

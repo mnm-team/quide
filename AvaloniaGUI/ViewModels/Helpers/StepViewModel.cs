@@ -59,7 +59,7 @@ public class StepViewModel : ViewModelBase
 
     public double ScaleCenterY
     {
-        get { return Gates.Count * CircuitGridViewModel.QubitScaleCenter; }
+        get { return Gates.Count * CircuitGridViewModel.QubitScaleCenter.Point.Y; }
     }
 
     public Thickness StepMargin
