@@ -1,0 +1,22 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:AvaloniaGUI.Views.Controls">
+    <Design.PreviewWith>
+        <controls:GateButton />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|GateButton">
+        <!-- Set Defaults -->
+        <Setter Property="PointerPressed" Value="{TemplateBinding PointerPressed}" />
+        <Setter Property="Drop" Value="{TemplateBinding Drop}" />
+        <Setter Property="DragEnter" Value="{TemplateBinding DragEnter}" />
+        <Setter Property="DragOver" Value="{TemplateBinding DragOver}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Button VerticalAlignment="Top" Padding="0" IsEnabled="{TemplateBinding Enabled}"
+                        RenderTransformOrigin="{TemplateBinding RenderTransform}" DragDrop.AllowDrop="True"
+                        Content="{TemplateBinding Content}" />
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

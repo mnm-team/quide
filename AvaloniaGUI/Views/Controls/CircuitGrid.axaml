@@ -174,7 +174,7 @@
                             <DataTemplate>
                                 <Border BorderBrush="Transparent" BorderThickness="0"
                                         Background="{DynamicResource HighLightColorBrush}" Padding="0">
-                                    <ItemsControl Items="{Binding Gates}"
+                                    <ItemsControl x:Name="Gates" Items="{Binding Gates}"
                                                   Margin="0,0,0,0">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
@@ -190,13 +190,18 @@
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <Button VerticalAlignment="Top" Padding="0"
+                                                <!--<controls:GateButton IsEnabled="{Binding IsEnabled}"
+                                                                     RenderTransformOrigin="{x:Static vm:CircuitGridViewModel.QubitScaleCenter}"
+                                                                     PointerPressed="GateButton_MouseDown"
+                                                                     Drop="GateButton_Drop"
+                                                                     DragEnter="GateButton_DragEnter"
+                                                                     DragOver="GateButton_DragOver">
+
+                                                </controls:GateButton>-->
+                                                <Button x:Name="GateButton" VerticalAlignment="Top" Padding="0"
                                                         IsEnabled="{Binding IsEnabled}"
                                                         RenderTransformOrigin="{x:Static vm:CircuitGridViewModel.QubitScaleCenter}"
-                                                        DragDrop.AllowDrop="True"
-                                                        DragDrop.Drop="GateButton_Drop"
-                                                        DragDrop.DragEnter="GateButton_DragEnter"
-                                                        DragDrop.DragOver="GateButton_DragOver">
+                                                        DragDrop.AllowDrop="True">
                                                     <!--Drop="GateButton_Drop"
                                                         DragEnter="GateButton_DragEnter"
                                                         DragOver="GateButton_DragOver"
@@ -274,7 +279,6 @@
                     x:Name="drawing"
                     Grid.Column="1"
                     DragDrop.AllowDrop="True"
-                    DragDrop.Drop="drawing_Drop"
                     RenderTransformOrigin="0,0">
                     <!--AllowDrop="True"-->
                     <Canvas.RenderTransform>
