@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:AvaloniaGUI.ViewModels.Controls"
              xmlns:p="clr-namespace:AvaloniaGUI.Properties"
+             xmlns:controls="clr-namespace:AvaloniaGUI.Views.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:CircuitGridViewModel"
              x:Class="AvaloniaGUI.Views.Controls.CircuitGrid">
@@ -190,40 +191,13 @@
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <!--<controls:GateButton IsEnabled="{Binding IsEnabled}"
-                                                                     RenderTransformOrigin="{x:Static vm:CircuitGridViewModel.QubitScaleCenter}"
-                                                                     PointerPressed="GateButton_MouseDown"
+                                                <controls:GateButton Enabled="{Binding IsEnabled}"
+                                                                     RenderTransform="{x:Static vm:CircuitGridViewModel.QubitScaleCenter}"
+                                                                     MousePressed="GateButton_MouseDown"
                                                                      Drop="GateButton_Drop"
                                                                      DragEnter="GateButton_DragEnter"
                                                                      DragOver="GateButton_DragOver">
-
-                                                </controls:GateButton>-->
-                                                <Button x:Name="GateButton" VerticalAlignment="Top" Padding="0"
-                                                        IsEnabled="{Binding IsEnabled}"
-                                                        RenderTransformOrigin="{x:Static vm:CircuitGridViewModel.QubitScaleCenter}"
-                                                        DragDrop.AllowDrop="True">
-                                                    <!--Drop="GateButton_Drop"
-                                                        DragEnter="GateButton_DragEnter"
-                                                        DragOver="GateButton_DragOver"
-                                                        PreviewMouseLeftButtonDown="GateButton_MouseDown"-->
-                                                    <!--AllowDrop="True"-->
-                                                    <Button.ContextMenu>
-                                                        <ContextMenu>
-                                                            <MenuItem Header="{x:Static p:Resources.InsertQubitAbove}"
-                                                                      Command="{Binding InsertRowAboveCommand}" />
-                                                            <MenuItem Header="{x:Static p:Resources.InsertQubitBelow}"
-                                                                      Command="{Binding InsertRowBelowCommand}" />
-                                                            <MenuItem Header="{x:Static p:Resources.InsertColumnLeft}"
-                                                                      Command="{Binding InsertColumnLeftCommand}" />
-                                                            <MenuItem Header="{x:Static p:Resources.InsertColumnRight}"
-                                                                      Command="{Binding InsertColumnRightCommand}" />
-                                                            <Separator />
-                                                            <MenuItem Header="{x:Static p:Resources.DeleteQubit}"
-                                                                      Command="{Binding DeleteRowCommand}" />
-                                                            <MenuItem Header="{x:Static p:Resources.DeleteColumn}"
-                                                                      Command="{Binding DeleteColumnCommand}" />
-                                                        </ContextMenu>
-                                                    </Button.ContextMenu>
+                                                    <!-- Content -->
                                                     <Grid>
                                                         <Rectangle
                                                             Fill="{DynamicResource HighLightColorBrush}"
@@ -258,15 +232,29 @@
                                                             </Border>
                                                         </Border>
                                                     </Grid>
-                                                    <Button.RenderTransform>
+                                                    <!-- Additional properties -->
+                                                    <controls:GateButton.Transform>
                                                         <ScaleTransform ScaleX="1" ScaleY="-1">
-                                                            <!--<ScaleTransform.CenterY>
-                                                                <Binding
-                                                                    Source="{x:Static vm:CircuitGridViewModel.QubitScaleCenter}" />
-                                                            </ScaleTransform.CenterY>-->
                                                         </ScaleTransform>
-                                                    </Button.RenderTransform>
-                                                </Button>
+                                                    </controls:GateButton.Transform>
+                                                    <controls:GateButton.ContextMenu>
+                                                        <ContextMenu>
+                                                            <MenuItem Header="{x:Static p:Resources.InsertQubitAbove}"
+                                                                      Command="{Binding InsertRowAboveCommand}" />
+                                                            <MenuItem Header="{x:Static p:Resources.InsertQubitBelow}"
+                                                                      Command="{Binding InsertRowBelowCommand}" />
+                                                            <MenuItem Header="{x:Static p:Resources.InsertColumnLeft}"
+                                                                      Command="{Binding InsertColumnLeftCommand}" />
+                                                            <MenuItem Header="{x:Static p:Resources.InsertColumnRight}"
+                                                                      Command="{Binding InsertColumnRightCommand}" />
+                                                            <Separator />
+                                                            <MenuItem Header="{x:Static p:Resources.DeleteQubit}"
+                                                                      Command="{Binding DeleteRowCommand}" />
+                                                            <MenuItem Header="{x:Static p:Resources.DeleteColumn}"
+                                                                      Command="{Binding DeleteColumnCommand}" />
+                                                        </ContextMenu>
+                                                    </controls:GateButton.ContextMenu>
+                                                </controls:GateButton>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
@@ -280,7 +268,6 @@
                     Grid.Column="1"
                     DragDrop.AllowDrop="True"
                     RenderTransformOrigin="0,0">
-                    <!--AllowDrop="True"-->
                     <Canvas.RenderTransform>
                         <ScaleTransform ScaleX="{Binding ScaleFactor}" ScaleY="{Binding ScaleFactor}" />
                         <!--CenterX="0" CenterY="0"/-->

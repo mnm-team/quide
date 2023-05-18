@@ -45,6 +45,7 @@
     </Window.Resources>
 
     <DockPanel Name="LayoutRoot">
+        <!-- Top level toolbar -->
         <DockPanel DockPanel.Dock="Top" LastChildFill="False">
             <!-- TODO: 
             toolbar in https://github.com/Splitwirez/Mechanism-for-Avalonia/-->

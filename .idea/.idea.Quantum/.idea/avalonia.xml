@@ -9,6 +9,7 @@
         <entry key="AvaloniaGUI/ViewModels/Controls/CircuitGrid.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
         <entry key="AvaloniaGUI/Views/CircuitDesigner.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
         <entry key="AvaloniaGUI/Views/Controls/CircuitGrid.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
+        <entry key="AvaloniaGUI/Views/Controls/CustomGateButton.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
         <entry key="AvaloniaGUI/Views/Controls/GateButton.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
         <entry key="AvaloniaGUI/Views/CurcuitDesigner.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
         <entry key="AvaloniaGUI/Views/Dialog/GammaInput.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />

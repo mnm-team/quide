@@ -5,6 +5,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Metadata;
 
 #endregion
 
@@ -12,28 +15,31 @@ namespace AvaloniaGUI.Views.Controls;
 
 public class GateButton : TemplatedControl
 {
-    public GateButton()
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
-        //null?
-        this.PointerPressed += PointerPressed;
-        this.AddHandler(DragDrop.DropEvent, Drop);
-        this.AddHandler(DragDrop.DragEnterEvent, DragEnter);
-        this.AddHandler(DragDrop.DragOverEvent, DragOver);
+        base.OnApplyTemplate(e);
+
+        var draggableButton = e.NameScope.Find<Button>("DraggableButton");
+
+        draggableButton.AddHandler(PointerPressedEvent, MousePressed, RoutingStrategies.Tunnel);
+        draggableButton.AddHandler(DragDrop.DropEvent, Drop, RoutingStrategies.Tunnel);
+        draggableButton.AddHandler(DragDrop.DragEnterEvent, DragEnter, RoutingStrategies.Tunnel);
+        draggableButton.AddHandler(DragDrop.DragOverEvent, DragOver, RoutingStrategies.Tunnel);
     }
 
     #region Events
 
-    public static readonly AttachedProperty<EventHandler<PointerPressedEventArgs>> PointerPressedProperty =
-        AvaloniaProperty.RegisterAttached<GateButton, EventHandler<PointerPressedEventArgs>>(
-            nameof(PointerPressed), typeof(GateButton));
+    private static readonly StyledProperty<EventHandler<PointerPressedEventArgs>> PointerPressedProperty =
+        AvaloniaProperty.Register<GateButton, EventHandler<PointerPressedEventArgs>>(
+            nameof(MousePressed));
 
-    public new EventHandler<PointerPressedEventArgs> PointerPressed
+    public EventHandler<PointerPressedEventArgs> MousePressed
     {
         get => GetValue(PointerPressedProperty);
         set => SetValue(PointerPressedProperty, value);
     }
 
-    public static readonly StyledProperty<EventHandler<DragEventArgs>> DropProperty =
+    private static readonly StyledProperty<EventHandler<DragEventArgs>> DropProperty =
         AvaloniaProperty.Register<GateButton, EventHandler<DragEventArgs>>(
             nameof(Drop));
 
@@ -43,7 +49,7 @@ public class GateButton : TemplatedControl
         set => SetValue(DropProperty, value);
     }
 
-    public static readonly StyledProperty<EventHandler<DragEventArgs>> DragEnterProperty =
+    private static readonly StyledProperty<EventHandler<DragEventArgs>> DragEnterProperty =
         AvaloniaProperty.Register<GateButton, EventHandler<DragEventArgs>>(
             nameof(DragEnter));
 
@@ -53,7 +59,7 @@ public class GateButton : TemplatedControl
         set => SetValue(DragEnterProperty, value);
     }
 
-    public static readonly StyledProperty<EventHandler<DragEventArgs>> DragOverProperty =
+    private static readonly StyledProperty<EventHandler<DragEventArgs>> DragOverProperty =
         AvaloniaProperty.Register<GateButton, EventHandler<DragEventArgs>>(
             nameof(DragOver));
 
@@ -87,9 +93,30 @@ public class GateButton : TemplatedControl
     public static readonly StyledProperty<IControl> ContentProperty = AvaloniaProperty.Register<GateButton, IControl>(
         nameof(Content));
 
+    [Content]
     public IControl Content
     {
         get => GetValue(ContentProperty);
         set => SetValue(ContentProperty, value);
+    }
+
+    public static readonly StyledProperty<ITransform> TransformProperty =
+        AvaloniaProperty.Register<GateButton, ITransform>(
+            nameof(Transform));
+
+    public ITransform Transform
+    {
+        get => GetValue(TransformProperty);
+        set => SetValue(TransformProperty, value);
+    }
+
+    public new static readonly StyledProperty<ContextMenu> ContextMenuProperty =
+        AvaloniaProperty.Register<GateButton, ContextMenu>(
+            nameof(ContextMenu));
+
+    public new ContextMenu ContextMenu
+    {
+        get => GetValue(ContextMenuProperty);
+        set => SetValue(ContextMenuProperty, value);
     }
 }

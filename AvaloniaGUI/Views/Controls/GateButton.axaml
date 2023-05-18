@@ -7,15 +7,13 @@
 
     <Style Selector="controls|GateButton">
         <!-- Set Defaults -->
-        <Setter Property="PointerPressed" Value="{TemplateBinding PointerPressed}" />
-        <Setter Property="Drop" Value="{TemplateBinding Drop}" />
-        <Setter Property="DragEnter" Value="{TemplateBinding DragEnter}" />
-        <Setter Property="DragOver" Value="{TemplateBinding DragOver}" />
         <Setter Property="Template">
             <ControlTemplate>
-                <Button VerticalAlignment="Top" Padding="0" IsEnabled="{TemplateBinding Enabled}"
+                <Button x:Name="DraggableButton" VerticalAlignment="Top" Padding="0"
+                        IsEnabled="{TemplateBinding Enabled}"
                         RenderTransformOrigin="{TemplateBinding RenderTransform}" DragDrop.AllowDrop="True"
-                        Content="{TemplateBinding Content}" />
+                        Content="{TemplateBinding Content}" RenderTransform="{TemplateBinding Transform}"
+                        ContextMenu="{TemplateBinding ContextMenu}" />
             </ControlTemplate>
         </Setter>
     </Style>

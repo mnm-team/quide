@@ -1,7 +1,6 @@
 ﻿#region
 
 using System;
-using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
@@ -40,11 +39,9 @@ public partial class CircuitGrid : UserControl
     {
         Control source = sender as Control;
 
-        bool shiftPressed = false;
-        // if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
-        // {
-        //     shiftPressed = true;
-        // }
+        if (e.GetCurrentPoint(source).Properties.IsRightButtonPressed) return;
+
+        bool shiftPressed = e.KeyModifiers == KeyModifiers.Shift;
 
         // perform drag drop operation for control gate
         if (MainWindowViewModel.SelectedAction == ActionName.Control && !shiftPressed)
@@ -184,156 +181,11 @@ public partial class CircuitGrid : UserControl
         //GatesScroll.ScrollToVerticalOffset(e.VerticalOffset);
     }
 
-//     void SetupDnd(string suffix, Action<DataObject> factory, DragDropEffects effects)
-//         {
-//             var dragMe = this.Get<Border>("DragMe" + suffix);
-//             var dragState = this.Get<TextBlock>("DragState" + suffix);
-//
-//             async void DoDrag(object? sender, Avalonia.Input.PointerPressedEventArgs e)
-//             {
-//                 var dragData = new DataObject();
-//                 factory(dragData);
-//
-//                 var result = await DragDrop.DoDragDrop(e, dragData, effects);
-//                 switch (result)
-//                 {
-//                     case DragDropEffects.Move:
-//                         dragState.Text = "Data was moved";
-//                         break;
-//                     case DragDropEffects.Copy:
-//                         dragState.Text = "Data was copied";
-//                         break;
-//                     case DragDropEffects.Link:
-//                         dragState.Text = "Data was linked";
-//                         break;
-//                     case DragDropEffects.None:
-//                         dragState.Text = "The drag operation was canceled";
-//                         break;
-//                     default:
-//                         dragState.Text = "Unknown result";
-//                         break;
-//                 }
-//             }
-//
-//             void DragOver(object? sender, DragEventArgs e)
-//             {
-//                 if (e.Source is Control c && c.Name == "MoveTarget")
-//                 {
-//                     e.DragEffects = e.DragEffects & (DragDropEffects.Move);
-//                 }
-//                 else
-//                 {
-//                     e.DragEffects = e.DragEffects & (DragDropEffects.Copy);
-//                 }
-//
-//                 // Only allow if the dragged data contains text or filenames.
-//                 if (!e.Data.Contains(DataFormats.Text)
-//                     && !e.Data.Contains(DataFormats.Files)
-//                     && !e.Data.Contains(CustomFormat))
-//                     e.DragEffects = DragDropEffects.None;
-//             }
-//
-//             async void Drop(object? sender, DragEventArgs e)
-//             {
-//                 if (e.Source is Control c && c.Name == "MoveTarget")
-//                 {
-//                     e.DragEffects = e.DragEffects & (DragDropEffects.Move);
-//                 }
-//                 else
-//                 {
-//                     e.DragEffects = e.DragEffects & (DragDropEffects.Copy);
-//                 }
-//
-//                 if (e.Data.Contains(DataFormats.Text))
-//                 {
-//                     _dropState.Text = e.Data.GetText();
-//                 }
-//                 else if (e.Data.Contains(DataFormats.Files))
-//                 {
-//                     var files = e.Data.GetFiles() ?? Array.Empty<IStorageItem>();
-//                     var contentStr = "";
-//
-//                     foreach (var item in files)
-//                     {
-//                         if (item is IStorageFile file)
-//                         {
-//                             var content = await DialogsPage.ReadTextFromFile(file, 1000);
-//                             contentStr += $"File {item.Name}:{Environment.NewLine}{content}{Environment.NewLine}{Environment.NewLine}";
-//                         }
-//                         else if (item is IStorageFolder folder)
-//                         {
-//                             var childrenCount = 0;
-//                             await foreach (var _ in folder.GetItemsAsync())
-//                             {
-//                                 childrenCount++;
-//                             }
-//                             contentStr += $"Folder {item.Name}: items {childrenCount}{Environment.NewLine}{Environment.NewLine}";
-//                         }
-//                     }
-//
-//                     _dropState.Text = contentStr;
-//                 }
-// #pragma warning disable CS0618 // Type or member is obsolete
-//                 else if (e.Data.Contains(DataFormats.FileNames))
-//                 {
-//                     var files = e.Data.GetFileNames();
-//                     _dropState.Text = string.Join(Environment.NewLine, files ?? Array.Empty<string>());
-//                 }
-// #pragma warning restore CS0618 // Type or member is obsolete
-//                 else if (e.Data.Contains(CustomFormat))
-//                 {
-//                     _dropState.Text = "Custom: " + e.Data.Get(CustomFormat);
-//                 }
-//             }
-//
-//             dragMe.PointerPressed += DoDrag;
-//
-//             AddHandler(DragDrop.DropEvent, Drop);
-//             AddHandler(DragDrop.DragOverEvent, DragOver);
-//         }
-
     private void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);
 
         Drawing = this.FindControl<Canvas>("drawing");
         Drawing.AddHandler(DragDrop.DropEvent, Drawing_Drop);
-
-        AddButtonHandlers();
-    }
-
-    private void AddButtonHandlers()
-    {
-        var parentItemsControl = this.FindControl<ItemsControl>("stepItemsControl");
-
-        var buttons = FindVisualChildren<Button>(parentItemsControl);
-
-        foreach (var button in buttons)
-        {
-            // doesnt get hit
-            button.PointerPressed += GateButton_MouseDown;
-            button.AddHandler(DragDrop.DropEvent, GateButton_Drop);
-            button.AddHandler(DragDrop.DragEnterEvent, GateButton_DragEnter);
-            button.AddHandler(DragDrop.DragOverEvent, GateButton_DragOver);
-        }
-    }
-
-    private IEnumerable<T> FindVisualChildren<T>(IControl control) where T : IControl
-    {
-        if (control != null)
-        {
-            for (int i = 0; i < control.VisualChildren.Count; i++)
-            {
-                if (control.VisualChildren[i] is T)
-                {
-                    yield return (T)control.VisualChildren[i];
-                }
-
-                foreach (var child in FindVisualChildren<T>((IControl)control.VisualChildren[i]))
-                {
-                    yield return child;
-                }
-            }
-        }
     }
 }

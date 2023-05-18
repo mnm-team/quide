@@ -9,6 +9,7 @@
 
     <Application.Styles>
         <FluentTheme Mode="Light" />
+        <StyleInclude Source="/Views/Controls/GateButton.axaml" />
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>
