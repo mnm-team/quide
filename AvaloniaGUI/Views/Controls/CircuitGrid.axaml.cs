@@ -29,8 +29,6 @@ public partial class CircuitGrid : UserControl
 
     private void LayoutRoot_PreviewMouseWheel(object sender, PointerWheelEventArgs e)
     {
-        //TODO: fix this
-        //base.OnPreviewMouseWheel(e);
         CircuitGridViewModel vm = DataContext as CircuitGridViewModel;
         vm.LayoutRoot_PreviewMouseWheel(e);
     }
@@ -159,28 +157,30 @@ public partial class CircuitGrid : UserControl
 
     private void GatesScroll_ScrollChanged(object sender, ScrollChangedEventArgs e)
     {
-        /*if (e.OffsetDelta.Y != 0) //e.VerticalChange != 0)
-        {
-            RegisterScroll.ScrollToVerticalOffset(e.VerticalOffset);
-            GatesScroll.ScrollToVerticalOffset = RegisterScroll.VerticalOffset;
-        }
+        //TODO:
+        // if (e.OffsetDelta.Y != 0) //e.VerticalChange != 0)
+        // {
+        //     RegisterScroll.ScrollToVerticalOffset(e.VerticalOffset);
+        //     GatesScroll.ScrollToVerticalOffset = RegisterScroll.VerticalOffset;
+        // }
 
         // if added step
-        if (e.ExtentDelta.X > 0) //e.ExtentWidthChange > 0)
+        var extentWidthChange = e.ExtentDelta.X;
+        if (extentWidthChange > 0)
         {
             CircuitGridViewModel circuitVM = DataContext as CircuitGridViewModel;
             int addedColumn = circuitVM.LastStepAdded;
             if (addedColumn > 0)
             {
                 // if newly added step is not fully visible
-                double scrollNeeded = e.ExtentWidthChange * (addedColumn + 1) - GatesScroll.HorizontalOffset -
-                                      GatesScroll.ViewportWidth;
+                double scrollNeeded = extentWidthChange * (addedColumn + 1) - GatesScroll.Offset.X -
+                                      GatesScroll.Viewport.Width;
                 if (scrollNeeded > 0)
                 {
-                    GatesScroll.ScrollToHorizontalOffset(GatesScroll.HorizontalOffset + scrollNeeded);
+                    //GatesScroll.ScrollToHorizontalOffset(GatesScroll.HorizontalOffset + scrollNeeded);
                 }
             }
-        }*/
+        }
     }
 
     private void RegisterScroll_ScrollChanged(object sender, ScrollChangedEventArgs e)

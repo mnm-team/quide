@@ -19,8 +19,7 @@
         <Style x:Key="DefaultButton" Selector="Button" />
     </UserControl.Resources>
 
-    <Grid x:Name="LayoutRoot" Background="White">
-        <!--PreviewMouseWheel="LayoutRoot_PreviewMouseWheel"-->
+    <Grid x:Name="LayoutRoot" Background="White" PointerWheelChanged="LayoutRoot_PreviewMouseWheel">
 
         <Border Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
             <Grid x:Name="mainGrid" Background="White" ColumnDefinitions="Auto,*">
@@ -152,8 +151,8 @@
                               Grid.Column="1"
                               HorizontalScrollBarVisibility="Visible"
                               VerticalScrollBarVisibility="Visible"
-                              Offset="{Binding #RegisterScroll.Offset, Mode=TwoWay}"
-                              ScrollChanged="GatesScroll_ScrollChanged">
+                              Offset="{Binding #RegisterScroll.Offset, Mode=TwoWay}">
+                    <!--ScrollChanged="GatesScroll_ScrollChanged"-->
                     <!-- Circuit line view -->
                     <ItemsControl x:Name="stepItemsControl"
                                   Background="White"
