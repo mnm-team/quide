@@ -50,16 +50,17 @@
             <!-- TODO: 
             toolbar in https://github.com/Splitwirez/Mechanism-for-Avalonia/-->
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
-                <Button Command="{Binding New}" ToolTip.Tip="{x:Static p:Resources.New}" HotKey="Ctrl+N">
+                <Button Command="{Binding NewCommand}" ToolTip.Tip="{x:Static p:Resources.New}" HotKey="Ctrl+N">
                     <Image Source="/Assets/Images/NewFile_6276.png" Width="16" />
                 </Button>
-                <Button Command="{Binding Open}" ToolTip.Tip="{x:Static p:Resources.Open}" HotKey="Ctrl+O">
+                <Button Command="{Binding OpenCommand}" ToolTip.Tip="{x:Static p:Resources.Open}" HotKey="Ctrl+O">
                     <Image Source="/Assets/Images/Open_6529.png" Width="16" />
                 </Button>
-                <Button Command="{Binding Save}" ToolTip.Tip="{x:Static p:Resources.Save}" HotKey="Ctrl+S">
+                <Button Command="{Binding SaveCommand}" ToolTip.Tip="{x:Static p:Resources.Save}" HotKey="Ctrl+S">
                     <Image Source="/Assets/Images/Save_6530.png" Width="16" />
                 </Button>
-                <Button Command="{Binding SaveAs}" ToolTip.Tip="{x:Static p:Resources.SaveAs}" HotKey="Ctrl+Alt+S">
+                <Button Command="{Binding SaveAsCommand}" ToolTip.Tip="{x:Static p:Resources.SaveAs}"
+                        HotKey="Ctrl+Alt+S">
                     <Image Source="/Assets/Images/SaveAs.png" Width="16" />
                 </Button>
 
