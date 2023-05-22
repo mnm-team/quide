@@ -1,0 +1,33 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:p="clr-namespace:AvaloniaGUI.Properties"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="AvaloniaGUI.Views.Dialog.AboutWindow"
+        Title="AboutWindow">
+    <!--<UserControl.Resources>
+        <Style x:Key="DefaultButton" Selector="Button" />
+        <Style x:Key="FlatButton" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Selector="Button" />
+    </UserControl.Resources>-->
+
+    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto">
+        <TextBlock Text="{x:Static p:Resources.AboutText}" Margin="10" />
+        <TextBlock
+            Grid.Row="1"
+            Text="{x:Static p:Resources.Authors}" Margin="10" />
+        <StackPanel
+            VerticalAlignment="Stretch"
+            Margin="10"
+            Grid.Row="2">
+            <TextBlock Text="{x:Static p:Resources.License}" Margin="0 5" />
+            <Border
+                Background="White"
+                BorderBrush="DimGray"
+                BorderThickness="1">
+                <TextBlock
+                    Text="{x:Static p:Resources.GPLText}" Margin="10" />
+            </Border>
+        </StackPanel>
+    </Grid>
+</Window>

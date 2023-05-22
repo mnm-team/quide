@@ -14,6 +14,7 @@ using AvaloniaGUI.ViewModels.MainModels.QuantumModel;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel.Gates;
 using AvaloniaGUI.ViewModels.MainModels.QuantumParser;
 using AvaloniaGUI.Views;
+using AvaloniaGUI.Views.Dialog;
 using ReactiveUI;
 
 #endregion
@@ -91,7 +92,7 @@ public class MainWindowViewModel : ViewModelBase
 
     private List<string> _toolsVM;
 
-    //private ConsoleWriter _consoleWriter;
+    private ConsoleWriter _consoleWriter;
 
     private static string _exampleCode = "using Quantum;\n" +
                                          "using Quantum.Operations;\n" +
@@ -145,7 +146,7 @@ public class MainWindowViewModel : ViewModelBase
     private DelegateCommand _save;
     private DelegateCommand _saveAs;
 
-    //TODO:
+    //TODO: how handle dialog interactions?
     private static ReactiveCommand<Unit, Unit> _calculatorCommand;
 
     private static ReactiveCommand<Unit, Unit> _aboutCommand;
@@ -161,9 +162,13 @@ public class MainWindowViewModel : ViewModelBase
         InitFromModel(ComputerModel.CreateModelForGUI());
 
         // _codeGenerator = new CodeGenerator();
-        // _consoleWriter = new ConsoleWriter();
-        // _consoleWriter.TextChanged += _consoleWriter_TextChanged;
-        //_window = Application.Current.MainWindow as MainWindow;
+        _consoleWriter = new ConsoleWriter();
+        _consoleWriter.TextChanged += _consoleWriter_TextChanged;
+    }
+
+    public void SetWindow(MainWindow window)
+    {
+        _window = window;
     }
 
     #endregion // Constructor
@@ -336,11 +341,7 @@ public class MainWindowViewModel : ViewModelBase
 
     public string ConsoleOutput
     {
-        get
-        {
-            //TODO:
-            return null; //_consoleWriter.Text;
-        }
+        get { return _consoleWriter.Text; }
     }
 
 
@@ -807,18 +808,18 @@ public class MainWindowViewModel : ViewModelBase
 
     public void RunInConsole(object parameter)
     {
-        // _window.ConsoleTab.IsSelected = true;
-        // _consoleWriter.Reset();
-        // Parser parser = new Parser();
-        // try
-        // {
-        //     Assembly asm = parser.CompileForRun(Code);
-        //     parser.Execute(asm, _consoleWriter);
-        // }
-        // catch (Exception e)
-        // {
-        //     PrintException(e);
-        // }
+        _window.ConsoleTab.IsSelected = true;
+        _consoleWriter.Reset();
+        Parser parser = new Parser();
+        try
+        {
+            Assembly asm = parser.CompileForRun(Code);
+            parser.Execute(asm, _consoleWriter);
+        }
+        catch (Exception e)
+        {
+            PrintException(e);
+        }
     }
 
     public void Restart(object parameter)
@@ -940,7 +941,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         // ICustomContentDialog dialog = _window.DialogManager
         //     .CreateCustomContentDialog(new AboutWindow(), DialogMode.Ok);
-        // dialog.Show();
+        new AboutWindow().ShowDialog(_window);
     }
 
     public void New(object parameter)
@@ -1072,7 +1073,7 @@ public class MainWindowViewModel : ViewModelBase
         //OutputGrid.LoadModel(_model, _outputModel);
     }
 
-    private void _consoleWriter_TextChanged(object sender, RoutedEventArgs e)
+    private void _consoleWriter_TextChanged(object? sender, EventArgs eventArgs)
     {
         OnPropertyChanged("ConsoleOutput");
     }

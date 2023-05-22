@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:p="clr-namespace:AvaloniaGUI.Properties"
         xmlns:controls="clr-namespace:AvaloniaGUI.Views.Controls"
+        xmlns:drawing="clr-namespace:System.Drawing;assembly=System.Drawing.Primitives"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AvaloniaGUI.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -113,8 +114,9 @@
             </StackPanel>
             <Button
                 DockPanel.Dock="Right"
-                ToolTip.Tip="{x:Static p:Resources.ShowAbout}"><!-- TODO: 
-                Style="{StaticResource FlatButton}" Command="{x:Static ViewModels:HomeVM.AboutCommand}"-->
+                ToolTip.Tip="{x:Static p:Resources.ShowAbout}"
+                Command="{x:Static vm:MainWindowViewModel.AboutCommand}">
+                <!-- Style="{StaticResource FlatButton}"-->
                 <Border
                     BorderBrush="DimGray"
                     BorderThickness="1"
@@ -128,8 +130,9 @@
             </Button>
             <Button
                 DockPanel.Dock="Right"
-                ToolTip.Tip="{x:Static p:Resources.ShowAbout}"><!-- TODO: 
-                Style="{StaticResource FlatButton}" Command="{x:Static ViewModels:HomeVM.CalculatorCommand}"-->
+                ToolTip.Tip="{x:Static p:Resources.ShowAbout}"
+                Command="{x:Static vm:MainWindowViewModel.CalculatorCommand}">
+                <!-- Style="{StaticResource FlatButton}"-->
                 <Border
                     BorderBrush="DimGray"
                     BorderThickness="1"
@@ -147,13 +150,12 @@
     https://github.com/wieslawsoltes/Dock -->
         <DockPanel>
             <TabControl DockPanel.Dock="Bottom">
-                <TabItem Header="{x:Static p:Resources.CircuitDesigner}"
-                         x:Name="CircuitTab">
-                    <!-- TODO: 
+                <TabItem Header="{x:Static p:Resources.CircuitDesigner}" x:Name="CircuitTab">
+                    <!-- TODO: DockingManager
                                        CanClose="False" 
                                        CanHide="False"-->
+                    <!--########################################### CircuitDesigner #############################################-->
                     <DockPanel>
-                        <!--########################################### CircuitDesigner #############################################-->
                         <!-- TODO: 
                                 toolbar in https://github.com/Splitwirez/Mechanism-for-Avalonia/-->
                         <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
@@ -406,7 +408,18 @@
                         <controls:CircuitGrid x:Name="circuitGrid" DataContext="{Binding CircuitGrid}"
                                               HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" />
                     </DockPanel>
+                </TabItem>
 
+                <!--########################################### Console Output #############################################-->
+                <TabItem Header="{x:Static p:Resources.ConsoleOutput}" x:Name="ConsoleTab">
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                        <TextBox
+                            IsReadOnly="True"
+                            Text="{Binding ConsoleOutput, Mode=OneWay}"
+                            FontFamily="Consolas"
+                            Background="{DynamicResource {x:Static drawing:SystemColors.Info}}"
+                            Foreground="{DynamicResource {x:Static drawing:SystemColors.InfoText}}" />
+                    </ScrollViewer>
                 </TabItem>
 
             </TabControl>

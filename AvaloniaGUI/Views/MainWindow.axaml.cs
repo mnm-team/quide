@@ -26,6 +26,9 @@ public partial class MainWindow : Window
         Thread.CurrentThread.CurrentUICulture = myCulture;
 
         InitializeComponent();
+
+        var vm = DataContext as MainWindowViewModel;
+        vm?.SetWindow(this);
     }
 
     private void Window_Closing(object sender, CancelEventArgs e)
@@ -40,7 +43,7 @@ public partial class MainWindow : Window
 
     private void CompositeTool_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        var vm = this.DataContext as MainWindowViewModel;
+        var vm = DataContext as MainWindowViewModel;
 
         vm?.CompositeSelected();
     }
