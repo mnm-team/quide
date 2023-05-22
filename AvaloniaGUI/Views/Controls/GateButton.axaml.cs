@@ -22,9 +22,9 @@ public class GateButton : TemplatedControl
         var draggableButton = e.NameScope.Find<Button>("DraggableButton");
 
         draggableButton.AddHandler(PointerPressedEvent, MousePressed, RoutingStrategies.Tunnel);
-        draggableButton.AddHandler(DragDrop.DropEvent, Drop, RoutingStrategies.Tunnel);
-        draggableButton.AddHandler(DragDrop.DragEnterEvent, DragEnter, RoutingStrategies.Tunnel);
-        draggableButton.AddHandler(DragDrop.DragOverEvent, DragOver, RoutingStrategies.Tunnel);
+        draggableButton.AddHandler(DragDrop.DropEvent, Drop);
+        draggableButton.AddHandler(DragDrop.DragEnterEvent, DragEnter);
+        draggableButton.AddHandler(DragDrop.DragOverEvent, DragOver);
     }
 
     #region Events

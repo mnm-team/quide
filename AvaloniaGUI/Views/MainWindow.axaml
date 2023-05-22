@@ -153,14 +153,6 @@
                                        CanHide="False"-->
                     <DockPanel>
                         <!--########################################### CircuitDesigner #############################################-->
-                        <!-- TODO: Necessary?? 
-                            DockPanel.InputBindings>
-                                <KeyBinding Command="Cut" Key="X" Modifiers="Ctrl"/>
-                                <KeyBinding Command="Copy" Key="C" Modifiers="Ctrl"/>
-                                <KeyBinding Command="Paste" Key="V" Modifiers="Ctrl"/>
-                                <KeyBinding Command="Delete" Key="Delete" />
-                                
-                            </-->
                         <!-- TODO: 
                                 toolbar in https://github.com/Splitwirez/Mechanism-for-Avalonia/-->
                         <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
@@ -170,19 +162,19 @@
                                 <!-- Execution -->
                                 <StackPanel Orientation="Horizontal">
                                     <Button x:Name="restart" ToolTip.Tip="{x:Static p:Resources.Restart}"
-                                            Command="{Binding RestartCommand}">
+                                            Command="{Binding RestartCommand}" HotKey="F5">
                                         <Image Source="/Assets/Images/GotoFirstRow_287.png" Width="16" />
                                     </Button>
                                     <Button x:Name="prev" ToolTip.Tip="{x:Static p:Resources.PrevStep}"
-                                            Command="{Binding PrevStepCommand}">
+                                            Command="{Binding PrevStepCommand}" HotKey="F6">
                                         <Image Source="/Assets/Images/MovePrevious_7195.png" Width="16" />
                                     </Button>
                                     <Button x:Name="next" ToolTip.Tip="{x:Static p:Resources.NextStep}"
-                                            Command="{Binding NextStepCommand}">
+                                            Command="{Binding NextStepCommand}" HotKey="F7">
                                         <Image Source="/Assets/Images/GotoNextRow_289.png" Width="16" />
                                     </Button>
                                     <Button x:Name="run" ToolTip.Tip="{x:Static p:Resources.Run}"
-                                            Command="{Binding RunCommand}">
+                                            Command="{Binding RunCommand}" HotKey="F8">
                                         <Image Source="/Assets/Images/GotoLastRow_288.png" Width="16" />
                                     </Button>
 
@@ -215,20 +207,20 @@
                                     </Button>
 
                                     <Button x:Name="delete" ToolTip.Tip="{x:Static p:Resources.ClearSelection}"
-                                            Command="{Binding DeleteGates}">
+                                            Command="{Binding DeleteGates}" HotKey="Delete">
                                         <Image Source="/Assets/Images/Clearallrequests_8816.png" Width="16" Margin="2" />
                                     </Button>
 
                                     <Button x:Name="cut" ToolTip.Tip="{x:Static p:Resources.Cut}"
-                                            Command="{Binding CutGatesCommand}">
+                                            Command="{Binding CutGatesCommand}" HotKey="Ctrl+X">
                                         <Image Source="/Assets/Images/Cut_6523.png" Width="16" />
                                     </Button>
                                     <Button x:Name="copy" ToolTip.Tip="{x:Static p:Resources.Copy}"
-                                            Command="{Binding CopyGatesCommand}">
+                                            Command="{Binding CopyGatesCommand}" HotKey="Ctrl+C">
                                         <Image Source="/Assets/Images/Copy_6524.png" Width="16" />
                                     </Button>
                                     <Button x:Name="paste" ToolTip.Tip="{x:Static p:Resources.Paste}"
-                                            Command="{Binding PasteGatesCommand}">
+                                            Command="{Binding PasteGatesCommand}" HotKey="Ctrl+V">
                                         <Image Source="/Assets/Images/Paste_6520.png" Width="16" />
                                     </Button>
                                 </StackPanel>

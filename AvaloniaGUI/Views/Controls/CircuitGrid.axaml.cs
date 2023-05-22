@@ -35,6 +35,11 @@ public partial class CircuitGrid : UserControl
         vm.LayoutRoot_PreviewMouseWheel(e);
     }
 
+    /// <summary>
+    /// Is called by PointerPressed event on GateButton.
+    /// </summary>
+    /// <param name="sender">GateButton</param>
+    /// <param name="e">event</param>
     private void GateButton_MouseDown(object sender, PointerPressedEventArgs e)
     {
         Control source = sender as Control;
@@ -43,52 +48,56 @@ public partial class CircuitGrid : UserControl
 
         bool shiftPressed = e.KeyModifiers == KeyModifiers.Shift;
 
-        // perform drag drop operation for control gate
+        // perform drawing operation for control gate
         if (MainWindowViewModel.SelectedAction == ActionName.Control && !shiftPressed)
         {
             Button button = source as Button;
 
+            //TODO: coords correct for every button?
             Point coordinates =
                 new Point(0, 0).Transform(button.TransformToVisual(Drawing)
                     .GetValueOrDefault()); //.Transform(new Point(0, 0));
-
-            CircuitGridViewModel circuitVM = DataContext as CircuitGridViewModel;
 
             double diameter = 12;
             double centerX = coordinates.X + 0.5 * CircuitGridViewModel.GateWidth;
             double centerY = coordinates.Y + 0.5 * CircuitGridViewModel.QubitSize;
 
-            Ellipse ctrlPoint = new Ellipse();
-            ctrlPoint.Width = diameter;
-            ctrlPoint.Height = diameter;
+            Ellipse ctrlPoint = new Ellipse
+            {
+                Width = diameter,
+                Height = diameter,
+                Fill = black,
+                Stroke = black,
+                StrokeThickness = 1
+            };
 
-            ctrlPoint.Fill = black;
-            ctrlPoint.Stroke = black;
-            ctrlPoint.StrokeThickness = 1;
-            //ctrlPoint.AllowDrop = true;
-            ctrlPoint.PointerReleased += ctrlPoint_Drop;
+            ctrlPoint.SetValue(DragDrop.AllowDropProperty, true); //AllowDrop = true;
+            ctrlPoint.AddHandler(DragDrop.DropEvent, ctrlPoint_Drop);
 
             Drawing.Children.Add(ctrlPoint);
             Canvas.SetTop(ctrlPoint, centerY - 0.5 * diameter);
             Canvas.SetLeft(ctrlPoint, centerX - 0.5 * diameter);
 
-            line = new Line();
-            line.StartPoint = new Point(centerX, centerY);
-            line.EndPoint = new Point(centerX, centerX);
+            line = new Line
+            {
+                StartPoint = new Point(centerX, centerY),
+                EndPoint = new Point(centerX, centerY),
+                Stroke = black,
+                StrokeThickness = 1
+            };
 
-            line.Stroke = black;
-            line.StrokeThickness = 1;
             Drawing.Children.Add(line);
-
-            //Action emptyDelegate = delegate { };
-            //Drawing.Dispatcher.Invoke(emptyDelegate, DispatcherPriority.Render);
         }
 
         GateViewModel vm = source.DataContext as GateViewModel;
 
         // fetch grid with gates to draw
-        IDataObject data = new Tuple<int, RegisterRefModel>(vm.Column, vm.Row) as IDataObject;
-        DragDrop.DoDragDrop(e, data, DragDropEffects.Link);
+        Tuple<int, RegisterRefModel> data = new Tuple<int, RegisterRefModel>(vm.Column, vm.Row);
+
+        DataObject dragData = new DataObject();
+        dragData.Set(typeof(Tuple<int, RegisterRefModel>).ToString(), data);
+
+        DragDrop.DoDragDrop(e, dragData, DragDropEffects.Link);
     }
 
     void ctrlPoint_Drop(object? sender, PointerEventArgs pointerEventArgs)
@@ -108,11 +117,10 @@ public partial class CircuitGrid : UserControl
         if (e.Data.Contains(typeof(Tuple<int, RegisterRefModel>).ToString()))
         {
             e.DragEffects = DragDropEffects.Link; //All
+            return;
         }
-        else
-        {
-            e.DragEffects = DragDropEffects.None;
-        }
+
+        e.DragEffects = DragDropEffects.None;
     }
 
     private void GateButton_DragOver(object sender, DragEventArgs e)
@@ -122,7 +130,6 @@ public partial class CircuitGrid : UserControl
             Point mouse = e.GetPosition(Drawing);
             //line.X2 = mouse.X - 5;
             //line.Y2 = mouse.Y - 5;
-            line.StartPoint = new Point(0, 0);
             line.EndPoint = new Point(mouse.X - 5, mouse.Y - 5);
         }
     }
@@ -132,13 +139,13 @@ public partial class CircuitGrid : UserControl
         Control target = sender as Control;
 
         // check for Tuple<int, RegisterRefModel>
-        var dataFormat = typeof(Tuple<int, RegisterRefModel>);
+        var dataFormat = typeof(Tuple<int, RegisterRefModel>).ToString();
 
-        if (e.Source.GetType() != dataFormat)
+        if (!e.Data.Contains(dataFormat))
             return;
 
         Tuple<int, RegisterRefModel> data =
-            e.Source as Tuple<int, RegisterRefModel>;
+            e.Data.Get(dataFormat) as Tuple<int, RegisterRefModel>;
         GateViewModel vm = target.DataContext as GateViewModel;
 
         vm.SetGate(data.Item1, data.Item2, e.KeyModifiers);

@@ -823,18 +823,19 @@ public class MainWindowViewModel : ViewModelBase
 
     public void Restart(object parameter)
     {
-        // try
-        // {
-        //     _model.CurrentStep = 0;
-        //     CircuitEvaluator eval = CircuitEvaluator.GetInstance();
-        //
-        //     _outputModel = eval.InitFromModel(_model);
-        //     OutputGrid.LoadModel(_model, _outputModel);
-        // }
-        // catch (Exception e)
-        // {
-        //     PrintException(e);
-        // }
+        try
+        {
+            _model.CurrentStep = 0;
+            CircuitEvaluator eval = CircuitEvaluator.GetInstance();
+
+            _outputModel = eval.InitFromModel(_model);
+            //TODO:
+            //OutputGrid.LoadModel(_model, _outputModel);
+        }
+        catch (Exception e)
+        {
+            PrintException(e);
+        }
     }
 
     public void PrevStep(object parameter)
