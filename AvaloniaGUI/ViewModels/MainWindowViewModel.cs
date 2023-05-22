@@ -15,6 +15,7 @@ using AvaloniaGUI.ViewModels.MainModels.QuantumModel.Gates;
 using AvaloniaGUI.ViewModels.MainModels.QuantumParser;
 using AvaloniaGUI.Views;
 using AvaloniaGUI.Views.Dialog;
+using MessageBox.Avalonia;
 using ReactiveUI;
 
 #endregion
@@ -1197,16 +1198,17 @@ public class MainWindowViewModel : ViewModelBase
         return name;
     }
 
-    //TODO:
     private void PrintException(Exception e)
     {
-        // string message = e.Message;
-        // if (e.InnerException != null)
-        // {
-        //     message = message + ":\n" + e.InnerException.Message;
-        // }
-        //
-        // MessageBox.Show(message);
+        string message = e.Message;
+        if (e.InnerException != null)
+        {
+            message = message + ":\n" + e.InnerException.Message;
+        }
+
+        var messageBoxWindow = MessageBoxManager.GetMessageBoxStandardWindow("Error", message);
+
+        messageBoxWindow.Show();
     }
 
     #endregion // Private Helpers
