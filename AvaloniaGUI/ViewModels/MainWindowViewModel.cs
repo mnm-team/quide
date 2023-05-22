@@ -68,10 +68,7 @@ public class MainWindowViewModel : ViewModelBase
 
     private void OnCodeChanged()
     {
-        if (CodeChanged != null)
-        {
-            CodeChanged(this, new RoutedEventArgs());
-        }
+        CodeChanged?.Invoke(this, new RoutedEventArgs());
     }
 
     #endregion // Events
@@ -84,7 +81,7 @@ public class MainWindowViewModel : ViewModelBase
     private ComputerModel _model;
     private OutputViewModel _outputModel;
 
-    //private CodeGenerator _codeGenerator;
+    private CodeGenerator _codeGenerator;
 
     private CircuitGridViewModel _circuitGridVM;
     //private OutputGridVM _outputGridVM;
@@ -161,7 +158,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         InitFromModel(ComputerModel.CreateModelForGUI());
 
-        // _codeGenerator = new CodeGenerator();
+        _codeGenerator = new CodeGenerator();
         _consoleWriter = new ConsoleWriter();
         _consoleWriter.TextChanged += _consoleWriter_TextChanged;
     }
@@ -757,16 +754,17 @@ public class MainWindowViewModel : ViewModelBase
         _model.Delete();
     }
 
+    //TODO:
     public void GenerateCode(object parameter)
     {
-        //TODO:
-        // string code = _codeGenerator.GenerateCode();
-        //
-        // string filename = GetNewFilename();
+        string code = _codeGenerator.GenerateCode();
+
+        string filename = GetNewFilename();
         // DocumentInfo info = CreateTab(null, filename);
         // info.Editor.Text = code;
     }
 
+    //TODO:
     public void GenerateFromCode(object parameter)
     {
         // _window.CircuitTab.IsSelected = true;
@@ -822,6 +820,7 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    //TODO:
     public void Restart(object parameter)
     {
         try
@@ -830,7 +829,6 @@ public class MainWindowViewModel : ViewModelBase
             CircuitEvaluator eval = CircuitEvaluator.GetInstance();
 
             _outputModel = eval.InitFromModel(_model);
-            //TODO:
             //OutputGrid.LoadModel(_model, _outputModel);
         }
         catch (Exception e)
@@ -924,6 +922,7 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    //TODO:
     // public CalcWindow ShowCalculator()
     // {
     //     if (_calcWindow == null)
@@ -937,6 +936,7 @@ public class MainWindowViewModel : ViewModelBase
     //     return _calcWindow;
     // }
 
+    //TODO:
     public void ShowAbout()
     {
         // ICustomContentDialog dialog = _window.DialogManager
@@ -944,17 +944,18 @@ public class MainWindowViewModel : ViewModelBase
         new AboutWindow().ShowDialog(_window);
     }
 
+    //TODO:
     public void New(object parameter)
     {
-        // string filename = GetNewFilename();
+        string filename = GetNewFilename();
         // DocumentInfo info = CreateTab(null, filename);
         // info.Editor.Text = _exampleCode;
         // info.Editor.IsModified = false;
     }
 
+    //TODO:
     public void Open(object parameter)
     {
-        //TODO:
         // OpenFileDialog dialog = new OpenFileDialog();
         //
         // // Set filter options and filter index.
@@ -984,6 +985,7 @@ public class MainWindowViewModel : ViewModelBase
         // }
     }
 
+    //TODO:
     public void Save(object parameter)
     {
         // LayoutDocument activeTab = ActiveTab;
@@ -995,6 +997,7 @@ public class MainWindowViewModel : ViewModelBase
         // }
     }
 
+    //TODO:
     public void SaveAs(object parameter)
     {
         // LayoutDocument activeTab = ActiveTab;
@@ -1006,6 +1009,7 @@ public class MainWindowViewModel : ViewModelBase
         // }
     }
 
+    //TODO:
     public bool Window_Closing()
     {
         //TODO:
@@ -1047,6 +1051,7 @@ public class MainWindowViewModel : ViewModelBase
 
     #region Private Helpers
 
+    //TODO:
     private void InitFromModel(ComputerModel model)
     {
         if (_model != null)
@@ -1069,7 +1074,6 @@ public class MainWindowViewModel : ViewModelBase
 
         CircuitEvaluator eval = CircuitEvaluator.GetInstance();
         _outputModel = eval.InitFromModel(_model);
-        //TODO:
         //OutputGrid.LoadModel(_model, _outputModel);
     }
 
@@ -1078,6 +1082,7 @@ public class MainWindowViewModel : ViewModelBase
         OnPropertyChanged("ConsoleOutput");
     }
 
+    //TODO:
     private void Save(DocumentInfo info)
     {
         // if (string.IsNullOrWhiteSpace(info.FullPath))
@@ -1090,6 +1095,7 @@ public class MainWindowViewModel : ViewModelBase
         // }
     }
 
+    //TODO:
     private void SaveAs(DocumentInfo info)
     {
         //TODO:
@@ -1119,6 +1125,7 @@ public class MainWindowViewModel : ViewModelBase
         // }
     }
 
+    //TODO:
     private DocumentInfo CreateTab(string fullPath, string title)
     {
         //TODO:
@@ -1147,6 +1154,7 @@ public class MainWindowViewModel : ViewModelBase
         return null; //info;
     }
 
+    //TODO:
     private void document_Closing(object sender, CancelEventArgs e)
     {
         // LayoutDocument document = sender as LayoutDocument;
@@ -1189,6 +1197,7 @@ public class MainWindowViewModel : ViewModelBase
         return name;
     }
 
+    //TODO:
     private void PrintException(Exception e)
     {
         // string message = e.Message;
@@ -1205,6 +1214,7 @@ public class MainWindowViewModel : ViewModelBase
 
     #region Nested Classes
 
+    //TODO:
     private class DocumentInfo
     {
         public int ID { get; private set; }
@@ -1213,7 +1223,6 @@ public class MainWindowViewModel : ViewModelBase
 
         public string Title;
 
-        //TODO:
         // public LayoutDocument Tab { get; private set; }
         //
         // public TextEditor Editor { get; private set; }
