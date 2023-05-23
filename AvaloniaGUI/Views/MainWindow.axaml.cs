@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Threading;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using AvaloniaGUI.ViewModels;
+using NP.Avalonia.UniDock;
 
 #endregion
 
@@ -12,6 +14,8 @@ namespace AvaloniaGUI.Views;
 
 public partial class MainWindow : Window
 {
+    private DockManager _dockManager;
+
     public MainWindow()
     {
         CultureInfo current = CultureInfo.CurrentCulture;
@@ -29,6 +33,25 @@ public partial class MainWindow : Window
 
         var vm = DataContext as MainWindowViewModel;
         vm?.SetWindow(this);
+
+        _dockManager = (DockManager)this.FindResource("TheDockManager")!;
+
+        _dockManager.RestoreFromFile("DefaultLayout.xml");
+
+        // Button _saveLayoutButton =
+        //     this.FindControl<Button>("SaveLayoutButton");
+        //
+        // _saveLayoutButton.Click += _saveLayoutButton_Click;
+    }
+
+    /// <summary>
+    /// Would save new default file under bin/.../DefaultLayout.xml
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void _saveLayoutButton_Click(object? sender, RoutedEventArgs e)
+    {
+        _dockManager.SaveToFile("./DefaultLayout.xml");
     }
 
     private void Window_Closing(object sender, CancelEventArgs e)

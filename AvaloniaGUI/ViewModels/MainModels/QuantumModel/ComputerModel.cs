@@ -77,7 +77,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
         public const int InitialRegistersCount = 1;
 
-        public const int InitialStepsCount = 8;
+        public const int InitialStepsCount = 16;
 
         #endregion // Public Constants
 

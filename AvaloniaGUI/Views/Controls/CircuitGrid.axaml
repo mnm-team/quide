@@ -153,6 +153,7 @@
                               VerticalScrollBarVisibility="Visible"
                               Offset="{Binding #RegisterScroll.Offset, Mode=TwoWay}">
                     <!--ScrollChanged="GatesScroll_ScrollChanged"-->
+
                     <!-- Circuit line view -->
                     <ItemsControl x:Name="stepItemsControl"
                                   Background="White"
