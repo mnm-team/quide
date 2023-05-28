@@ -1,5 +1,6 @@
 #region
 
+using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Threading;
@@ -31,9 +32,6 @@ public partial class MainWindow : Window
 
         InitializeComponent();
 
-        var vm = DataContext as MainWindowViewModel;
-        vm?.SetWindow(this);
-
         _dockManager = (DockManager)this.FindResource("TheDockManager")!;
 
         _dockManager.RestoreFromFile("DefaultLayout.xml");
@@ -42,6 +40,14 @@ public partial class MainWindow : Window
         //     this.FindControl<Button>("SaveLayoutButton");
         //
         // _saveLayoutButton.Click += _saveLayoutButton_Click;
+    }
+
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        base.OnDataContextChanged(e);
+
+        var vm = DataContext as MainWindowViewModel;
+        vm?.SetWindow(this);
     }
 
     /// <summary>

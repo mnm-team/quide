@@ -147,7 +147,7 @@ public class MainWindowViewModel : ViewModelBase
     //TODO: how handle dialog interactions?
     private static ReactiveCommand<Unit, Unit> _calculatorCommand;
 
-    private static ReactiveCommand<Unit, Unit> _aboutCommand;
+    private DelegateCommand _aboutCommand;
     //private CalcWindow _calcWindow;
 
     #endregion // Fields
@@ -350,9 +350,17 @@ public class MainWindowViewModel : ViewModelBase
         get { return _calculatorCommand; }
     }
 
-    public static ICommand AboutCommand
+    public ICommand AboutCommand
     {
-        get { return _aboutCommand; }
+        get
+        {
+            if (_aboutCommand == null)
+            {
+                _aboutCommand = new DelegateCommand(ShowAbout, x => true);
+            }
+
+            return _aboutCommand;
+        }
     }
 
     public ICommand SelectActionCommand
@@ -938,11 +946,11 @@ public class MainWindowViewModel : ViewModelBase
     // }
 
     //TODO:
-    public void ShowAbout()
+    public async void ShowAbout(object o)
     {
         // ICustomContentDialog dialog = _window.DialogManager
         //     .CreateCustomContentDialog(new AboutWindow(), DialogMode.Ok);
-        new AboutWindow().ShowDialog(_window);
+        await new AboutWindow().ShowDialog(_window);
     }
 
     //TODO:

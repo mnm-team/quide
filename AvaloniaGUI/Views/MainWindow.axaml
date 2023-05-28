@@ -123,7 +123,7 @@
             <Button
                 DockPanel.Dock="Right"
                 ToolTip.Tip="{x:Static p:Resources.ShowAbout}"
-                Command="{x:Static vm:MainWindowViewModel.AboutCommand}">
+                Command="{Binding AboutCommand}">
                 <!-- Style="{StaticResource FlatButton}"-->
                 <Border
                     BorderBrush="DimGray"
