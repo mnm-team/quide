@@ -19,6 +19,7 @@
         <entry key="AvaloniaGUI/Views/Dialog/ParametricInput.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
         <entry key="AvaloniaGUI/Views/Dialog/PhaseDistInput.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
         <entry key="AvaloniaGUI/Views/MainWindow.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
+        <entry key="AvaloniaGUI/Views/OutputGrid.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
       </map>
     </option>
   </component>

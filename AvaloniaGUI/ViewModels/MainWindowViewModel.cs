@@ -15,7 +15,6 @@ using AvaloniaGUI.ViewModels.MainModels.QuantumModel.Gates;
 using AvaloniaGUI.ViewModels.MainModels.QuantumParser;
 using AvaloniaGUI.Views;
 using AvaloniaGUI.Views.Dialog;
-using MessageBox.Avalonia;
 using ReactiveUI;
 
 #endregion
@@ -85,7 +84,8 @@ public class MainWindowViewModel : ViewModelBase
     private CodeGenerator _codeGenerator;
 
     private CircuitGridViewModel _circuitGridVM;
-    //private OutputGridVM _outputGridVM;
+
+    private OutputGridViewModel _outputGridVM;
     //private PropertiesVM _propertiesVM;
 
     private List<string> _toolsVM;
@@ -182,10 +182,10 @@ public class MainWindowViewModel : ViewModelBase
                 // {
                 //     _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
                 // }
-                // if (_outputGridVM != null)
-                // {
-                //     _outputGridVM.AddQubitsTracing(_circuitGridVM);
-                // }
+                if (_outputGridVM != null)
+                {
+                    _outputGridVM.AddQubitsTracing(_circuitGridVM);
+                }
             }
 
             return _circuitGridVM;
@@ -200,50 +200,53 @@ public class MainWindowViewModel : ViewModelBase
             // {
             //     _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
             // }
-            // if (_outputGridVM != null)
-            // {
-            //     _outputGridVM.AddQubitsTracing(_circuitGridVM);
-            // }
-            base.OnPropertyChanged("CircuitGrid");
+            if (_outputGridVM != null)
+            {
+                _outputGridVM.AddQubitsTracing(_circuitGridVM);
+            }
+
+            base.OnPropertyChanged(nameof(CircuitGrid));
         }
     }
 
-    // public OutputGridVM OutputGrid
-    // {
-    //     get
-    //     {
-    //         if (_outputGridVM == null)
-    //         {
-    //             _outputGridVM = new OutputGridVM();
-    //             _outputGridVM.LoadModel(_model, _outputModel);
-    //             if (_circuitGridVM != null)
-    //             {
-    //                 _outputGridVM.AddQubitsTracing(_circuitGridVM);
-    //             }
-    //             if (_propertiesVM != null)
-    //             {
-    //                 _propertiesVM.AddSelectionTracing(_outputGridVM);
-    //             }
-    //         }
-    //         return _outputGridVM;
-    //     }
-    //     private set
-    //     {
-    //         if (value == _outputGridVM)
-    //             return;
-    //
-    //         _outputGridVM = value;
-    //         if (_circuitGridVM != null)
-    //         {
-    //             _outputGridVM.AddQubitsTracing(_circuitGridVM);
-    //         }
-    //         if (_propertiesVM != null)
-    //         {
-    //             _propertiesVM.AddSelectionTracing(_outputGridVM);
-    //         }
-    //         base.OnPropertyChanged("OutputGrid");
-    //     }
-    // }
+    public OutputGridViewModel OutputGrid
+    {
+        get
+        {
+            if (_outputGridVM == null)
+            {
+                _outputGridVM = new OutputGridViewModel();
+                _outputGridVM.LoadModel(_model, _outputModel);
+                if (_circuitGridVM != null)
+                {
+                    _outputGridVM.AddQubitsTracing(_circuitGridVM);
+                }
+                // if (_propertiesVM != null)
+                // {
+                //     _propertiesVM.AddSelectionTracing(_outputGridVM);
+                // }
+            }
+
+            return _outputGridVM;
+        }
+        private set
+        {
+            if (value == _outputGridVM)
+                return;
+
+            _outputGridVM = value;
+            if (_circuitGridVM != null)
+            {
+                _outputGridVM.AddQubitsTracing(_circuitGridVM);
+            }
+
+            // if (_propertiesVM != null)
+            // {
+            //     _propertiesVM.AddSelectionTracing(_outputGridVM);
+            // }
+            base.OnPropertyChanged(nameof(OutputGrid));
+        }
+    }
 
     // public PropertiesVM PropertiesPane
     // {
@@ -298,7 +301,7 @@ public class MainWindowViewModel : ViewModelBase
         private set
         {
             _toolsVM = value;
-            OnPropertyChanged("CompositeTools");
+            OnPropertyChanged(nameof(CompositeTools));
         }
     }
 
@@ -829,7 +832,6 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    //TODO:
     public void Restart(object parameter)
     {
         try
@@ -838,7 +840,7 @@ public class MainWindowViewModel : ViewModelBase
             CircuitEvaluator eval = CircuitEvaluator.GetInstance();
 
             _outputModel = eval.InitFromModel(_model);
-            //OutputGrid.LoadModel(_model, _outputModel);
+            OutputGrid.LoadModel(_model, _outputModel);
         }
         catch (Exception e)
         {
@@ -1060,7 +1062,6 @@ public class MainWindowViewModel : ViewModelBase
 
     #region Private Helpers
 
-    //TODO:
     private void InitFromModel(ComputerModel model)
     {
         if (_model != null)
@@ -1083,12 +1084,12 @@ public class MainWindowViewModel : ViewModelBase
 
         CircuitEvaluator eval = CircuitEvaluator.GetInstance();
         _outputModel = eval.InitFromModel(_model);
-        //OutputGrid.LoadModel(_model, _outputModel);
+        OutputGrid.LoadModel(_model, _outputModel);
     }
 
     private void _consoleWriter_TextChanged(object? sender, EventArgs eventArgs)
     {
-        OnPropertyChanged("ConsoleOutput");
+        OnPropertyChanged(nameof(ConsoleOutput));
     }
 
     //TODO:
@@ -1206,7 +1207,7 @@ public class MainWindowViewModel : ViewModelBase
         return name;
     }
 
-    private void PrintException(Exception e)
+    private static void PrintException(Exception e)
     {
         string message = e.Message;
         if (e.InnerException != null)
@@ -1214,9 +1215,7 @@ public class MainWindowViewModel : ViewModelBase
             message = message + ":\n" + e.InnerException.Message;
         }
 
-        var messageBoxWindow = MessageBoxManager.GetMessageBoxStandardWindow("Error", message);
-
-        messageBoxWindow.Show();
+        ErrorMessageHelper.ShowError(message);
     }
 
     #endregion // Private Helpers
