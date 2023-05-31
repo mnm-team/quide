@@ -32,9 +32,9 @@ public partial class MainWindow : Window
 
         InitializeComponent();
 
-        _dockManager = (DockManager)this.FindResource("TheDockManager")!;
-
-        _dockManager.RestoreFromFile("DefaultLayout.xml");
+        // _dockManager = (DockManager)this.FindResource("TheDockManager")!;
+        //
+        // _dockManager.RestoreFromFile("DefaultLayout.xml");
 
         // Button _saveLayoutButton =
         //     this.FindControl<Button>("SaveLayoutButton");

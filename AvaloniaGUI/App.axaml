@@ -1,7 +1,6 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="using:AvaloniaGUI"
-             xmlns:uniDock="https://np.com/visuals"
              x:Class="AvaloniaGUI.App">
 
     <Application.DataTemplates>
@@ -16,9 +15,9 @@
         </Style>
 
         <!-- NP.Avalonia.UniDock -->
-        <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/TextStyles.axaml" />
+        <!--<StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/TextStyles.axaml" />
         <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/CustomWindowStyles.axaml" />
-        <StyleInclude Source="avares://NP.Avalonia.UniDock/Themes/DockStyles.axaml" />
+        <StyleInclude Source="avares://NP.Avalonia.UniDock/Themes/DockStyles.axaml" />-->
 
         <StyleInclude Source="/Views/Controls/GateButton.axaml" />
     </Application.Styles>
@@ -31,7 +30,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <!-- NP.Avalonia.UniDock -->
-            <uniDock:DockManager x:Key="TheDockManager" IsInEditableState="False" />
+            <!-- <uniDock:DockManager x:Key="TheDockManager" IsInEditableState="False" /> -->
         </ResourceDictionary>
     </Application.Resources>
 </Application>
