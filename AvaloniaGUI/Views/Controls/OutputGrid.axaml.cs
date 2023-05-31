@@ -21,6 +21,7 @@ public partial class OutputGrid : UserControl
 
     private void statesList_GotFocus(object sender, GotFocusEventArgs e)
     {
+        //TODO: statesList null? so this.FindControl?
         if (statesList.SelectedItem != null)
         {
             OutputGridViewModel vm = DataContext as OutputGridViewModel;

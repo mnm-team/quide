@@ -446,7 +446,7 @@
 
             <StackPanel>
                 <!--########################################### Editor #############################################-->
-                <TextBlock Width="580" Height="500" />
+                <TextBlock Width="580" Height="500" Text="{Binding OutputGrid.States[0].Value}" />
             </StackPanel>
         </DockPanel>
     </DockPanel>

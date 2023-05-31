@@ -6,6 +6,7 @@
              xmlns:vm="using:AvaloniaGUI.ViewModels.Controls"
              xmlns:drawing="clr-namespace:System.Drawing;assembly=System.Drawing.Primitives"
              xmlns:p="clr-namespace:AvaloniaGUI.Properties"
+             xmlns:helpers="clr-namespace:AvaloniaGUI.ViewModels.Helpers"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AvaloniaGUI.Views.Controls.OutputGrid"
              x:DataType="vm:OutputGridViewModel">
@@ -47,8 +48,8 @@
                     </ComboBox>
                 </Grid>
             </Border>
-            <!-- TODO:
-            <GroupBox Header="{x:Static p:Resources.StatesVisibility}" Margin="2">
+            <!-- TODO: GroupBox -->
+            <!-- GroupBox Header="{x:Static p:Resources.StatesVisibility}" Margin="2">
                 <StackPanel Orientation="Horizontal">
                     <RadioButton GroupName="StatesVisibilityMode"
                                  Content="{x:Static p:Resources.ShowAll}"
@@ -59,7 +60,7 @@
                                  Margin="10,2"
                                  IsChecked="True" />
                 </StackPanel>
-            </GroupBox>
+            </>
             <GroupBox Header="{x:Static p:Resources.ProbabilityScale}" Margin="2">
                 <StackPanel Orientation="Horizontal">
                     <RadioButton GroupName="ScaleMode"
@@ -87,7 +88,7 @@
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Header="{x:Static p:Resources.Value}">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
+                                <DataTemplate DataType="helpers:StateViewModel">
                                     <TextBlock
                                         Text="{Binding Value, StringFormat='|\{0\}>'}"
                                         ToolTip.Tip="{x:Static p:Resources.StateValue}">
@@ -97,7 +98,7 @@
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="{x:Static p:Resources.Qubits}">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
+                                <DataTemplate DataType="helpers:StateViewModel">
                                     <TextBlock
                                         Text="{Binding Representation}"
                                         ToolTip.Tip="{x:Static p:Resources.StateQubits}">
@@ -107,7 +108,7 @@
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="{x:Static p:Resources.Probability}">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
+                                <DataTemplate DataType="helpers:StateViewModel">
                                     <Grid Margin="0" Width="{Binding RectangleMaxWidth}">
                                         <Rectangle
                                             Fill="{Binding Amplitude, Converter={StaticResource AmplitudeToColor}}"
@@ -140,7 +141,7 @@
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="{x:Static p:Resources.Amplitude}">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
+                                <DataTemplate DataType="helpers:StateViewModel">
                                     <TextBlock
                                         Text="{Binding Amplitude, Converter={StaticResource ComplexToString}}"
                                         ToolTip.Tip="{x:Static p:Resources.StateAmplitude}">
