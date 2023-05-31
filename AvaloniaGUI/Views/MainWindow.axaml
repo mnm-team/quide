@@ -9,7 +9,6 @@
         xmlns:p="clr-namespace:AvaloniaGUI.Properties"
         xmlns:controls="clr-namespace:AvaloniaGUI.Views.Controls"
         xmlns:drawing="clr-namespace:System.Drawing;assembly=System.Drawing.Primitives"
-        xmlns:views="clr-namespace:AvaloniaGUI.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AvaloniaGUI.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -450,8 +449,8 @@
                 <np:StackDockGroup TheOrientation="Vertical">
                     <!--########################################### OutputGrid #############################################-->
                     <np:DockItem Header="{x:Static p:Resources.Output}">
-                        <views:OutputGrid x:Name="outputGrid" DataContext="{Binding OutputGrid}"
-                                          HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" />
+                        <controls:OutputGrid x:Name="outputGrid" DataContext="{Binding OutputGrid}"
+                                             HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" />
                     </np:DockItem>
                     <!--########################################### Properties #############################################-->
                     <np:DockItem Header="{x:Static p:Resources.Properties}">

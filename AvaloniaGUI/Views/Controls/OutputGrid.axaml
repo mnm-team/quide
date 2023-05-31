@@ -3,11 +3,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:codeHelpers="clr-namespace:AvaloniaGUI.CodeHelpers"
-             xmlns:vm="using:AvaloniaGUI.ViewModels"
+             xmlns:vm="using:AvaloniaGUI.ViewModels.Controls"
              xmlns:drawing="clr-namespace:System.Drawing;assembly=System.Drawing.Primitives"
              xmlns:p="clr-namespace:AvaloniaGUI.Properties"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="AvaloniaGUI.Views.OutputGrid"
+             x:Class="AvaloniaGUI.Views.Controls.OutputGrid"
              x:DataType="vm:OutputGridViewModel">
     <Design.DataContext>
         <vm:OutputGridViewModel />

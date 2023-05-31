@@ -6,11 +6,11 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using AvaloniaGUI.CodeHelpers;
-using AvaloniaGUI.ViewModels;
+using AvaloniaGUI.ViewModels.Controls;
 
 #endregion
 
-namespace AvaloniaGUI.Views;
+namespace AvaloniaGUI.Views.Controls;
 
 public partial class OutputGrid : UserControl
 {

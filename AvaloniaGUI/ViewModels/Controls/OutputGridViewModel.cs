@@ -6,14 +6,13 @@ using System.Linq;
 using System.Numerics;
 using Avalonia.Interactivity;
 using AvaloniaGUI.CodeHelpers;
-using AvaloniaGUI.ViewModels.Controls;
 using AvaloniaGUI.ViewModels.Helpers;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel;
 using AvaloniaGUI.ViewModels.MainModels.QuantumParser;
 
 #endregion
 
-namespace AvaloniaGUI.ViewModels;
+namespace AvaloniaGUI.ViewModels.Controls;
 
 public enum SortField
 {
@@ -123,7 +122,7 @@ public class OutputGridViewModel : ViewModelBase
             OnPropertyChanged(nameof(RegistersNames));
         }
     }
-    
+
     private string[] _SAS = new string[] { "S", "A", "S" };
 
     public string[] SAS
