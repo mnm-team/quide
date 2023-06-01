@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Folder Include="Models" />
         <Folder Include="Models\" />
         <AvaloniaResource Include="Assets\**" />
         <None Remove="Assets\Images\CopyHS.png" />
@@ -96,6 +97,10 @@
       </Compile>
       <Compile Update="Views\Controls\OutputGrid.axaml.cs">
         <DependentUpon>OutputGrid.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Controls\Custom\GateButton.axaml.cs">
+        <DependentUpon>GateButton.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
     </ItemGroup>

@@ -1,11 +1,11 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:AvaloniaGUI.Views.Controls">
+        xmlns:custom="clr-namespace:AvaloniaGUI.Views.Controls.Custom">
     <Design.PreviewWith>
-        <controls:GateButton />
+        <custom:GateButton />
     </Design.PreviewWith>
 
-    <Style Selector="controls|GateButton">
+    <Style Selector="custom|GateButton">
         <!-- Set Defaults -->
         <Setter Property="Template">
             <ControlTemplate>

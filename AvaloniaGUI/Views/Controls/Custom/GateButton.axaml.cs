@@ -11,7 +11,7 @@ using Avalonia.Metadata;
 
 #endregion
 
-namespace AvaloniaGUI.Views.Controls;
+namespace AvaloniaGUI.Views.Controls.Custom;
 
 public class GateButton : TemplatedControl
 {

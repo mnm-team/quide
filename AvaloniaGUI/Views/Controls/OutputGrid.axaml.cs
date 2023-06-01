@@ -76,5 +76,7 @@ public partial class OutputGrid : UserControl
     private void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);
+
+        statesList = this.FindControl<DataGrid>("statesList");
     }
 }

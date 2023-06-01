@@ -57,7 +57,6 @@ public class OutputGridViewModel : ViewModelBase
 
     #endregion // Fields
 
-
     #region Constructor
 
     // only for design
@@ -121,14 +120,6 @@ public class OutputGridViewModel : ViewModelBase
             _registersNames = value;
             OnPropertyChanged(nameof(RegistersNames));
         }
-    }
-
-    private string[] _SAS = new string[] { "S", "A", "S" };
-
-    public string[] SAS
-    {
-        get => _SAS;
-        set => _SAS = value;
     }
 
     public bool ShowAll

@@ -446,7 +446,13 @@
 
             <StackPanel>
                 <!--########################################### Editor #############################################-->
-                <TextBlock Width="580" Height="500" Text="{Binding OutputGrid.States[0].Value}" />
+                <ItemsControl Items="{Binding OutputGrid.States}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Value}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </StackPanel>
         </DockPanel>
     </DockPanel>

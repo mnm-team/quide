@@ -20,7 +20,8 @@
         <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/CustomWindowStyles.axaml" />
         <StyleInclude Source="avares://NP.Avalonia.UniDock/Themes/DockStyles.axaml" />-->
 
-        <StyleInclude Source="/Views/Controls/GateButton.axaml" />
+        <StyleInclude Source="/Views/Controls/Custom/GateButton.axaml" />
+        <StyleInclude Source="/Views/Controls/Custom/GroupBox.axaml" />
     </Application.Styles>
 
     <Application.Resources>
