@@ -32,8 +32,6 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
     {
         #region Fields
 
-        private ObservableCollection<Gate> _gates;
-
         #endregion // Fields
 
 
@@ -41,7 +39,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
         public StepModel(IList<RegisterModel> initRegisters)
         {
-            _gates = CreateGates(initRegisters);
+            Gates = CreateGates(initRegisters);
         }
 
         #endregion // Constructor
@@ -49,11 +47,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
         #region Model Properties
 
-        public ObservableCollection<Gate> Gates
-        {
-            get { return _gates; }
-            set { _gates = value; }
-        }
+        public ObservableCollection<Gate> Gates { get; set; }
 
         #endregion // Model Properties
 
@@ -66,7 +60,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
             int endRow = gate.End;
             for (int i = beginRow; i <= endRow; i++)
             {
-                _gates[i] = gate;
+                Gates[i] = gate;
             }
         }
 
@@ -77,7 +71,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
             {
                 for (int i = endRow; i <= beginRow; i++)
                 {
-                    if (_gates[i].Name != GateName.Empty)
+                    if (Gates[i].Name != GateName.Empty)
                     {
                         hasPlace = false;
                     }
@@ -87,7 +81,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
             {
                 for (int i = beginRow; i <= endRow; i++)
                 {
-                    if (_gates[i].Name != GateName.Empty)
+                    if (Gates[i].Name != GateName.Empty)
                     {
                         hasPlace = false;
                     }

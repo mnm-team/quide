@@ -57,20 +57,11 @@ public class GateViewModel : ViewModelBase
 
     #region Model Properties
 
-    public Gate Value
-    {
-        get { return _model.Steps[_column].Gates[_row.OffsetToRoot]; }
-    }
+    public Gate Value => _model.Steps[_column].Gates[_row.OffsetToRoot];
 
-    public RegisterRefModel Row
-    {
-        get { return _row; }
-    }
+    public RegisterRefModel Row => _row;
 
-    public int Column
-    {
-        get { return _column; }
-    }
+    public int Column => _column;
 
     #endregion // Model Properties
 
@@ -153,53 +144,38 @@ public class GateViewModel : ViewModelBase
                     {
                         return Application.Current.FindResource("ImgDownC") as VisualBrush;
                     }
-                    else
-                    {
-                        return Application.Current.FindResource("ImgDown") as VisualBrush;
-                    }
+
+                    return Application.Current.FindResource("ImgDown") as VisualBrush;
                 }
-                else if (_row.OffsetToRoot == gate.End)
+
+                if (_row.OffsetToRoot != gate.End) return Application.Current.FindResource("ImgLine") as VisualBrush;
+
+                if (_row.Equals(gate.Control.Value))
                 {
-                    if (_row.Equals(gate.Control.Value))
-                    {
-                        return Application.Current.FindResource("ImgUpC") as VisualBrush;
-                    }
-                    else
-                    {
-                        return Application.Current.FindResource("ImgUp") as VisualBrush;
-                    }
+                    return Application.Current.FindResource("ImgUpC") as VisualBrush;
                 }
-                else
-                {
-                    return Application.Current.FindResource("ImgLine") as VisualBrush;
-                }
+
+                return Application.Current.FindResource("ImgUp") as VisualBrush;
             }
-            else if (gate is MultiControlledGate)
+
+            if (gate is not MultiControlledGate) return Application.Current.FindResource("ImgEmpty") as VisualBrush;
+
+            if (_row.OffsetToRoot == gate.Begin)
             {
-                if (_row.OffsetToRoot == gate.Begin)
+                if (_row.OffsetToRoot != gate.End)
                 {
-                    if (_row.OffsetToRoot != gate.End)
-                    {
-                        return Application.Current.FindResource("ImgDown") as VisualBrush;
-                    }
-                    else
-                    {
-                        return Application.Current.FindResource("ImgEmpty") as VisualBrush;
-                    }
+                    return Application.Current.FindResource("ImgDown") as VisualBrush;
                 }
-                else if (_row.OffsetToRoot == gate.End)
-                {
-                    return Application.Current.FindResource("ImgUp") as VisualBrush;
-                }
-                else
-                {
-                    return Application.Current.FindResource("ImgLine") as VisualBrush;
-                }
-            }
-            else
-            {
+
                 return Application.Current.FindResource("ImgEmpty") as VisualBrush;
             }
+
+            if (_row.OffsetToRoot == gate.End)
+            {
+                return Application.Current.FindResource("ImgUp") as VisualBrush;
+            }
+
+            return Application.Current.FindResource("ImgLine") as VisualBrush;
         }
     }
 
@@ -214,34 +190,33 @@ public class GateViewModel : ViewModelBase
             {
                 return null;
             }
-            else if (gate is CustomGate)
+
+            if (gate is CustomGate cg)
             {
-                CustomGate cg = gate as CustomGate;
                 if (_row.OffsetToRoot == cg.Begin)
                 {
                     if (_row.OffsetToRoot == cg.End)
                     {
                         return Application.Current.FindResource("ToolComposite") as VisualBrush;
                     }
-                    else
-                    {
-                        return Application.Current.FindResource("DownComposite") as VisualBrush;
-                    }
+
+                    return Application.Current.FindResource("DownComposite") as VisualBrush;
                 }
-                else if (_row.OffsetToRoot == cg.End)
+
+                if (_row.OffsetToRoot == cg.End)
                 {
                     return Application.Current.FindResource("UpComposite") as VisualBrush;
                 }
-                else
-                {
-                    return Application.Current.FindResource("CenterComposite") as VisualBrush;
-                }
+
+                return Application.Current.FindResource("CenterComposite") as VisualBrush;
             }
-            else if (gate.Name == GateName.Measure)
+
+            if (gate.Name == GateName.Measure)
             {
                 return Application.Current.FindResource("ToolMeasure") as VisualBrush;
             }
-            else if (_row.Equals(gate.Target))
+
+            if (_row.Equals(gate.Target))
             {
                 VisualBrush brush;
                 switch (gate.Name)
@@ -295,27 +270,19 @@ public class GateViewModel : ViewModelBase
 
                 return brush;
             }
-            else if (gate is MultiControlledGate)
+
+            if (gate is not MultiControlledGate controlledGate) return null;
+
+            if (controlledGate.Controls.Contains(_row))
             {
-                MultiControlledGate t = gate as MultiControlledGate;
-                if (t.Controls.Contains<RegisterRefModel>(_row))
-                {
-                    return Application.Current.FindResource("ImgC") as VisualBrush;
-                }
-                else
-                {
-                    return Application.Current.FindResource("ImgLine") as VisualBrush;
-                }
+                return Application.Current.FindResource("ImgC") as VisualBrush;
             }
 
-            return null;
+            return Application.Current.FindResource("ImgLine") as VisualBrush;
         }
     }
 
-    public bool IsEnabled
-    {
-        get { return _isEnabled; }
-    }
+    public bool IsEnabled => _isEnabled;
 
     public ICommand InsertRowAboveCommand
     {
@@ -415,7 +382,6 @@ public class GateViewModel : ViewModelBase
     public void SetGate(int pressedColumn, RegisterRefModel pressedRow, KeyModifiers keyStates)
     {
         ActionName action = MainWindowViewModel.SelectedAction;
-        Gate oldGate;
 
         // make selection
         if (keyStates.HasFlag(KeyModifiers.Shift))
@@ -423,12 +389,11 @@ public class GateViewModel : ViewModelBase
             // move selection
             if (keyStates.HasFlag(KeyModifiers.Control))
             {
-                if (_model.IsSelected(pressedRow.OffsetToRoot, pressedColumn))
-                {
-                    _model.Cut();
-                    _model.Select(_row.OffsetToRoot, _row.OffsetToRoot, _column, _column);
-                    _model.Paste();
-                }
+                if (!_model.IsSelected(pressedRow.OffsetToRoot, pressedColumn)) return;
+
+                _model.Cut();
+                _model.Select(_row.OffsetToRoot, _row.OffsetToRoot, _column, _column);
+                _model.Paste();
             }
             else
             {
@@ -437,6 +402,7 @@ public class GateViewModel : ViewModelBase
         }
         else
         {
+            Gate oldGate;
             switch (action)
             {
                 case ActionName.Empty:
@@ -450,39 +416,47 @@ public class GateViewModel : ViewModelBase
                             _model.Steps[_column].SetGate(newGate);
                         }
 
-                        if (oldGate is MultiControlledGate)
+                        if (oldGate is MultiControlledGate mcg)
                         {
-                            MultiControlledGate mcg = oldGate as MultiControlledGate;
-                            if (mcg.Controls.Contains<RegisterRefModel>(_row))
+                            if (mcg.Controls.Contains(_row))
                             {
                                 RegisterRefModel[] toRemove = new RegisterRefModel[] { _row };
                                 RegisterRefModel[] newControls =
-                                    mcg.Controls.Except<RegisterRefModel>(toRemove).ToArray();
+                                    mcg.Controls.Except(toRemove).ToArray();
                                 Gate toAdd = null;
-                                if (oldGate.Name == GateName.PhaseKick)
+                                switch (mcg.Name)
                                 {
-                                    PhaseKickGate pk = oldGate as PhaseKickGate;
-                                    toAdd = new PhaseKickGate(pk.Gamma, pk.Target, newControls);
-                                }
-                                else if (oldGate.Name == GateName.CPhaseShift)
-                                {
-                                    CPhaseShiftGate cps = oldGate as CPhaseShiftGate;
-                                    toAdd = new CPhaseShiftGate(cps.Dist, cps.Target, newControls);
-                                }
-                                else if (oldGate.Name == GateName.InvCPhaseShift)
-                                {
-                                    InvCPhaseShiftGate icps = oldGate as InvCPhaseShiftGate;
-                                    toAdd = new InvCPhaseShiftGate(icps.Dist, icps.Target, newControls);
-                                }
-                                else // Toffoli
-                                {
-                                    if (newControls.Length > 1)
+                                    case GateName.PhaseKick:
                                     {
-                                        toAdd = new ToffoliGate(oldGate.Target, newControls);
+                                        PhaseKickGate pk = mcg as PhaseKickGate;
+                                        toAdd = new PhaseKickGate(pk.Gamma, pk.Target, newControls);
+                                        break;
                                     }
-                                    else
+                                    case GateName.CPhaseShift:
                                     {
-                                        toAdd = new CNotGate(oldGate.Target, newControls[0]);
+                                        CPhaseShiftGate cps = mcg as CPhaseShiftGate;
+                                        toAdd = new CPhaseShiftGate(cps.Dist, cps.Target, newControls);
+                                        break;
+                                    }
+                                    case GateName.InvCPhaseShift:
+                                    {
+                                        InvCPhaseShiftGate icps = mcg as InvCPhaseShiftGate;
+                                        toAdd = new InvCPhaseShiftGate(icps.Dist, icps.Target, newControls);
+                                        break;
+                                    }
+                                    // Toffoli
+                                    default:
+                                    {
+                                        if (newControls.Length > 1)
+                                        {
+                                            toAdd = new ToffoliGate(mcg.Target, newControls);
+                                        }
+                                        else
+                                        {
+                                            toAdd = new CNotGate(mcg.Target, newControls[0]);
+                                        }
+
+                                        break;
                                     }
                                 }
 
@@ -497,52 +471,48 @@ public class GateViewModel : ViewModelBase
                                 _model.Steps[_column].SetGate(toAdd);
                             }
                         }
-                        else if (oldGate is SingleGate)
+                        else if (oldGate is SingleGate { Control: { } } sg)
                         {
-                            SingleGate sg = oldGate as SingleGate;
-                            if (sg.Control.HasValue)
+                            if (sg.Control.Value.OffsetToRoot == _row.OffsetToRoot)
                             {
-                                if (sg.Control.Value.OffsetToRoot == _row.OffsetToRoot)
+                                Gate toAdd = null;
+                                switch (sg.Name)
                                 {
-                                    Gate toAdd = null;
-                                    switch (sg.Name)
-                                    {
-                                        case GateName.Hadamard:
-                                            toAdd = new HadamardGate(sg.Target);
-                                            break;
-                                        case GateName.PhaseScale:
-                                            toAdd = new PhaseScaleGate((sg as PhaseScaleGate).Gamma, sg.Target);
-                                            break;
-                                        case GateName.RotateX:
-                                            toAdd = new RotateXGate((sg as RotateXGate).Gamma, sg.Target);
-                                            break;
-                                        case GateName.RotateY:
-                                            toAdd = new RotateYGate((sg as RotateYGate).Gamma, sg.Target);
-                                            break;
-                                        case GateName.RotateZ:
-                                            toAdd = new RotateZGate((sg as RotateZGate).Gamma, sg.Target);
-                                            break;
-                                        case GateName.SigmaX:
-                                            toAdd = new SigmaXGate(sg.Target);
-                                            break;
-                                        case GateName.SigmaY:
-                                            toAdd = new SigmaYGate(sg.Target);
-                                            break;
-                                        case GateName.SigmaZ:
-                                            toAdd = new SigmaZGate(sg.Target);
-                                            break;
-                                        case GateName.SqrtX:
-                                            toAdd = new SqrtXGate(sg.Target);
-                                            break;
-                                        case GateName.Unitary:
-                                            toAdd = new UnitaryGate((sg as UnitaryGate).Matrix, sg.Target);
-                                            break;
-                                        default:
-                                            break;
-                                    }
-
-                                    _model.Steps[_column].SetGate(toAdd);
+                                    case GateName.Hadamard:
+                                        toAdd = new HadamardGate(sg.Target);
+                                        break;
+                                    case GateName.PhaseScale:
+                                        toAdd = new PhaseScaleGate((sg as PhaseScaleGate).Gamma, sg.Target);
+                                        break;
+                                    case GateName.RotateX:
+                                        toAdd = new RotateXGate((sg as RotateXGate).Gamma, sg.Target);
+                                        break;
+                                    case GateName.RotateY:
+                                        toAdd = new RotateYGate((sg as RotateYGate).Gamma, sg.Target);
+                                        break;
+                                    case GateName.RotateZ:
+                                        toAdd = new RotateZGate((sg as RotateZGate).Gamma, sg.Target);
+                                        break;
+                                    case GateName.SigmaX:
+                                        toAdd = new SigmaXGate(sg.Target);
+                                        break;
+                                    case GateName.SigmaY:
+                                        toAdd = new SigmaYGate(sg.Target);
+                                        break;
+                                    case GateName.SigmaZ:
+                                        toAdd = new SigmaZGate(sg.Target);
+                                        break;
+                                    case GateName.SqrtX:
+                                        toAdd = new SqrtXGate(sg.Target);
+                                        break;
+                                    case GateName.Unitary:
+                                        toAdd = new UnitaryGate((sg as UnitaryGate).Matrix, sg.Target);
+                                        break;
+                                    default:
+                                        break;
                                 }
+
+                                _model.Steps[_column].SetGate(toAdd);
                             }
                         }
                     }
@@ -1037,23 +1007,79 @@ public class GateViewModel : ViewModelBase
                     break;
                 case ActionName.Ungroup:
                     oldGate = _model.Steps[_column].Gates[_row.OffsetToRoot];
-                    if (oldGate.Name == GateName.Parametric)
+                    switch (oldGate.Name)
                     {
-                        CircuitEvaluator eval = CircuitEvaluator.GetInstance();
-                        //eval.InitFromModel(_model);
-
-                        try
+                        case GateName.Parametric:
                         {
-                            _model.SetStepForGates(_column);
+                            CircuitEvaluator eval = CircuitEvaluator.GetInstance();
 
-                            int oldColumns = _model.Steps.Count;
-                            int oldBegin = oldGate.Begin;
-                            int oldEnd = oldGate.End;
+                            try
+                            {
+                                _model.SetStepForGates(_column);
 
-                            eval.Decompose(oldGate as ParametricGate);
-                            int columnsAdded = _model.Steps.Count - oldColumns;
+                                int oldColumns = _model.Steps.Count;
+                                int oldBegin = oldGate.Begin;
+                                int oldEnd = oldGate.End;
 
-                            _model.ResetStepForGates();
+                                eval.Decompose(oldGate as ParametricGate);
+                                int columnsAdded = _model.Steps.Count - oldColumns;
+
+                                _model.ResetStepForGates();
+
+                                //remove old composite gate
+                                for (int i = oldGate.Begin; i <= oldGate.End; i++)
+                                {
+                                    RegisterRefModel gateRef = _model.GetRefFromOffset(i);
+                                    Gate newGate = new EmptyGate(gateRef);
+                                    _model.Steps[_column].SetGate(newGate);
+                                }
+
+                                //delete step on _column (if it is empty)
+                                bool isEmpty = true;
+                                int j = 0;
+                                while (isEmpty && j < _model.Steps[_column].Gates.Count)
+                                {
+                                    if (_model.Steps[_column].Gates[j].Name != GateName.Empty)
+                                    {
+                                        isEmpty = false;
+                                    }
+
+                                    j++;
+                                }
+
+                                if (isEmpty)
+                                {
+                                    _model.DeleteStep(_column);
+                                    _model.Select(oldBegin, oldEnd, _column, _column + columnsAdded - 1);
+                                }
+                                else
+                                {
+                                    _model.Select(oldBegin, oldEnd, _column + 1, _column + columnsAdded);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                string msg = "Unable to ungroup gate. Its parameters are invalid.\n" +
+                                             "Inner exception:\n" +
+                                             (ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+                                ErrorMessageHelper.ShowError(msg);
+                            }
+
+                            break;
+                        }
+                        case GateName.Composite:
+                        {
+                            CompositeGate cg = oldGate as CompositeGate;
+                            List<Gate> toAdd = _model.GetActualGates(cg);
+                            int column = _column;
+                            foreach (Gate g in toAdd)
+                            {
+                                if (g.Name == GateName.Empty) continue;
+
+                                _model.InsertStepRight(column);
+                                column++;
+                                _model.Steps[column].SetGate(g);
+                            }
 
                             //remove old composite gate
                             for (int i = oldGate.Begin; i <= oldGate.End; i++)
@@ -1079,64 +1105,9 @@ public class GateViewModel : ViewModelBase
                             if (isEmpty)
                             {
                                 _model.DeleteStep(_column);
-                                _model.Select(oldBegin, oldEnd, _column, _column + columnsAdded - 1);
-                            }
-                            else
-                            {
-                                _model.Select(oldBegin, oldEnd, _column + 1, _column + columnsAdded);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            string msg = "Unable to ungroup gate. Its parameters are invalid.\n" +
-                                         "Inner exception:\n" +
-                                         (ex.InnerException == null ? ex.Message : ex.InnerException.Message);
-                            // MessageBox.Show(
-                            //     msg,
-                            //     "Unable to ungroup gate",
-                            //     MessageBoxButton.OK,
-                            //     MessageBoxImage.Error);
-                        }
-                    }
-                    else if (oldGate.Name == GateName.Composite)
-                    {
-                        CompositeGate cg = oldGate as CompositeGate;
-                        List<Gate> toAdd = _model.GetActualGates(cg);
-                        int column = _column;
-                        foreach (Gate g in toAdd)
-                        {
-                            if (g.Name != GateName.Empty)
-                            {
-                                _model.InsertStepRight(column);
-                                column++;
-                                _model.Steps[column].SetGate(g);
-                            }
-                        }
-
-                        //remove old composite gate
-                        for (int i = oldGate.Begin; i <= oldGate.End; i++)
-                        {
-                            RegisterRefModel gateRef = _model.GetRefFromOffset(i);
-                            Gate newGate = new EmptyGate(gateRef);
-                            _model.Steps[_column].SetGate(newGate);
-                        }
-
-                        //delete step on _column (if it is empty)
-                        bool isEmpty = true;
-                        int j = 0;
-                        while (isEmpty && j < _model.Steps[_column].Gates.Count)
-                        {
-                            if (_model.Steps[_column].Gates[j].Name != GateName.Empty)
-                            {
-                                isEmpty = false;
                             }
 
-                            j++;
-                        }
-
-                        if (isEmpty)
-                        {
-                            _model.DeleteStep(_column);
+                            break;
                         }
                     }
 
@@ -1145,6 +1116,7 @@ public class GateViewModel : ViewModelBase
                     oldGate = _model.Steps[_column].Gates[_row.OffsetToRoot];
                     if (oldGate.Name == GateName.Empty)
                     {
+                        //TODO:
                         //MainWindow window1 = App.Current.MainWindow as MainWindow;
 
                         CircuitEvaluator eval = CircuitEvaluator.GetInstance();
@@ -1222,53 +1194,56 @@ public class GateViewModel : ViewModelBase
     public void ChangeAngle(double gamma)
     {
         Gate oldGate = _model.Steps[_column].Gates[_row.OffsetToRoot];
-        if (oldGate.Name == GateName.RotateX)
+        switch (oldGate.Name)
         {
-            _model.Steps[_column].SetGate(new RotateXGate(gamma, oldGate.Target, oldGate.Control));
-        }
-        else if (oldGate.Name == GateName.RotateY)
-        {
-            _model.Steps[_column].SetGate(new RotateYGate(gamma, oldGate.Target, oldGate.Control));
-        }
-        else if (oldGate.Name == GateName.RotateZ)
-        {
-            _model.Steps[_column].SetGate(new RotateZGate(gamma, oldGate.Target, oldGate.Control));
-        }
-        else if (oldGate.Name == GateName.PhaseKick)
-        {
-            _model.Steps[_column]
-                .SetGate(new PhaseKickGate(gamma, oldGate.Target, (oldGate as PhaseKickGate).Controls));
-        }
-        else
-        {
-            _model.Steps[_column].SetGate(new PhaseScaleGate(gamma, oldGate.Target, oldGate.Control));
+            case GateName.RotateX:
+                _model.Steps[_column].SetGate(new RotateXGate(gamma, oldGate.Target, oldGate.Control));
+                break;
+            case GateName.RotateY:
+                _model.Steps[_column].SetGate(new RotateYGate(gamma, oldGate.Target, oldGate.Control));
+                break;
+            case GateName.RotateZ:
+                _model.Steps[_column].SetGate(new RotateZGate(gamma, oldGate.Target, oldGate.Control));
+                break;
+            case GateName.PhaseKick:
+                _model.Steps[_column]
+                    .SetGate(new PhaseKickGate(gamma, oldGate.Target, (oldGate as PhaseKickGate).Controls));
+                break;
+            default:
+                _model.Steps[_column].SetGate(new PhaseScaleGate(gamma, oldGate.Target, oldGate.Control));
+                break;
         }
 
-        OnPropertyChanged("Value");
+        OnPropertyChanged(nameof(Value));
     }
 
     public void ChangePhaseDist(int dist)
     {
         Gate oldGate = _model.Steps[_column].Gates[_row.OffsetToRoot];
-        if (oldGate.Name == GateName.CPhaseShift)
+        switch (oldGate.Name)
         {
-            CPhaseShiftGate cps = oldGate as CPhaseShiftGate;
-            _model.Steps[_column].SetGate(new CPhaseShiftGate(dist, oldGate.Target, cps.Controls));
-        }
-        else if (oldGate.Name == GateName.InvCPhaseShift)
-        {
-            InvCPhaseShiftGate icps = oldGate as InvCPhaseShiftGate;
-            _model.Steps[_column].SetGate(new InvCPhaseShiftGate(dist, oldGate.Target, icps.Controls));
+            case GateName.CPhaseShift:
+            {
+                CPhaseShiftGate cps = oldGate as CPhaseShiftGate;
+                _model.Steps[_column].SetGate(new CPhaseShiftGate(dist, oldGate.Target, cps.Controls));
+                break;
+            }
+            case GateName.InvCPhaseShift:
+            {
+                InvCPhaseShiftGate icps = oldGate as InvCPhaseShiftGate;
+                _model.Steps[_column].SetGate(new InvCPhaseShiftGate(dist, oldGate.Target, icps.Controls));
+                break;
+            }
         }
 
-        OnPropertyChanged("Value");
+        OnPropertyChanged(nameof(Value));
     }
 
     public void ChangeUnitaryMatrix(Complex[,] matrix)
     {
         Gate oldGate = _model.Steps[_column].Gates[_row.OffsetToRoot];
         _model.Steps[_column].SetGate(new UnitaryGate(matrix, oldGate.Target, oldGate.Control));
-        OnPropertyChanged("Value");
+        OnPropertyChanged(nameof(Value));
     }
 
     public void ChangeParametricParams(object[] parameters)
@@ -1306,12 +1281,7 @@ public class GateViewModel : ViewModelBase
             string msg = "Unable to add gate. The parameters are invalid.\n" +
                          "Inner exception:\n" +
                          (ex.InnerException != null ? ex.InnerException.Message : ex.Message);
-            // TODO: message box
-            // MessageBox.Show(
-            //     msg,
-            //     "Unable to add gate",
-            //     MessageBoxButton.OK,
-            //     MessageBoxImage.Error);
+            ErrorMessageHelper.ShowError(msg);
         }
     }
 
@@ -1343,18 +1313,18 @@ public class GateViewModel : ViewModelBase
 
     public void Refresh()
     {
-        OnPropertyChanged("GateText");
-        OnPropertyChanged("GateHeight");
-        OnPropertyChanged("GateTextHeight");
-        OnPropertyChanged("Value");
-        OnPropertyChanged("GateImage");
-        OnPropertyChanged("BackgroundImage");
+        OnPropertyChanged(nameof(GateText));
+        OnPropertyChanged(nameof(GateHeight));
+        OnPropertyChanged(nameof(GateTextHeight));
+        OnPropertyChanged(nameof(Value));
+        OnPropertyChanged(nameof(GateImage));
+        OnPropertyChanged(nameof(BackgroundImage));
     }
 
     public void RefreshSelection(bool isSelected)
     {
         _isSelected = isSelected;
-        OnPropertyChanged("SelectionOpacity");
+        OnPropertyChanged(nameof(SelectionOpacity));
     }
 
     public void InsertRowAbove(object parameter)
@@ -1397,13 +1367,13 @@ public class GateViewModel : ViewModelBase
     public void UpdateDeleteRowCommand(bool canExecute)
     {
         _deleteRow = new DelegateCommand(DeleteRow, x => canExecute);
-        OnPropertyChanged("DeleteRowCommand");
+        OnPropertyChanged(nameof(DeleteRowCommand));
     }
 
     public void UpdateDeleteColumnCommand(bool canExecute)
     {
         _deleteColumn = new DelegateCommand(DeleteColumn, x => canExecute);
-        OnPropertyChanged("DeleteColumnCommand");
+        OnPropertyChanged(nameof(DeleteColumnCommand));
     }
 
     #endregion // Internal Public Methods
@@ -1414,7 +1384,7 @@ public class GateViewModel : ViewModelBase
     private void _model_CurrentStepChanged(object? sender, EventArgs eventArgs)
     {
         _isEnabled = (_model.CurrentStep <= _column);
-        OnPropertyChanged("IsEnabled");
+        OnPropertyChanged(nameof(IsEnabled));
     }
 
     #endregion // Private Helpers

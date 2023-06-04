@@ -106,7 +106,7 @@ public class CircuitGridViewModel : ViewModelBase
 
     public GateViewModel SelectedObject
     {
-        get { return _selectedObject; }
+        get => _selectedObject;
         set
         {
             _selectedObject = value;
@@ -119,58 +119,35 @@ public class CircuitGridViewModel : ViewModelBase
 
     #region Presentation Properties
 
-    public static double GateWidth
-    {
-        get { return 96; }
-    }
+    public static double GateWidth => 96;
 
-    public static double GateHeight
-    {
-        get { return 40; }
-    }
+    public static double GateHeight => 40;
 
-    public static double GateTextTranslate
-    {
-        get { return (GateWidth - GateHeight) / 2; }
-    }
+    public static double GateTextTranslate => (GateWidth - GateHeight) / 2;
 
-    public static double GateTextCanvasTop
-    {
-        get { return (QubitSize - GateHeight) / 2; }
-    }
+    public static double GateTextCanvasTop => (QubitSize - GateHeight) / 2;
 
-    public static double QubitSize
-    {
-        get { return 64; }
-    }
+    public static double QubitSize => 64;
 
-    public static RelativePoint QubitScaleCenter
-    {
-        get { return new RelativePoint(0, QubitSize / 2, RelativeUnit.Absolute); }
-    }
+    public static RelativePoint QubitScaleCenter => new RelativePoint(0, QubitSize / 2, RelativeUnit.Absolute);
 
-    public double ScaleCenterY
-    {
-        get { return _model.TotalWidth * QubitScaleCenter.Point.Y; }
-    }
+    public RelativePoint ScaleCenterY =>
+        new RelativePoint(0, _model.TotalWidth * QubitScaleCenter.Point.Y, RelativeUnit.Absolute);
 
     public double ScaleFactor
     {
-        get { return _scaleFactor; }
+        get => _scaleFactor;
         private set
         {
             if (value != _scaleFactor)
             {
                 _scaleFactor = value;
-                OnPropertyChanged("ScaleFactor");
+                OnPropertyChanged(nameof(ScaleFactor));
             }
         }
     }
 
-    public bool AddRegisterEnabled
-    {
-        get { return _model.CurrentStep == 0; }
-    }
+    public bool AddRegisterEnabled => _model.CurrentStep == 0;
 
     public int LastStepAdded { get; private set; }
 
@@ -401,7 +378,7 @@ public class CircuitGridViewModel : ViewModelBase
                 break;
         }
 
-        OnPropertyChanged("ScaleCenterY");
+        OnPropertyChanged(nameof(ScaleCenterY));
         OnSelectionChanged();
     }
 

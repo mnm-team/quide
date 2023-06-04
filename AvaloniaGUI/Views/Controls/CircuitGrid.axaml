@@ -178,7 +178,8 @@
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Vertical" VerticalAlignment="Top"
                                                             HorizontalAlignment="Stretch"
-                                                            Margin="{Binding StepMargin}" Background="White">
+                                                            Margin="{Binding StepMargin}" Background="White"
+                                                            RenderTransformOrigin="{Binding ScaleCenterY}">
                                                     <StackPanel.RenderTransform>
                                                         <ScaleTransform ScaleX="1" ScaleY="-1" />
                                                         <!--CenterY="{Binding ScaleCenterY}" /-->
