@@ -13,7 +13,13 @@
                         IsEnabled="{TemplateBinding Enabled}"
                         RenderTransformOrigin="{TemplateBinding RenderTransform}" DragDrop.AllowDrop="True"
                         Content="{TemplateBinding Content}" RenderTransform="{TemplateBinding Transform}"
-                        ContextMenu="{TemplateBinding ContextMenu}" />
+                        ContextMenu="{TemplateBinding ContextMenu}">
+                    <Button.Styles>
+                        <Style Selector="Button:pressed">
+                            <Setter Property="RenderTransform" Value="scale(1,-1)"></Setter>
+                        </Style>
+                    </Button.Styles>
+                </Button>
             </ControlTemplate>
         </Setter>
     </Style>

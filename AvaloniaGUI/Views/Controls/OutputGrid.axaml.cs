@@ -41,7 +41,7 @@ public partial class OutputGrid : UserControl
             }
             catch (Exception ex)
             {
-                ErrorMessageHelper.ShowError(ex.Message);
+                ErrorMessageHelper.ShowMessage(ex.Message);
             }
         }
     }
@@ -57,7 +57,7 @@ public partial class OutputGrid : UserControl
         }
         catch (Exception ex)
         {
-            ErrorMessageHelper.ShowError(ex.Message);
+            ErrorMessageHelper.ShowMessage(ex.Message);
         }
     }
 

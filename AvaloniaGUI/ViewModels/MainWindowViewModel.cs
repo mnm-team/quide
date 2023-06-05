@@ -1215,7 +1215,7 @@ public class MainWindowViewModel : ViewModelBase
             message = message + ":\n" + e.InnerException.Message;
         }
 
-        ErrorMessageHelper.ShowError(message);
+        ErrorMessageHelper.ShowMessage(message);
     }
 
     #endregion // Private Helpers

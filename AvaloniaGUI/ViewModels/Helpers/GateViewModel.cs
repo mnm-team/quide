@@ -637,225 +637,245 @@ public class GateViewModel : ViewModelBase
                         oldGate = _model.Steps[_column].Gates[_row.OffsetToRoot];
                         if (!_row.Equals(pressedRow))
                         {
-                            if (oldGate.Name == GateName.CNot)
+                            switch (oldGate.Name)
                             {
-                                CNotGate oldCnot = oldGate as CNotGate;
-                                if (pressedRow.OffsetToRoot < oldGate.Begin)
+                                case GateName.CNot:
                                 {
-                                    if (_model.Steps[_column].HasPlace(pressedRow.OffsetToRoot, oldGate.Begin - 1))
+                                    CNotGate oldCnot = oldGate as CNotGate;
+                                    if (pressedRow.OffsetToRoot < oldGate.Begin)
                                     {
-                                        _model.Steps[_column].SetGate(new ToffoliGate(oldCnot.Target,
-                                            oldCnot.Control.Value, pressedRow));
+                                        if (_model.Steps[_column].HasPlace(pressedRow.OffsetToRoot, oldGate.Begin - 1))
+                                        {
+                                            _model.Steps[_column].SetGate(new ToffoliGate(oldCnot.Target,
+                                                oldCnot.Control.Value, pressedRow));
+                                        }
                                     }
-                                }
-                                else if (pressedRow.OffsetToRoot > oldGate.End)
-                                {
-                                    if (_model.Steps[_column].HasPlace(oldGate.End + 1, pressedRow.OffsetToRoot))
+                                    else if (pressedRow.OffsetToRoot > oldGate.End)
                                     {
-                                        _model.Steps[_column].SetGate(new ToffoliGate(oldCnot.Target,
-                                            oldCnot.Control.Value, pressedRow));
+                                        if (_model.Steps[_column].HasPlace(oldGate.End + 1, pressedRow.OffsetToRoot))
+                                        {
+                                            _model.Steps[_column].SetGate(new ToffoliGate(oldCnot.Target,
+                                                oldCnot.Control.Value, pressedRow));
+                                        }
                                     }
-                                }
-                                else // new Control inside
-                                {
-                                    //check if not doubled
-                                    if (_row.OffsetToRoot != oldCnot.Target.OffsetToRoot &&
-                                        _row.OffsetToRoot != oldCnot.Control.Value.OffsetToRoot)
+                                    else // new Control inside
                                     {
-                                        _model.Steps[_column].SetGate(new ToffoliGate(oldCnot.Target,
-                                            oldCnot.Control.Value, _row));
+                                        //check if not doubled
+                                        if (_row.OffsetToRoot != oldCnot.Target.OffsetToRoot &&
+                                            _row.OffsetToRoot != oldCnot.Control.Value.OffsetToRoot)
+                                        {
+                                            _model.Steps[_column].SetGate(new ToffoliGate(oldCnot.Target,
+                                                oldCnot.Control.Value, _row));
+                                        }
                                     }
-                                }
-                            }
-                            else if (oldGate.Name == GateName.Toffoli)
-                            {
-                                ToffoliGate oldT = oldGate as ToffoliGate;
-                                if (pressedRow.OffsetToRoot < oldGate.Begin)
-                                {
-                                    if (_model.Steps[_column].HasPlace(pressedRow.OffsetToRoot, oldGate.Begin - 1))
-                                    {
-                                        _model.Steps[_column]
-                                            .SetGate(new ToffoliGate(oldT.Target, pressedRow, oldT.Controls));
-                                    }
-                                }
-                                else if (pressedRow.OffsetToRoot > oldGate.End)
-                                {
-                                    if (_model.Steps[_column].HasPlace(oldGate.End + 1, pressedRow.OffsetToRoot))
-                                    {
-                                        _model.Steps[_column]
-                                            .SetGate(new ToffoliGate(oldT.Target, pressedRow, oldT.Controls));
-                                    }
-                                }
-                                else // new Control inside
-                                {
-                                    //check if not doubled
-                                    if (_row.OffsetToRoot != oldT.Target.OffsetToRoot &&
-                                        !oldT.Controls.Contains<RegisterRefModel>(_row))
-                                    {
-                                        _model.Steps[_column]
-                                            .SetGate(new ToffoliGate(oldT.Target, _row, oldT.Controls));
-                                    }
-                                }
-                            }
-                            else if (oldGate.Name == GateName.CPhaseShift)
-                            {
-                                CPhaseShiftGate oldT = oldGate as CPhaseShiftGate;
-                                if (pressedRow.OffsetToRoot < oldGate.Begin)
-                                {
-                                    if (_model.Steps[_column].HasPlace(pressedRow.OffsetToRoot, oldGate.Begin - 1))
-                                    {
-                                        List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
-                                        cList.Add(pressedRow);
-                                        RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
-                                        _model.Steps[_column]
-                                            .SetGate(new CPhaseShiftGate(oldT.Dist, oldT.Target, cParams));
-                                    }
-                                }
-                                else if (pressedRow.OffsetToRoot > oldGate.End)
-                                {
-                                    if (_model.Steps[_column].HasPlace(oldGate.End + 1, pressedRow.OffsetToRoot))
-                                    {
-                                        List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
-                                        cList.Add(pressedRow);
-                                        RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
-                                        _model.Steps[_column]
-                                            .SetGate(new CPhaseShiftGate(oldT.Dist, oldT.Target, cParams));
-                                    }
-                                }
-                                else // new Control inside
-                                {
-                                    List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
-                                    cList.Add(_row);
-                                    RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
-                                    _model.Steps[_column].SetGate(new CPhaseShiftGate(oldT.Dist, oldT.Target, cParams));
-                                }
-                            }
-                            else if (oldGate.Name == GateName.InvCPhaseShift)
-                            {
-                                InvCPhaseShiftGate oldT = oldGate as InvCPhaseShiftGate;
-                                if (pressedRow.OffsetToRoot < oldGate.Begin)
-                                {
-                                    if (_model.Steps[_column].HasPlace(pressedRow.OffsetToRoot, oldGate.Begin - 1))
-                                    {
-                                        List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
-                                        cList.Add(pressedRow);
-                                        RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
-                                        _model.Steps[_column]
-                                            .SetGate(new InvCPhaseShiftGate(oldT.Dist, oldT.Target, cParams));
-                                    }
-                                }
-                                else if (pressedRow.OffsetToRoot > oldGate.End)
-                                {
-                                    if (_model.Steps[_column].HasPlace(oldGate.End + 1, pressedRow.OffsetToRoot))
-                                    {
-                                        List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
-                                        cList.Add(pressedRow);
-                                        RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
-                                        _model.Steps[_column]
-                                            .SetGate(new InvCPhaseShiftGate(oldT.Dist, oldT.Target, cParams));
-                                    }
-                                }
-                                else // new Control inside
-                                {
-                                    List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
-                                    cList.Add(_row);
-                                    RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
-                                    _model.Steps[_column]
-                                        .SetGate(new InvCPhaseShiftGate(oldT.Dist, oldT.Target, cParams));
-                                }
-                            }
-                            else if (oldGate.Name == GateName.PhaseKick)
-                            {
-                                PhaseKickGate oldT = oldGate as PhaseKickGate;
-                                if (pressedRow.OffsetToRoot < oldGate.Begin)
-                                {
-                                    if (_model.Steps[_column].HasPlace(pressedRow.OffsetToRoot, oldGate.Begin - 1))
-                                    {
-                                        List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
-                                        cList.Add(pressedRow);
-                                        RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
-                                        _model.Steps[_column]
-                                            .SetGate(new PhaseKickGate(oldT.Gamma, oldT.Target, cParams));
-                                    }
-                                }
-                                else if (pressedRow.OffsetToRoot > oldGate.End)
-                                {
-                                    if (_model.Steps[_column].HasPlace(oldGate.End + 1, pressedRow.OffsetToRoot))
-                                    {
-                                        List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
-                                        cList.Add(pressedRow);
-                                        RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
-                                        _model.Steps[_column]
-                                            .SetGate(new PhaseKickGate(oldT.Gamma, oldT.Target, cParams));
-                                    }
-                                }
-                                else // new Control inside
-                                {
-                                    List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
-                                    cList.Add(_row);
-                                    RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
-                                    _model.Steps[_column].SetGate(new PhaseKickGate(oldT.Gamma, oldT.Target, cParams));
-                                }
-                            }
-                            else if (oldGate.Control == null)
-                            {
-                                int lastEmptyRow = _row.OffsetToRoot - 1;
-                                if (pressedRow.OffsetToRoot > _row.OffsetToRoot)
-                                {
-                                    lastEmptyRow = lastEmptyRow + 2;
-                                }
 
-                                if (_model.Steps[_column].HasPlace(pressedRow.OffsetToRoot, lastEmptyRow))
+                                    break;
+                                }
+                                case GateName.Toffoli:
                                 {
-                                    switch (oldGate.Name)
+                                    ToffoliGate oldT = oldGate as ToffoliGate;
+                                    if (pressedRow.OffsetToRoot < oldGate.Begin)
                                     {
-                                        case GateName.Hadamard:
-                                            _model.Steps[_column].SetGate(new HadamardGate(_row, pressedRow));
-                                            break;
-                                        case GateName.PhaseScale:
-                                            PhaseScaleGate oldPs = oldGate as PhaseScaleGate;
+                                        if (_model.Steps[_column].HasPlace(pressedRow.OffsetToRoot, oldGate.Begin - 1))
+                                        {
                                             _model.Steps[_column]
-                                                .SetGate(new PhaseScaleGate(oldPs.Gamma, _row, pressedRow));
-                                            break;
-                                        case GateName.RotateX:
-                                            RotateXGate oldRx = oldGate as RotateXGate;
-                                            _model.Steps[_column]
-                                                .SetGate(new RotateXGate(oldRx.Gamma, _row, pressedRow));
-                                            break;
-                                        case GateName.RotateY:
-                                            RotateYGate oldRy = oldGate as RotateYGate;
-                                            _model.Steps[_column]
-                                                .SetGate(new RotateYGate(oldRy.Gamma, _row, pressedRow));
-                                            break;
-                                        case GateName.RotateZ:
-                                            RotateZGate oldRz = oldGate as RotateZGate;
-                                            _model.Steps[_column]
-                                                .SetGate(new RotateZGate(oldRz.Gamma, _row, pressedRow));
-                                            break;
-                                        case GateName.SigmaX:
-                                            _model.Steps[_column].SetGate(new CNotGate(_row, pressedRow));
-                                            break;
-                                        case GateName.SigmaY:
-                                            _model.Steps[_column].SetGate(new SigmaYGate(_row, pressedRow));
-                                            break;
-                                        case GateName.SigmaZ:
-                                            _model.Steps[_column].SetGate(new SigmaZGate(_row, pressedRow));
-                                            break;
-                                        case GateName.SqrtX:
-                                            _model.Steps[_column].SetGate(new SqrtXGate(_row, pressedRow));
-                                            break;
-                                        case GateName.Unitary:
-                                            UnitaryGate oldU = oldGate as UnitaryGate;
-                                            _model.Steps[_column]
-                                                .SetGate(new UnitaryGate(oldU.Matrix, _row, pressedRow));
-                                            break;
-                                        case GateName.Empty:
-                                            _model.Steps[_column].SetGate(new CNotGate(_row, pressedRow));
-                                            _model.AddStepAfter(_column);
-                                            break;
-                                        default:
-                                            break;
+                                                .SetGate(new ToffoliGate(oldT.Target, pressedRow, oldT.Controls));
+                                        }
                                     }
+                                    else if (pressedRow.OffsetToRoot > oldGate.End)
+                                    {
+                                        if (_model.Steps[_column].HasPlace(oldGate.End + 1, pressedRow.OffsetToRoot))
+                                        {
+                                            _model.Steps[_column]
+                                                .SetGate(new ToffoliGate(oldT.Target, pressedRow, oldT.Controls));
+                                        }
+                                    }
+                                    else // new Control inside
+                                    {
+                                        //check if not doubled
+                                        if (_row.OffsetToRoot != oldT.Target.OffsetToRoot &&
+                                            !oldT.Controls.Contains<RegisterRefModel>(_row))
+                                        {
+                                            _model.Steps[_column]
+                                                .SetGate(new ToffoliGate(oldT.Target, _row, oldT.Controls));
+                                        }
+                                    }
+
+                                    break;
+                                }
+                                case GateName.CPhaseShift:
+                                {
+                                    CPhaseShiftGate oldT = oldGate as CPhaseShiftGate;
+                                    if (pressedRow.OffsetToRoot < oldGate.Begin)
+                                    {
+                                        if (_model.Steps[_column].HasPlace(pressedRow.OffsetToRoot, oldGate.Begin - 1))
+                                        {
+                                            List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
+                                            cList.Add(pressedRow);
+                                            RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
+                                            _model.Steps[_column]
+                                                .SetGate(new CPhaseShiftGate(oldT.Dist, oldT.Target, cParams));
+                                        }
+                                    }
+                                    else if (pressedRow.OffsetToRoot > oldGate.End)
+                                    {
+                                        if (_model.Steps[_column].HasPlace(oldGate.End + 1, pressedRow.OffsetToRoot))
+                                        {
+                                            List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
+                                            cList.Add(pressedRow);
+                                            RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
+                                            _model.Steps[_column]
+                                                .SetGate(new CPhaseShiftGate(oldT.Dist, oldT.Target, cParams));
+                                        }
+                                    }
+                                    else // new Control inside
+                                    {
+                                        List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
+                                        cList.Add(_row);
+                                        RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
+                                        _model.Steps[_column]
+                                            .SetGate(new CPhaseShiftGate(oldT.Dist, oldT.Target, cParams));
+                                    }
+
+                                    break;
+                                }
+                                case GateName.InvCPhaseShift:
+                                {
+                                    InvCPhaseShiftGate oldT = oldGate as InvCPhaseShiftGate;
+                                    if (pressedRow.OffsetToRoot < oldGate.Begin)
+                                    {
+                                        if (_model.Steps[_column].HasPlace(pressedRow.OffsetToRoot, oldGate.Begin - 1))
+                                        {
+                                            List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
+                                            cList.Add(pressedRow);
+                                            RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
+                                            _model.Steps[_column]
+                                                .SetGate(new InvCPhaseShiftGate(oldT.Dist, oldT.Target, cParams));
+                                        }
+                                    }
+                                    else if (pressedRow.OffsetToRoot > oldGate.End)
+                                    {
+                                        if (_model.Steps[_column].HasPlace(oldGate.End + 1, pressedRow.OffsetToRoot))
+                                        {
+                                            List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
+                                            cList.Add(pressedRow);
+                                            RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
+                                            _model.Steps[_column]
+                                                .SetGate(new InvCPhaseShiftGate(oldT.Dist, oldT.Target, cParams));
+                                        }
+                                    }
+                                    else // new Control inside
+                                    {
+                                        List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
+                                        cList.Add(_row);
+                                        RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
+                                        _model.Steps[_column]
+                                            .SetGate(new InvCPhaseShiftGate(oldT.Dist, oldT.Target, cParams));
+                                    }
+
+                                    break;
+                                }
+                                case GateName.PhaseKick:
+                                {
+                                    PhaseKickGate oldT = oldGate as PhaseKickGate;
+                                    if (pressedRow.OffsetToRoot < oldGate.Begin)
+                                    {
+                                        if (_model.Steps[_column].HasPlace(pressedRow.OffsetToRoot, oldGate.Begin - 1))
+                                        {
+                                            List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
+                                            cList.Add(pressedRow);
+                                            RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
+                                            _model.Steps[_column]
+                                                .SetGate(new PhaseKickGate(oldT.Gamma, oldT.Target, cParams));
+                                        }
+                                    }
+                                    else if (pressedRow.OffsetToRoot > oldGate.End)
+                                    {
+                                        if (_model.Steps[_column].HasPlace(oldGate.End + 1, pressedRow.OffsetToRoot))
+                                        {
+                                            List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
+                                            cList.Add(pressedRow);
+                                            RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
+                                            _model.Steps[_column]
+                                                .SetGate(new PhaseKickGate(oldT.Gamma, oldT.Target, cParams));
+                                        }
+                                    }
+                                    else // new Control inside
+                                    {
+                                        List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
+                                        cList.Add(_row);
+                                        RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
+                                        _model.Steps[_column]
+                                            .SetGate(new PhaseKickGate(oldT.Gamma, oldT.Target, cParams));
+                                    }
+
+                                    break;
+                                }
+                                default:
+                                {
+                                    if (oldGate.Control == null)
+                                    {
+                                        int lastEmptyRow = _row.OffsetToRoot - 1;
+                                        if (pressedRow.OffsetToRoot > _row.OffsetToRoot)
+                                        {
+                                            lastEmptyRow = lastEmptyRow + 2;
+                                        }
+
+                                        if (_model.Steps[_column].HasPlace(pressedRow.OffsetToRoot, lastEmptyRow))
+                                        {
+                                            switch (oldGate.Name)
+                                            {
+                                                case GateName.Hadamard:
+                                                    _model.Steps[_column].SetGate(new HadamardGate(_row, pressedRow));
+                                                    break;
+                                                case GateName.PhaseScale:
+                                                    PhaseScaleGate oldPs = oldGate as PhaseScaleGate;
+                                                    _model.Steps[_column]
+                                                        .SetGate(new PhaseScaleGate(oldPs.Gamma, _row, pressedRow));
+                                                    break;
+                                                case GateName.RotateX:
+                                                    RotateXGate oldRx = oldGate as RotateXGate;
+                                                    _model.Steps[_column]
+                                                        .SetGate(new RotateXGate(oldRx.Gamma, _row, pressedRow));
+                                                    break;
+                                                case GateName.RotateY:
+                                                    RotateYGate oldRy = oldGate as RotateYGate;
+                                                    _model.Steps[_column]
+                                                        .SetGate(new RotateYGate(oldRy.Gamma, _row, pressedRow));
+                                                    break;
+                                                case GateName.RotateZ:
+                                                    RotateZGate oldRz = oldGate as RotateZGate;
+                                                    _model.Steps[_column]
+                                                        .SetGate(new RotateZGate(oldRz.Gamma, _row, pressedRow));
+                                                    break;
+                                                case GateName.SigmaX:
+                                                    _model.Steps[_column].SetGate(new CNotGate(_row, pressedRow));
+                                                    break;
+                                                case GateName.SigmaY:
+                                                    _model.Steps[_column].SetGate(new SigmaYGate(_row, pressedRow));
+                                                    break;
+                                                case GateName.SigmaZ:
+                                                    _model.Steps[_column].SetGate(new SigmaZGate(_row, pressedRow));
+                                                    break;
+                                                case GateName.SqrtX:
+                                                    _model.Steps[_column].SetGate(new SqrtXGate(_row, pressedRow));
+                                                    break;
+                                                case GateName.Unitary:
+                                                    UnitaryGate oldU = oldGate as UnitaryGate;
+                                                    _model.Steps[_column]
+                                                        .SetGate(new UnitaryGate(oldU.Matrix, _row, pressedRow));
+                                                    break;
+                                                case GateName.Empty:
+                                                    _model.Steps[_column].SetGate(new CNotGate(_row, pressedRow));
+                                                    _model.AddStepAfter(_column);
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        }
+                                    }
+
+                                    break;
                                 }
                             }
                         }
@@ -1062,7 +1082,7 @@ public class GateViewModel : ViewModelBase
                                 string msg = "Unable to ungroup gate. Its parameters are invalid.\n" +
                                              "Inner exception:\n" +
                                              (ex.InnerException == null ? ex.Message : ex.InnerException.Message);
-                                ErrorMessageHelper.ShowError(msg);
+                                ErrorMessageHelper.ShowMessage(msg);
                             }
 
                             break;
@@ -1281,7 +1301,7 @@ public class GateViewModel : ViewModelBase
             string msg = "Unable to add gate. The parameters are invalid.\n" +
                          "Inner exception:\n" +
                          (ex.InnerException != null ? ex.InnerException.Message : ex.Message);
-            ErrorMessageHelper.ShowError(msg);
+            ErrorMessageHelper.ShowMessage(msg);
         }
     }
 

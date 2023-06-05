@@ -7,6 +7,7 @@ using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using AvaloniaGUI.CodeHelpers;
 using AvaloniaGUI.ViewModels;
 using AvaloniaGUI.ViewModels.Controls;
 using AvaloniaGUI.ViewModels.Helpers;
@@ -46,6 +47,8 @@ public partial class CircuitGrid : UserControl
 
         bool shiftPressed = e.KeyModifiers == KeyModifiers.Shift;
 
+        GateViewModel vm = source.DataContext as GateViewModel;
+
         // perform drawing operation for control gate
         if (MainWindowViewModel.SelectedAction == ActionName.Control && !shiftPressed)
         {
@@ -54,9 +57,14 @@ public partial class CircuitGrid : UserControl
             //TODO: coords correct for every button?
             Point coordinates =
                 new Point(0, 0).Transform(button.TransformToVisual(Drawing)
-                    .GetValueOrDefault()); //.Transform(new Point(0, 0));
+                    .GetValueOrDefault()) /
+                (DataContext as CircuitGridViewModel).ScaleFactor; //.Transform(new Point(0, 0));
 
-            double diameter = 12;
+            const double diameter = 12;
+            if (button == null) ErrorMessageHelper.ShowMessage("Button is null! Consult developer.");
+
+            var buttonSize = button.DesiredSize;
+
             double centerX = coordinates.X + 0.5 * CircuitGridViewModel.GateWidth;
             double centerY = coordinates.Y + 0.5 * CircuitGridViewModel.QubitSize;
 
@@ -86,8 +94,6 @@ public partial class CircuitGrid : UserControl
 
             Drawing.Children.Add(line);
         }
-
-        GateViewModel vm = source.DataContext as GateViewModel;
 
         // fetch grid with gates to draw
         Tuple<int, RegisterRefModel> data = new Tuple<int, RegisterRefModel>(vm.Column, vm.Row);
@@ -123,13 +129,15 @@ public partial class CircuitGrid : UserControl
 
     private void GateButton_DragOver(object sender, DragEventArgs e)
     {
-        if (line != null)
-        {
-            Point mouse = e.GetPosition(Drawing);
-            //line.X2 = mouse.X - 5;
-            //line.Y2 = mouse.Y - 5;
-            line.EndPoint = new Point(mouse.X - 5, mouse.Y - 5);
-        }
+        if (line == null) return;
+
+        var scaleFactor = (DataContext as CircuitGridViewModel).ScaleFactor;
+
+        var offset = new Vector(-10, 4);
+
+        Point mouse = (e.GetPosition(Drawing) + offset) / scaleFactor;
+
+        line.EndPoint = new Point(mouse.X, mouse.Y);
     }
 
     private void GateButton_Drop(object sender, DragEventArgs e)

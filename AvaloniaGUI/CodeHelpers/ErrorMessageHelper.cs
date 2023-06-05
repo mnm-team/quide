@@ -9,14 +9,18 @@ namespace AvaloniaGUI.CodeHelpers;
 
 public static class ErrorMessageHelper
 {
-    public static void ShowError(string msg)
+    /// <summary>
+    /// Custom message box
+    /// </summary>
+    /// <param name="title">Title</param>
+    /// <param name="msg">Message</param>
+    /// <param name="icon">Icon look up <see cref="Icon"/> enum for available options other then default error.</param>
+    public static void ShowMessage(string msg = "An error occurred. Please contact the developer.",
+        string title = "Error", Icon icon = Icon.Error)
     {
-        var message =
-            "Invalid value typed:\n" + msg;
-
         var messageBoxWindow =
-            MessageBoxManager.GetMessageBoxStandardWindow("Invalid register", message, ButtonEnum.Ok,
-                Icon.Error);
+            MessageBoxManager.GetMessageBoxStandardWindow(title, msg, ButtonEnum.Ok,
+                icon);
 
         messageBoxWindow.Show();
     }

@@ -434,7 +434,7 @@ public class OutputGridViewModel : ViewModelBase
             message = message + ":\n" + e.InnerException.Message;
         }
 
-        ErrorMessageHelper.ShowError(message);
+        ErrorMessageHelper.ShowMessage(message);
     }
 
     #endregion // Private Helpers
