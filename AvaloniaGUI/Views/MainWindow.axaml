@@ -160,12 +160,12 @@
                     </Border>
                 </StackPanel>
                 <!--########################################### OutputGrid #############################################-->
-                <StackPanel>
+                <DockPanel>
                     <Border BorderBrush="Black" BorderThickness="1">
                         <controls:OutputGrid x:Name="outputGrid" DataContext="{Binding OutputGrid}"
                                              HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" />
                     </Border>
-                </StackPanel>
+                </DockPanel>
             </DockPanel>
 
             <TabControl DockPanel.Dock="Bottom" TabStripPlacement="Bottom" BorderBrush="Black" BorderThickness="1">

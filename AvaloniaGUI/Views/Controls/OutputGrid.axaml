@@ -23,8 +23,8 @@
         <codeHelpers:ComplexConverter x:Key="ComplexToString" />
     </UserControl.Resources>
 
-    <Grid x:Name="LayoutRoot" Background="White" RowDefinitions="Auto,*">
-        <StackPanel Orientation="Vertical">
+    <DockPanel x:Name="LayoutRoot" Background="White">
+        <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
             <!-- Register selector -->
             <Border
                 BorderBrush="LightGray"
@@ -80,8 +80,8 @@
             </custom:GroupBox>
         </StackPanel>
 
-        <Border Grid.Row="1"
-                Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+        <Border
+                Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Margin="5">
             <Grid>
                 <DataGrid x:Name="statesList"
                           Items="{Binding States}"
@@ -159,5 +159,5 @@
                 </DataGrid>
             </Grid>
         </Border>
-    </Grid>
+    </DockPanel>
 </UserControl>
