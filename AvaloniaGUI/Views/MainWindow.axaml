@@ -155,20 +155,27 @@
             <DockPanel DockPanel.Dock="Right">
                 <!--########################################### Properties #############################################-->
                 <StackPanel DockPanel.Dock="Bottom">
-                    <Border BorderBrush="Black" BorderThickness="1">
-                        <TextBlock Width="200" Height="200">Properties</TextBlock>
+                    <Border BorderBrush="LightGray" BorderThickness="1">
+                        <ScrollViewer Padding="2">
+                            <controls:PropertiesPane
+                                x:Name="propertiesPane"
+                                DataContext="{Binding PropertiesPane}"
+                                HorizontalAlignment="Stretch"
+                                Margin="0"
+                                VerticalAlignment="Stretch" />
+                        </ScrollViewer>
                     </Border>
                 </StackPanel>
                 <!--########################################### OutputGrid #############################################-->
                 <DockPanel>
-                    <Border BorderBrush="Black" BorderThickness="1">
+                    <Border BorderBrush="LightGray" BorderThickness="1">
                         <controls:OutputGrid x:Name="outputGrid" DataContext="{Binding OutputGrid}"
                                              HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" />
                     </Border>
                 </DockPanel>
             </DockPanel>
 
-            <TabControl DockPanel.Dock="Bottom" TabStripPlacement="Bottom" BorderBrush="Black" BorderThickness="1">
+            <TabControl DockPanel.Dock="Bottom" TabStripPlacement="Bottom" BorderBrush="LightGray" BorderThickness="1">
                 <!--########################################### CircuitDesigner #############################################-->
                 <TabItem Header="{x:Static p:Resources.CircuitDesigner}" x:Name="CircuitTab">
                     <DockPanel>

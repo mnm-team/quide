@@ -1,0 +1,501 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:AvaloniaGUI.ViewModels.Controls"
+             xmlns:p="clr-namespace:AvaloniaGUI.Properties"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaGUI.Views.Controls.PropertiesPane"
+             x:DataType="vm:PropertiesViewModel">
+    <Design.DataContext>
+        <vm:PropertiesViewModel />
+    </Design.DataContext>
+
+    <UserControl.Resources>
+        <Style x:Key="DefaultButton" Selector="Button" />
+        <!--<Style x:Key="FlatRadioButton" BasedOn="{StaticResource {x:Static ToolBar.RadioButtonStyleKey}}" Selector="RadioButton" />
+        <Style x:Key="FlatButton" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Selector="Button" />
+        <Style x:Key="FlatComboBox" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}" Selector="ComboBox" />-->
+    </UserControl.Resources>
+
+    <Grid x:Name="LayoutRoot"
+          Background="White">
+        <Grid x:Name="StatePane"
+              IsVisible="{Binding StatePaneVisibility}" ColumnDefinitions="*,*"
+              RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+
+            <TextBlock Text="{x:Static p:Resources.Value}"
+                       Margin="3"
+                       Grid.Column="0"
+                       Grid.Row="1"
+                       HorizontalAlignment="Left" />
+            <TextBlock Text="{Binding Value}"
+                       Margin="3"
+                       Grid.Column="1"
+                       Grid.Row="1"
+                       HorizontalAlignment="Left" />
+            <TextBlock Text="{x:Static p:Resources.Qubits}"
+                       Margin="3"
+                       Grid.Column="0"
+                       Grid.Row="2"
+                       HorizontalAlignment="Left" />
+            <TextBlock Text="{Binding Qubits}"
+                       Margin="3"
+                       Grid.Column="1"
+                       Grid.Row="2"
+                       HorizontalAlignment="Left" />
+            <TextBlock Text="{x:Static p:Resources.Probability}"
+                       Margin="3"
+                       Grid.Column="0"
+                       Grid.Row="3"
+                       HorizontalAlignment="Left" />
+            <TextBlock Text="{Binding Probability}"
+                       Margin="3"
+                       Grid.Column="1"
+                       Grid.Row="3"
+                       HorizontalAlignment="Left" />
+            <TextBlock Text="{x:Static p:Resources.Amplitude}"
+                       IsVisible="{Binding AmplitudeVisibility}"
+                       Margin="3"
+                       Grid.Column="0"
+                       Grid.Row="4"
+                       HorizontalAlignment="Left" />
+            <TextBlock Text="{Binding Amplitude}"
+                       IsVisible="{Binding AmplitudeVisibility}"
+                       Margin="3"
+                       Grid.Column="1"
+                       Grid.Row="4"
+                       HorizontalAlignment="Left" />
+            <Canvas
+                IsVisible="{Binding AmplitudeVisibility}"
+                Grid.Row="0"
+                Grid.ColumnSpan="2" Grid.Column="0"
+                Width="180"
+                Height="180"
+                Background="{DynamicResource ComplexPlane}"
+                Opacity="0.75"
+                Margin="5">
+                <Line
+                    Canvas.Top="90"
+                    Canvas.Left="90"
+                    Stroke="Black" StrokeLineCap="Round"
+                    StrokeThickness="4"
+                    StartPoint="0,0" EndPoint="{Binding StatePaneLineEnd}" />
+                <!-- TODO: check if correct
+                StrokeStartLineCap="Round"
+                StrokeEndLineCap="Triangle"-->
+                <Polygon
+                    Canvas.Top="90"
+                    Canvas.Left="90"
+                    Points="60,-6 75,0, 60,6"
+                    Stroke="Black"
+                    Fill="Black">
+                    <Polygon.RenderTransform>
+                        <RotateTransform Angle="{Binding Phase}" />
+                    </Polygon.RenderTransform>
+                </Polygon>
+            </Canvas>
+        </Grid>
+
+        <Grid x:Name="RotateGatePane"
+              IsVisible="{Binding RotateGateVisibility}" ColumnDefinitions="Auto,*,Auto,Auto,10"
+              RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+
+            <TextBlock
+                Grid.ColumnSpan="2"
+                Margin="5,3"
+                Text="{x:Static p:Resources.AngleValue}" />
+
+            <RadioButton
+                x:Name="Deg"
+                Grid.Row="0" Grid.Column="2"
+                GroupName="Unit"
+                IsChecked="True"
+                Command="{Binding SelectUnitCommand}"
+                CommandParameter="Deg"
+                Content=" [ &#x00b0; ] ">
+                <!--Style="{StaticResource FlatRadioButton}">-->
+            </RadioButton>
+            <RadioButton
+                Grid.Row="0" Grid.Column="3"
+                GroupName="Unit"
+                IsChecked="{Binding Rad, Mode=TwoWay}"
+                Command="{Binding SelectUnitCommand}"
+                CommandParameter="Rad"
+                Content="[rad]">
+                <!--Style="{StaticResource FlatRadioButton}">-->
+            </RadioButton>
+
+            <Grid
+                Grid.Row="1"
+                Grid.ColumnSpan="4" Grid.Column="0" ColumnDefinitions="Auto,*,Auto">
+                <TextBlock
+                    Margin="5,3"
+                    VerticalAlignment="Center"
+                    FontFamily="Times New Roman"
+                    FontStyle="Italic"
+                    Text="&#x03b3; = " />
+                <TextBox
+                    Margin="0,3"
+                    Grid.Column="1"
+                    Text="{Binding Gamma, Mode=TwoWay}" />
+                <ComboBox
+                    Margin="1,3"
+                    Padding="10,0"
+                    Width="{Binding RelativeSource={RelativeSource Self}, Path=Height}"
+                    Grid.Column="2"
+                    SelectionChanged="ComboBox_SelectionChanged"
+                    FontFamily="Times New Roman"
+                    FontStyle="Italic">
+                    <ComboBoxItem
+                        Content="{x:Static p:Resources.Pi}" />
+                    <ComboBoxItem
+                        Content="{x:Static p:Resources.Pi_2}" />
+                    <ComboBoxItem
+                        Content="{x:Static p:Resources.Pi_3}" />
+                    <ComboBoxItem
+                        Content="{x:Static p:Resources.Pi_4}" />
+                    <ComboBoxItem
+                        Content="{x:Static p:Resources.Pi_6}" />
+                    <ComboBoxItem
+                        Content="{x:Static p:Resources.Pi_8}" />
+                </ComboBox>
+            </Grid>
+            <Button
+                x:Name="ApplyGamma"
+                Grid.Row="2"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                Margin="0, 3"
+                Content="{x:Static p:Resources.Apply}"
+                Command="{Binding ApplyGammaCommand}" />
+            <!--Style="{StaticResource DefaultButton}"/>-->
+            <TextBlock
+                Grid.Row="3"
+                Grid.ColumnSpan="3" Grid.Column="0"
+                Margin="5, 10, 5, 10"
+                Text="{x:Static p:Resources.OperationMatrix}" />
+            <Image
+                Margin="5,0"
+                Stretch="None"
+                HorizontalAlignment="Left"
+                Grid.Row="4"
+                Grid.ColumnSpan="5" Grid.Column="0"
+                RenderOptions.BitmapInterpolationMode="{x:Static vm:PropertiesViewModel.ScalingQuality}"
+                Source="{Binding ImageSource}" />
+            <!-- TODO: right?
+            RenderOptions.BitmapScalingMode="NearestNeighbor"-->
+
+        </Grid>
+
+        <Grid x:Name="PhaseShiftPane"
+              IsVisible="{Binding PhaseShiftVisibility}" RowDefinitions="Auto,Auto,Auto,Auto"
+              ColumnDefinitions="Auto,*,Auto,10">
+
+            <TextBlock
+                Margin="5,3"
+                Grid.Row="0"
+                VerticalAlignment="Center"
+                FontFamily="Times New Roman"
+                FontStyle="Italic"
+                Text="k = " />
+            <TextBox
+                Margin="3"
+                Grid.Row="0"
+                Grid.Column="1"
+                Grid.ColumnSpan="2"
+                Text="{Binding PhaseDist, Mode=TwoWay}" />
+
+            <Button
+                Grid.Row="1"
+                Grid.Column="2"
+                Margin="3"
+                Content="{x:Static p:Resources.Apply}"
+                Command="{Binding ApplyDistCommand}"
+                Width="{Binding ElementName=ApplyGamma, Path=Width}" />
+            <!--Style="{StaticResource DefaultButton}" />-->
+
+            <TextBlock
+                Grid.Row="2"
+                Grid.ColumnSpan="2" Grid.Column="0"
+                Margin="5, 10, 5, 10"
+                Text="{x:Static p:Resources.OperationMatrix}" />
+
+            <Image
+                Grid.Row="3"
+                Grid.ColumnSpan="4" Grid.Column="0"
+                Margin="5,0"
+                Stretch="None"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                RenderOptions.BitmapInterpolationMode="{x:Static vm:PropertiesViewModel.ScalingQuality}"
+                Source="{Binding ImageSource}" />
+        </Grid>
+
+        <Grid x:Name="GatePane"
+              IsVisible="{Binding GatePaneVisibility}" RowDefinitions="Auto,Auto">
+
+            <TextBlock
+                Margin="5, 10, 5, 10"
+                Text="{x:Static p:Resources.OperationMatrix}" />
+
+            <Image
+                Grid.Row="1"
+                Margin="5,0"
+                Stretch="None"
+                MaxWidth="300"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                RenderOptions.BitmapInterpolationMode="{x:Static vm:PropertiesViewModel.ScalingQuality}"
+                Source="{Binding ImageSource}" />
+        </Grid>
+
+        <Grid x:Name="UnitaryPane"
+              IsVisible="{Binding UnitaryPaneVisibility}" ColumnDefinitions="Auto,*,*,Auto"
+              RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+            <TextBlock
+                Text="{x:Static p:Resources.OperationMatrix}"
+                Margin="2"
+                Grid.ColumnSpan="4" />
+
+            <TextBlock
+                Grid.Row="1"
+                Grid.RowSpan="2" Grid.Column="0"
+                Margin="2"
+                VerticalAlignment="Center"
+                FontFamily="Times New Roman"
+                FontStyle="Italic"
+                Text="U = " />
+
+            <TextBox x:Name="a00"
+                     MinWidth="100"
+                     Margin="2"
+                     Grid.Row="1"
+                     Grid.Column="1"
+                     PropertyChanged="a_TextChanged"
+                     Text="{Binding A00Text}">
+                <!--TODO: correct simplification?
+                 <TextBox.Text>
+                    <Binding Path="A00Text" UpdateSourceTrigger="PropertyChanged">
+                    </Binding>
+                </TextBox.Text>-->
+            </TextBox>
+
+            <TextBox x:Name="a01"
+                     MinWidth="100"
+                     Margin="2"
+                     Grid.Row="1"
+                     Grid.Column="2"
+                     PropertyChanged="a_TextChanged"
+                     Text="{Binding A01Text}">
+                <!--<TextBox.Text>
+                    <Binding Path="A01Text" UpdateSourceTrigger="PropertyChanged">
+                    </Binding>
+                </TextBox.Text>-->
+            </TextBox>
+
+            <TextBox x:Name="a10"
+                     MinWidth="100"
+                     Margin="2"
+                     Grid.Row="2"
+                     Grid.Column="1"
+                     PropertyChanged="a_TextChanged"
+                     Text="{Binding A10Text}">
+                <!--<TextBox.Text>
+                    <Binding Path="A10Text" UpdateSourceTrigger="PropertyChanged">
+                    </Binding>
+                </TextBox.Text>-->
+            </TextBox>
+
+            <TextBox x:Name="a11"
+                     MinWidth="100"
+                     Margin="2"
+                     Grid.Row="2"
+                     Grid.Column="2"
+                     PropertyChanged="a_TextChanged"
+                     Text="{Binding A11Text}">
+                <!--<TextBox.Text>
+                    <Binding Path="A11Text" UpdateSourceTrigger="PropertyChanged">
+                    </Binding>
+                </TextBox.Text>-->
+            </TextBox>
+
+            <TextBlock
+                Grid.Row="3"
+                Grid.ColumnSpan="4" Grid.Column="0"
+                Margin="0,5"
+                Foreground="Red"
+                Text="{Binding ValidationMessage}" />
+
+            <StackPanel
+                Margin="2,20,2,2"
+                HorizontalAlignment="Right"
+                Grid.Row="4"
+                Grid.ColumnSpan="4" Grid.Column="0"
+                Orientation="Horizontal">
+                <Button
+                    x:Name="ApplyButton"
+                    Margin="2,0"
+                    IsEnabled="False"
+                    Content="{x:Static p:Resources.Apply}"
+                    Command="{Binding ApplyMatrixCommand}"
+                    Width="{Binding ElementName=ApplyGamma, Path=Width}">
+                    <!--Style="{StaticResource DefaultButton}" />-->
+                </Button>
+                <Button
+                    Margin="2,0"
+                    Content="{x:Static p:Resources.Cancel}"
+                    Command="{Binding CancelMatrixCommand}"
+                    Width="{Binding ElementName=ApplyGamma, Path=Width}" />
+                <!--Style="{StaticResource DefaultButton}" />-->
+            </StackPanel>
+        </Grid>
+
+        <Grid x:Name="CompositePane"
+              IsVisible="{Binding CompositePaneVisibility}" RowDefinitions="Auto,Auto,Auto"
+              ColumnDefinitions="10,Auto,Auto,*,Auto,10">
+            <StackPanel
+                Grid.Row="0"
+                Grid.Column="1"
+                Grid.ColumnSpan="4"
+                Orientation="Vertical">
+                <TextBlock
+                    Margin="0,3"
+                    HorizontalAlignment="Stretch"
+                    Text="{x:Static p:Resources.SelectMethod}" />
+                <ListBox
+                    x:Name="methodBox"
+                    Margin="0,3"
+                    HorizontalAlignment="Stretch"
+                    Items="{Binding Candidates}"
+                    SelectionMode="Single"
+                    SelectionChanged="methodBox_SelectionChanged" />
+            </StackPanel>
+
+            <ItemsControl
+                Grid.Row="1"
+                Grid.Column="3"
+                Items="{Binding Parameters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBox
+                            Height="23"
+                            Margin="0, 3"
+                            HorizontalAlignment="Stretch"
+                            Text="{Binding ValueString, Mode=TwoWay}" />
+                        <!-- TODO:
+                         , UpdateSourceTrigger=PropertyChanged -->
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <ItemsControl
+                Grid.Row="1"
+                Grid.Column="4"
+                Items="{Binding Parameters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button
+                            Click="addParam_Click"
+                            Height="23"
+                            Margin="3,3,0,3"
+                            IsVisible="{Binding VarParamsVisibility}"
+                            Content="{x:Static p:Resources.AddParam}"
+                            Width="NaN" />
+                        <!--Style="{StaticResource DefaultButton}" />-->
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <ItemsControl
+                Grid.Row="1"
+                Grid.Column="1"
+                Items="{Binding Parameters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock
+                            Height="23"
+                            VerticalAlignment="Center"
+                            Margin="0, 3"
+                            Text="{Binding TypeString}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <ItemsControl
+                Grid.Row="1"
+                Grid.Column="2"
+                Items="{Binding Parameters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock
+                            Height="23"
+                            VerticalAlignment="Center"
+                            Margin="10, 3"
+                            Text="{Binding Name}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Rectangle
+                x:Name="widthRef"
+                Grid.Row="2"
+                Grid.Column="1"
+                Grid.ColumnSpan="4" />
+
+            <ItemsControl
+                Grid.Row="2"
+                Grid.Column="1"
+                Grid.ColumnSpan="3"
+                Items="{Binding Parameters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"
+                                    Width="{Binding ElementName=widthRef, Path=Width}"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock
+                            Margin="0, 3"
+                            TextWrapping="Wrap"
+                            Foreground="Red"
+                            Text="{Binding ValidationMessage}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Button
+                Grid.Row="2"
+                Grid.Column="4"
+                VerticalAlignment="Top"
+                Margin="2,0"
+                IsEnabled="{Binding IsValid}"
+                Content="{x:Static p:Resources.Apply}"
+                Command="{Binding ApplyParamsCommand}">
+                <!--Style="{StaticResource DefaultButton}" >-->
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>

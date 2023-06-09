@@ -86,7 +86,7 @@ public class MainWindowViewModel : ViewModelBase
     private CircuitGridViewModel _circuitGridVM;
 
     private OutputGridViewModel _outputGridVM;
-    //private PropertiesVM _propertiesVM;
+    private PropertiesViewModel _propertiesVM;
 
     private List<string> _toolsVM;
 
@@ -175,17 +175,18 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_circuitGridVM == null)
+            if (_circuitGridVM != null) return _circuitGridVM;
+
+            _circuitGridVM = new CircuitGridViewModel(_model);
+
+            if (_propertiesVM != null)
             {
-                _circuitGridVM = new CircuitGridViewModel(_model);
-                // if (_propertiesVM != null)
-                // {
-                //     _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
-                // }
-                if (_outputGridVM != null)
-                {
-                    _outputGridVM.AddQubitsTracing(_circuitGridVM);
-                }
+                _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
+            }
+
+            if (_outputGridVM != null)
+            {
+                _outputGridVM.AddQubitsTracing(_circuitGridVM);
             }
 
             return _circuitGridVM;
@@ -196,10 +197,12 @@ public class MainWindowViewModel : ViewModelBase
                 return;
 
             _circuitGridVM = value;
-            // if (_propertiesVM != null)
-            // {
-            //     _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
-            // }
+
+            if (_propertiesVM != null)
+            {
+                _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
+            }
+
             if (_outputGridVM != null)
             {
                 _outputGridVM.AddQubitsTracing(_circuitGridVM);
@@ -221,10 +224,11 @@ public class MainWindowViewModel : ViewModelBase
                 {
                     _outputGridVM.AddQubitsTracing(_circuitGridVM);
                 }
-                // if (_propertiesVM != null)
-                // {
-                //     _propertiesVM.AddSelectionTracing(_outputGridVM);
-                // }
+
+                if (_propertiesVM != null)
+                {
+                    _propertiesVM.AddSelectionTracing(_outputGridVM);
+                }
             }
 
             return _outputGridVM;
@@ -235,66 +239,70 @@ public class MainWindowViewModel : ViewModelBase
                 return;
 
             _outputGridVM = value;
+
             if (_circuitGridVM != null)
             {
                 _outputGridVM.AddQubitsTracing(_circuitGridVM);
             }
 
-            // if (_propertiesVM != null)
-            // {
-            //     _propertiesVM.AddSelectionTracing(_outputGridVM);
-            // }
+            if (_propertiesVM != null)
+            {
+                _propertiesVM.AddSelectionTracing(_outputGridVM);
+            }
+
             base.OnPropertyChanged(nameof(OutputGrid));
         }
     }
 
-    // public PropertiesVM PropertiesPane
-    // {
-    //     get
-    //     {
-    //         if (_propertiesVM == null)
-    //         {
-    //             _propertiesVM = new PropertiesVM(CircuitGrid, OutputGrid);
-    //             if (_outputGridVM != null)
-    //             {
-    //                 _propertiesVM.AddSelectionTracing(_outputGridVM);
-    //             }
-    //             if (_circuitGridVM != null)
-    //             {
-    //                 _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
-    //             }
-    //         }
-    //         return _propertiesVM;
-    //     }
-    //     private set
-    //     {
-    //         if (value == _propertiesVM)
-    //             return;
-    //
-    //         _propertiesVM = value;
-    //         if (_outputGridVM != null)
-    //         {
-    //             _propertiesVM.AddSelectionTracing(_outputGridVM);
-    //         }
-    //         if (_circuitGridVM != null)
-    //         {
-    //             _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
-    //         }
-    //
-    //         base.OnPropertyChanged("PropertiesPane");
-    //     }
-    // }
+    public PropertiesViewModel PropertiesPane
+    {
+        get
+        {
+            if (_propertiesVM != null) return _propertiesVM;
+
+            _propertiesVM = new PropertiesViewModel(CircuitGrid, OutputGrid);
+            if (_outputGridVM != null)
+            {
+                _propertiesVM.AddSelectionTracing(_outputGridVM);
+            }
+
+            if (_circuitGridVM != null)
+            {
+                _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
+            }
+
+            return _propertiesVM;
+        }
+        private set
+        {
+            if (value == _propertiesVM)
+                return;
+
+            _propertiesVM = value;
+
+            if (_outputGridVM != null)
+            {
+                _propertiesVM.AddSelectionTracing(_outputGridVM);
+            }
+
+            if (_circuitGridVM != null)
+            {
+                _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
+            }
+
+            base.OnPropertyChanged(nameof(PropertiesPane));
+        }
+    }
 
     public List<string> CompositeTools
     {
         get
         {
-            if (_toolsVM == null)
-            {
-                CircuitEvaluator eval = CircuitEvaluator.GetInstance();
-                Dictionary<string, List<MethodInfo>> dict = eval.GetExtensionGates();
-                _toolsVM = dict.Keys.ToList();
-            }
+            if (_toolsVM != null) return _toolsVM;
+
+            CircuitEvaluator eval = CircuitEvaluator.GetInstance();
+            Dictionary<string, List<MethodInfo>> dict = eval.GetExtensionGates();
+            _toolsVM = dict.Keys.ToList();
 
             return _toolsVM;
         }
@@ -305,14 +313,7 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public object SelectedObject
-    {
-        get
-        {
-            //TODO:
-            return null; //_window.outputGrid.statesList.SelectedValue;
-        }
-    }
+    public object SelectedObject => _window.outputGrid.statesList.SelectedItem;
 
     public static ActionName SelectedAction { get; private set; }
 
@@ -340,18 +341,12 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public string ConsoleOutput
-    {
-        get { return _consoleWriter.Text; }
-    }
+    public string ConsoleOutput => _consoleWriter.Text;
 
 
     #region Commands
 
-    public static ICommand CalculatorCommand
-    {
-        get { return _calculatorCommand; }
-    }
+    public static ICommand CalculatorCommand => _calculatorCommand;
 
     public ICommand AboutCommand
     {
@@ -592,77 +587,36 @@ public class MainWindowViewModel : ViewModelBase
 
     #region Public Methods
 
-    public void CompositeSelected()
+    public static void CompositeSelected()
     {
         SelectedAction = ActionName.Composite;
     }
 
-    public void SelectAction(object parameter)
+    private static void SelectAction(object parameter)
     {
-        switch (parameter as string)
+        SelectedAction = (parameter as string) switch
         {
-            case "Empty":
-                SelectedAction = ActionName.Empty;
-                break;
-            case "Hadamard":
-                SelectedAction = ActionName.Hadamard;
-                break;
-            case "SigmaX":
-                SelectedAction = ActionName.SigmaX;
-                break;
-            case "SigmaY":
-                SelectedAction = ActionName.SigmaY;
-                break;
-            case "SigmaZ":
-                SelectedAction = ActionName.SigmaZ;
-                break;
-            case "SqrtX":
-                SelectedAction = ActionName.SqrtX;
-                break;
-            case "PhaseKick":
-                SelectedAction = ActionName.PhaseKick;
-                break;
-            case "PhaseScale":
-                SelectedAction = ActionName.PhaseScale;
-                break;
-            case "CPhaseShift":
-                SelectedAction = ActionName.CPhaseShift;
-                break;
-            case "InvCPhaseShift":
-                SelectedAction = ActionName.InvCPhaseShift;
-                break;
-            case "RotateX":
-                SelectedAction = ActionName.RotateX;
-                break;
-            case "RotateY":
-                SelectedAction = ActionName.RotateY;
-                break;
-            case "RotateZ":
-                SelectedAction = ActionName.RotateZ;
-                break;
-            case "Unitary":
-                SelectedAction = ActionName.Unitary;
-                break;
-            case "Control":
-                SelectedAction = ActionName.Control;
-                break;
-            case "Measure":
-                SelectedAction = ActionName.Measure;
-                break;
-            case "Ungroup":
-                SelectedAction = ActionName.Ungroup;
-                break;
-            case "Composite":
-                SelectedAction = ActionName.Composite;
-                break;
-            case "Pointer":
-                SelectedAction = ActionName.Pointer;
-                break;
-            case "Selection":
-            default:
-                SelectedAction = ActionName.Selection;
-                break;
-        }
+            "Empty" => ActionName.Empty,
+            "Hadamard" => ActionName.Hadamard,
+            "SigmaX" => ActionName.SigmaX,
+            "SigmaY" => ActionName.SigmaY,
+            "SigmaZ" => ActionName.SigmaZ,
+            "SqrtX" => ActionName.SqrtX,
+            "PhaseKick" => ActionName.PhaseKick,
+            "PhaseScale" => ActionName.PhaseScale,
+            "CPhaseShift" => ActionName.CPhaseShift,
+            "InvCPhaseShift" => ActionName.InvCPhaseShift,
+            "RotateX" => ActionName.RotateX,
+            "RotateY" => ActionName.RotateY,
+            "RotateZ" => ActionName.RotateZ,
+            "Unitary" => ActionName.Unitary,
+            "Control" => ActionName.Control,
+            "Measure" => ActionName.Measure,
+            "Ungroup" => ActionName.Ungroup,
+            "Composite" => ActionName.Composite,
+            "Pointer" => ActionName.Pointer,
+            _ => ActionName.Selection
+        };
     }
 
     public void MakeComposite(object parameter)
@@ -950,8 +904,6 @@ public class MainWindowViewModel : ViewModelBase
     //TODO:
     public async void ShowAbout(object o)
     {
-        // ICustomContentDialog dialog = _window.DialogManager
-        //     .CreateCustomContentDialog(new AboutWindow(), DialogMode.Ok);
         await new AboutWindow().ShowDialog(_window);
     }
 

@@ -72,8 +72,6 @@ public partial class MainWindow : Window
 
     private void CompositeTool_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        var vm = DataContext as MainWindowViewModel;
-
-        vm?.CompositeSelected();
+        MainWindowViewModel.CompositeSelected();
     }
 }
