@@ -42,11 +42,7 @@
                         Margin="2"
                         Items="{Binding RegistersNames}"
                         SelectedIndex="0"
-                        KeyUp="registerBox_KeyUp">
-                        <!-- TODO:
-                        DropDownClosed="registerBox_DropDownClosed"
-                        IsEditable="True"
-                        IsReadOnly="False"-->
+                        SelectionChanged="RegisterBox_OnSelectionChanged" IsTextSearchEnabled="True">
                     </ComboBox>
                 </Grid>
             </Border>
@@ -123,12 +119,12 @@
                                             Stroke="DimGray"
                                             Height="20" Width="{Binding RectangleWidth}"
                                             Margin="0" HorizontalAlignment="Left">
-                                            <!-- TODO:
+                                            <!-- TODO: no rounded corners in Avalonia as of yet
                                             RadiusX="2" RadiusY="2"-->
                                             <Rectangle.OpacityMask>
                                                 <LinearGradientBrush EndPoint="0.5,1"
                                                                      StartPoint="0.5,0">
-                                                    <!-- TODO:
+                                                    <!-- TODO: how make color rectangle fill the whole rectangle?
                                                                      MappingMode="RelativeToBoundingBox"-->
                                                     <GradientStop Color="#33000000" />
                                                     <GradientStop Color="White" Offset="0.5" />

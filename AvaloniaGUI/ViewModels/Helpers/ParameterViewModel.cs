@@ -47,42 +47,30 @@ public class ParameterViewModel : ViewModelBase
             ValueString = ValueToString(value);
         }
 
-        OnPropertyChanged("ValidationMessage");
+        OnPropertyChanged(nameof(ValidationMessage));
     }
 
-    public string Name
-    {
-        get { return _name; }
-    }
+    public string Name => _name;
 
-    public string TypeString
-    {
-        get { return _typeString; }
-    }
+    public string TypeString => _typeString;
 
     public string ValueString
     {
-        get { return _valueString; }
+        get => _valueString;
         set
         {
             _valueString = value;
             _value = StringToValue(_valueString, _type);
-            OnPropertyChanged("Value");
-            OnPropertyChanged("ValueString");
-            OnPropertyChanged("IsValid");
-            OnPropertyChanged("ValidationMessage");
+            OnPropertyChanged(nameof(Value));
+            OnPropertyChanged(nameof(ValueString));
+            OnPropertyChanged(nameof(IsValid));
+            OnPropertyChanged(nameof(ValidationMessage));
         }
     }
 
-    public object Value
-    {
-        get { return _value; }
-    }
+    public object Value => _value;
 
-    public bool IsValid
-    {
-        get { return _isValid; }
-    }
+    public bool IsValid => _isValid;
 
     public string ValidationMessage
     {
@@ -99,10 +87,7 @@ public class ParameterViewModel : ViewModelBase
 
     // TODO: whats this
     // https://mcraiha.github.io/xaml/wpf/avalonia/2020/03/03/Differences-in-wpf-and-avalonia.html
-    public bool VarParamsVisibility
-    {
-        get { return _paramsArray; }
-    }
+    public bool VarParamsVisibility => _paramsArray;
 
 
     private string TypeToString(Type type)
@@ -127,46 +112,43 @@ public class ParameterViewModel : ViewModelBase
                 sb.Append("root");
             }
 
-            sb.Append("[").Append(rrm.Offset).Append("]");
+            sb.Append('[').Append(rrm.Offset).Append(']');
             return sb.ToString();
         }
 
-        if (type == typeof(RegisterPartModel))
+        if (type != typeof(RegisterPartModel)) return value.ToString();
+
+        RegisterPartModel rm = (RegisterPartModel)value;
+        if (rm.Register != null)
         {
-            RegisterPartModel rm = (RegisterPartModel)value;
-            if (rm.Register != null)
+            if (rm.Width == rm.Register.Qubits.Count)
             {
-                if (rm.Width == rm.Register.Qubits.Count)
-                {
-                    return rm.Register.Name;
-                }
-                else
-                {
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append(rm.Register.Name);
-                    sb.Append("[").Append(rm.Offset).Append(", ").Append(rm.Width).Append("]");
-                    return sb.ToString();
-                }
+                return rm.Register.Name;
             }
             else
             {
-                CircuitEvaluator eval = CircuitEvaluator.GetInstance();
-                int rootWidth = eval.RootRegister.Width;
-                if (rm.Width == rootWidth)
-                {
-                    return "root";
-                }
-                else
-                {
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append("root");
-                    sb.Append("[").Append(rm.Offset).Append(", ").Append(rm.Width).Append("]");
-                    return sb.ToString();
-                }
+                StringBuilder sb = new StringBuilder();
+                sb.Append(rm.Register.Name);
+                sb.Append('[').Append(rm.Offset).Append(", ").Append(rm.Width).Append(']');
+                return sb.ToString();
             }
         }
-
-        return value.ToString();
+        else
+        {
+            CircuitEvaluator eval = CircuitEvaluator.GetInstance();
+            int rootWidth = eval.RootRegister.Width;
+            if (rm.Width == rootWidth)
+            {
+                return "root";
+            }
+            else
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("root");
+                sb.Append('[').Append(rm.Offset).Append(", ").Append(rm.Width).Append(']');
+                return sb.ToString();
+            }
+        }
     }
 
     private object StringToValue(string text, Type type)
