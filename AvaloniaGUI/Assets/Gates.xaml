@@ -20,7 +20,7 @@
     along with this program.  If not, see<http://www.gnu.org/licenses/> .
  -->
 <ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <VisualBrush x:Key="ImgEmpty" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgEmpty" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -37,7 +37,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgH" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgH" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -62,7 +62,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgUpNot" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgUpNot" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -90,7 +90,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgCenterNot" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgCenterNot" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -118,7 +118,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgUpC" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgUpC" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -146,7 +146,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgDownC" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgDownC" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -174,7 +174,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgCenterC" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgCenterC" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -202,7 +202,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgDownNot" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgDownNot" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -230,7 +230,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgLine" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgLine" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -252,7 +252,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgX" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgX" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -277,7 +277,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgY" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgY" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -302,7 +302,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgZ" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgZ" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -327,7 +327,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgU" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgU" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -352,7 +352,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgRotateX" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgRotateX" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -379,7 +379,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgRotateY" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgRotateY" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -406,7 +406,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgRotateZ" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgRotateZ" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -433,7 +433,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgUpPhaseShift" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgUpPhaseShift" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -465,7 +465,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgDownPhaseShift" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgDownPhaseShift" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -497,7 +497,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgPhaseKick" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgPhaseKick" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -522,7 +522,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgUpPhaseKick" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgUpPhaseKick" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -552,7 +552,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgDownPhaseKick" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgDownPhaseKick" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -582,7 +582,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgSqrtX" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgSqrtX" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -617,7 +617,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgMeasure" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgMeasure" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -652,7 +652,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgEmptyM" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgEmptyM" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -674,7 +674,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgUpNotM" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgUpNotM" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -712,7 +712,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgCenterNotM" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgCenterNotM" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -750,7 +750,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgUpCM" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgUpCM" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -788,7 +788,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgDownCM" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgDownCM" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -826,7 +826,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgCenterCM" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgCenterCM" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -864,7 +864,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgDownNotM" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgDownNotM" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -902,7 +902,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgLineM" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgLineM" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -934,7 +934,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgUpPhaseShiftM" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgUpPhaseShiftM" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -971,7 +971,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgDownPhaseShiftM" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgDownPhaseShiftM" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1008,7 +1008,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgUpPhaseKickM" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgUpPhaseKickM" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1043,7 +1043,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgDownPhaseKickM" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgDownPhaseKickM" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1078,7 +1078,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgQubit0" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgQubit0" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1107,7 +1107,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgQubit1" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgQubit1" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1136,7 +1136,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgQubitMixed" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgQubitMixed" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1165,7 +1165,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ToolX" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ToolX" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1183,7 +1183,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ToolY" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ToolY" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1201,7 +1201,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ToolZ" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ToolZ" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1219,7 +1219,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ToolU" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ToolU" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1237,7 +1237,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ToolSqrtX" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ToolSqrtX" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1265,7 +1265,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ToolRotateX" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ToolRotateX" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1285,7 +1285,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ToolRotateY" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ToolRotateY" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1305,7 +1305,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ToolRotateZ" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ToolRotateZ" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1325,7 +1325,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ToolPhaseKick" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ToolPhaseKick" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1343,7 +1343,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ToolMeasure" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ToolMeasure" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1366,7 +1366,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ToolCPhaseShift" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ToolCPhaseShift" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1386,7 +1386,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ToolH" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ToolH" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1404,7 +1404,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ToolC" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ToolC" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1432,7 +1432,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ToolEmpty" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ToolEmpty" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1449,7 +1449,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgUpInvPhaseShift" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgUpInvPhaseShift" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1485,7 +1485,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgDownInvPhaseShift" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgDownInvPhaseShift" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1521,7 +1521,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgUpInvPhaseShiftM" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgUpInvPhaseShiftM" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1562,7 +1562,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgDownInvPhaseShiftM" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgDownInvPhaseShiftM" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1603,7 +1603,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ToolInvCPhaseShift" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ToolInvCPhaseShift" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1627,7 +1627,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgPhaseScale" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgPhaseScale" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1652,7 +1652,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ToolPhaseScale" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ToolPhaseScale" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1670,7 +1670,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgMeasureM" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgMeasureM" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1710,7 +1710,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgUp" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgUp" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1731,7 +1731,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgDown" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgDown" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1753,7 +1753,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgNot" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgNot" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1780,7 +1780,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgC" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgC" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1798,7 +1798,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgQubitBegin" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgQubitBegin" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1815,7 +1815,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgUpM" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgUpM" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1847,7 +1847,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgDownM" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgDownM" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1879,7 +1879,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ImgQubitEnd" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ImgQubitEnd" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1901,7 +1901,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="UpComposite" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="UpComposite" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1920,7 +1920,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="CenterComposite" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="CenterComposite" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1942,7 +1942,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="DownComposite" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="DownComposite" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1961,7 +1961,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ToolComposite" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ToolComposite" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1977,7 +1977,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush x:Key="ComplexPlane" Stretch="Uniform">
+    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ComplexPlane" Stretch="Uniform">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>

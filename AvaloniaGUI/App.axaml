@@ -17,6 +17,11 @@
             <Setter Property="Background" Value="Transparent"></Setter>
         </Style>
 
+        <!-- only effects Brushes outside of Rsrc Dictionaries -->
+        <Style Selector="VisualBrush">
+            <Setter Property="RenderOptions.BitmapInterpolationMode" Value="LowQuality" />
+        </Style>
+
         <!-- Toolbar radio button design -->
         <Style Selector="RadioButton.ToolBarButton">
             <Setter Property="Template">

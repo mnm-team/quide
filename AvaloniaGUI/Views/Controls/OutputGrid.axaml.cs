@@ -44,6 +44,7 @@ public partial class OutputGrid : UserControl
             if (_dataContext is null) return;
 
             // could be simplified in future to just use binding to _dataContext._selectedRegister.Value as reactive Property
+            // TODO: fires null exception when not selected and bitFlip operation, SelectedIndex is -1 ??
             _dataContext.SetRegister(registerBox.SelectedItem.ToString());
             statesList.Focus();
         }

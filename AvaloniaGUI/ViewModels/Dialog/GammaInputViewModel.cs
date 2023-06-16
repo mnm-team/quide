@@ -33,7 +33,7 @@ public class GammaInputViewModel : ViewModelBase
 
     public bool Rad
     {
-        get { return _rad; }
+        get => _rad;
         set
         {
             if (_rad == value) return;

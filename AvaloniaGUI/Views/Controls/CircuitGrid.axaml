@@ -90,12 +90,7 @@
                                                         </ContextMenu>
                                                     </StackPanel.ContextMenu>
                                                     <StackPanel.RenderTransform>
-                                                        <ScaleTransform ScaleX="1" ScaleY="-1">
-                                                            <!--<ScaleTransform.CenterY>
-                                                                <Binding
-                                                                    Source="{x:Static vm:CircuitGridViewModel.QubitScaleCenter}" />
-                                                            </ScaleTransform.CenterY>-->
-                                                        </ScaleTransform>
+                                                        <ScaleTransform ScaleX="1" ScaleY="-1" />
                                                     </StackPanel.RenderTransform>
                                                     <Rectangle
                                                         Width="5"

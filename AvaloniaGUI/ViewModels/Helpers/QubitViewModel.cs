@@ -155,7 +155,7 @@ public class QubitViewModel : ViewModelBase
 
     public QubitModel Value
     {
-        get { return _model.Registers[_registerIndex].Qubits[_rowIndex]; }
+        get => _model.Registers[_registerIndex].Qubits[_rowIndex];
         set
         {
             if (value == _model.Registers[_registerIndex].Qubits[_rowIndex])
@@ -164,19 +164,13 @@ public class QubitViewModel : ViewModelBase
             // update model :
             _model.Registers[_registerIndex].Qubits[_rowIndex] = value;
 
-            OnPropertyChanged("QubitImage");
+            OnPropertyChanged(nameof(QubitImage));
         }
     }
 
-    public string RegisterName
-    {
-        get { return _model.Registers[_registerIndex].Name; }
-    }
+    public string RegisterName => _model.Registers[_registerIndex].Name;
 
-    public int Index
-    {
-        get { return _rowIndex; }
-    }
+    public int Index => _rowIndex;
 
     public VisualBrush QubitImage
     {
