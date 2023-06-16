@@ -24,6 +24,8 @@
 
     <!-- ******MAIN PAGE STYLES****** -->
 
+    <SolidColorBrush x:Key="StandardButtonBackgroundOnHoverOver" Color="#FF000000" Opacity="0.1" />
+
     <LinearGradientBrush x:Key="BorderBrush" EndPoint="0.5,1" StartPoint="0.5,0">
         <GradientStop Color="#FFA3AEB9" Offset="0" />
         <GradientStop Color="#FF8399A9" Offset="0.375" />
@@ -214,7 +216,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
 
     <!-- **************************** -->
     <!-- Primary Color Brushes -->

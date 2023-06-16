@@ -16,10 +16,7 @@ public class GammaInputViewModel : ViewModelBase
     private double _gammaRad;
     private string _gammaString;
 
-    public double Gamma
-    {
-        get { return _gammaRad; }
-    }
+    public double Gamma => _gammaRad;
 
     public ICommand SelectUnitCommand
     {
@@ -39,49 +36,39 @@ public class GammaInputViewModel : ViewModelBase
         get { return _rad; }
         set
         {
-            if (_rad != value)
-            {
-                _rad = value;
-                OnPropertyChanged("Rad");
-                GammaText = GammaToString();
-            }
+            if (_rad == value) return;
+
+            _rad = value;
+            OnPropertyChanged(nameof(Rad));
+            GammaText = GammaToString();
         }
     }
 
     [DoubleType]
     public string GammaText
     {
-        get { return _gammaString; }
+        get => _gammaString;
         set
         {
-            double result;
-            if (double.TryParse(value, out result))
-            {
-                if (_rad)
-                {
-                    _gammaRad = result;
-                }
-                else
-                {
-                    _gammaRad = result * Math.PI / 180;
-                }
+            if (!double.TryParse(value, out var result)) return;
 
-                _gammaString = GammaToString();
-                OnPropertyChanged("GammaText");
+            if (_rad)
+            {
+                _gammaRad = result;
             }
+            else
+            {
+                _gammaRad = result * Math.PI / 180;
+            }
+
+            _gammaString = GammaToString();
+            OnPropertyChanged(nameof(GammaText));
         }
     }
 
     public void SelectUnit(object parameter)
     {
-        if (string.Equals("Rad", parameter as string))
-        {
-            Rad = true;
-        }
-        else
-        {
-            Rad = false;
-        }
+        Rad = string.Equals("Rad", parameter as string);
     }
 
     public void SetAngle(string value)
@@ -120,13 +107,6 @@ public class GammaInputViewModel : ViewModelBase
 
     private string GammaToString()
     {
-        if (_rad)
-        {
-            return string.Format("{0:N5}", _gammaRad);
-        }
-        else
-        {
-            return string.Format("{0:N2}", _gammaRad * 180 / Math.PI);
-        }
+        return _rad ? $"{_gammaRad:N5}" : $"{_gammaRad * 180 / Math.PI:N2}";
     }
 }
