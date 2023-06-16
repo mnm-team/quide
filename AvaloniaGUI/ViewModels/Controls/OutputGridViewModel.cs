@@ -90,7 +90,7 @@ public class OutputGridViewModel : ViewModelBase
 
     public int SelectedIndex
     {
-        get { return _selectedIndex; }
+        get => _selectedIndex;
         set
         {
             _selectedIndex = value;
@@ -124,33 +124,30 @@ public class OutputGridViewModel : ViewModelBase
 
     public bool ShowAll
     {
-        get { return _showAll; }
+        get => _showAll;
         set
         {
-            if (_showAll != value)
-            {
-                _showAll = value;
-                OnPropertyChanged(nameof(ShowAll));
-                int prevIndex = SelectedIndex;
-                _states = CreateStates();
-                _states = ScaleProbability(_states);
-                OnPropertyChanged(nameof(States));
-                SelectedIndex = prevIndex;
-            }
+            if (_showAll == value) return;
+
+            _showAll = value;
+            OnPropertyChanged(nameof(ShowAll));
+            int prevIndex = SelectedIndex;
+            _states = CreateStates();
+            _states = ScaleProbability(_states);
+            OnPropertyChanged(nameof(States));
+            SelectedIndex = prevIndex;
         }
     }
 
     public bool ScaleRelative
     {
-        get { return _scaleRelative; }
+        get => _scaleRelative;
         set
         {
-            if (_scaleRelative != value)
-            {
-                _scaleRelative = value;
-                OnPropertyChanged(nameof(ScaleRelative));
-                _states = ScaleProbability(_states);
-            }
+            if (_scaleRelative == value) return;
+            _scaleRelative = value;
+            OnPropertyChanged(nameof(ScaleRelative));
+            _states = ScaleProbability(_states);
         }
     }
 
@@ -177,27 +174,26 @@ public class OutputGridViewModel : ViewModelBase
 
     public void SetRegister(string value)
     {
-        if (!value.Equals(_selectedRegister.ValueString))
+        if (value.Equals(_selectedRegister.ValueString)) return;
+
+        _selectedRegister.ValueString = value;
+        if (_selectedRegister.IsValid)
         {
-            _selectedRegister.ValueString = value;
-            if (_selectedRegister.IsValid)
+            try
             {
-                try
-                {
-                    CircuitEvaluator eval = CircuitEvaluator.GetInstance();
-                    Register selected = _selectedRegister.Value as Register;
-                    _outputModel.Update(eval.RootRegister, selected.ToPartModel());
-                    OnSelectionChanged();
-                }
-                catch (Exception e)
-                {
-                    PrintException(e);
-                }
+                CircuitEvaluator eval = CircuitEvaluator.GetInstance();
+                Register selected = _selectedRegister.Value as Register;
+                _outputModel.Update(eval.RootRegister, selected.ToPartModel());
+                OnSelectionChanged();
             }
-            else
+            catch (Exception e)
             {
-                throw new Exception(_selectedRegister.ValidationMessage);
+                PrintException(e);
             }
+        }
+        else
+        {
+            throw new Exception(_selectedRegister.ValidationMessage);
         }
     }
 
@@ -215,26 +211,16 @@ public class OutputGridViewModel : ViewModelBase
             switch (_sortBy)
             {
                 case SortField.Probability:
-                    if (_sortDesc)
-                    {
-                        _states = States.OrderByDescending(x => x.Probability).ToArray();
-                    }
-                    else
-                    {
-                        _states = States.OrderBy(x => x.Probability).ToArray();
-                    }
+                    _states = _sortDesc
+                        ? States.OrderByDescending(x => x.Probability).ToArray()
+                        : States.OrderBy(x => x.Probability).ToArray();
 
                     break;
                 case SortField.Value:
                 default:
-                    if (_sortDesc)
-                    {
-                        _states = States.OrderByDescending(x => x.Value).ToArray();
-                    }
-                    else
-                    {
-                        _states = States.OrderBy(x => x.Value).ToArray();
-                    }
+                    _states = _sortDesc
+                        ? States.OrderByDescending(x => x.Value).ToArray()
+                        : States.OrderBy(x => x.Value).ToArray();
 
                     break;
             }
@@ -243,11 +229,10 @@ public class OutputGridViewModel : ViewModelBase
 
             for (int i = 0; i < _states.Length; i++)
             {
-                if (_states[i].Value == selectedState)
-                {
-                    SelectedIndex = i;
-                    break;
-                }
+                if (_states[i].Value != selectedState) continue;
+
+                SelectedIndex = i;
+                break;
             }
         }
         else
@@ -261,11 +246,10 @@ public class OutputGridViewModel : ViewModelBase
 
     public void AddQubitsTracing(CircuitGridViewModel circuitGrid)
     {
-        if (_trackedCircuitGrid != circuitGrid)
-        {
-            circuitGrid.QubitsChanged += circuitGrid_QubitsChanged;
-            _trackedCircuitGrid = circuitGrid;
-        }
+        if (_trackedCircuitGrid == circuitGrid) return;
+
+        circuitGrid.QubitsChanged += circuitGrid_QubitsChanged;
+        _trackedCircuitGrid = circuitGrid;
     }
 
     #endregion // Public Methods
@@ -326,36 +310,28 @@ public class OutputGridViewModel : ViewModelBase
 
                 for (int i = 0; i < statesCount; i++)
                 {
-                    if (states[i] == null)
+                    if (states[i] != null) continue;
+
+                    if (amplitudeHasValue)
                     {
-                        if (amplitudeHasValue)
-                        {
-                            states[i] = new StateViewModel(new OutputState((ulong)i, Complex.Zero, width));
-                        }
-                        else
-                        {
-                            states[i] = new StateViewModel(new OutputState((ulong)i, 0.0, width));
-                        }
+                        states[i] = new StateViewModel(new OutputState((ulong)i, Complex.Zero, width));
+                    }
+                    else
+                    {
+                        states[i] = new StateViewModel(new OutputState((ulong)i, 0.0, width));
                     }
                 }
 
                 switch (_sortBy)
                 {
                     case SortField.Probability:
-                        if (_sortDesc)
-                        {
-                            return states.OrderByDescending(x => x.Probability).ToArray();
-                        }
+                        return _sortDesc
+                            ? states.OrderByDescending(x => x.Probability).ToArray()
+                            : states.OrderBy(x => x.Probability).ToArray();
 
-                        return states.OrderBy(x => x.Probability).ToArray();
                     case SortField.Value:
                     default:
-                        if (_sortDesc)
-                        {
-                            return states.Reverse().ToArray();
-                        }
-
-                        return states;
+                        return _sortDesc ? states.Reverse().ToArray() : states;
                 }
             }
             else
@@ -368,26 +344,16 @@ public class OutputGridViewModel : ViewModelBase
                 switch (_sortBy)
                 {
                     case SortField.Probability:
-                        if (_sortDesc)
-                        {
-                            sorted = _outputModel.States.OrderByDescending(x => x.Probability);
-                        }
-                        else
-                        {
-                            sorted = _outputModel.States.OrderBy(x => x.Probability);
-                        }
+                        sorted = _sortDesc
+                            ? _outputModel.States.OrderByDescending(x => x.Probability)
+                            : _outputModel.States.OrderBy(x => x.Probability);
 
                         break;
                     case SortField.Value:
                     default:
-                        if (_sortDesc)
-                        {
-                            sorted = _outputModel.States.OrderByDescending(x => x.Value);
-                        }
-                        else
-                        {
-                            sorted = _outputModel.States.OrderBy(x => x.Value);
-                        }
+                        sorted = _sortDesc
+                            ? _outputModel.States.OrderByDescending(x => x.Value)
+                            : _outputModel.States.OrderBy(x => x.Value);
 
                         break;
                 }
@@ -406,20 +372,20 @@ public class OutputGridViewModel : ViewModelBase
             PrintException(e);
         }
 
-        return new StateViewModel[] { new StateViewModel(new OutputState(0, Complex.Zero, _outputModel.Width)) };
+        return new[] { new StateViewModel(new OutputState(0, Complex.Zero, _outputModel.Width)) };
     }
 
     private StateViewModel[] ScaleProbability(StateViewModel[] states)
     {
-        for (int i = 0; i < states.Length; i++)
+        foreach (var t in states)
         {
             if (_scaleRelative)
             {
-                states[i].RelativeProbability = states[i].Probability / _maxProbability;
+                t.RelativeProbability = t.Probability / _maxProbability;
             }
             else
             {
-                states[i].RelativeProbability = states[i].Probability;
+                t.RelativeProbability = t.Probability;
             }
         }
 

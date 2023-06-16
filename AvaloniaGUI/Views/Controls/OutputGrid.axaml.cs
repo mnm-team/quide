@@ -22,27 +22,25 @@ public partial class OutputGrid : UserControl
     private void statesList_GotFocus(object sender, GotFocusEventArgs e)
     {
         //TODO: statesList null? so this.FindControl?
-        if (statesList.SelectedItem != null)
-        {
-            OutputGridViewModel vm = DataContext as OutputGridViewModel;
-            vm.SelectedIndex = statesList.SelectedIndex;
-        }
+        if (statesList.SelectedItem == null) return;
+
+        OutputGridViewModel vm = DataContext as OutputGridViewModel;
+        vm.SelectedIndex = statesList.SelectedIndex;
     }
 
     private void registerBox_KeyUp(object sender, KeyEventArgs e)
     {
-        if (e.Key == Key.Enter)
+        if (e.Key != Key.Enter) return;
+
+        OutputGridViewModel vm = DataContext as OutputGridViewModel;
+        try
         {
-            OutputGridViewModel vm = DataContext as OutputGridViewModel;
-            try
-            {
-                vm.SetRegister(registerBox.SelectedItem.ToString());
-                statesList.Focus();
-            }
-            catch (Exception ex)
-            {
-                ErrorMessageHelper.ShowMessage(ex.Message);
-            }
+            vm.SetRegister(registerBox.SelectedItem.ToString());
+            statesList.Focus();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessageHelper.ShowMessage(ex.Message);
         }
     }
 

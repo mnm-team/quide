@@ -81,7 +81,7 @@
         </StackPanel>
 
         <Border
-                Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Margin="5">
+            Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Margin="5">
             <Grid>
                 <DataGrid x:Name="statesList"
                           Items="{Binding States}"
@@ -92,7 +92,8 @@
                           CanUserSortColumns="True"
                           AutoGenerateColumns="False">
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Header="{x:Static p:Resources.Value}">
+                        <DataGridTemplateColumn Header="{x:Static p:Resources.Value}" CanUserSort="True"
+                                                SortMemberPath="Value">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate DataType="helpers:StateViewModel">
                                     <TextBlock
@@ -112,7 +113,8 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="{x:Static p:Resources.Probability}">
+                        <DataGridTemplateColumn Header="{x:Static p:Resources.Probability}" CanUserSort="True"
+                                                SortMemberPath="ProbabilityFloat">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate DataType="helpers:StateViewModel">
                                     <Grid Margin="0" Width="{Binding RectangleMaxWidth}">
