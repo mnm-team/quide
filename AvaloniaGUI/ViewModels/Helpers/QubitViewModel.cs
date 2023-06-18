@@ -176,25 +176,16 @@ public class QubitViewModel : ViewModelBase
     {
         get
         {
-            if (Value == QubitModel.Zero)
+            return Value switch
             {
-                return Application.Current.FindResource("ImgQubit0") as VisualBrush;
-            }
-            else if (Value == QubitModel.One)
-            {
-                return Application.Current.FindResource("ImgQubit1") as VisualBrush;
-            }
-            else
-            {
-                return Application.Current.FindResource("ImgQubitMixed") as VisualBrush;
-            }
+                QubitModel.Zero => Application.Current.FindResource("ImgQubit0") as VisualBrush,
+                QubitModel.One => Application.Current.FindResource("ImgQubit1") as VisualBrush,
+                _ => Application.Current.FindResource("ImgQubitMixed") as VisualBrush
+            };
         }
     }
 
-    public bool IsEnabled
-    {
-        get { return _model.CurrentStep == 0; }
-    }
+    public bool IsEnabled => _model.CurrentStep == 0;
 
     #endregion // Properties
 
@@ -203,21 +194,14 @@ public class QubitViewModel : ViewModelBase
 
     public void Refresh()
     {
-        OnPropertyChanged("QubitImage");
+        OnPropertyChanged(nameof(QubitImage));
     }
 
     public void ChangeValue(object parameter)
     {
         QubitModel old = Value;
         _model.Registers[_registerIndex].ResetQubit(_rowIndex, old);
-        if (old == QubitModel.Zero)
-        {
-            Value = QubitModel.One;
-        }
-        else
-        {
-            Value = QubitModel.Zero;
-        }
+        Value = old == QubitModel.Zero ? QubitModel.One : QubitModel.Zero;
     }
 
     public void InsertQubitAbove(object parameter)
@@ -332,26 +316,26 @@ public class QubitViewModel : ViewModelBase
     public void IncrementRow(int delta = 1)
     {
         _rowIndex += delta;
-        OnPropertyChanged("Index");
-        OnPropertyChanged("QubitImage");
+        OnPropertyChanged(nameof(Index));
+        OnPropertyChanged(nameof(QubitImage));
     }
 
     public void IncrementRegisterIndex(int delta = 1)
     {
         _registerIndex += delta;
-        OnPropertyChanged("RegisterName");
+        OnPropertyChanged(nameof(RegisterName));
     }
 
     public void UpdateDeleteRegisterCommand(bool canExecute)
     {
         _deleteRegister = new DelegateCommand(DeleteRegister, x => canExecute);
-        OnPropertyChanged("DeleteRegisterCommand");
+        OnPropertyChanged(nameof(DeleteRegisterCommand));
     }
 
     public void UpdateDeleteQubitCommand(bool canExecute)
     {
         _deleteQubit = new DelegateCommand(DeleteQubit, x => canExecute);
-        OnPropertyChanged("DeleteQubitCommand");
+        OnPropertyChanged(nameof(DeleteQubitCommand));
     }
 
     #endregion // Public Methods
@@ -361,7 +345,7 @@ public class QubitViewModel : ViewModelBase
 
     private void _model_CurrentStepChanged(object? sender, EventArgs eventArgs)
     {
-        OnPropertyChanged("IsEnabled");
+        OnPropertyChanged(nameof(IsEnabled));
     }
 
     #endregion // Private Helpers

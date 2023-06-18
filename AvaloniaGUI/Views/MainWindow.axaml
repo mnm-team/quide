@@ -181,7 +181,7 @@
                     <DockPanel>
                         <!-- TODO: 
                                         toolbar in https://github.com/Splitwirez/Mechanism-for-Avalonia/-->
-                        <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
+                        <StackPanel DockPanel.Dock="Top" Orientation="Vertical" Margin="4">
                             <!-- First row -->
                             <StackPanel Orientation="Horizontal">
 

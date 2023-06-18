@@ -43,7 +43,7 @@ public class OutputGridViewModel : ViewModelBase
     private string[] _registersNames;
     private ParameterViewModel _selectedRegister;
 
-    private int _selectedIndex;
+    private int _selectedIndex = 0;
 
     private SortField _sortBy = SortField.Value;
     private bool _sortDesc = false;
@@ -62,7 +62,7 @@ public class OutputGridViewModel : ViewModelBase
     // only for design
     public OutputGridViewModel()
     {
-        _selectedRegister = new ParameterViewModel("register", typeof(Register));
+        _selectedRegister = new ParameterViewModel("register", typeof(Register), "root");
     }
 
     #endregion // Constructor
@@ -96,6 +96,39 @@ public class OutputGridViewModel : ViewModelBase
             _selectedIndex = value;
             OnPropertyChanged(nameof(SelectedIndex));
             OnSelectionChanged();
+        }
+    }
+
+    public string SelectedRegister
+    {
+        get => _selectedRegister.ValueString;
+        set
+        {
+            // TODO: probably investigate again
+            // somehow gets called after bitflip in CircuitGrid with null value
+            if (value is null) return;
+
+            if (value.Equals(_selectedRegister.ValueString)) return;
+
+            _selectedRegister.ValueString = value;
+            if (_selectedRegister.IsValid)
+            {
+                try
+                {
+                    CircuitEvaluator eval = CircuitEvaluator.GetInstance();
+                    Register selected = _selectedRegister.Value as Register;
+                    _outputModel.Update(eval.RootRegister, selected.ToPartModel());
+                    OnSelectionChanged();
+                }
+                catch (Exception e)
+                {
+                    PrintException(e);
+                }
+            }
+            else
+            {
+                throw new Exception(_selectedRegister.ValidationMessage);
+            }
         }
     }
 

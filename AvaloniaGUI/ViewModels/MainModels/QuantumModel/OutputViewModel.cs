@@ -46,7 +46,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
         #region Fields
 
-        private RegisterPartModel? _selectedRegister = null;
+        private RegisterPartModel? _selectedRegister;
         private List<OutputState> _states = new List<OutputState>();
 
         #endregion // Fields
@@ -58,18 +58,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
         public RegisterPartModel? SelectedRegister => _selectedRegister;
 
-        public int Width
-        {
-            get
-            {
-                if (_states.Count == 0)
-                {
-                    return 0;
-                }
-
-                return _states[0].Width;
-            }
-        }
+        public int Width => _states.Count == 0 ? 0 : _states[0].Width;
 
         #endregion // Model Properties
 

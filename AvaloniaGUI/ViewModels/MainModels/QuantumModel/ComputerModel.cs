@@ -95,7 +95,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
                 return _registers;
             }
-            set { _registers = value; }
+            set => _registers = value;
         }
 
         public int TotalWidth
@@ -123,42 +123,37 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
                 return _steps;
             }
-            set { _steps = value; }
+            set => _steps = value;
         }
 
         public int CurrentStep
         {
-            get { return _currentStep; }
+            get => _currentStep;
             set
             {
-                if (value != _currentStep)
-                {
-                    _currentStep = value;
-                    OnStepChanged();
-                }
+                if (value == _currentStep) return;
+
+                _currentStep = value;
+                OnStepChanged();
             }
         }
 
         public Selection? SelectedItems
         {
-            get { return _selectedItems; }
+            get => _selectedItems;
             private set
             {
-                if (value != _selectedItems)
-                {
-                    UnselectedItems = _selectedItems;
-                    _selectedItems = value;
-                    OnSelectionChanged();
-                }
+                if (value == _selectedItems) return;
+
+                UnselectedItems = _selectedItems;
+                _selectedItems = value;
+                OnSelectionChanged();
             }
         }
 
         public Selection? UnselectedItems { get; private set; }
 
-        public Dictionary<string, List<Gate>> CompositeGates
-        {
-            get { return _compositeGates; }
-        }
+        public Dictionary<string, List<Gate>> CompositeGates => _compositeGates;
 
         #endregion // Model Properties
 
@@ -183,9 +178,11 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
         public static ComputerModel CreateModelForParser()
         {
-            ComputerModel toReturn = new ComputerModel();
-            toReturn._registers = new ObservableCollection<RegisterModel>();
-            toReturn._steps = new ObservableCollection<StepModel>();
+            ComputerModel toReturn = new ComputerModel
+            {
+                _registers = new ObservableCollection<RegisterModel>(),
+                _steps = new ObservableCollection<StepModel>()
+            };
             return toReturn;
         }
 
@@ -553,18 +550,11 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
         public bool IsSelected(int row, int column)
         {
-            if (_selectedItems.HasValue)
-            {
-                if (column >= _selectedItems.Value.BeginColumn && column <= _selectedItems.Value.EndColumn)
-                {
-                    if (row >= _selectedItems.Value.BeginRow && row <= _selectedItems.Value.EndRow)
-                    {
-                        return true;
-                    }
-                }
-            }
+            if (!_selectedItems.HasValue) return false;
 
-            return false;
+            if (column < _selectedItems.Value.BeginColumn || column > _selectedItems.Value.EndColumn) return false;
+
+            return row >= _selectedItems.Value.BeginRow && row <= _selectedItems.Value.EndRow;
         }
 
         public void Select(int pressedRow, int row, int pressedColumn, int column)
@@ -574,137 +564,137 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
         public void Delete()
         {
-            if (_selectedItems.HasValue)
+            if (!_selectedItems.HasValue) return;
+
+            if (_selectedItems.Value.RowSpan == 1 && _selectedItems.Value.ColumnSpan == 1)
             {
-                if (_selectedItems.Value.RowSpan == 1 && _selectedItems.Value.ColumnSpan == 1)
+                int column = _selectedItems.Value.BeginColumn;
+                int row = _selectedItems.Value.BeginRow;
+                Gate oldGate = _steps[column].Gates[row];
+
+                if (oldGate.Name == GateName.Empty) return;
+
+                for (int i = oldGate.Begin; i <= oldGate.End; i++)
                 {
-                    int column = _selectedItems.Value.BeginColumn;
-                    int row = _selectedItems.Value.BeginRow;
-                    Gate oldGate = _steps[column].Gates[row];
-                    if (oldGate.Name != GateName.Empty)
+                    RegisterRefModel gateRef = GetRefFromOffset(i);
+                    Gate newGate = new EmptyGate(gateRef);
+                    _steps[column].SetGate(newGate);
+                }
+
+                if (oldGate is MultiControlledGate mcg)
+                {
+                    RegisterRefModel rowRef = GetRefFromOffset(row);
+                    if (!mcg.Controls.Contains(rowRef)) return;
+
+                    RegisterRefModel[] toRemove = { rowRef };
+                    RegisterRefModel[] newControls =
+                        mcg.Controls.Except(toRemove).ToArray();
+                    Gate toAdd;
+                    switch (mcg.Name)
                     {
-                        for (int i = oldGate.Begin; i <= oldGate.End; i++)
+                        case GateName.PhaseKick:
                         {
-                            RegisterRefModel gateRef = GetRefFromOffset(i);
-                            Gate newGate = new EmptyGate(gateRef);
-                            _steps[column].SetGate(newGate);
+                            PhaseKickGate pk = mcg as PhaseKickGate;
+                            toAdd = new PhaseKickGate(pk.Gamma, pk.Target, newControls);
+                            break;
                         }
-
-                        if (oldGate is MultiControlledGate)
+                        case GateName.CPhaseShift:
                         {
-                            MultiControlledGate mcg = oldGate as MultiControlledGate;
-                            RegisterRefModel rowRef = GetRefFromOffset(row);
-                            if (mcg.Controls.Contains<RegisterRefModel>(rowRef))
-                            {
-                                RegisterRefModel[] toRemove = new RegisterRefModel[] { rowRef };
-                                RegisterRefModel[] newControls =
-                                    mcg.Controls.Except<RegisterRefModel>(toRemove).ToArray();
-                                Gate toAdd = null;
-                                if (oldGate.Name == GateName.PhaseKick)
-                                {
-                                    PhaseKickGate pk = oldGate as PhaseKickGate;
-                                    toAdd = new PhaseKickGate(pk.Gamma, pk.Target, newControls);
-                                }
-                                else if (oldGate.Name == GateName.CPhaseShift)
-                                {
-                                    CPhaseShiftGate cps = oldGate as CPhaseShiftGate;
-                                    toAdd = new CPhaseShiftGate(cps.Dist, cps.Target, newControls);
-                                }
-                                else if (oldGate.Name == GateName.InvCPhaseShift)
-                                {
-                                    InvCPhaseShiftGate icps = oldGate as InvCPhaseShiftGate;
-                                    toAdd = new InvCPhaseShiftGate(icps.Dist, icps.Target, newControls);
-                                }
-                                else // Toffoli
-                                {
-                                    if (newControls.Length > 1)
-                                    {
-                                        toAdd = new ToffoliGate(oldGate.Target, newControls);
-                                    }
-                                    else
-                                    {
-                                        toAdd = new CNotGate(oldGate.Target, newControls[0]);
-                                    }
-                                }
-
-                                _steps[column].SetGate(toAdd);
-                            }
+                            CPhaseShiftGate cps = mcg as CPhaseShiftGate;
+                            toAdd = new CPhaseShiftGate(cps.Dist, cps.Target, newControls);
+                            break;
                         }
-                        else if (oldGate.Name == GateName.CNot)
+                        case GateName.InvCPhaseShift:
                         {
-                            if (oldGate.Control.Value.OffsetToRoot == row)
-                            {
-                                Gate toAdd = new SigmaXGate(oldGate.Target);
-                                _steps[column].SetGate(toAdd);
-                            }
+                            InvCPhaseShiftGate icps = mcg as InvCPhaseShiftGate;
+                            toAdd = new InvCPhaseShiftGate(icps.Dist, icps.Target, newControls);
+                            break;
                         }
-                        else if (oldGate is SingleGate)
+                        // Toffoli
+                        default:
                         {
-                            SingleGate sg = oldGate as SingleGate;
-                            if (sg.Control.HasValue)
+                            if (newControls.Length > 1)
                             {
-                                if (sg.Control.Value.OffsetToRoot == row)
-                                {
-                                    Gate toAdd = null;
-                                    switch (sg.Name)
-                                    {
-                                        case GateName.Hadamard:
-                                            toAdd = new HadamardGate(sg.Target);
-                                            break;
-                                        case GateName.PhaseScale:
-                                            toAdd = new PhaseScaleGate((sg as PhaseScaleGate).Gamma, sg.Target);
-                                            break;
-                                        case GateName.RotateX:
-                                            toAdd = new RotateXGate((sg as RotateXGate).Gamma, sg.Target);
-                                            break;
-                                        case GateName.RotateY:
-                                            toAdd = new RotateYGate((sg as RotateYGate).Gamma, sg.Target);
-                                            break;
-                                        case GateName.RotateZ:
-                                            toAdd = new RotateZGate((sg as RotateZGate).Gamma, sg.Target);
-                                            break;
-                                        case GateName.SigmaX:
-                                            toAdd = new SigmaXGate(sg.Target);
-                                            break;
-                                        case GateName.SigmaY:
-                                            toAdd = new SigmaYGate(sg.Target);
-                                            break;
-                                        case GateName.SigmaZ:
-                                            toAdd = new SigmaZGate(sg.Target);
-                                            break;
-                                        case GateName.SqrtX:
-                                            toAdd = new SqrtXGate(sg.Target);
-                                            break;
-                                        case GateName.Unitary:
-                                            toAdd = new UnitaryGate((sg as UnitaryGate).Matrix, sg.Target);
-                                            break;
-                                        default:
-                                            break;
-                                    }
-
-                                    _steps[column].SetGate(toAdd);
-                                }
+                                toAdd = new ToffoliGate(mcg.Target, newControls);
                             }
+                            else
+                            {
+                                toAdd = new CNotGate(mcg.Target, newControls[0]);
+                            }
+
+                            break;
                         }
                     }
+
+                    _steps[column].SetGate(toAdd);
                 }
-                else
+                else if (oldGate.Name == GateName.CNot)
                 {
-                    for (int i = _selectedItems.Value.BeginColumn; i <= _selectedItems.Value.EndColumn; i++)
+                    if (oldGate.Control.Value.OffsetToRoot != row) return;
+
+                    Gate toAdd = new SigmaXGate(oldGate.Target);
+                    _steps[column].SetGate(toAdd);
+                }
+                else if (oldGate is SingleGate { Control: { } } sg)
+                {
+                    if (sg.Control.Value.OffsetToRoot != row) return;
+
+                    Gate toAdd = null;
+                    switch (sg.Name)
                     {
-                        for (int j = _selectedItems.Value.BeginRow; j <= _selectedItems.Value.EndRow; j++)
+                        case GateName.Hadamard:
+                            toAdd = new HadamardGate(sg.Target);
+                            break;
+                        case GateName.PhaseScale:
+                            toAdd = new PhaseScaleGate((sg as PhaseScaleGate).Gamma, sg.Target);
+                            break;
+                        case GateName.RotateX:
+                            toAdd = new RotateXGate((sg as RotateXGate).Gamma, sg.Target);
+                            break;
+                        case GateName.RotateY:
+                            toAdd = new RotateYGate((sg as RotateYGate).Gamma, sg.Target);
+                            break;
+                        case GateName.RotateZ:
+                            toAdd = new RotateZGate((sg as RotateZGate).Gamma, sg.Target);
+                            break;
+                        case GateName.SigmaX:
+                            toAdd = new SigmaXGate(sg.Target);
+                            break;
+                        case GateName.SigmaY:
+                            toAdd = new SigmaYGate(sg.Target);
+                            break;
+                        case GateName.SigmaZ:
+                            toAdd = new SigmaZGate(sg.Target);
+                            break;
+                        case GateName.SqrtX:
+                            toAdd = new SqrtXGate(sg.Target);
+                            break;
+                        case GateName.Unitary:
+                            toAdd = new UnitaryGate((sg as UnitaryGate).Matrix, sg.Target);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    _steps[column].SetGate(toAdd);
+                }
+            }
+            else
+            {
+                for (int i = _selectedItems.Value.BeginColumn; i <= _selectedItems.Value.EndColumn; i++)
+                {
+                    for (int j = _selectedItems.Value.BeginRow; j <= _selectedItems.Value.EndRow; j++)
+                    {
+                        Gate oldGate = _steps[i].Gates[j];
+
+                        for (int k = oldGate.Begin; k <= oldGate.End; k++)
                         {
-                            Gate oldGate = _steps[i].Gates[j];
-
-                            for (int k = oldGate.Begin; k <= oldGate.End; k++)
-                            {
-                                RegisterRefModel gateRef = GetRefFromOffset(k);
-                                Gate newGate = new EmptyGate(gateRef);
-                                _steps[i].SetGate(newGate);
-                            }
-
-                            j = oldGate.End;
+                            RegisterRefModel gateRef = GetRefFromOffset(k);
+                            Gate newGate = new EmptyGate(gateRef);
+                            _steps[i].SetGate(newGate);
                         }
+
+                        j = oldGate.End;
                     }
                 }
             }
@@ -722,81 +712,78 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
         public void Paste()
         {
-            if (_selectedItems.HasValue)
+            if (!_selectedItems.HasValue) return;
+
+            int clickedColumn = _selectedItems.Value.BeginColumn;
+            int clickedRow = _selectedItems.Value.EndRow;
+
+            if (_clipboard == null) return;
+
+            int endColumn = clickedColumn + _clipboardSelection.Value.ColumnSpan - 1;
+            int beginRow = clickedRow - _clipboardSelection.Value.RowSpan + 1;
+
+            int rightColumn = Math.Min(endColumn, _steps.Count - 1);
+            int bottomRow = Math.Max(beginRow, 0);
+
+            int newUpperRow = bottomRow + _clipboardSelection.Value.RowSpan - 1;
+
+            // remove old gates
+            for (int i = clickedColumn; i <= rightColumn; i++)
             {
-                int clickedColumn = _selectedItems.Value.BeginColumn;
-                int clickedRow = _selectedItems.Value.EndRow;
-
-                if (_clipboard != null)
+                Gate beginGate = _steps[i].Gates[bottomRow];
+                if (beginGate.Begin < bottomRow)
                 {
-                    int endColumn = clickedColumn + _clipboardSelection.Value.ColumnSpan - 1;
-                    int beginRow = clickedRow - _clipboardSelection.Value.RowSpan + 1;
-
-                    int rightColumn = Math.Min(endColumn, _steps.Count - 1);
-                    int bottomRow = Math.Max(beginRow, 0);
-
-                    int newUpperRow = bottomRow + _clipboardSelection.Value.RowSpan - 1;
-
-                    // remove old gates
-                    for (int i = clickedColumn; i <= rightColumn; i++)
+                    for (int j = beginGate.Begin; j <= beginGate.End; j++)
                     {
-                        Gate beginGate = _steps[i].Gates[bottomRow];
-                        if (beginGate.Begin < bottomRow)
-                        {
-                            for (int j = beginGate.Begin; j <= beginGate.End; j++)
-                            {
-                                RegisterRefModel gateRef = GetRefFromOffset(j);
-                                Gate newGate = new EmptyGate(gateRef);
-                                _steps[i].SetGate(newGate);
-                            }
-                        }
-
-                        Gate endGate = _steps[i].Gates[clickedRow];
-                        if (endGate.End > clickedRow)
-                        {
-                            for (int j = endGate.Begin; j <= endGate.End; j++)
-                            {
-                                RegisterRefModel gateRef = GetRefFromOffset(j);
-                                Gate newGate = new EmptyGate(gateRef);
-                                _steps[i].SetGate(newGate);
-                            }
-                        }
+                        RegisterRefModel gateRef = GetRefFromOffset(j);
+                        Gate newGate = new EmptyGate(gateRef);
+                        _steps[i].SetGate(newGate);
                     }
+                }
 
-                    // make place, if it was too little
-                    for (int i = rightColumn; i < endColumn; i++)
-                    {
-                        InsertStepRight(i);
-                    }
+                Gate endGate = _steps[i].Gates[clickedRow];
+                if (endGate.End <= clickedRow) continue;
 
-                    for (int i = bottomRow; i > beginRow; i--)
-                    {
-                        InsertQubitBelow(_registers.Count - 1, 0);
-                    }
-
-                    // paste
-                    for (int i = 0; i < _clipboard.Count; i++)
-                    {
-                        foreach (Gate oldGate in _clipboard[i])
-                        {
-                            Gate newGate = PasteGate(oldGate, bottomRow);
-                            _steps[i + clickedColumn].SetGate(newGate);
-                        }
-                    }
-
-                    // and move selection
-                    SelectedItems = new Selection
-                    (bottomRow,
-                        newUpperRow,
-                        clickedColumn,
-                        endColumn);
+                for (int j = endGate.Begin; j <= endGate.End; j++)
+                {
+                    RegisterRefModel gateRef = GetRefFromOffset(j);
+                    Gate newGate = new EmptyGate(gateRef);
+                    _steps[i].SetGate(newGate);
                 }
             }
+
+            // make place, if it was too little
+            for (int i = rightColumn; i < endColumn; i++)
+            {
+                InsertStepRight(i);
+            }
+
+            for (int i = bottomRow; i > beginRow; i--)
+            {
+                InsertQubitBelow(_registers.Count - 1, 0);
+            }
+
+            // paste
+            for (int i = 0; i < _clipboard.Count; i++)
+            {
+                foreach (Gate oldGate in _clipboard[i])
+                {
+                    Gate newGate = PasteGate(oldGate, bottomRow);
+                    _steps[i + clickedColumn].SetGate(newGate);
+                }
+            }
+
+            // and move selection
+            SelectedItems = new Selection
+            (bottomRow,
+                newUpperRow,
+                clickedColumn,
+                endColumn);
         }
 
         public List<Gate> GetSelectedGates()
         {
-            List<Gate> selected = null;
+            List<Gate> selected;
             if (_selectedItems.HasValue)
             {
                 selected = new List<Gate>();
@@ -804,17 +791,16 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
                 {
                     for (int j = _selectedItems.Value.BeginRow; j <= _selectedItems.Value.EndRow; j++)
                     {
-                        if ((_steps[i].Gates[j].Begin >= _selectedItems.Value.BeginRow) &&
-                            (_steps[i].Gates[j].End <= _selectedItems.Value.EndRow))
-                        {
-                            Gate oldGate = _steps[i].Gates[j];
-                            if (oldGate.Name != GateName.Empty)
-                            {
-                                selected.Add(oldGate.Copy(_selectedItems.Value.BeginRow));
-                            }
+                        if ((_steps[i].Gates[j].Begin < _selectedItems.Value.BeginRow) ||
+                            (_steps[i].Gates[j].End > _selectedItems.Value.EndRow)) continue;
 
-                            j = oldGate.End;
+                        Gate oldGate = _steps[i].Gates[j];
+                        if (oldGate.Name != GateName.Empty)
+                        {
+                            selected.Add(oldGate.Copy(_selectedItems.Value.BeginRow));
                         }
+
+                        j = oldGate.End;
                     }
                 }
 
@@ -839,7 +825,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
             {
                 Register = null,
                 Offset = 0,
-                Width = toGroup.Select<Gate, int>(x => x.End).Max() + 1
+                Width = toGroup.Select(x => x.End).Max() + 1
             };
             CompositeGate cg = new CompositeGate(name, target);
 
@@ -871,8 +857,6 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
             _compositeGates[name] = toGroup;
 
-            //CompositeGate cg = new CompositeGate(name, toGroup, target);
-
             Gate toPaste = PasteGate(cg, _selectedItems.Value.BeginRow);
 
             bool notPasted = true;
@@ -888,20 +872,18 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
                 i++;
             }
 
-            if (notPasted)
-            {
-                InsertStepLeft(_selectedItems.Value.BeginColumn);
-                _steps[_selectedItems.Value.BeginColumn].SetGate(toPaste);
-            }
+            if (!notPasted) return;
+
+            InsertStepLeft(_selectedItems.Value.BeginColumn);
+            _steps[_selectedItems.Value.BeginColumn].SetGate(toPaste);
         }
 
         public int MinWidthForComposite(string name)
         {
-            List<Gate> result = null;
-            _compositeGates.TryGetValue(name, out result);
-            if (result != null && result.Count > 0)
+            _compositeGates.TryGetValue(name, out List<Gate> result);
+            if (result is { Count: > 0 })
             {
-                int minWidth = result.Select<Gate, int>(x => x.End).Max() + 1;
+                int minWidth = result.Select(x => x.End).Max() + 1;
                 return minWidth;
             }
             else
@@ -912,20 +894,15 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
         public List<Gate> FindComposite(string name)
         {
-            List<Gate> result = null;
-            _compositeGates.TryGetValue(name, out result);
+            _compositeGates.TryGetValue(name, out List<Gate> result);
             return result;
         }
 
         public List<Gate> GetActualGates(CompositeGate cg)
         {
-            List<Gate> defined;
-            if (_compositeGates.TryGetValue(cg.FunctionName, out defined))
-            {
-                return defined.Select<Gate, Gate>(x => PasteGate(x, cg.Begin)).ToList();
-            }
-
-            return null;
+            return _compositeGates.TryGetValue(cg.FunctionName, out List<Gate> defined)
+                ? defined.Select<Gate, Gate>(x => PasteGate(x, cg.Begin)).ToList()
+                : null;
         }
 
         #endregion // Public Methods
@@ -935,43 +912,41 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
         private void CutCopy(bool cut)
         {
-            if (_selectedItems.HasValue)
+            if (!_selectedItems.HasValue) return;
+
+            _clipboard = new List<List<Gate>>();
+
+            _clipboardSelection = new Selection(
+                0,
+                _selectedItems.Value.RowSpan - 1,
+                0,
+                _selectedItems.Value.ColumnSpan - 1);
+
+            for (int i = _selectedItems.Value.BeginColumn; i <= _selectedItems.Value.EndColumn; i++)
             {
-                _clipboard = new List<List<Gate>>();
+                List<Gate> current = new List<Gate>();
+                _clipboard.Add(current);
 
-                _clipboardSelection = new Selection(
-                    0,
-                    _selectedItems.Value.RowSpan - 1,
-                    0,
-                    _selectedItems.Value.ColumnSpan - 1);
-
-                for (int i = _selectedItems.Value.BeginColumn; i <= _selectedItems.Value.EndColumn; i++)
+                for (int j = _selectedItems.Value.BeginRow; j <= _selectedItems.Value.EndRow; j++)
                 {
-                    List<Gate> current = new List<Gate>();
-                    _clipboard.Add(current);
+                    if ((_steps[i].Gates[j].Begin < _selectedItems.Value.BeginRow) ||
+                        (_steps[i].Gates[j].End > _selectedItems.Value.EndRow)) continue;
 
-                    for (int j = _selectedItems.Value.BeginRow; j <= _selectedItems.Value.EndRow; j++)
+                    Gate oldGate = _steps[i].Gates[j];
+
+                    current.Add(oldGate.Copy(_selectedItems.Value.BeginRow));
+
+                    if (cut && oldGate.Name != GateName.Empty)
                     {
-                        if ((_steps[i].Gates[j].Begin >= _selectedItems.Value.BeginRow) &&
-                            (_steps[i].Gates[j].End <= _selectedItems.Value.EndRow))
+                        for (; j <= oldGate.End; j++)
                         {
-                            Gate oldGate = _steps[i].Gates[j];
-
-                            current.Add(oldGate.Copy(_selectedItems.Value.BeginRow));
-
-                            if (cut && oldGate.Name != GateName.Empty)
-                            {
-                                for (; j <= oldGate.End; j++)
-                                {
-                                    RegisterRefModel gateRef = GetRefFromOffset(j);
-                                    Gate newGate = new EmptyGate(gateRef);
-                                    _steps[i].SetGate(newGate);
-                                }
-                            }
-
-                            j = oldGate.End;
+                            RegisterRefModel gateRef = GetRefFromOffset(j);
+                            Gate newGate = new EmptyGate(gateRef);
+                            _steps[i].SetGate(newGate);
                         }
                     }
+
+                    j = oldGate.End;
                 }
             }
         }
@@ -1017,8 +992,8 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
                     }
                 case GateName.CPhaseShift:
                     CPhaseShiftGate cps = gate as CPhaseShiftGate;
-                    RegisterRefModel[] controls = cps.Controls.Select<RegisterRefModel, RegisterRefModel>(x =>
-                        GetRefFromOffset(x.OffsetToRoot + referenceBeginRow)).ToArray<RegisterRefModel>();
+                    RegisterRefModel[] controls = cps.Controls.Select(x =>
+                        GetRefFromOffset(x.OffsetToRoot + referenceBeginRow)).ToArray();
                     return new CPhaseShiftGate(cps.Dist, targetRef, controls);
                 case GateName.Empty:
                     return new EmptyGate(targetRef);
@@ -1026,8 +1001,8 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
                     return new HadamardGate(targetRef, controlRef);
                 case GateName.InvCPhaseShift:
                     InvCPhaseShiftGate icps = gate as InvCPhaseShiftGate;
-                    RegisterRefModel[] icontrols = icps.Controls.Select<RegisterRefModel, RegisterRefModel>(x =>
-                        GetRefFromOffset(x.OffsetToRoot + referenceBeginRow)).ToArray<RegisterRefModel>();
+                    RegisterRefModel[] icontrols = icps.Controls.Select(x =>
+                        GetRefFromOffset(x.OffsetToRoot + referenceBeginRow)).ToArray();
                     return new InvCPhaseShiftGate(icps.Dist, targetRef, icontrols);
                 case GateName.Measure:
                     MeasureGate mg = gate as MeasureGate;
@@ -1036,8 +1011,8 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
                     return new MeasureGate(beginRef, endRef);
                 case GateName.PhaseKick:
                     PhaseKickGate pk = gate as PhaseKickGate;
-                    RegisterRefModel[] controls1 = pk.Controls.Select<RegisterRefModel, RegisterRefModel>(x =>
-                        GetRefFromOffset(x.OffsetToRoot + referenceBeginRow)).ToArray<RegisterRefModel>();
+                    RegisterRefModel[] controls1 = pk.Controls.Select(x =>
+                        GetRefFromOffset(x.OffsetToRoot + referenceBeginRow)).ToArray();
                     return new PhaseKickGate(pk.Gamma, targetRef, controls1);
                 case GateName.PhaseScale:
                     PhaseScaleGate ps = gate as PhaseScaleGate;
@@ -1061,8 +1036,8 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
                     return new SqrtXGate(targetRef, controlRef);
                 case GateName.Toffoli:
                     ToffoliGate t = gate as ToffoliGate;
-                    RegisterRefModel[] tcontrols = t.Controls.Select<RegisterRefModel, RegisterRefModel>(x =>
-                        GetRefFromOffset(x.OffsetToRoot + referenceBeginRow)).ToArray<RegisterRefModel>();
+                    RegisterRefModel[] tcontrols = t.Controls.Select(x =>
+                        GetRefFromOffset(x.OffsetToRoot + referenceBeginRow)).ToArray();
                     return new ToffoliGate(targetRef, tcontrols);
                 case GateName.Unitary:
                     UnitaryGate u = gate as UnitaryGate;
@@ -1074,49 +1049,48 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
         private ParametricGate PasteParametricGate(ParametricGate gate, int referenceBeginRow)
         {
-            Func<RegisterRefModel, RegisterRefModel> pasteRegRef = rrm =>
-            {
-                return GetRefFromOffset(rrm.OffsetToRoot + referenceBeginRow);
-            };
+            RegisterRefModel PasteRegRef(RegisterRefModel rrm) =>
+                GetRefFromOffset(rrm.OffsetToRoot + referenceBeginRow);
 
-            Func<RegisterPartModel, RegisterPartModel> pasteRegPart = rpm =>
+            RegisterPartModel PasteRegPart(RegisterPartModel rpm)
             {
                 RegisterRefModel beginRef = GetRefFromOffset(rpm.OffsetToRoot + referenceBeginRow);
                 int width = Math.Min(beginRef.Register.Qubits.Count - beginRef.Offset, rpm.Width);
 
-                return new RegisterPartModel()
-                {
-                    Register = beginRef.Register,
-                    Offset = beginRef.Offset,
-                    Width = width
-                };
-            };
+                return new RegisterPartModel { Register = beginRef.Register, Offset = beginRef.Offset, Width = width };
+            }
 
             object[] parameters = gate.Parameters;
             object[] newPars = new object[parameters.Length];
             for (int i = 0; i < parameters.Length; i++)
             {
-                if (parameters[i] is RegisterRefModel)
+                switch (parameters[i])
                 {
-                    newPars[i] = pasteRegRef((RegisterRefModel)parameters[i]);
-                }
-                else if (parameters[i] is RegisterPartModel)
-                {
-                    newPars[i] = pasteRegPart((RegisterPartModel)parameters[i]);
-                }
-                else if (parameters[i].GetType() == typeof(RegisterRefModel[]))
-                {
-                    newPars[i] = (parameters[i] as RegisterRefModel[])
-                        .Select<RegisterRefModel, RegisterRefModel>(x => pasteRegRef(x)).ToArray();
-                }
-                else if (parameters[i].GetType() == typeof(RegisterPartModel[]))
-                {
-                    newPars[i] = (parameters[i] as RegisterPartModel[])
-                        .Select<RegisterPartModel, RegisterPartModel>(x => pasteRegPart(x)).ToArray();
-                }
-                else
-                {
-                    newPars[i] = parameters[i];
+                    case RegisterRefModel:
+                        newPars[i] = PasteRegRef((RegisterRefModel)parameters[i]);
+                        break;
+                    case RegisterPartModel:
+                        newPars[i] = PasteRegPart((RegisterPartModel)parameters[i]);
+                        break;
+                    default:
+                    {
+                        if (parameters[i].GetType() == typeof(RegisterRefModel[]))
+                        {
+                            newPars[i] = (parameters[i] as RegisterRefModel[])
+                                .Select(PasteRegRef).ToArray();
+                        }
+                        else if (parameters[i].GetType() == typeof(RegisterPartModel[]))
+                        {
+                            newPars[i] = (parameters[i] as RegisterPartModel[])
+                                .Select(PasteRegPart).ToArray();
+                        }
+                        else
+                        {
+                            newPars[i] = parameters[i];
+                        }
+
+                        break;
+                    }
                 }
             }
 

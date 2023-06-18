@@ -41,7 +41,7 @@
                         HorizontalAlignment="Stretch"
                         Margin="2"
                         Items="{Binding RegistersNames}"
-                        SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
+                        SelectedItem="{Binding SelectedRegister, Mode=TwoWay}"
                         SelectionChanged="RegisterBox_OnSelectionChanged" IsTextSearchEnabled="True">
                     </ComboBox>
                 </Grid>

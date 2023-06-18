@@ -41,11 +41,9 @@ public partial class OutputGrid : UserControl
         {
             // has to be here, because on initial window loading is executed before DataContext is set.
             // After that it wont ever be null again
-            if (_dataContext is null) return;
+            //if (_dataContext is null) return;
 
-            // could be simplified in future to just use binding to _dataContext._selectedRegister.Value as reactive Property
-            // TODO: fires null exception when not selected and bitFlip operation, SelectedIndex is -1 ??
-            _dataContext.SetRegister(registerBox.SelectedItem.ToString());
+            //_dataContext.SetRegister(registerBox.SelectedItem.ToString());
             statesList.Focus();
         }
         catch (Exception ex)

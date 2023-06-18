@@ -48,7 +48,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
         public string Name
         {
-            get { return _name; }
+            get => _name;
             set
             {
                 if (!string.IsNullOrWhiteSpace(value))
@@ -58,19 +58,13 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
             }
         }
 
-        public int Index
-        {
-            get { return _index; }
-        }
+        public int Index => _index;
 
-        public int OffsetToRoot
-        {
-            get { return _offsetToRoot; }
-        }
+        public int OffsetToRoot => _offsetToRoot;
 
         public Dictionary<ulong, Complex> InitStates
         {
-            get { return _initStates; }
+            get => _initStates;
             set
             {
                 _initStates = value;
@@ -89,7 +83,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
                 return _qubits;
             }
-            set { _qubits = value; }
+            set => _qubits = value;
         }
 
         #endregion // Model Properties
@@ -237,33 +231,30 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
             HashSet<ulong> done = new HashSet<ulong>();
             ulong[] states = _initStates.Keys.ToArray<ulong>();
             int length = states.Length;
-            Complex t, tnot;
             for (int k = 0; k < length; k++)
             {
                 ulong state = states[k];
-                if (!done.Contains(state))
+                if (done.Contains(state)) continue;
+
+                // Flip the target bit of each basis state
+                //state ^= ((ulong)1 << target);
+                ulong reversedTargetState = state ^ ((ulong)1 << index);
+
+                var t = _initStates[state];
+
+                bool reversedTargetStateExist =
+                    _initStates.TryGetValue(reversedTargetState, out var tnot);
+
+                _initStates[reversedTargetState] = t;
+
+                if (reversedTargetStateExist)
                 {
-                    // Flip the target bit of each basis state
-                    //state ^= ((ulong)1 << target);
-                    ulong reversedTargetState = state ^ ((ulong)1 << index);
-
-                    tnot = 0;
-                    t = _initStates[state];
-
-                    bool reversedTargetStateExist =
-                        _initStates.TryGetValue(reversedTargetState, out tnot);
-
-                    _initStates[reversedTargetState] = t;
-
-                    if (reversedTargetStateExist)
-                    {
-                        _initStates[state] = tnot;
-                        done.Add(reversedTargetState);
-                    }
-                    else
-                    {
-                        _initStates.Remove(state);
-                    }
+                    _initStates[state] = tnot;
+                    done.Add(reversedTargetState);
+                }
+                else
+                {
+                    _initStates.Remove(state);
                 }
             }
         }
@@ -277,13 +268,15 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
             if (_initStates == null || _initStates.Count == 0)
             {
-                _initStates = new Dictionary<ulong, Complex>();
-                _initStates[0] = Complex.One;
+                _initStates = new Dictionary<ulong, Complex>
+                {
+                    [0] = Complex.One
+                };
             }
 
             if (_initStates.Count == 1)
             {
-                ulong tmpState = _initStates.Keys.First<ulong>();
+                ulong tmpState = _initStates.Keys.First();
                 int i = 0;
                 while (tmpState > 0 && i < _qubits.Count)
                 {
@@ -296,7 +289,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
                         _qubits[i] = QubitModel.Zero;
                     }
 
-                    tmpState = tmpState / 2;
+                    tmpState /= 2;
                     i++;
                 }
 
@@ -321,25 +314,20 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
             if (_initStates == null || _initStates.Count == 0)
             {
-                _initStates = new Dictionary<ulong, Complex>();
-                _initStates[0] = Complex.One;
+                _initStates = new Dictionary<ulong, Complex>
+                {
+                    [0] = Complex.One
+                };
             }
 
             if (_initStates.Count == 1)
             {
-                ulong tmpState = _initStates.Keys.First<ulong>();
+                ulong tmpState = _initStates.Keys.First();
                 while (tmpState > 0)
                 {
-                    if (tmpState % 2 > 0)
-                    {
-                        qubits.Add(QubitModel.One);
-                    }
-                    else
-                    {
-                        qubits.Add(QubitModel.Zero);
-                    }
+                    qubits.Add(tmpState % 2 > 0 ? QubitModel.One : QubitModel.Zero);
 
-                    tmpState = tmpState / 2;
+                    tmpState /= 2;
                 }
 
                 while (qubits.Count < initWidth)
