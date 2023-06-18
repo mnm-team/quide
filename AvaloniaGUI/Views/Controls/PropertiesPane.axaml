@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:AvaloniaGUI.ViewModels.Controls"
              xmlns:p="clr-namespace:AvaloniaGUI.Properties"
+             xmlns:codeHelpers="clr-namespace:AvaloniaGUI.CodeHelpers"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AvaloniaGUI.Views.Controls.PropertiesPane"
              x:DataType="vm:PropertiesViewModel">
@@ -16,14 +17,16 @@
         <!--<Style x:Key="FlatRadioButton" BasedOn="{StaticResource {x:Static ToolBar.RadioButtonStyleKey}}" Selector="RadioButton" />
         <Style x:Key="FlatButton" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Selector="Button" />
         <Style x:Key="FlatComboBox" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}" Selector="ComboBox" />-->
+        <codeHelpers:ImageConverter x:Key="ImageConverter" />
     </UserControl.Resources>
 
     <Grid x:Name="LayoutRoot"
-          Background="White">
+          Background="White" Margin="5">
+
+        <!-- State infos -->
         <Grid x:Name="StatePane"
               IsVisible="{Binding StatePaneVisibility}" ColumnDefinitions="*,*"
               RowDefinitions="Auto,Auto,Auto,Auto,Auto">
-
             <TextBlock Text="{x:Static p:Resources.Value}"
                        Margin="3"
                        Grid.Column="0"
@@ -66,6 +69,8 @@
                        Grid.Column="1"
                        Grid.Row="4"
                        HorizontalAlignment="Left" />
+
+            <!-- probability circle -->
             <Canvas
                 IsVisible="{Binding AmplitudeVisibility}"
                 Grid.Row="0"
@@ -97,6 +102,7 @@
             </Canvas>
         </Grid>
 
+        <!-- Matrix pane: RotateGates -->
         <Grid x:Name="RotateGatePane"
               IsVisible="{Binding RotateGateVisibility}" ColumnDefinitions="Auto,*,Auto,Auto,10"
               RowDefinitions="Auto,Auto,Auto,Auto,Auto">
@@ -182,12 +188,13 @@
                 Grid.Row="4"
                 Grid.ColumnSpan="5" Grid.Column="0"
                 RenderOptions.BitmapInterpolationMode="{x:Static vm:PropertiesViewModel.ScalingQuality}"
-                Source="{Binding ImageSource}" />
+                Source="{Binding ImageSource, Converter={StaticResource ImageConverter}}" />
             <!-- TODO: right?
             RenderOptions.BitmapScalingMode="NearestNeighbor"-->
 
         </Grid>
 
+        <!-- Matrix pane: PhaseShift -->
         <Grid x:Name="PhaseShiftPane"
               IsVisible="{Binding PhaseShiftVisibility}" RowDefinitions="Auto,Auto,Auto,Auto"
               ColumnDefinitions="Auto,*,Auto,10">
@@ -229,9 +236,10 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 RenderOptions.BitmapInterpolationMode="{x:Static vm:PropertiesViewModel.ScalingQuality}"
-                Source="{Binding ImageSource}" />
+                Source="{Binding ImageSource, Converter={StaticResource ImageConverter}}" />
         </Grid>
 
+        <!-- Matrix pane: Gate -->
         <Grid x:Name="GatePane"
               IsVisible="{Binding GatePaneVisibility}" RowDefinitions="Auto,Auto">
 
@@ -247,9 +255,10 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 RenderOptions.BitmapInterpolationMode="{x:Static vm:PropertiesViewModel.ScalingQuality}"
-                Source="{Binding ImageSource}" />
+                Source="{Binding ImageSource, Converter={StaticResource ImageConverter}}" />
         </Grid>
 
+        <!-- Matrix pane: Unitary -->
         <Grid x:Name="UnitaryPane"
               IsVisible="{Binding UnitaryPaneVisibility}" ColumnDefinitions="Auto,*,*,Auto"
               RowDefinitions="Auto,Auto,Auto,Auto,Auto">
@@ -351,6 +360,7 @@
             </StackPanel>
         </Grid>
 
+        <!-- Matrix pane: Composite -->
         <Grid x:Name="CompositePane"
               IsVisible="{Binding CompositePaneVisibility}" RowDefinitions="Auto,Auto,Auto"
               ColumnDefinitions="10,Auto,Auto,*,Auto,10">

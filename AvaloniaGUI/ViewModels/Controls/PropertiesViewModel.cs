@@ -556,22 +556,24 @@ public class PropertiesViewModel : ViewModelBase
         {
             if (_selectedType == SelectedType.State) return null;
 
+            const string imagePath = $"/Assets/Images/";
+
             return _selectedGate.Value.Name switch
             {
-                GateName.CNot => "/QuIDE;component/Images/imgCNot.gif",
-                GateName.CPhaseShift => "/QuIDE;component/Images/imgRk.gif",
-                GateName.Hadamard => "/QuIDE;component/Images/imgH.gif",
-                GateName.InvCPhaseShift => "/QuIDE;component/Images/imgInvRk.gif",
-                GateName.PhaseKick => "/QuIDE;component/Images/imgR.gif",
-                GateName.PhaseScale => "/QuIDE;component/Images/imgTheta.gif",
-                GateName.RotateX => "/QuIDE;component/Images/imgRx.gif",
-                GateName.RotateY => "/QuIDE;component/Images/imgRy.gif",
-                GateName.RotateZ => "/QuIDE;component/Images/imgRz.gif",
-                GateName.SigmaX => "/QuIDE;component/Images/imgSigmaX.gif",
-                GateName.SigmaY => "/QuIDE;component/Images/imgSigmaY.gif",
-                GateName.SigmaZ => "/QuIDE;component/Images/imgSigmaZ.gif",
-                GateName.SqrtX => "/QuIDE;component/Images/imgSqrtX.gif",
-                GateName.Toffoli => "/QuIDE;component/Images/imgToffoliSmall.gif",
+                GateName.CNot => $"{imagePath}imgCNot.gif",
+                GateName.CPhaseShift => $"{imagePath}imgRk.gif",
+                GateName.Hadamard => $"{imagePath}imgH.gif",
+                GateName.InvCPhaseShift => $"{imagePath}imgInvRk.gif",
+                GateName.PhaseKick => $"{imagePath}imgR.gif",
+                GateName.PhaseScale => $"{imagePath}imgTheta.gif",
+                GateName.RotateX => $"{imagePath}imgRx.gif",
+                GateName.RotateY => $"{imagePath}imgRy.gif",
+                GateName.RotateZ => $"{imagePath}imgRz.gif",
+                GateName.SigmaX => $"{imagePath}imgSigmaX.gif",
+                GateName.SigmaY => $"{imagePath}imgSigmaY.gif",
+                GateName.SigmaZ => $"{imagePath}imgSigmaZ.gif",
+                GateName.SqrtX => $"{imagePath}imgSqrtX.gif",
+                GateName.Toffoli => $"{imagePath}imgToffoliSmall.gif",
                 _ => null
             } ?? string.Empty;
         }

@@ -92,26 +92,36 @@
                                                     <StackPanel.RenderTransform>
                                                         <ScaleTransform ScaleX="1" ScaleY="-1" />
                                                     </StackPanel.RenderTransform>
+                                                    
+                                                    <!-- First Vertical Line -->
                                                     <Rectangle
                                                         Width="5"
                                                         Height="{x:Static vm:CircuitGridViewModel.QubitSize}"
                                                         Fill="{DynamicResource ImgQubitBegin}" />
+                                                    
+                                                    <!-- RegisterName (X,..) -->
                                                     <TextBlock
                                                         Text="{Binding RegisterName}"
                                                         FontSize="30"
                                                         FontFamily="Times New Roman"
                                                         FontStyle="Oblique"
                                                         VerticalAlignment="Center" />
+                                                    
+                                                    <!-- Lowercase index -->
                                                     <TextBlock
                                                         Text="{Binding Index}"
                                                         FontSize="20"
                                                         FontFamily="Times New Roman"
                                                         FontStyle="Oblique"
                                                         VerticalAlignment="Bottom" />
+                                                    
+                                                    <!-- First Qubit arrow -->
                                                     <Rectangle
                                                         Width="20"
                                                         Height="{x:Static vm:CircuitGridViewModel.QubitSize}"
                                                         Fill="{DynamicResource ImgQubitEnd}" />
+                                                    
+                                                    <!-- Equals sign -->
                                                     <TextBlock
                                                         Text="= "
                                                         FontSize="30"

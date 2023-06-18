@@ -686,7 +686,7 @@
     <!-- DataTemplate for Origins -->
     <DataTemplate x:Key="OriginsDataTemplate">
         <Grid Width="370" Background="#AA000000">
-            <TextBlock Foreground="#22ffffff" Margin="4+0,2+0" FontSize="30" Text="{Binding Name}"/>
+            <TextBlock Foreground="#22ffffff" Margin="4,2" FontSize="30" Text="{Binding Name}"/>
             <StackPanel HorizontalAlignment="Right" Margin="0, 0, 8, 0">
                 <TextBlock Text="count: " Foreground="White"/>
                 <TextBlock HorizontalAlignment="Right" Foreground="White" 
