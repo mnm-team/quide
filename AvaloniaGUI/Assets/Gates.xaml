@@ -1990,7 +1990,7 @@
                                 <Pen LineJoin="Round" Brush="#FF000000" />
                             </GeometryDrawing.Pen>
                             <GeometryDrawing.Brush>
-                                <ImageBrush Stretch="None" Source="Gates_files/image0.png"
+                                <ImageBrush Stretch="None" Source="Gates_files/image0_flipped.png"
                                             TileMode="Tile">
                                     <!-- Viewport="0,0,200,200" ViewportUnits="Absolute"-->
                                     <!--<VisualBrush.Transform> TODO: image should be flipped and scaled
