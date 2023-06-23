@@ -1977,7 +1977,7 @@
             </Image>
         </VisualBrush.Visual>
     </VisualBrush>
-    <VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ComplexPlane" Stretch="Uniform">
+    <!--<VisualBrush RenderOptions.BitmapInterpolationMode="LowQuality" x:Key="ComplexPlane">
         <VisualBrush.Visual>
             <Image>
                 <DrawingImage>
@@ -1990,12 +1990,11 @@
                                 <Pen LineJoin="Round" Brush="#FF000000" />
                             </GeometryDrawing.Pen>
                             <GeometryDrawing.Brush>
-                                <ImageBrush Source="Gates_files/image0_flipped.png" TileMode="Tile">
-                                    <!-- Viewport="0,0,200,200" ViewportUnits="Absolute"-->
-                                    <!--<VisualBrush.Transform> TODO: image should be flipped and scaled
+                                <ImageBrush Source="Gates_files/image0_flipped.png" TileMode="Tile" />
+                                ~1~ Viewport="0,0,200,200" ViewportUnits="Absolute"@1@
+                                ~1~<VisualBrush.Transform> TODO: image should be flipped and scaled
                                 <MatrixTransform Matrix="1.33317,0,0,1.33317,-67.7,1232.4" />
-                            </VisualBrush.Transform>-->
-                                </ImageBrush>
+                            </VisualBrush.Transform>@1@
                             </GeometryDrawing.Brush>
                         </GeometryDrawing>
                         <GeometryDrawing Brush="#FF000000"
@@ -2014,5 +2013,7 @@
                 </DrawingImage>
             </Image>
         </VisualBrush.Visual>
-    </VisualBrush>
+    </VisualBrush>-->
+    <ImageBrush x:Key="ComplexPlane" RenderOptions.BitmapInterpolationMode="LowQuality"
+                Source="/Assets/Gates_files/ComplexPlane.png" />
 </ResourceDictionary>

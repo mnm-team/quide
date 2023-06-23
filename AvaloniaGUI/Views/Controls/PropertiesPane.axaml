@@ -80,21 +80,22 @@
                 Background="{DynamicResource ComplexPlane}"
                 Opacity="0.75"
                 Margin="5">
+
                 <Line
-                    Canvas.Top="90"
-                    Canvas.Left="90"
-                    Stroke="Black" StrokeLineCap="Round"
-                    StrokeThickness="4"
+                    Canvas.Top="100"
+                    Canvas.Left="79"
+                    Stroke="Black" StrokeLineCap="Square"
+                    StrokeThickness="4" Opacity="1"
                     StartPoint="0,0" EndPoint="{Binding StatePaneLineEnd}" />
                 <!-- TODO: check if correct
                 StrokeStartLineCap="Round"
                 StrokeEndLineCap="Triangle"-->
                 <Polygon
-                    Canvas.Top="90"
-                    Canvas.Left="90"
-                    Points="60,-6 75,0, 60,6"
-                    Stroke="Black"
-                    Fill="Black">
+                    Canvas.Top="100"
+                    Canvas.Left="80"
+                    Points="{Binding ArrowPositions}"
+                    Stroke="Black" Opacity="1"
+                    Fill="Black" RenderTransformOrigin="0,0">
                     <Polygon.RenderTransform>
                         <RotateTransform Angle="{Binding Phase}" />
                     </Polygon.RenderTransform>

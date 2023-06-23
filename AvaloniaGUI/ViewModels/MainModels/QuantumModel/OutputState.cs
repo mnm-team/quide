@@ -69,36 +69,18 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
 
         #region Model Properties
 
-        public double Probability
-        {
-            get { return _probability; }
-            //set { _probability = value; }
-        }
+        public double Probability => _probability;
 
-        public char[] Bits
-        {
-            get { return _bits; }
-        }
+        //set { _probability = value; }
+        public char[] Bits => _bits;
 
-        public Complex? Amplitude
-        {
-            get { return _amplitute; }
-        }
+        public Complex? Amplitude => _amplitute;
 
-        public ulong Value
-        {
-            get { return _value; }
-        }
+        public ulong Value => _value;
 
-        public string Representation
-        {
-            get { return _representation; }
-        }
+        public string Representation => _representation;
 
-        public int Width
-        {
-            get { return _width; }
-        }
+        public int Width => _width;
 
         #endregion // Model Properties
 
@@ -117,12 +99,12 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
             {
                 char bit = (value % 2) == 1 ? '1' : '0';
                 _bits[i] = bit;
-                representation.Insert(0, bit.ToString());
-                value = value / 2;
+                representation.Insert(0, bit);
+                value /= 2;
             }
 
             representation.Insert(0, "|");
-            representation.Append(">");
+            representation.Append('>');
             _representation = representation.ToString();
         }
 

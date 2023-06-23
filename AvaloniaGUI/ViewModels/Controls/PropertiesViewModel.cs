@@ -223,6 +223,20 @@ public class PropertiesViewModel : ViewModelBase
         }
     }
 
+    public List<Point> ArrowPositions
+    {
+        get
+        {
+            var lineReference = StatePaneLineEnd;
+
+            var bottom = new Point(lineReference.X, lineReference.Y - 6);
+            var right = new Point(lineReference.X + 15, lineReference.Y);
+            var top = new Point(lineReference.X, lineReference.Y + 6);
+
+            return new List<Point> { bottom, right, top };
+        }
+    }
+
     public Point StatePaneLineEnd => _selectedState is { Amplitude: { } }
         ? new Point(_lineLength * Math.Cos(_selectedState.Amplitude.Value.Phase),
             -_lineLength * Math.Sin(_selectedState.Amplitude.Value.Phase))
