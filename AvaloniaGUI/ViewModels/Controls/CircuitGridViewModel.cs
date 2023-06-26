@@ -6,6 +6,7 @@ using System.Collections.Specialized;
 using Avalonia;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using AvaloniaGUI.CodeHelpers;
 using AvaloniaGUI.ViewModels.Helpers;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel;
 
@@ -49,20 +50,25 @@ public class CircuitGridViewModel : ViewModelBase
 
     private GateViewModel _selectedObject;
 
+    private readonly DialogManager _dialogManager;
+
     #endregion // Fields
 
 
     #region Constructor
 
     //only for design
-    public CircuitGridViewModel()
-        : this(ComputerModel.CreateModelForGUI())
+    public CircuitGridViewModel(DialogManager dialogManager)
+        : this(ComputerModel.CreateModelForGUI(), dialogManager)
     {
     }
 
-    public CircuitGridViewModel(ComputerModel model)
+    public CircuitGridViewModel(ComputerModel model, DialogManager dialogManager)
     {
         _model = model;
+        _dialogManager = dialogManager;
+
+        // they need dialogManager
         _registers = CreateRegistersFromModel();
         _steps = CreateStepsFromModel();
 
@@ -139,11 +145,10 @@ public class CircuitGridViewModel : ViewModelBase
         get => _scaleFactor;
         private set
         {
-            if (value != _scaleFactor)
-            {
-                _scaleFactor = value;
-                OnPropertyChanged(nameof(ScaleFactor));
-            }
+            if (value == _scaleFactor) return;
+
+            _scaleFactor = value;
+            OnPropertyChanged(nameof(ScaleFactor));
         }
     }
 
@@ -186,7 +191,7 @@ public class CircuitGridViewModel : ViewModelBase
             _steps[_currentStep].SetAsCurrent();
         }
 
-        OnPropertyChanged("AddQubitEnabled");
+        OnPropertyChanged("AddQubitEnabled"); // TODO: remove??
     }
 
     void _model_SelectionChanged(object? sender, EventArgs eventArgs)
@@ -248,7 +253,7 @@ public class CircuitGridViewModel : ViewModelBase
         ObservableCollection<StepViewModel> steps = new ObservableCollection<StepViewModel>();
         for (int i = 0; i < _model.Steps.Count; i++)
         {
-            steps.Add(new StepViewModel(_model, i));
+            steps.Add(new StepViewModel(_model, i, _dialogManager));
         }
 
         steps[_model.CurrentStep].SetAsCurrent();
@@ -265,7 +270,7 @@ public class CircuitGridViewModel : ViewModelBase
                 int newColumn = e.NewStartingIndex;
                 if (step != null)
                 {
-                    Steps.Insert(newColumn, new StepViewModel(_model, newColumn));
+                    Steps.Insert(newColumn, new StepViewModel(_model, newColumn, _dialogManager));
                     for (int i = newColumn + 1; i < _steps.Count; i++)
                     {
                         _steps[i].IncrementColumn();
@@ -329,17 +334,16 @@ public class CircuitGridViewModel : ViewModelBase
                             _registers[i].IncrementIndex();
                         }
 
-                        if (_registers.Count == 2)
-                        {
-                            foreach (QubitViewModel qubit in _registers[0].Qubits)
-                            {
-                                qubit.UpdateDeleteRegisterCommand(true);
-                            }
+                        if (_registers.Count != 2) continue;
 
-                            foreach (QubitViewModel qubit in _registers[1].Qubits)
-                            {
-                                qubit.UpdateDeleteRegisterCommand(true);
-                            }
+                        foreach (QubitViewModel qubit in _registers[0].Qubits)
+                        {
+                            qubit.UpdateDeleteRegisterCommand(true);
+                        }
+
+                        foreach (QubitViewModel qubit in _registers[1].Qubits)
+                        {
+                            qubit.UpdateDeleteRegisterCommand(true);
                         }
                     }
                 }
@@ -349,28 +353,27 @@ public class CircuitGridViewModel : ViewModelBase
                 foreach (object item in e.OldItems)
                 {
                     int oldRow = e.OldStartingIndex;
-                    if (item is RegisterModel)
+                    if (item is not RegisterModel) continue;
+
+                    Registers.RemoveAt(oldRow);
+                    for (int i = oldRow; i < _registers.Count; i++)
                     {
-                        Registers.RemoveAt(oldRow);
-                        for (int i = oldRow; i < _registers.Count; i++)
-                        {
-                            _registers[i].IncrementIndex(-1);
-                        }
+                        _registers[i].IncrementIndex(-1);
+                    }
 
-                        if (_registers.Count == 1)
+                    if (_registers.Count == 1)
+                    {
+                        foreach (QubitViewModel qubit in _registers[0].Qubits)
                         {
-                            foreach (QubitViewModel qubit in _registers[0].Qubits)
-                            {
-                                qubit.UpdateDeleteRegisterCommand(false);
-                            }
+                            qubit.UpdateDeleteRegisterCommand(false);
                         }
+                    }
 
-                        foreach (StepViewModel step in _steps)
+                    foreach (StepViewModel step in _steps)
+                    {
+                        for (int i = 0; i < step.Gates.Count; i++)
                         {
-                            for (int i = 0; i < step.Gates.Count; i++)
-                            {
-                                step.Gates[i].UpdateRow(i);
-                            }
+                            step.Gates[i].UpdateRow(i);
                         }
                     }
                 }

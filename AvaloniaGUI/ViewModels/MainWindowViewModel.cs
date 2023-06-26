@@ -77,6 +77,7 @@ public class MainWindowViewModel : ViewModelBase
     #region Fields
 
     private MainWindow _window;
+    private DialogManager _dialogManager;
 
     private ComputerModel _model;
     private OutputViewModel _outputModel;
@@ -155,18 +156,17 @@ public class MainWindowViewModel : ViewModelBase
 
     #region Constructor
 
-    public MainWindowViewModel()
+    public void InitializeWindow(MainWindow window)
     {
+        _window = window;
+        _dialogManager = new DialogManager(_window);
+
+        // they need dialogManager
         InitFromModel(ComputerModel.CreateModelForGUI());
 
         _codeGenerator = new CodeGenerator();
         _consoleWriter = new ConsoleWriter();
         _consoleWriter.TextChanged += _consoleWriter_TextChanged;
-    }
-
-    public void SetWindow(MainWindow window)
-    {
-        _window = window;
     }
 
     #endregion // Constructor
@@ -177,7 +177,7 @@ public class MainWindowViewModel : ViewModelBase
         {
             if (_circuitGridVM != null) return _circuitGridVM;
 
-            _circuitGridVM = new CircuitGridViewModel(_model);
+            _circuitGridVM = new CircuitGridViewModel(_model, _dialogManager);
 
             if (_propertiesVM != null)
             {
@@ -1032,7 +1032,7 @@ public class MainWindowViewModel : ViewModelBase
 
         _model = model;
 
-        CircuitGrid = new CircuitGridViewModel(_model);
+        CircuitGrid = new CircuitGridViewModel(_model, _dialogManager);
 
         CircuitEvaluator eval = CircuitEvaluator.GetInstance();
         _outputModel = eval.InitFromModel(_model);

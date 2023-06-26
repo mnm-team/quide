@@ -3,6 +3,7 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Avalonia;
+using AvaloniaGUI.CodeHelpers;
 using AvaloniaGUI.ViewModels.Controls;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel.Gates;
@@ -23,18 +24,24 @@ public class StepViewModel : ViewModelBase
 
     private Thickness _stepMargin;
 
-    private static readonly Thickness currentMargin = new Thickness(3, 0, 0, 0);
-    private static readonly Thickness noMargin = new Thickness(0, 0, 0, 0);
+    private static readonly Thickness currentMargin = new(3, 0, 0, 0);
+    private static readonly Thickness noMargin = new(0, 0, 0, 0);
+
+    private readonly DialogManager _dialogManager;
 
     #endregion // Fields
 
 
     #region Constructor
 
-    public StepViewModel(ComputerModel model, int column)
+    public StepViewModel(ComputerModel model, int column, DialogManager dialogManager)
     {
         _model = model;
         _column = column;
+
+        _dialogManager = dialogManager;
+
+        // they need dialogManager
         _model.Steps[_column].Gates.CollectionChanged += Gates_CollectionChanged;
         _gates = CreateGatesFromModel();
     }
@@ -57,10 +64,7 @@ public class StepViewModel : ViewModelBase
         }
     }
 
-    public double ScaleCenterY
-    {
-        get { return Gates.Count * CircuitGridViewModel.QubitScaleCenter.Point.Y; }
-    }
+    public double ScaleCenterY => Gates.Count * CircuitGridViewModel.QubitScaleCenter.Point.Y;
 
     public Thickness StepMargin
     {
@@ -68,12 +72,7 @@ public class StepViewModel : ViewModelBase
         {
             if (_stepMargin == null)
             {
-                if (_model.CurrentStep == _column)
-                {
-                    return currentMargin;
-                }
-
-                return noMargin;
+                return _model.CurrentStep == _column ? currentMargin : noMargin;
             }
 
             return _stepMargin;
@@ -81,14 +80,14 @@ public class StepViewModel : ViewModelBase
         set
         {
             _stepMargin = value;
-            OnPropertyChanged("StepMargin");
+            OnPropertyChanged(nameof(StepMargin));
         }
     }
 
     #endregion // Presentation Properties
 
 
-    #region Public Methids
+    #region Public Methods
 
     public void SetAsCurrent()
     {
@@ -128,9 +127,8 @@ public class StepViewModel : ViewModelBase
         ObservableCollection<GateViewModel> gates = new ObservableCollection<GateViewModel>();
         for (int i = 0; i < _model.Steps[_column].Gates.Count; i++)
         {
-            Gate gate = _model.Steps[_column].Gates[i];
             RegisterRefModel gateRow = _model.GetRefFromOffset(i);
-            gates.Add(new GateViewModel(_model, gateRow, _column));
+            gates.Add(new GateViewModel(_model, gateRow, _column, _dialogManager));
         }
 
         return gates;
@@ -138,6 +136,8 @@ public class StepViewModel : ViewModelBase
 
     private void Gates_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
+        if (_dialogManager is null) return;
+
         Gate gate;
         switch (e.Action)
         {
@@ -146,21 +146,19 @@ public class StepViewModel : ViewModelBase
                 foreach (object item in e.NewItems)
                 {
                     gate = item as Gate;
-                    if (gate != null)
-                    {
-                        RegisterRefModel gateRow = _model.GetRefFromOffset(addIndex);
-                        Gates.Insert(addIndex, new GateViewModel(_model, gateRow, _column));
-                        for (int i = addIndex + 1; i < _gates.Count; i++)
-                        {
-                            _gates[i].UpdateRow(i);
-                        }
+                    if (gate == null) continue;
 
-                        if (_gates.Count == 2)
-                        {
-                            _gates[0].UpdateDeleteRowCommand(true);
-                            _gates[1].UpdateDeleteRowCommand(true);
-                        }
+                    RegisterRefModel gateRow = _model.GetRefFromOffset(addIndex);
+                    Gates.Insert(addIndex, new GateViewModel(_model, gateRow, _column, _dialogManager));
+                    for (int i = addIndex + 1; i < _gates.Count; i++)
+                    {
+                        _gates[i].UpdateRow(i);
                     }
+
+                    if (_gates.Count != 2) continue;
+
+                    _gates[0].UpdateDeleteRowCommand(true);
+                    _gates[1].UpdateDeleteRowCommand(true);
                 }
 
                 break;
@@ -179,25 +177,24 @@ public class StepViewModel : ViewModelBase
                 int oldRow = e.OldStartingIndex;
                 foreach (object item in e.OldItems)
                 {
-                    if (item is Gate)
-                    {
-                        Gates.RemoveAt(oldRow);
-                        for (int i = oldRow; i < _gates.Count; i++)
-                        {
-                            _gates[i].UpdateRow(i);
-                        }
+                    if (item is not Gate) continue;
 
-                        if (_gates.Count == 1)
-                        {
-                            _gates[0].UpdateDeleteRowCommand(false);
-                        }
+                    Gates.RemoveAt(oldRow);
+                    for (int i = oldRow; i < _gates.Count; i++)
+                    {
+                        _gates[i].UpdateRow(i);
+                    }
+
+                    if (_gates.Count == 1)
+                    {
+                        _gates[0].UpdateDeleteRowCommand(false);
                     }
                 }
 
                 break;
         }
 
-        OnPropertyChanged("ScaleCenterY");
+        OnPropertyChanged(nameof(ScaleCenterY));
     }
 
     #endregion // Private Helpers

@@ -47,7 +47,7 @@ public partial class MainWindow : Window
         base.OnDataContextChanged(e);
 
         var vm = DataContext as MainWindowViewModel;
-        vm?.SetWindow(this);
+        vm?.InitializeWindow(this);
     }
 
     /// <summary>

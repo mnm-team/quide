@@ -1,6 +1,5 @@
 ﻿#region
 
-using System;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using AvaloniaGUI.ViewModels.Dialog;
@@ -15,15 +14,22 @@ public partial class GammaInput : UserControl
 
     public GammaInput()
     {
+    }
+
+    public GammaInput(GammaInputViewModel vm) : this()
+    {
+        DataContext = vm;
+        _dataContext = vm;
+
         InitializeComponent();
     }
 
-    protected override void OnDataContextChanged(EventArgs e)
-    {
-        base.OnDataContextChanged(e);
-
-        _dataContext = DataContext as GammaInputViewModel;
-    }
+    // protected override void OnDataContextChanged(EventArgs e)
+    // {
+    //     base.OnDataContextChanged(e);
+    //
+    //     _dataContext = DataContext as GammaInputViewModel;
+    // }
 
     // private void UserControl_Loaded(object sender, RoutedEventArgs e)
     // {

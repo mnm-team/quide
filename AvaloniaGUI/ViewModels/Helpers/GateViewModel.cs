@@ -12,9 +12,11 @@ using Avalonia.Input;
 using Avalonia.Media;
 using AvaloniaGUI.CodeHelpers;
 using AvaloniaGUI.ViewModels.Controls;
+using AvaloniaGUI.ViewModels.Dialog;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel.Gates;
 using AvaloniaGUI.ViewModels.MainModels.QuantumParser;
+using AvaloniaGUI.Views.Dialog;
 
 #endregion
 
@@ -39,17 +41,21 @@ public class GateViewModel : ViewModelBase
     private DelegateCommand _deleteRow;
     private DelegateCommand _deleteColumn;
 
+    private readonly DialogManager _dialogManager;
+
     #endregion // Fields
 
 
     #region Constructor
 
-    public GateViewModel(ComputerModel model, RegisterRefModel row, int column)
+    public GateViewModel(ComputerModel model, RegisterRefModel row, int column, DialogManager dialogManager)
     {
         _model = model;
         _row = row;
         _column = column;
         _model.StepChanged += _model_CurrentStepChanged;
+
+        _dialogManager = dialogManager;
     }
 
     #endregion // Constructor
@@ -72,34 +78,19 @@ public class GateViewModel : ViewModelBase
     {
         get
         {
-            if (Value is CustomGate)
-            {
-                CustomGate cg = Value as CustomGate;
-                if ((cg.End + cg.Begin + 1) / 2 == _row.OffsetToRoot)
-                {
-                    return cg.FunctionName;
-                }
-            }
+            if (Value is not CustomGate) return null;
 
-            return null;
+            CustomGate cg = Value as CustomGate;
+
+            return (cg.End + cg.Begin + 1) / 2 == _row.OffsetToRoot ? cg.FunctionName : null;
         }
     }
 
-    public double GateHeight
-    {
-        get
-        {
-            if (Value is CustomGate &&
-                Value.Begin != Value.End)
-            {
-                return CircuitGridViewModel.QubitSize;
-            }
-            else
-            {
-                return CircuitGridViewModel.GateHeight;
-            }
-        }
-    }
+    public double GateHeight =>
+        Value is CustomGate &&
+        Value.Begin != Value.End
+            ? CircuitGridViewModel.QubitSize
+            : CircuitGridViewModel.GateHeight;
 
     public double GateTextHeight
     {
@@ -118,18 +109,7 @@ public class GateViewModel : ViewModelBase
     }
 
 
-    public double SelectionOpacity
-    {
-        get
-        {
-            if (_isSelected)
-            {
-                return 0.25;
-            }
-
-            return 0;
-        }
-    }
+    public double SelectionOpacity => _isSelected ? 0.25 : 0;
 
     public VisualBrush BackgroundImage
     {
@@ -379,7 +359,7 @@ public class GateViewModel : ViewModelBase
         Refresh();
     }
 
-    public void SetGate(int pressedColumn, RegisterRefModel pressedRow, KeyModifiers keyStates)
+    public async void SetGate(int pressedColumn, RegisterRefModel pressedRow, KeyModifiers keyStates)
     {
         ActionName action = MainWindowViewModel.SelectedAction;
 
@@ -572,41 +552,38 @@ public class GateViewModel : ViewModelBase
                     if (oldGate.Name == GateName.Empty)
                     {
                         //TODO: GammaInput dialog
-                        // MainWindow window = App.Current.MainWindow as MainWindow;
-                        // GammaInputViewModel gammmaVM = new GammaInputViewModel();
+                        //MainWindow window = App.Current.MainWindow as MainWindow;
+                        GammaInputViewModel gammaVM = new GammaInputViewModel();
                         // ICustomContentDialog dialog =
-                        //     window.DialogManager.CreateCustomContentDialog(new GammaInput(gammmaVM),
+                        //     window.DialogManager.CreateCustomContentDialog(new GammaInput(gammaVM),
                         //         DialogMode.OkCancel);
                         // dialog.Ok = () =>
-                        // {
-                        //     double gamma = gammmaVM.Gamma;
-                        //     if (action == ActionName.RotateX)
-                        //     {
-                        //         _model.Steps[_column].SetGate(new RotateXGate(gamma, _row));
-                        //         _model.AddStepAfter(_column);
-                        //     }
-                        //     else if (action == ActionName.RotateY)
-                        //     {
-                        //         _model.Steps[_column].SetGate(new RotateYGate(gamma, _row));
-                        //         _model.AddStepAfter(_column);
-                        //     }
-                        //     else if (action == ActionName.RotateZ)
-                        //     {
-                        //         _model.Steps[_column].SetGate(new RotateZGate(gamma, _row));
-                        //         _model.AddStepAfter(_column);
-                        //     }
-                        //     else if (action == ActionName.PhaseKick)
-                        //     {
-                        //         _model.Steps[_column].SetGate(new PhaseKickGate(gamma, _row));
-                        //         _model.AddStepAfter(_column);
-                        //     }
-                        //     else
-                        //     {
-                        //         _model.Steps[_column].SetGate(new PhaseScaleGate(gamma, _row));
-                        //         _model.AddStepAfter(_column);
-                        //     }
-                        // };
-                        // dialog.Show();
+
+
+                        await _dialogManager.ShowDialogAsync(new GammaInput(gammaVM), () =>
+                        {
+                            double gamma = gammaVM.Gamma;
+                            switch (action)
+                            {
+                                case ActionName.RotateX:
+                                    SetCustomGates(new RotateXGate(gamma, _row));
+                                    break;
+                                case ActionName.RotateY:
+                                    SetCustomGates(new RotateYGate(gamma, _row));
+                                    break;
+                                case ActionName.RotateZ:
+                                    SetCustomGates(new RotateZGate(gamma, _row));
+                                    break;
+                                case ActionName.PhaseKick:
+                                    SetCustomGates(new PhaseKickGate(gamma, _row));
+                                    break;
+                                default:
+                                    SetCustomGates(new PhaseScaleGate(gamma, _row));
+                                    break;
+                            }
+                        });
+
+                        //dialog.Show();
                     }
 
                     break;
@@ -1226,6 +1203,12 @@ public class GateViewModel : ViewModelBase
                     break;
             }
         }
+    }
+
+    private void SetCustomGates(Gate gate)
+    {
+        _model.Steps[_column].SetGate(gate);
+        _model.AddStepAfter(_column);
     }
 
     public void ChangeAngle(double gamma)

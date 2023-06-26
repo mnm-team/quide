@@ -20,12 +20,12 @@
     </UserControl.Resources>
 
     <Grid ColumnDefinitions="Auto,*,Auto,Auto,10" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+        <!-- Angle Value Unit Type-->
         <TextBlock
             Grid.ColumnSpan="2"
             Margin="5,3"
             Text="{x:Static p:Resources.AngleValue}" />
 
-        <!-- TODO: again, visible radiobutton circles here -->
         <RadioButton
             x:Name="Deg"
             Grid.Row="0" Grid.Column="2"
@@ -58,15 +58,15 @@
             <TextBox
                 x:Name="gammaBox"
                 Grid.Column="1"
-                Margin="1,3">
-                <TextBox.Text>
-                    <!-- <Binding Path="GammaText" UpdateSourceTrigger="PropertyChanged" -->
-                    <!--          Mode="TwoWay"> -->
-                    <!--     <Binding.ValidationRules> -->
-                    <!--         <ViewModels:DoubleValidationRule /> -->
-                    <!--     </Binding.ValidationRules> -->
-                    <!-- </Binding> -->
-                </TextBox.Text>
+                Margin="1,3" Text="{Binding GammaText}">
+                <!-- <TextBox.Text> -->
+                <!--     <Binding Path="GammaText" UpdateSourceTrigger="PropertyChanged" -->
+                <!--              Mode="TwoWay"> -->
+                <!--         <Binding.ValidationRules> -->
+                <!--             <ViewModels:DoubleValidationRule /> -->
+                <!--         </Binding.ValidationRules> -->
+                <!--     </Binding> -->
+                <!-- </TextBox.Text> -->
             </TextBox>
             <ComboBox
                 Margin="0,3"
