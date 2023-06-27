@@ -53,7 +53,6 @@ public class GammaInputViewModel : ViewModelBase
             if (!double.TryParse(value, out var result))
             {
                 DialogInputValid = false;
-                OnPropertyChanged(nameof(DialogInputValid));
                 return;
             }
 
@@ -68,7 +67,6 @@ public class GammaInputViewModel : ViewModelBase
 
             _gammaString = GammaToString();
             DialogInputValid = true;
-            OnPropertyChanged(nameof(DialogInputValid));
             OnPropertyChanged(nameof(GammaText));
         }
     }

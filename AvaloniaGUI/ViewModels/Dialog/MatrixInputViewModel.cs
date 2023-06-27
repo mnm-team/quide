@@ -77,6 +77,5 @@ public class MatrixInputViewModel : ViewModelBase
         _isUnitary = MatrixValidator.IsUnitary2x2(_matrix);
         DialogInputValid = _isUnitary;
         OnPropertyChanged(nameof(ValidationMessage));
-        OnPropertyChanged(nameof(DialogInputValid));
     }
 }

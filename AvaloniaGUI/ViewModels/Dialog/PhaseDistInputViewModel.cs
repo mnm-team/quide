@@ -1,6 +1,5 @@
 ﻿#region
 
-using System;
 using AvaloniaGUI.CodeHelpers;
 
 #endregion
@@ -9,30 +8,22 @@ namespace AvaloniaGUI.ViewModels.Dialog;
 
 public class PhaseDistInputViewModel : ViewModelBase
 {
-    private string _distText = String.Empty;
+    private string _distText = string.Empty;
 
-    public int? Dist
-    {
-        get
-        {
-            int dist;
-            if (int.TryParse(_distText, out dist))
-            {
-                return dist;
-            }
-
-            return null;
-        }
-    }
+    public int? Dist => int.TryParse(_distText, out var dist) ? dist : null;
 
     [IntegerType]
     public string DistText
     {
-        get { return _distText; }
+        get => _distText;
         set
         {
             _distText = value;
-            OnPropertyChanged("DistText");
+            OnPropertyChanged(nameof(DistText));
+
+            var isValid = int.TryParse(value, out _);
+
+            DialogInputValid = isValid;
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
@@ -833,8 +834,6 @@ public class GateViewModel : ViewModelBase
                                                     _model.Steps[_column].SetGate(new CNotGate(_row, pressedRow));
                                                     _model.AddStepAfter(_column);
                                                     break;
-                                                default:
-                                                    break;
                                             }
                                         }
                                     }
@@ -865,7 +864,7 @@ public class GateViewModel : ViewModelBase
                                     ToffoliGate oldT = oldGate as ToffoliGate;
                                     //check if not doubled
                                     if (_row.OffsetToRoot != oldT.Target.OffsetToRoot &&
-                                        !oldT.Controls.Contains<RegisterRefModel>(_row))
+                                        !oldT.Controls.Contains(_row))
                                     {
                                         _model.Steps[_column]
                                             .SetGate(new ToffoliGate(oldT.Target, _row, oldT.Controls));
@@ -878,9 +877,9 @@ public class GateViewModel : ViewModelBase
                                     CPhaseShiftGate oldT = oldGate as CPhaseShiftGate;
                                     //check if not doubled
                                     if (_row.OffsetToRoot != oldT.Target.OffsetToRoot &&
-                                        !oldT.Controls.Contains<RegisterRefModel>(_row))
+                                        !oldT.Controls.Contains(_row))
                                     {
-                                        List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
+                                        List<RegisterRefModel> cList = oldT.Controls.ToList();
                                         cList.Add(_row);
                                         RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
                                         _model.Steps[_column]
@@ -894,9 +893,9 @@ public class GateViewModel : ViewModelBase
                                     InvCPhaseShiftGate oldT = oldGate as InvCPhaseShiftGate;
                                     //check if not doubled
                                     if (_row.OffsetToRoot != oldT.Target.OffsetToRoot &&
-                                        !oldT.Controls.Contains<RegisterRefModel>(_row))
+                                        !oldT.Controls.Contains(_row))
                                     {
-                                        List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
+                                        List<RegisterRefModel> cList = oldT.Controls.ToList();
                                         cList.Add(_row);
                                         RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
                                         _model.Steps[_column]
@@ -910,9 +909,9 @@ public class GateViewModel : ViewModelBase
                                     PhaseKickGate oldT = oldGate as PhaseKickGate;
                                     //check if not doubled
                                     if (_row.OffsetToRoot != oldT.Target.OffsetToRoot &&
-                                        !oldT.Controls.Contains<RegisterRefModel>(_row))
+                                        !oldT.Controls.Contains(_row))
                                     {
-                                        List<RegisterRefModel> cList = oldT.Controls.ToList<RegisterRefModel>();
+                                        List<RegisterRefModel> cList = oldT.Controls.ToList();
                                         cList.Add(_row);
                                         RegisterRefModel[] cParams = cList.ToArray<RegisterRefModel>();
                                         _model.Steps[_column]
@@ -927,71 +926,11 @@ public class GateViewModel : ViewModelBase
 
                     break;
                 case ActionName.CPhaseShift:
-                    if (pressedColumn == _column)
-                    {
-                        if (_model.Steps[_column].HasPlace(pressedRow.OffsetToRoot, _row.OffsetToRoot))
-                        {
-                            // MainWindow window1 = App.Current.MainWindow as MainWindow;
-                            // PhaseDistInputViewModel vm = new PhaseDistInputViewModel();
-                            // vm.DistText = Math.Abs(pressedRow.OffsetToRoot - _row.OffsetToRoot).ToString();
-                            //
-                            // ICustomContentDialog dialog1 = window1.DialogManager.CreateCustomContentDialog(
-                            //     new PhaseDistInput(vm), DialogMode.OkCancel);
-                            // dialog1.Ok = () =>
-                            // {
-                            //     int? dist = vm.Dist;
-                            //     if (dist.HasValue)
-                            //     {
-                            //         if (_row.Equals(pressedRow))
-                            //         {
-                            //             _model.Steps[_column].SetGate(new CPhaseShiftGate(dist.Value, _row));
-                            //         }
-                            //         else
-                            //         {
-                            //             _model.Steps[_column]
-                            //                 .SetGate(new CPhaseShiftGate(dist.Value, _row, pressedRow));
-                            //         }
-                            //
-                            //         _model.AddStepAfter(_column);
-                            //     }
-                            // };
-                            // dialog1.Show();
-                        }
-                    }
+                    await SetCPhaseShift(pressedColumn, pressedRow, false);
 
                     break;
                 case ActionName.InvCPhaseShift:
-                    if (pressedColumn == _column)
-                    {
-                        if (_model.Steps[_column].HasPlace(pressedRow.OffsetToRoot, _row.OffsetToRoot))
-                        {
-                            // MainWindow window1 = App.Current.MainWindow as MainWindow;
-                            // PhaseDistInputViewModel vm = new PhaseDistInputViewModel();
-                            // vm.DistText = Math.Abs(pressedRow.OffsetToRoot - _row.OffsetToRoot).ToString();
-                            //
-                            // ICustomContentDialog dialog1 = window1.DialogManager.CreateCustomContentDialog(
-                            //     new PhaseDistInput(vm), DialogMode.OkCancel);
-                            // dialog1.Ok = () =>
-                            // {
-                            //     int? dist = vm.Dist;
-                            //     if (dist.HasValue)
-                            //     {
-                            //         if (_row.Equals(pressedRow))
-                            //         {
-                            //             _model.Steps[_column].SetGate(new InvCPhaseShiftGate(dist.Value, _row));
-                            //         }
-                            //         else
-                            //         {
-                            //             _model.Steps[_column]
-                            //                 .SetGate(new InvCPhaseShiftGate(dist.Value, _row, pressedRow));
-                            //         }
-                            //
-                            //         _model.AddStepAfter(_column);
-                            //     }
-                            // };
-                            // dialog1.Show();
-                        }
-                    }
+                    await SetCPhaseShift(pressedColumn, pressedRow, true);
 
                     break;
                 case ActionName.Measure:
@@ -1072,10 +1011,8 @@ public class GateViewModel : ViewModelBase
                             CompositeGate cg = oldGate as CompositeGate;
                             List<Gate> toAdd = _model.GetActualGates(cg);
                             int column = _column;
-                            foreach (Gate g in toAdd)
+                            foreach (var g in toAdd.Where(g => g.Name != GateName.Empty))
                             {
-                                if (g.Name == GateName.Empty) continue;
-
                                 _model.InsertStepRight(column);
                                 column++;
                                 _model.Steps[column].SetGate(g);
@@ -1116,13 +1053,11 @@ public class GateViewModel : ViewModelBase
                     oldGate = _model.Steps[_column].Gates[_row.OffsetToRoot];
                     if (oldGate.Name == GateName.Empty)
                     {
-                        //TODO:
-                        //MainWindow window1 = App.Current.MainWindow as MainWindow;
-
                         CircuitEvaluator eval = CircuitEvaluator.GetInstance();
                         Dictionary<string, List<MethodInfo>> dict = eval.GetExtensionGates();
                         if (!string.IsNullOrWhiteSpace(MainWindowViewModel.SelectedComposite))
                         {
+                            // TODO: Composite
                             // ParametricInputViewModel vm = new ParametricInputViewModel(
                             //     MainWindowViewModel.SelectedComposite, dict,
                             //     _model.CompositeGates);
@@ -1189,6 +1124,39 @@ public class GateViewModel : ViewModelBase
                     break;
             }
         }
+    }
+
+    private async Task SetCPhaseShift(int pressedColumn, RegisterRefModel pressedRow, bool inverse)
+    {
+        if (pressedColumn != _column) return;
+
+        if (!_model.Steps[_column].HasPlace(pressedRow.OffsetToRoot, _row.OffsetToRoot)) return;
+
+        PhaseDistInputViewModel phaseDistInputVM = new PhaseDistInputViewModel
+        {
+            DistText = Math.Abs(pressedRow.OffsetToRoot - _row.OffsetToRoot).ToString()
+        };
+
+        await _dialogManager.ShowDialogAsync(new PhaseDistInput(phaseDistInputVM), () =>
+        {
+            int? dist = phaseDistInputVM.Dist;
+            if (!dist.HasValue) return;
+
+            if (inverse)
+            {
+                _model.Steps[_column].SetGate(_row.Equals(pressedRow)
+                    ? new InvCPhaseShiftGate(dist.Value, _row)
+                    : new InvCPhaseShiftGate(dist.Value, _row, pressedRow));
+            }
+            else
+            {
+                _model.Steps[_column].SetGate(_row.Equals(pressedRow)
+                    ? new CPhaseShiftGate(dist.Value, _row)
+                    : new CPhaseShiftGate(dist.Value, _row, pressedRow));
+            }
+
+            _model.AddStepAfter(_column);
+        });
     }
 
     private void SetCustomGates(Gate gate)

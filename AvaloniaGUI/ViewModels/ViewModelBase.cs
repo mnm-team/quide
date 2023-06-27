@@ -23,8 +23,18 @@ public abstract class ViewModelBase : INotifyPropertyChanged
 
     #endregion // INotifyPropertyChanged Members
 
+    private bool _dialogInputValid;
+
     /// <summary>
     /// Useful for binding OK button in dialog windows
     /// </summary>
-    public bool DialogInputValid { get; set; }
+    public bool DialogInputValid
+    {
+        get => _dialogInputValid;
+        set
+        {
+            _dialogInputValid = value;
+            OnPropertyChanged(nameof(DialogInputValid));
+        }
+    }
 }
