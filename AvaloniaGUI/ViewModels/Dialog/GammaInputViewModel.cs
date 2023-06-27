@@ -50,7 +50,12 @@ public class GammaInputViewModel : ViewModelBase
         get => _gammaString;
         set
         {
-            if (!double.TryParse(value, out var result)) return;
+            if (!double.TryParse(value, out var result))
+            {
+                DialogInputValid = false;
+                OnPropertyChanged(nameof(DialogInputValid));
+                return;
+            }
 
             if (_rad)
             {
@@ -62,6 +67,8 @@ public class GammaInputViewModel : ViewModelBase
             }
 
             _gammaString = GammaToString();
+            DialogInputValid = true;
+            OnPropertyChanged(nameof(DialogInputValid));
             OnPropertyChanged(nameof(GammaText));
         }
     }

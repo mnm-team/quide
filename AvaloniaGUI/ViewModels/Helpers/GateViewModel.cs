@@ -551,14 +551,7 @@ public class GateViewModel : ViewModelBase
                     oldGate = _model.Steps[_column].Gates[_row.OffsetToRoot];
                     if (oldGate.Name == GateName.Empty)
                     {
-                        //TODO: GammaInput dialog
-                        //MainWindow window = App.Current.MainWindow as MainWindow;
                         GammaInputViewModel gammaVM = new GammaInputViewModel();
-                        // ICustomContentDialog dialog =
-                        //     window.DialogManager.CreateCustomContentDialog(new GammaInput(gammaVM),
-                        //         DialogMode.OkCancel);
-                        // dialog.Ok = () =>
-
 
                         await _dialogManager.ShowDialogAsync(new GammaInput(gammaVM), () =>
                         {
@@ -582,8 +575,6 @@ public class GateViewModel : ViewModelBase
                                     break;
                             }
                         });
-
-                        //dialog.Show();
                     }
 
                     break;

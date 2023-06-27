@@ -12,15 +12,19 @@ public abstract class ViewModelBase : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    protected virtual void OnPropertyChanged(string propertyName)
+    protected void OnPropertyChanged(string propertyName)
     {
-        PropertyChangedEventHandler handler = this.PropertyChanged;
-        if (handler != null)
-        {
-            var e = new PropertyChangedEventArgs(propertyName);
-            handler(this, e);
-        }
+        PropertyChangedEventHandler handler = PropertyChanged;
+        if (handler == null) return;
+
+        var e = new PropertyChangedEventArgs(propertyName);
+        handler(this, e);
     }
 
     #endregion // INotifyPropertyChanged Members
+
+    /// <summary>
+    /// Useful for binding OK button in dialog windows
+    /// </summary>
+    public bool DialogInputValid { get; set; }
 }

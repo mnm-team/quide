@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using AvaloniaGUI.CodeHelpers;
+using AvaloniaGUI.ViewModels;
 
 #endregion
 
@@ -16,12 +17,12 @@ public partial class BasicDialogWindow : Window
 
     public BasicDialogWindow()
     {
-        InitializeComponent();
     }
 
     public BasicDialogWindow(UserControl content) : this()
     {
         _content = content;
+        DataContext = (ViewModelBase)content.DataContext;
         InitializeComponent();
 #if DEBUG
         this.AttachDevTools();
