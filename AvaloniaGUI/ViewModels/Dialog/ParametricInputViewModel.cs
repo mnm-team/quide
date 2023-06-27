@@ -46,11 +46,10 @@ public class ParametricInputViewModel : ViewModelBase
 
         for (int i = 0; i < _compositeNames.Length; i++)
         {
-            if (_compositeNames[i].Equals(name))
-            {
-                _gateIndex = i;
-                break;
-            }
+            if (!_compositeNames[i].Equals(name)) continue;
+
+            _gateIndex = i;
+            break;
         }
 
         PopulateCandidates();
@@ -58,23 +57,23 @@ public class ParametricInputViewModel : ViewModelBase
 
     public int GateIndex
     {
-        get { return _gateIndex; }
+        get => _gateIndex;
         set
         {
             _gateIndex = value;
             PopulateCandidates();
-            OnPropertyChanged("Candidates");
+            OnPropertyChanged(nameof(Candidates));
         }
     }
 
     public int MethodIndex
     {
-        get { return _methodIndex; }
+        get => _methodIndex;
         set
         {
             _methodIndex = value;
             PopulateParams();
-            OnPropertyChanged("Parameters");
+            OnPropertyChanged(nameof(Parameters));
         }
     }
 
@@ -104,20 +103,11 @@ public class ParametricInputViewModel : ViewModelBase
         }
     }
 
-    public string[] CompositeNames
-    {
-        get { return _compositeNames; }
-    }
+    public string[] CompositeNames => _compositeNames;
 
-    public string[] Candidates
-    {
-        get { return _candidateNames; }
-    }
+    public string[] Candidates => _candidateNames;
 
-    public ParameterViewModel[] Parameters
-    {
-        get { return _parameters; }
-    }
+    public ParameterViewModel[] Parameters => _parameters;
 
     public bool IsValid
     {
@@ -186,12 +176,7 @@ public class ParametricInputViewModel : ViewModelBase
         get
         {
             Register reg = _parameters[0].Value as Register;
-            if (reg != null)
-            {
-                return reg.ToPartModel();
-            }
-
-            return null;
+            return reg?.ToPartModel();
         }
     }
 
@@ -216,7 +201,7 @@ public class ParametricInputViewModel : ViewModelBase
         parList.Add(toAdd);
         _parameters = parList.ToArray();
 
-        OnPropertyChanged("Parameters");
+        OnPropertyChanged(nameof(Parameters));
     }
 
     private void PopulateCandidates()
@@ -241,7 +226,6 @@ public class ParametricInputViewModel : ViewModelBase
 
                 for (int j = 1; j < infos.Length; j++)
                 {
-                    Type type = infos[j].ParameterType;
                     if (j == infos.Length - 1 &&
                         infos[j].GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0)
                     {
@@ -252,8 +236,8 @@ public class ParametricInputViewModel : ViewModelBase
                 }
 
                 StringBuilder sb = new StringBuilder();
-                sb.Append(TypeToString(method.ReturnType)).Append(" ");
-                sb.Append(method.Name).Append("(");
+                sb.Append(TypeToString(method.ReturnType)).Append(' ');
+                sb.Append(method.Name).Append('(');
                 for (int j = 1; j < infos.Length; j++)
                 {
                     if (j > 1)
@@ -266,11 +250,11 @@ public class ParametricInputViewModel : ViewModelBase
                         sb.Append("params ");
                     }
 
-                    sb.Append(TypeToString(infos[j].ParameterType)).Append(" ");
+                    sb.Append(TypeToString(infos[j].ParameterType)).Append(' ');
                     sb.Append(_paramsNames[i][j]);
                 }
 
-                sb.Append(")");
+                sb.Append(')');
                 _candidateNames[i] = sb.ToString();
             }
         }
@@ -283,8 +267,8 @@ public class ParametricInputViewModel : ViewModelBase
             _paramsNames[0] = new string[2];
             _hasParamArray[0] = false;
 
-            string compName = "comp";
-            string regName = "regA";
+            const string compName = "comp";
+            const string regName = "regA";
 
             _paramsNames[0][0] = compName;
             _paramsNames[0][1] = regName;
@@ -293,7 +277,7 @@ public class ParametricInputViewModel : ViewModelBase
             sb.Append("Void ");
             sb.Append(functionName).Append("(Register ");
             sb.Append(regName);
-            sb.Append(")");
+            sb.Append(')');
 
             _candidateNames[0] = sb.ToString();
         }

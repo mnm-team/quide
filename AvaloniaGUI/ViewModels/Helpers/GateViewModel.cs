@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
@@ -1050,69 +1051,57 @@ public class GateViewModel : ViewModelBase
 
                     break;
                 case ActionName.Composite:
+                    // TODO: Composite
                     oldGate = _model.Steps[_column].Gates[_row.OffsetToRoot];
                     if (oldGate.Name == GateName.Empty)
                     {
                         CircuitEvaluator eval = CircuitEvaluator.GetInstance();
                         Dictionary<string, List<MethodInfo>> dict = eval.GetExtensionGates();
-                        if (!string.IsNullOrWhiteSpace(MainWindowViewModel.SelectedComposite))
+                        if (string.IsNullOrWhiteSpace(MainWindowViewModel.SelectedComposite)) break;
+
+                        ParametricInputViewModel parametricInputVM = new ParametricInputViewModel(
+                            MainWindowViewModel.SelectedComposite, dict,
+                            _model.CompositeGates);
+                        await _dialogManager.ShowDialogAsync(new ParametricInput(parametricInputVM), () =>
                         {
-                            // TODO: Composite
-                            // ParametricInputViewModel vm = new ParametricInputViewModel(
-                            //     MainWindowViewModel.SelectedComposite, dict,
-                            //     _model.CompositeGates);
-                            // ParametricInput ci = new ParametricInput(vm);
-                            // ICustomContentDialog dialog1 = window1.DialogManager
-                            //     .CreateCustomContentDialog(ci, DialogMode.OkCancel);
-                            // dialog1.Ok = () =>
-                            // {
-                            //     try
-                            //     {
-                            //         if (vm.IsValid)
-                            //         {
-                            //             if (vm.Method != null)
-                            //             {
-                            //                 ParametricGate cg = eval.CreateParametricGate(vm.Method, vm.ParamValues);
-                            //                 _model.Steps[_column].SetGate(cg);
-                            //                 _model.AddStepAfter(_column);
-                            //             }
-                            //             else if (vm.CopositeGateTarget != null)
-                            //             {
-                            //                 int minWidth = _model.MinWidthForComposite(vm.FunctionName);
-                            //                 if (vm.CopositeGateTarget.Value.Width < minWidth)
-                            //                 {
-                            //                     StringBuilder sb =
-                            //                         new StringBuilder("Entered parameter has too small width.\n");
-                            //                     sb.Append("Entered width: ");
-                            //                     sb.Append(vm.CopositeGateTarget.Value.Width).AppendLine();
-                            //                     sb.Append("Minimum width: ");
-                            //                     sb.Append(minWidth).AppendLine();
-                            //                     throw new Exception(sb.ToString());
-                            //                 }
-                            //                 else
-                            //                 {
-                            //                     CompositeGate cg = new CompositeGate(vm.FunctionName,
-                            //                         vm.CopositeGateTarget.Value);
-                            //                     _model.Steps[_column].SetGate(cg);
-                            //                     _model.AddStepAfter(_column);
-                            //                 }
-                            //             }
-                            //         }
-                            //     }
-                            //     catch (Exception ex)
-                            //     {
-                            //         string msg = "Unable to add gate. The parameters are invalid.\n" +
-                            //                      "Inner exception:\n" +
-                            //                      (ex.InnerException != null ? ex.InnerException.Message : ex.Message);
-                            //         MessageBox.Show(
-                            //             msg,
-                            //             "Unable to add gate",
-                            //             MessageBoxButton.OK,
-                            //             MessageBoxImage.Error);
-                            //     }
-                            // };
-                            // dialog1.Show();
-                        }
+                            try
+                            {
+                                if (!parametricInputVM.IsValid) return;
+
+                                if (parametricInputVM.Method != null)
+                                {
+                                    ParametricGate cg = eval.CreateParametricGate(parametricInputVM.Method,
+                                        parametricInputVM.ParamValues);
+                                    _model.Steps[_column].SetGate(cg);
+                                    _model.AddStepAfter(_column);
+                                }
+                                else if (parametricInputVM.CopositeGateTarget != null)
+                                {
+                                    int minWidth = _model.MinWidthForComposite(parametricInputVM.FunctionName);
+                                    if (parametricInputVM.CopositeGateTarget.Value.Width < minWidth)
+                                    {
+                                        StringBuilder sb =
+                                            new StringBuilder("Entered parameter has too small width.\n");
+                                        sb.Append("Entered width: ");
+                                        sb.Append(parametricInputVM.CopositeGateTarget.Value.Width).AppendLine();
+                                        sb.Append("Minimum width: ");
+                                        sb.Append(minWidth).AppendLine();
+                                        throw new Exception(sb.ToString());
+                                    }
+                                    else
+                                    {
+                                        CompositeGate cg = new CompositeGate(parametricInputVM.FunctionName,
+                                            parametricInputVM.CopositeGateTarget.Value);
+                                        _model.Steps[_column].SetGate(cg);
+                                        _model.AddStepAfter(_column);
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                ErrorMessageHelper.ShowMessage(ex.Message);
+                            }
+                        });
                     }
 
                     break;

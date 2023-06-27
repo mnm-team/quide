@@ -18,7 +18,6 @@ public partial class PhaseDistInput : UserControl
     public PhaseDistInput(PhaseDistInputViewModel vm) : this()
     {
         DataContext = vm;
-
         InitializeComponent();
     }
 

@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:AvaloniaGUI.ViewModels.Dialog"
+             xmlns:p="clr-namespace:AvaloniaGUI.Properties"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:ParametricInputViewModel"
              x:Class="AvaloniaGUI.Views.Dialog.ParametricInput">
@@ -11,8 +12,8 @@
         <vm:ParametricInputViewModel />
     </Design.DataContext>
 
-    <!--<UserControl.Resources>
-        <Style x:Key="FlatComboBox" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}" Selector="ComboBox" />
+    <UserControl.Resources>
+        <!-- <Style x:Key="FlatComboBox" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}" Selector="ComboBox" /> -->
         <Style x:Key="DefaultButton" Selector="Button" />
     </UserControl.Resources>
 
@@ -33,11 +34,10 @@
                 x:Name="gateBox"
                 Margin="0,3"
                 HorizontalAlignment="Stretch"
-                Style="{StaticResource FlatComboBox}"
-                IsTextSearchCaseSensitive="False"
                 Items="{Binding CompositeNames}"
                 SelectedIndex="{Binding GateIndex}"
                 SelectionChanged="gateBox_SelectionChanged" />
+            <!-- IsTextSearchCaseSensitive="False" -->
         </StackPanel>
 
         <StackPanel
@@ -56,19 +56,7 @@
                 SelectionChanged="methodBox_SelectionChanged" />
         </StackPanel>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="10" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="10" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        <Grid ColumnDefinitions="10,Auto,Auto,*,Auto,10" RowDefinitions="Auto,Auto">
 
             <ItemsControl
                 Grid.Column="3"
@@ -84,14 +72,14 @@
                             HorizontalAlignment="Stretch"
                             Height="23"
                             Margin="0, 3"
-                            Text="{Binding ValueString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding ValueString, Mode=TwoWay}" />
 
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
             <ItemsControl
-                Grid.Column="4"
+                Grid.Row="0" Grid.Column="4"
                 Items="{Binding Parameters}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -104,8 +92,7 @@
                             Click="addParam_Click"
                             Height="23"
                             Margin="3,3,0,3"
-                            Style="{StaticResource DefaultButton}"
-                            Visibility="{Binding VarParamsVisibility}"
+                            IsVisible="{Binding VarParamsVisibility}"
                             Content="{x:Static p:Resources.AddParam}"
                             Width="Auto" />
                     </DataTemplate>
@@ -113,7 +100,7 @@
             </ItemsControl>
 
             <ItemsControl
-                Grid.Column="1"
+                Grid.Row="0" Grid.Column="1"
                 Items="{Binding Parameters}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -132,7 +119,7 @@
             </ItemsControl>
 
             <ItemsControl
-                Grid.Column="2"
+                Grid.Row="0" Grid.Column="2"
                 Items="{Binding Parameters}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -164,7 +151,7 @@
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical"
-                                    Width="{Binding ElementName=widthRef, Path=ActualWidth}"
+                                    Width="{Binding ElementName=widthRef, Path=Width}"
                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
@@ -179,5 +166,5 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
-    </DockPanel>-->
+    </DockPanel>
 </UserControl>
