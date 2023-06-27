@@ -26,7 +26,7 @@ using System.Numerics;
 
 namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser.Validation
 {
-    public class MatrixValidator
+    public static class MatrixValidator
     {
         public static bool IsUnitary2x2(Complex[,] matrix)
         {
@@ -39,7 +39,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser.Validation
                 return false;
             }
 
-            bool isUnitary = false;
+            bool isUnitary;
 
             Complex[,] conjugate = new Complex[2, 2];
             conjugate[0, 0] = Complex.Conjugate(matrix[0, 0]);

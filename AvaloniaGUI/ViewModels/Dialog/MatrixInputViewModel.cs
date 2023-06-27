@@ -1,6 +1,5 @@
 ﻿#region
 
-using System;
 using System.Numerics;
 using AvaloniaGUI.CodeHelpers;
 using AvaloniaGUI.Properties;
@@ -12,10 +11,10 @@ namespace AvaloniaGUI.ViewModels.Dialog;
 
 public class MatrixInputViewModel : ViewModelBase
 {
-    private string _a00Text = String.Empty;
-    private string _a01Text = String.Empty;
-    private string _a10Text = String.Empty;
-    private string _a11Text = String.Empty;
+    private string _a00Text = string.Empty;
+    private string _a01Text = string.Empty;
+    private string _a10Text = string.Empty;
+    private string _a11Text = string.Empty;
 
     private Complex[,] _matrix = new Complex[2, 2] { { 0, 0 }, { 0, 0 } };
 
@@ -24,7 +23,7 @@ public class MatrixInputViewModel : ViewModelBase
     [ComplexNumber]
     public string A00Text
     {
-        get { return _a00Text; }
+        get => _a00Text;
         set
         {
             _a00Text = value;
@@ -36,7 +35,7 @@ public class MatrixInputViewModel : ViewModelBase
     [ComplexNumber]
     public string A01Text
     {
-        get { return _a01Text; }
+        get => _a01Text;
         set
         {
             _a01Text = value;
@@ -48,7 +47,7 @@ public class MatrixInputViewModel : ViewModelBase
     [ComplexNumber]
     public string A10Text
     {
-        get { return _a10Text; }
+        get => _a10Text;
         set
         {
             _a10Text = value;
@@ -60,7 +59,7 @@ public class MatrixInputViewModel : ViewModelBase
     [ComplexNumber]
     public string A11Text
     {
-        get { return _a11Text; }
+        get => _a11Text;
         set
         {
             _a11Text = value;
@@ -69,39 +68,15 @@ public class MatrixInputViewModel : ViewModelBase
         }
     }
 
-    public string ValidationMessage
-    {
-        get
-        {
-            if (_isUnitary)
-            {
-                return string.Empty;
-            }
-            else
-            {
-                return Resources.MatrixNotUnitary;
-            }
-        }
-    }
+    public string ValidationMessage => _isUnitary ? string.Empty : Resources.MatrixNotUnitary;
 
-    public Complex[,] Matrix
-    {
-        get
-        {
-            if (_isUnitary)
-            {
-                return _matrix;
-            }
-            else
-            {
-                return null;
-            }
-        }
-    }
+    public Complex[,] Matrix => _isUnitary ? _matrix : null;
 
     private void ValidateMatrix()
     {
         _isUnitary = MatrixValidator.IsUnitary2x2(_matrix);
-        OnPropertyChanged("ValidationMessage");
+        DialogInputValid = _isUnitary;
+        OnPropertyChanged(nameof(ValidationMessage));
+        OnPropertyChanged(nameof(DialogInputValid));
     }
 }

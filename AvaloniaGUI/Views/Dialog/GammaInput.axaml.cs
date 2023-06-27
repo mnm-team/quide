@@ -10,8 +10,9 @@ namespace AvaloniaGUI.Views.Dialog;
 
 public partial class GammaInput : UserControl
 {
-    private GammaInputViewModel _dataContext;
+    private readonly GammaInputViewModel _dataContext;
 
+    // mandatory for xaml file to initialize
     public GammaInput()
     {
     }
@@ -23,18 +24,6 @@ public partial class GammaInput : UserControl
 
         InitializeComponent();
     }
-
-    // protected override void OnDataContextChanged(EventArgs e)
-    // {
-    //     base.OnDataContextChanged(e);
-    //
-    //     _dataContext = DataContext as GammaInputViewModel;
-    // }
-
-    // private void UserControl_Loaded(object sender, RoutedEventArgs e)
-    // {
-    //     gammaBox.Focus();
-    // }
 
     private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {

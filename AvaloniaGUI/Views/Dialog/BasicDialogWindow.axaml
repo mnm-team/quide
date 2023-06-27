@@ -8,7 +8,7 @@
         x:DataType="vm:ViewModelBase"
         Title="Dialog Window"
         Icon="/Assets/avalonia-logo.ico"
-        ClientSize="500,350"
+        SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterOwner">
 
     <Design.DataContext>

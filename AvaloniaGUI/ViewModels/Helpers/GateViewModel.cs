@@ -582,21 +582,16 @@ public class GateViewModel : ViewModelBase
                     oldGate = _model.Steps[_column].Gates[_row.OffsetToRoot];
                     if (oldGate.Name == GateName.Empty)
                     {
-                        // MainWindow window1 = App.Current.MainWindow as MainWindow;
-                        // MatrixInputViewModel matrixVM = new MatrixInputViewModel();
-                        // ICustomContentDialog dialog1 =
-                        //     window1.DialogManager.CreateCustomContentDialog(new MatrixInput(matrixVM),
-                        //         DialogMode.OkCancel);
-                        // dialog1.Ok = () =>
-                        // {
-                        //     Complex[,] matrix = matrixVM.Matrix;
-                        //     if (matrix != null)
-                        //     {
-                        //         _model.Steps[_column].SetGate(new UnitaryGate(matrix, _row));
-                        //         _model.AddStepAfter(_column);
-                        //     }
-                        // };
-                        // dialog1.Show();
+                        MatrixInputViewModel matrixVM = new MatrixInputViewModel();
+
+                        await _dialogManager.ShowDialogAsync(new MatrixInput(matrixVM), () =>
+                        {
+                            Complex[,] matrix = matrixVM.Matrix;
+                            if (matrix == null) return;
+
+                            _model.Steps[_column].SetGate(new UnitaryGate(matrix, _row));
+                            _model.AddStepAfter(_column);
+                        });
                     }
 
                     break;

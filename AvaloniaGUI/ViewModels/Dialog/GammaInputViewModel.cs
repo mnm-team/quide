@@ -73,7 +73,7 @@ public class GammaInputViewModel : ViewModelBase
         }
     }
 
-    public void SelectUnit(object parameter)
+    private void SelectUnit(object parameter)
     {
         Rad = string.Equals("Rad", parameter as string);
     }
