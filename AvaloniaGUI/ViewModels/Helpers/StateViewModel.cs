@@ -34,24 +34,15 @@ public class StateViewModel : ViewModelBase
 
     #region Presentation Properties
 
-    public double Probability
-    {
-        get { return _model.Probability; }
-    }
+    public double Probability => _model.Probability;
 
-    public float ProbabilityFloat
-    {
-        get { return (float)_model.Probability; }
-    }
+    public float ProbabilityFloat => (float)_model.Probability;
 
-    public double RectangleWidth
-    {
-        get { return _rectangleWidth; }
-    }
+    public double RectangleWidth => _rectangleWidth;
 
     public double RectangleMaxWidth
     {
-        get { return _rectangleMaxWidth; }
+        get => _rectangleMaxWidth;
         set
         {
             if (value == _rectangleMaxWidth)
@@ -66,7 +57,7 @@ public class StateViewModel : ViewModelBase
 
     public double RelativeProbability
     {
-        get { return _relativeProbability; }
+        get => _relativeProbability;
         set
         {
             _relativeProbability = value;
@@ -76,35 +67,15 @@ public class StateViewModel : ViewModelBase
         }
     }
 
-    public char[] Bits
-    {
-        get { return _model.Bits; }
-    }
+    public char[] Bits => _model.Bits;
 
-    public ulong Value
-    {
-        get { return _model.Value; }
-    }
+    public ulong Value => _model.Value;
 
-    public Complex? Amplitude
-    {
-        get { return _model.Amplitude; }
-    }
+    public Complex? Amplitude => _model.Amplitude;
 
-    public string Representation
-    {
-        get { return _model.Representation; }
-    }
+    public string Representation => _model.Representation;
 
-    public OutputState Model
-    {
-        get { return _model; }
-    }
+    public OutputState Model => _model;
 
     #endregion // Presentation Properties
-
-
-    #region Private Helpers
-
-    #endregion // Private Helpers
 }

@@ -18,7 +18,6 @@
     </UserControl.Resources>
 
     <DockPanel
-        Width="Auto"
         MinHeight="300"
         MinWidth="500">
 
@@ -93,8 +92,7 @@
                             Height="23"
                             Margin="3,3,0,3"
                             IsVisible="{Binding VarParamsVisibility}"
-                            Content="{x:Static p:Resources.AddParam}"
-                            Width="Auto" />
+                            Content="{x:Static p:Resources.AddParam}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

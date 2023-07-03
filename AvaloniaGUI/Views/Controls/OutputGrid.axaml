@@ -27,9 +27,9 @@
         <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
             <!-- Register selector -->
             <Border
-                BorderBrush="LightGray"
+                BorderBrush="{StaticResource BorderBrush}"
                 BorderThickness="1"
-                Background="{DynamicResource {x:Static drawing:SystemColors.Menu}}">
+                Background="LightGray" Margin="4">
                 <Grid ColumnDefinitions="Auto,*">
                     <TextBlock
                         Margin="2"
@@ -116,9 +116,8 @@
                                     <Grid Margin="0" Width="{Binding RectangleMaxWidth}">
                                         <Rectangle
                                             Fill="{Binding Amplitude, Converter={StaticResource AmplitudeToColor}}"
-                                            Stroke="DimGray"
-                                            Height="20" Width="{Binding RectangleWidth}"
-                                            Margin="0" HorizontalAlignment="Left">
+                                            Stroke="DimGray" Width="{Binding RectangleWidth}"
+                                            Margin="4" HorizontalAlignment="Left">
                                             <!-- TODO: no rounded corners in Avalonia as of yet
                                             RadiusX="2" RadiusY="2"-->
                                             <Rectangle.OpacityMask>
@@ -136,7 +135,7 @@
                                         </Rectangle>
                                         <TextBlock Text="{Binding ProbabilityFloat, StringFormat='P = \{0\}'}"
                                                    Width="{Binding RectangleMaxWidth}"
-                                                   TextAlignment="Left" Margin="5,0,0,0"
+                                                   TextAlignment="Left" Padding="6"
                                                    ToolTip.Tip="{x:Static p:Resources.StateProbability}">
                                         </TextBlock>
                                     </Grid>
