@@ -44,7 +44,7 @@ public partial class ParametricInput : UserControl
     private void gateBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         // mandatory
-        if (_dataContext is null) return;
+        if (_dataContext is null || gateBox is null) return;
 
         _dataContext.GateIndex = gateBox.SelectedIndex;
         _dataContext.MethodIndex = 0;
@@ -59,5 +59,8 @@ public partial class ParametricInput : UserControl
     private void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);
+
+        gateBox = this.FindControl<ComboBox>("gateBox");
+        methodBox = this.FindControl<ListBox>("methodBox");
     }
 }

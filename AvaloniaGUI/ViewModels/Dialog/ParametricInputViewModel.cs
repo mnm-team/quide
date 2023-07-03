@@ -314,7 +314,7 @@ public class ParametricInputViewModel : ViewModelBase
         }
     }
 
-    private string TypeToString(Type type)
+    private static string TypeToString(Type type)
     {
         string[] split = type.ToString().Split('.');
         return split[split.Length - 1];

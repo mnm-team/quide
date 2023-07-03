@@ -27,7 +27,7 @@ public class RegisterViewModel : ViewModelBase
 
     #region Fields
 
-    private ComputerModel _model;
+    private readonly ComputerModel _model;
 
     private int _registerIndex;
 
@@ -64,29 +64,15 @@ public class RegisterViewModel : ViewModelBase
         }
     }
 
-    public string Name
-    {
-        get { return _model.Registers[_registerIndex].Name; }
-    }
+    public string Name => _model.Registers[_registerIndex].Name;
 
-    public double ButtonHeight
-    {
-        get { return Qubits.Count * CircuitGridViewModel.QubitSize; }
-    }
+    public double ButtonHeight => Qubits.Count * CircuitGridViewModel.QubitSize;
 
-    public RelativePoint ScaleCenterY
-    {
-        get
-        {
-            return new RelativePoint(0, Qubits.Count * CircuitGridViewModel.QubitScaleCenter.Point.Y,
-                RelativeUnit.Absolute);
-        }
-    }
+    public RelativePoint ScaleCenterY =>
+        new(0, Qubits.Count * CircuitGridViewModel.QubitScaleCenter.Point.Y,
+            RelativeUnit.Absolute);
 
-    public bool AddQubitEnabled
-    {
-        get { return _model.CurrentStep == 0; }
-    }
+    public bool AddQubitEnabled => _model.CurrentStep == 0;
 
     public void IncrementIndex(int delta = 1)
     {
@@ -120,28 +106,24 @@ public class RegisterViewModel : ViewModelBase
 
     private void Qubits_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        QubitModel qubit;
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
                 foreach (object item in e.NewItems)
                 {
                     int newRow = e.NewStartingIndex;
-                    if (item is QubitModel)
-                    {
-                        qubit = (QubitModel)item;
-                        _qubits.Insert(newRow, new QubitViewModel(_model, _registerIndex, newRow));
-                        for (int i = newRow + 1; i < _qubits.Count; i++)
-                        {
-                            _qubits[i].IncrementRow();
-                        }
+                    if (item is not QubitModel) continue;
 
-                        if (_qubits.Count == 2)
-                        {
-                            _qubits[0].UpdateDeleteQubitCommand(true);
-                            _qubits[1].UpdateDeleteQubitCommand(true);
-                        }
+                    _qubits.Insert(newRow, new QubitViewModel(_model, _registerIndex, newRow));
+                    for (int i = newRow + 1; i < _qubits.Count; i++)
+                    {
+                        _qubits[i].IncrementRow();
                     }
+
+                    if (_qubits.Count != 2) continue;
+
+                    _qubits[0].UpdateDeleteQubitCommand(true);
+                    _qubits[1].UpdateDeleteQubitCommand(true);
                 }
 
                 break;
@@ -149,18 +131,17 @@ public class RegisterViewModel : ViewModelBase
                 foreach (object item in e.OldItems)
                 {
                     int oldRow = e.OldStartingIndex;
-                    if (item is QubitModel)
-                    {
-                        _qubits.RemoveAt(oldRow);
-                        for (int i = oldRow; i < _qubits.Count; i++)
-                        {
-                            _qubits[i].IncrementRow(-1);
-                        }
+                    if (item is not QubitModel) continue;
 
-                        if (_qubits.Count == 1)
-                        {
-                            _qubits[0].UpdateDeleteQubitCommand(false);
-                        }
+                    _qubits.RemoveAt(oldRow);
+                    for (int i = oldRow; i < _qubits.Count; i++)
+                    {
+                        _qubits[i].IncrementRow(-1);
+                    }
+
+                    if (_qubits.Count == 1)
+                    {
+                        _qubits[0].UpdateDeleteQubitCommand(false);
                     }
                 }
 
@@ -170,14 +151,14 @@ public class RegisterViewModel : ViewModelBase
                 break;
         }
 
-        OnPropertyChanged("ScaleCenterY");
-        OnPropertyChanged("ButtonHeight");
+        OnPropertyChanged(nameof(ScaleCenterY));
+        OnPropertyChanged(nameof(ButtonHeight));
         OnQubitsChanged();
     }
 
     private void _model_StepChanged(object? sender, EventArgs eventArgs)
     {
-        OnPropertyChanged("AddQubitEnabled");
+        OnPropertyChanged(nameof(AddQubitEnabled));
     }
 
     #endregion // Private Helpers

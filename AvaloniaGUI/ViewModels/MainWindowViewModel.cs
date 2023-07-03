@@ -6,11 +6,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Windows.Input;
 using Avalonia.Interactivity;
 using AvaloniaGUI.CodeHelpers;
 using AvaloniaGUI.ViewModels.Controls;
+using AvaloniaGUI.ViewModels.Dialog;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel.Gates;
 using AvaloniaGUI.ViewModels.MainModels.QuantumParser;
@@ -619,51 +619,27 @@ public class MainWindowViewModel : ViewModelBase
         };
     }
 
-    public async void MakeComposite(object parameter)
+    private async void MakeComposite(object parameter)
     {
         try
         {
+            // throws if no selection
             List<Gate> toGroup = _model.GetSelectedGates();
-            CompositeInput ci = new CompositeInput();
-            await _dialogManager.ShowDialogAsync(new CompositeInput(), () =>
+
+            Dictionary<string, List<MethodInfo>> dict = CircuitEvaluator.GetInstance().GetExtensionGates();
+            CompositeInputViewModel compositeVM = new CompositeInputViewModel(dict, _model);
+
+            await _dialogManager.ShowDialogAsync(new CompositeInput(compositeVM), () =>
             {
-                try
-                {
-                    string name = ci.nameBox.Text;
+                var name = compositeVM.Name;
 
-                    const string pattern = @"^\s*[a-zA-Z_][a-zA-Z0-9_]*\s*$";
+                _model.MakeComposite(name, toGroup);
 
-                    Regex regex = new Regex(pattern);
-                    Match match = regex.Match(name);
-                    if (!match.Success)
-                    {
-                        throw new Exception("Entered name is invalid.");
-                    }
+                if (_toolsVM.Contains(name)) return;
 
-                    CircuitEvaluator eval = CircuitEvaluator.GetInstance();
-                    Dictionary<string, List<MethodInfo>> dict = eval.GetExtensionGates();
-                    if (dict.ContainsKey(name) || _model.FindComposite(name) is not null)
-                    {
-                        ErrorMessageHelper.ShowMessage(
-                            "Another composite gate with the same name already exist. Please choose other name.",
-                            "New composite gate");
-                    }
-                    else
-                    {
-                        _model.MakeComposite(name, toGroup);
-
-                        if (_toolsVM.Contains(name)) return;
-
-                        List<string> newTools = _toolsVM;
-                        newTools.Add(name);
-                        CompositeTools = newTools;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ErrorMessageHelper.ShowMessage("Unable to create composite gate from selection:\n" + ex.Message,
-                        "Unable to create composite gate");
-                }
+                List<string> newTools = _toolsVM;
+                newTools.Add(name);
+                CompositeTools = newTools;
             });
         }
         catch (Exception ex)

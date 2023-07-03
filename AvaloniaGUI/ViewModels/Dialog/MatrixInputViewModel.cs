@@ -16,7 +16,7 @@ public class MatrixInputViewModel : ViewModelBase
     private string _a10Text = string.Empty;
     private string _a11Text = string.Empty;
 
-    private Complex[,] _matrix = new Complex[2, 2] { { 0, 0 }, { 0, 0 } };
+    private readonly Complex[,] _matrix = new Complex[2, 2] { { 0, 0 }, { 0, 0 } };
 
     private bool _isUnitary;
 
