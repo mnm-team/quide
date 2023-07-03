@@ -10,7 +10,7 @@ namespace AvaloniaGUI.CodeHelpers;
 public static class ErrorMessageHelper
 {
     /// <summary>
-    /// Custom message box
+    /// Custom message box.
     /// </summary>
     /// <param name="title">Title</param>
     /// <param name="msg">Message</param>

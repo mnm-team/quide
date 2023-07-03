@@ -135,10 +135,9 @@ public class CircuitGridViewModel : ViewModelBase
 
     public static double QubitSize => 64;
 
-    public static RelativePoint QubitScaleCenter => new RelativePoint(0, QubitSize / 2, RelativeUnit.Absolute);
+    public static RelativePoint QubitScaleCenter => new(0, QubitSize / 2, RelativeUnit.Absolute);
 
-    public RelativePoint ScaleCenterY =>
-        new RelativePoint(0, _model.TotalWidth * QubitScaleCenter.Point.Y, RelativeUnit.Absolute);
+    public RelativePoint ScaleCenterY => new(0, _model.TotalWidth * QubitScaleCenter.Point.Y, RelativeUnit.Absolute);
 
     public double ScaleFactor
     {

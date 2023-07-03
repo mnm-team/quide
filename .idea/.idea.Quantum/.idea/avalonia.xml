@@ -18,6 +18,7 @@
         <entry key="AvaloniaGUI/Views/CurcuitDesigner.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
         <entry key="AvaloniaGUI/Views/Dialog/AboutWindow.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
         <entry key="AvaloniaGUI/Views/Dialog/BasicDialogWindow.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
+        <entry key="AvaloniaGUI/Views/Dialog/CompositeInput.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
         <entry key="AvaloniaGUI/Views/Dialog/GammaInput.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
         <entry key="AvaloniaGUI/Views/Dialog/MatrixInput.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />
         <entry key="AvaloniaGUI/Views/Dialog/NewRegisterInput.axaml" value="AvaloniaGUI/AvaloniaGUI.csproj" />

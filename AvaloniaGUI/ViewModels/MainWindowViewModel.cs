@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Windows.Input;
 using Avalonia.Interactivity;
 using AvaloniaGUI.CodeHelpers;
@@ -145,8 +146,7 @@ public class MainWindowViewModel : ViewModelBase
     private DelegateCommand _save;
     private DelegateCommand _saveAs;
 
-    //TODO: how handle dialog interactions?
-    private static ReactiveCommand<Unit, Unit> _calculatorCommand;
+    private static DelegateCommand _calculatorCommand;
 
     private DelegateCommand _aboutCommand;
     //private CalcWindow _calcWindow;
@@ -208,7 +208,7 @@ public class MainWindowViewModel : ViewModelBase
                 _outputGridVM.AddQubitsTracing(_circuitGridVM);
             }
 
-            base.OnPropertyChanged(nameof(CircuitGrid));
+            OnPropertyChanged(nameof(CircuitGrid));
         }
     }
 
@@ -619,80 +619,58 @@ public class MainWindowViewModel : ViewModelBase
         };
     }
 
-    public void MakeComposite(object parameter)
+    public async void MakeComposite(object parameter)
     {
-        //TODO:
-        // try
-        // {
-        //     List<Gate> toGroup = _model.GetSelectedGates();
-        //     CompositeInput ci = new CompositeInput();
-        //     ICustomContentDialog dialog1 = _window.DialogManager
-        //         .CreateCustomContentDialog(ci, DialogMode.OkCancel);
-        //     dialog1.Ok = () =>
-        //     {
-        //         try
-        //         {
-        //             string name = ci.nameBox.Text;
-        //
-        //             string pattern = @"^\s*[a-zA-Z_][a-zA-Z0-9_]*\s*$";
-        //             Regex regex = new Regex(pattern);
-        //             Match match = regex.Match(name);
-        //             if (!match.Success)
-        //             {
-        //                 throw new Exception("Entered name is invalid.");
-        //             }
-        //
-        //             CircuitEvaluator eval = CircuitEvaluator.GetInstance();
-        //             Dictionary<string, List<MethodInfo>> dict = eval.GetExtensionGates();
-        //             if (dict.ContainsKey(name))
-        //             {
-        //                 MessageBox.Show(
-        //                     "Another composite gate with the same name already exist. Please choose other name.",
-        //                     "New composite gate",
-        //                     MessageBoxButton.OK,
-        //                     MessageBoxImage.Error);
-        //             }
-        //             else
-        //             {
-        //                 List<Gate> alreadyDefined = _model.FindComposite(name);
-        //                 if (alreadyDefined != null)
-        //                 {
-        //                     MessageBox.Show(
-        //                         "Another composite gate with the same name already exist. Please choose other name.",
-        //                         "New composite gate",
-        //                         MessageBoxButton.OK,
-        //                         MessageBoxImage.Error);
-        //                 }
-        //                 else
-        //                 {
-        //                     _model.MakeComposite(name, toGroup);
-        //
-        //                     if (!_toolsVM.Contains(name))
-        //                     {
-        //                         List<string> newTools = _toolsVM;
-        //                         newTools.Add(name);
-        //                         CompositeTools = newTools;
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //         catch (Exception ex)
-        //         {
-        //             MessageBox.Show("Unable to create composite gate from selection:\n" + ex.Message,
-        //                 "Unable to create composite gate",
-        //                 MessageBoxButton.OK,
-        //                 MessageBoxImage.Error);
-        //         }
-        //     };
-        //     dialog1.Show();
-        // }
-        // catch (Exception ex)
-        // {
-        //     MessageBox.Show("Unable to create composite gate from selection:\n" + ex.Message,
-        //         "Unable to create composite gate",
-        //         MessageBoxButton.OK,
-        //         MessageBoxImage.Error);
-        // }
+        try
+        {
+            List<Gate> toGroup = _model.GetSelectedGates();
+            CompositeInput ci = new CompositeInput();
+            await _dialogManager.ShowDialogAsync(new CompositeInput(), () =>
+            {
+                try
+                {
+                    string name = ci.nameBox.Text;
+
+                    const string pattern = @"^\s*[a-zA-Z_][a-zA-Z0-9_]*\s*$";
+
+                    Regex regex = new Regex(pattern);
+                    Match match = regex.Match(name);
+                    if (!match.Success)
+                    {
+                        throw new Exception("Entered name is invalid.");
+                    }
+
+                    CircuitEvaluator eval = CircuitEvaluator.GetInstance();
+                    Dictionary<string, List<MethodInfo>> dict = eval.GetExtensionGates();
+                    if (dict.ContainsKey(name) || _model.FindComposite(name) is not null)
+                    {
+                        ErrorMessageHelper.ShowMessage(
+                            "Another composite gate with the same name already exist. Please choose other name.",
+                            "New composite gate");
+                    }
+                    else
+                    {
+                        _model.MakeComposite(name, toGroup);
+
+                        if (_toolsVM.Contains(name)) return;
+
+                        List<string> newTools = _toolsVM;
+                        newTools.Add(name);
+                        CompositeTools = newTools;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ErrorMessageHelper.ShowMessage("Unable to create composite gate from selection:\n" + ex.Message,
+                        "Unable to create composite gate");
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            ErrorMessageHelper.ShowMessage("Unable to create composite gate from selection:\n" + ex.Message,
+                "Unable to create composite gate");
+        }
     }
 
     public void ClearCircuit(object parameter)
@@ -887,7 +865,7 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    //TODO:
+    //TODO: Calculator
     // public CalcWindow ShowCalculator()
     // {
     //     if (_calcWindow == null)

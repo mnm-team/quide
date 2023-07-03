@@ -892,9 +892,9 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
             }
         }
 
-        public List<Gate> FindComposite(string name)
+        public List<Gate>? FindComposite(string name)
         {
-            _compositeGates.TryGetValue(name, out List<Gate> result);
+            _compositeGates.TryGetValue(name, out var result);
             return result;
         }
 
