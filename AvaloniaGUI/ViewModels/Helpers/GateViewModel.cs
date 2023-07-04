@@ -1057,6 +1057,7 @@ public class GateViewModel : ViewModelBase
                     {
                         CircuitEvaluator eval = CircuitEvaluator.GetInstance();
                         Dictionary<string, List<MethodInfo>> dict = eval.GetExtensionGates();
+
                         if (string.IsNullOrWhiteSpace(MainWindowViewModel.SelectedComposite)) break;
 
                         ParametricInputViewModel parametricInputVM = new ParametricInputViewModel(

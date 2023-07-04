@@ -22,7 +22,7 @@ public class ParametricInputViewModel : ViewModelBase
     private int _methodIndex;
 
     private Dictionary<string, List<MethodInfo>> _allParametrics;
-    private List<MethodInfo> _candidates;
+    private List<MethodInfo> _candidateMethods;
 
     private string[] _compositeNames;
     private string[] _candidateNames;
@@ -33,7 +33,12 @@ public class ParametricInputViewModel : ViewModelBase
 
     private Dictionary<string, List<Gate>> _allComposites;
 
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ParametricInputViewModel"/> class.
+    /// </summary>
+    /// <param name="name">CompositeName</param>
+    /// <param name="allParametrics">Composites with their respective methods</param>
+    /// <param name="allComposites">Custom composites with their underlying gates</param>
     public ParametricInputViewModel(string name,
         Dictionary<string, List<MethodInfo>> allParametrics,
         Dictionary<string, List<Gate>> allComposites)
@@ -42,8 +47,10 @@ public class ParametricInputViewModel : ViewModelBase
         _allParametrics = allParametrics;
         _allComposites = allComposites;
 
+        // get total CompositeNames (default + custom)
         _compositeNames = allParametrics.Keys.Concat(allComposites.Keys).Distinct().ToArray();
 
+        // find position of chosen composite in total list
         for (int i = 0; i < _compositeNames.Length; i++)
         {
             if (!_compositeNames[i].Equals(name)) continue;
@@ -81,9 +88,9 @@ public class ParametricInputViewModel : ViewModelBase
     {
         get
         {
-            if (_candidates != null && _methodIndex != -1)
+            if (_candidateMethods != null && _methodIndex != -1)
             {
-                return _candidates[_methodIndex];
+                return _candidateMethods[_methodIndex];
             }
 
             return null;
@@ -120,7 +127,7 @@ public class ParametricInputViewModel : ViewModelBase
         {
             if (_hasParamArray[_methodIndex])
             {
-                ParameterInfo[] infos = _candidates[_methodIndex].GetParameters();
+                ParameterInfo[] infos = _candidateMethods[_methodIndex].GetParameters();
                 object[] values = new object[infos.Length];
                 // normal parameters
                 for (int i = 1; i < infos.Length - 1; i++)
@@ -182,7 +189,7 @@ public class ParametricInputViewModel : ViewModelBase
 
     public void AddParam()
     {
-        ParameterInfo[] infos = _candidates[_methodIndex].GetParameters();
+        ParameterInfo[] infos = _candidateMethods[_methodIndex].GetParameters();
         ParameterInfo info = infos.Last();
 
         Type type = info.ParameterType.GetElementType();
@@ -206,20 +213,27 @@ public class ParametricInputViewModel : ViewModelBase
 
     private void PopulateCandidates()
     {
+        // get name of chosen composite
         string functionName = _compositeNames[_gateIndex];
+
+        // if chosen composite in the list of default composites
         if (_allParametrics.ContainsKey(functionName))
         {
-            _candidates = _allParametrics[functionName];
+            // get available methods for chosen composite
+            _candidateMethods = _allParametrics[functionName];
 
-            _paramsNames = new string[_candidates.Count][];
-            _candidateNames = new string[_candidates.Count];
-            _hasParamArray = new bool[_candidates.Count];
+            _paramsNames = new string[_candidateMethods.Count][];
+            _candidateNames = new string[_candidateMethods.Count];
+            _hasParamArray = new bool[_candidateMethods.Count];
 
-            for (int i = 0; i < _candidates.Count; i++)
+            // 
+            for (int i = 0; i < _candidateMethods.Count; i++)
             {
-                MethodInfo method = _candidates[i];
+                MethodInfo method = _candidateMethods[i];
                 ParameterInfo[] infos = method.GetParameters();
+
                 _paramsNames[i] = new string[infos.Length];
+                // set name 
                 _paramsNames[i][0] = infos[0].Name;
 
                 _hasParamArray[i] = false;
@@ -258,7 +272,7 @@ public class ParametricInputViewModel : ViewModelBase
                 _candidateNames[i] = sb.ToString();
             }
         }
-        else // Composite with List<Gate>
+        else // custom Composite with List<Gate>
         {
             _paramsNames = new string[1][];
             _candidateNames = new string[1];
@@ -285,9 +299,9 @@ public class ParametricInputViewModel : ViewModelBase
 
     private void PopulateParams()
     {
-        if (_candidates != null)
+        if (_candidateMethods != null)
         {
-            ParameterInfo[] infos = _candidates[_methodIndex].GetParameters();
+            ParameterInfo[] infos = _candidateMethods[_methodIndex].GetParameters();
 
             _parameters = new ParameterViewModel[infos.Length - 1];
 

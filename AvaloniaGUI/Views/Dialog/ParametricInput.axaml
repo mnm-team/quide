@@ -21,6 +21,7 @@
         MinHeight="300"
         MinWidth="500">
 
+        <!-- SelectedCompositeGate -->
         <StackPanel
             DockPanel.Dock="Top"
             Orientation="Vertical"
@@ -35,10 +36,10 @@
                 HorizontalAlignment="Stretch"
                 Items="{Binding CompositeNames}"
                 SelectedIndex="{Binding GateIndex}"
-                SelectionChanged="gateBox_SelectionChanged" />
-            <!-- IsTextSearchCaseSensitive="False" -->
+                SelectionChanged="gateBox_SelectionChanged" IsTextSearchEnabled="True" />
         </StackPanel>
 
+        <!-- SelectedMethod -->
         <StackPanel
             DockPanel.Dock="Top"
             Orientation="Vertical"
@@ -77,6 +78,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
+            <!-- Add Parameter Button -->
             <ItemsControl
                 Grid.Row="0" Grid.Column="4"
                 Items="{Binding Parameters}">
@@ -141,6 +143,7 @@
                 Grid.Column="1"
                 Grid.ColumnSpan="4" />
 
+            <!-- Validation Messages -->
             <ItemsControl
                 Grid.Row="1"
                 Grid.Column="1"

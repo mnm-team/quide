@@ -46,9 +46,9 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
         //private List<Gate> _gatesContainer;
 
         private Quantum.QuantumComputer _comp;
-        private Quantum.Register _quantumRoot = null;
+        private Quantum.Register _quantumRoot;
 
-        private Register _parserRoot = null;
+        private Register _parserRoot;
 
         private Dictionary<string, List<MethodInfo>> _parserExtensionGates;
         private Dictionary<string, List<MethodInfo>> _tempParserExtensionGates;
@@ -60,7 +60,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
 
         private Dictionary<string, List<MethodCode>> _methodsCodes;
 
-        private Dictionary<RegisterModel, Register> _modelRefs = new Dictionary<RegisterModel, Register>();
+        private Dictionary<RegisterModel, Register> _modelRefs;
 
         private bool _listenToModelChanges = true;
 
@@ -73,17 +73,16 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
         {
             get
             {
-                if (_allParserExtensionGates == null)
-                {
-                    if (_parserExtensionGates == null)
-                    {
-                        IEnumerable<MethodInfo> methods =
-                            Parser.GetExtensionMethods(Assembly.GetAssembly(this.GetType()), this.GetType());
-                        _parserExtensionGates = LoadExtMethods(methods);
-                    }
+                if (_allParserExtensionGates != null) return _allParserExtensionGates;
 
-                    _allParserExtensionGates = new Dictionary<string, List<MethodInfo>>(_parserExtensionGates);
+                if (_parserExtensionGates == null)
+                {
+                    IEnumerable<MethodInfo> methods =
+                        Parser.GetExtensionMethods(Assembly.GetAssembly(GetType()), GetType());
+                    _parserExtensionGates = LoadExtMethods(methods);
                 }
+
+                _allParserExtensionGates = new Dictionary<string, List<MethodInfo>>(_parserExtensionGates);
 
                 return _allParserExtensionGates;
             }
@@ -93,27 +92,23 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
         {
             get
             {
-                if (_allLibExtensionGates == null)
-                {
-                    if (_libExtensionGates == null)
-                    {
-                        IEnumerable<MethodInfo> methods = Parser.GetExtensionMethods(
-                            Assembly.GetAssembly(typeof(Quantum.QuantumComputer)),
-                            typeof(Quantum.QuantumComputer));
-                        _libExtensionGates = LoadExtMethods(methods);
-                    }
+                if (_allLibExtensionGates != null) return _allLibExtensionGates;
 
-                    _allLibExtensionGates = new Dictionary<string, List<MethodInfo>>(_libExtensionGates);
+                if (_libExtensionGates == null)
+                {
+                    IEnumerable<MethodInfo> methods = Parser.GetExtensionMethods(
+                        Assembly.GetAssembly(typeof(Quantum.QuantumComputer)),
+                        typeof(Quantum.QuantumComputer));
+                    _libExtensionGates = LoadExtMethods(methods);
                 }
+
+                _allLibExtensionGates = new Dictionary<string, List<MethodInfo>>(_libExtensionGates);
 
                 return _allLibExtensionGates;
             }
         }
 
-        internal Dictionary<string, List<MethodCode>> MethodsCodes
-        {
-            get { return _methodsCodes; }
-        }
+        internal Dictionary<string, List<MethodCode>> MethodsCodes => _methodsCodes;
 
         #endregion // Public Fields and Properties
 
@@ -187,11 +182,10 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
         public void AddParametricGate(string name, object[] parameters)
         {
             MethodInfo rightMethod = FindExtension(name, parameters, ExtensionGates);
-            if (rightMethod != null)
-            {
-                ParametricGate cg = CreateParametricGate(rightMethod, parameters);
-                AddGate(cg);
-            }
+            if (rightMethod == null) return;
+
+            ParametricGate cg = CreateParametricGate(rightMethod, parameters);
+            AddGate(cg);
         }
 
         #endregion // Public Methods for parsing
@@ -201,17 +195,17 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
 
         internal void LoadParserMethods(Assembly asm)
         {
-            IEnumerable<MethodInfo> methods = Parser.GetExtensionMethods(asm, this.GetType());
+            IEnumerable<MethodInfo> methods = Parser.GetExtensionMethods(asm, GetType());
             _tempParserExtensionGates = LoadExtMethods(methods);
             if (_parserExtensionGates == null)
             {
                 IEnumerable<MethodInfo> methods1 =
-                    Parser.GetExtensionMethods(Assembly.GetAssembly(this.GetType()), this.GetType());
+                    Parser.GetExtensionMethods(Assembly.GetAssembly(GetType()), GetType());
                 _parserExtensionGates = LoadExtMethods(methods1);
             }
 
             _allParserExtensionGates =
-                MergeLeft<string, List<MethodInfo>>(_parserExtensionGates, _tempParserExtensionGates);
+                MergeLeft(_parserExtensionGates, _tempParserExtensionGates);
         }
 
         internal void LoadLibMethods(Assembly asm)
@@ -226,7 +220,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
                 _libExtensionGates = LoadExtMethods(methods1);
             }
 
-            _allLibExtensionGates = MergeLeft<string, List<MethodInfo>>(_libExtensionGates, _tempLibExtensionGates);
+            _allLibExtensionGates = MergeLeft(_libExtensionGates, _tempLibExtensionGates);
         }
 
         internal void LoadMethodsCodes(Dictionary<string, List<MethodCode>> methods)
@@ -234,7 +228,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
             _methodsCodes = methods;
         }
 
-        //for Parser
+        // for Parser
         internal ComputerModel GetModel()
         {
             return _model;
@@ -248,9 +242,8 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
         internal OutputViewModel InitFromModel(ComputerModel model)
         {
             Reset(model);
-            for (int i = 0; i < model.Registers.Count; i++)
+            foreach (var regModel in model.Registers)
             {
-                RegisterModel regModel = model.Registers[i];
                 NewFromModel(regModel);
             }
 
@@ -265,12 +258,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
                 Register reg = FindRegister(prev.Value.Register.Name);
                 if (reg != null && reg.Width >= prev.Value.Offset + prev.Value.Width)
                 {
-                    _outputModel.Update(GetSourceRoot(), new RegisterPartModel()
-                    {
-                        Register = reg.Model,
-                        Offset = prev.Value.Offset,
-                        Width = prev.Value.Width
-                    });
+                    _outputModel.Update(GetSourceRoot(), prev.Value with { Register = reg.Model });
                 }
                 else
                 {
@@ -302,104 +290,74 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
         internal void Decompose(ParametricGate gate)
         {
             MethodInfo rightMethod = gate.Method;
-            if (rightMethod != null)
-            {
-                object[] parameters = gate.Parameters.Select<object, object>(x =>
-                {
-                    if (x is RegisterRefModel)
-                    {
-                        return ModelToRef((RegisterRefModel)x);
-                    }
-                    else if (x is RegisterPartModel)
-                    {
-                        return ModelToRef((RegisterPartModel)x);
-                    }
-                    else if (x is RegisterRefModel[])
-                    {
-                        return (x as RegisterRefModel[])
-                            .Select<RegisterRefModel, RegisterRef>(y => ModelToRef(y)).ToArray();
-                    }
-                    else if (x is RegisterPartModel[])
-                    {
-                        return (x as RegisterPartModel[])
-                            .Select<RegisterPartModel, Register>(y => ModelToRef(y)).ToArray();
-                    }
-                    else
-                    {
-                        return x;
-                    }
-                }).ToArray();
-                parameters[0] = this;
+            if (rightMethod == null) return;
 
-                Group = false;
-                rightMethod.Invoke(this, parameters);
-            }
+            object[] parameters = gate.Parameters.Select<object, object>(x =>
+            {
+                return x switch
+                {
+                    RegisterRefModel registerRefModel => ModelToRef(registerRefModel),
+                    RegisterPartModel model => ModelToRef(model),
+                    RegisterRefModel[] models => models.Select(ModelToRef).ToArray(),
+                    RegisterPartModel[] registerPartModels => registerPartModels.Select(ModelToRef).ToArray(),
+                    _ => x
+                };
+            }).ToArray();
+            parameters[0] = this;
+
+            Group = false;
+            rightMethod.Invoke(this, parameters);
         }
 
         internal void Evaluate(ParametricGate gate, bool runBackward)
         {
-            MethodInfo rightMethod = null;
-            if (runBackward)
-            {
-                rightMethod = gate.InverseMethod;
-            }
-            else
-            {
-                rightMethod = gate.ComputationMethod;
-            }
+            var rightMethod = runBackward ? gate.InverseMethod : gate.ComputationMethod;
 
-            if (rightMethod != null)
+            if (rightMethod == null) return;
+
+            object FromModel(object x)
             {
-                Func<object, object> fromModel = x =>
+                return x switch
                 {
-                    if (x is RegisterRefModel)
-                    {
-                        return ModelToSource((RegisterRefModel)x);
-                    }
-                    else if (x is RegisterPartModel)
-                    {
-                        return ModelToSource((RegisterPartModel)x);
-                    }
-                    else
-                    {
-                        return x;
-                    }
+                    RegisterRefModel model => ModelToSource(model),
+                    RegisterPartModel model => ModelToSource(model),
+                    _ => x
                 };
-
-                object[] parameters = new object[gate.Parameters.Length];
-                ParameterInfo[] infos = rightMethod.GetParameters();
-                for (int i = 1; i < parameters.Length; i++)
-                {
-                    object par = gate.Parameters[i];
-                    if (infos[i].GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0)
-                    {
-                        IEnumerable pars = par as IEnumerable;
-                        ArrayList newPars = new ArrayList();
-                        foreach (var item in pars)
-                        {
-                            newPars.Add(fromModel(item));
-                        }
-
-                        Array arr = newPars.ToArray(infos[i].ParameterType.GetElementType());
-                        parameters[i] = arr;
-                    }
-                    else
-                    {
-                        parameters[i] = fromModel(par);
-                    }
-                }
-
-                parameters[0] = _comp;
-
-                rightMethod.Invoke(_comp, parameters);
             }
+
+            object[] parameters = new object[gate.Parameters.Length];
+            ParameterInfo[] infos = rightMethod.GetParameters();
+            for (int i = 1; i < parameters.Length; i++)
+            {
+                object par = gate.Parameters[i];
+                if (infos[i].GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0)
+                {
+                    IEnumerable pars = par as IEnumerable;
+                    ArrayList newPars = new ArrayList();
+                    foreach (var item in pars)
+                    {
+                        newPars.Add(FromModel(item));
+                    }
+
+                    Array arr = newPars.ToArray(infos[i].ParameterType.GetElementType());
+                    parameters[i] = arr;
+                }
+                else
+                {
+                    parameters[i] = FromModel(par);
+                }
+            }
+
+            parameters[0] = _comp;
+
+            rightMethod.Invoke(_comp, parameters);
         }
 
         internal ParametricGate CreateParametricGate(MethodInfo method, object[] parameters)
         {
             string name = method.Name;
             string invName = name;
-            string[] sep = new string[] { "Inverse" };
+            string[] sep = { "Inverse" };
             if (name.StartsWith("Inverse"))
             {
                 string[] splitted = name.Split(sep, StringSplitOptions.RemoveEmptyEntries);
@@ -433,12 +391,12 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
                 else if (t == typeof(RegisterRef[]))
                 {
                     parameters[i] = ((RegisterRef[])parameters[i])
-                        .Select<RegisterRef, RegisterRefModel>(x => x.ToRefModel()).ToArray();
+                        .Select(x => x.ToRefModel()).ToArray();
                 }
                 else if (t == typeof(Register[]))
                 {
                     parameters[i] = (parameters[i] as Register[])
-                        .Select<Register, RegisterPartModel>(x => x.ToPartModel()).ToArray();
+                        .Select(x => x.ToPartModel()).ToArray();
                 }
             }
 
@@ -497,7 +455,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
         {
             if (model.Register != null)
             {
-                return new RegisterRef()
+                return new RegisterRef
                 {
                     Register = _modelRefs[model.Register],
                     Offset = model.Offset
@@ -505,7 +463,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
             }
             else
             {
-                return new RegisterRef()
+                return new RegisterRef
                 {
                     Register = _parserRoot,
                     Offset = model.Offset
@@ -521,21 +479,14 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
                 toReturn = _modelRefs[model.Register];
             }
 
-            if (model.Width == toReturn.Width)
-            {
-                return toReturn;
-            }
-            else
-            {
-                return toReturn[model.Offset, model.Width];
-            }
+            return model.Width == toReturn.Width ? toReturn : toReturn[model.Offset, model.Width];
         }
 
         internal Quantum.RegisterRef ModelToSource(RegisterRefModel model)
         {
             if (model.Register != null)
             {
-                return new Quantum.RegisterRef()
+                return new Quantum.RegisterRef
                 {
                     Register = _modelRefs[model.Register].SourceRegister,
                     Offset = model.Offset
@@ -543,7 +494,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
             }
             else
             {
-                return new Quantum.RegisterRef()
+                return new Quantum.RegisterRef
                 {
                     Register = _parserRoot.SourceRegister,
                     Offset = model.Offset
@@ -559,14 +510,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
                 toReturn = _modelRefs[model.Register].SourceRegister;
             }
 
-            if (model.Width == toReturn.Width)
-            {
-                return toReturn;
-            }
-            else
-            {
-                return toReturn[model.Offset, model.Width];
-            }
+            return model.Width == toReturn.Width ? toReturn : toReturn[model.Offset, model.Width];
         }
 
         #endregion // Internal Methods
@@ -579,14 +523,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
             RegisterModel regModel = new RegisterModel(
                 _model.Registers.Count, 0, reg.Width, reg.GetAmplitudes());
 
-            if (_quantumRoot == null)
-            {
-                _quantumRoot = _comp.GetRootRegister(reg);
-            }
-            else
-            {
-                _quantumRoot = _comp.GetRootRegister(_quantumRoot, reg);
-            }
+            _quantumRoot = _quantumRoot == null ? _comp.GetRootRegister(reg) : _comp.GetRootRegister(_quantumRoot, reg);
 
             _parserRoot = new Register(_model, _quantumRoot, null, 0);
 
@@ -637,14 +574,14 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
                 }
                 else
                 {
-                    dict[item.Name] = new List<MethodInfo>() { item };
+                    dict[item.Name] = new List<MethodInfo> { item };
                 }
             }
 
             return dict;
         }
 
-        private Dictionary<K, V> MergeLeft<K, V>(Dictionary<K, V> oldDict, Dictionary<K, V> newDict)
+        private static Dictionary<K, V> MergeLeft<K, V>(Dictionary<K, V> oldDict, Dictionary<K, V> newDict)
         {
             Dictionary<K, V> toReturn = new Dictionary<K, V>(oldDict);
             foreach (var pair in newDict)
@@ -657,49 +594,46 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
 
         private MethodInfo FindExtension(string name, object[] parameters, Dictionary<string, List<MethodInfo>> dict)
         {
-            List<MethodInfo> sameName;
-            if (dict != null && dict.TryGetValue(name, out sameName))
+            if (dict == null || !dict.TryGetValue(name, out List<MethodInfo> sameName)) return null;
+
+            foreach (MethodInfo item in sameName)
             {
-                foreach (MethodInfo item in sameName)
+                ParameterInfo[] pars = item.GetParameters();
+                if (pars.Length != parameters.Length) continue;
+
+                bool match = true;
+                int i = 0;
+                while (match && i < pars.Length)
                 {
-                    ParameterInfo[] pars = item.GetParameters();
-                    if (pars.Length == parameters.Length)
+                    Type actual = parameters[i].GetType();
+                    if (pars[i].ParameterType != actual)
                     {
-                        bool match = true;
-                        int i = 0;
-                        while (match && i < pars.Length)
+                        if (i == pars.Length - 1 &&
+                            pars[i].GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0)
                         {
-                            Type actual = parameters[i].GetType();
-                            if (pars[i].ParameterType != actual)
+                            if (actual != typeof(RegisterRef[]) &&
+                                actual != typeof(Register[]))
                             {
-                                if (i == pars.Length - 1 &&
-                                    pars[i].GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0)
-                                {
-                                    if (actual != typeof(RegisterRef[]) &&
-                                        actual != typeof(Register[]))
-                                    {
-                                        match = false;
-                                    }
-                                }
-                                else
-                                {
-                                    if (actual != typeof(QuantumComputer) &&
-                                        actual != typeof(RegisterRef) &&
-                                        actual != typeof(Register))
-                                    {
-                                        match = false;
-                                    }
-                                }
+                                match = false;
                             }
-
-                            i++;
                         }
-
-                        if (match)
+                        else
                         {
-                            return item;
+                            if (actual != typeof(QuantumComputer) &&
+                                actual != typeof(RegisterRef) &&
+                                actual != typeof(Register))
+                            {
+                                match = false;
+                            }
                         }
                     }
+
+                    i++;
+                }
+
+                if (match)
+                {
+                    return item;
                 }
             }
 
@@ -710,32 +644,30 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
         {
             ParameterInfo[] parameters = info.GetParameters();
 
-            List<MethodCode> sameName;
-            if (_methodsCodes != null && _methodsCodes.TryGetValue(info.Name, out sameName))
+            if (_methodsCodes == null || !_methodsCodes.TryGetValue(info.Name, out List<MethodCode> sameName))
+                return null;
+
+            foreach (MethodCode item in sameName)
             {
-                foreach (MethodCode item in sameName)
+                string[] parTypes = item.ParametersTypes;
+                if (parTypes.Length != parameters.Length) continue;
+
+                bool match = true;
+                int i = 0;
+                while (match && i < parTypes.Length)
                 {
-                    string[] parTypes = item.ParametersTypes;
-                    if (parTypes.Length == parameters.Length)
+                    Type actual = parameters[i].ParameterType;
+                    if (!actual.ToString().Contains(parTypes[i]))
                     {
-                        bool match = true;
-                        int i = 0;
-                        while (match && i < parTypes.Length)
-                        {
-                            Type actual = parameters[i].ParameterType;
-                            if (!actual.ToString().Contains(parTypes[i]))
-                            {
-                                match = false;
-                            }
-
-                            i++;
-                        }
-
-                        if (match)
-                        {
-                            return item;
-                        }
+                        match = false;
                     }
+
+                    i++;
+                }
+
+                if (match)
+                {
+                    return item;
                 }
             }
 
