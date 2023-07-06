@@ -85,8 +85,6 @@ public class ParameterViewModel : ViewModelBase
         }
     }
 
-    // TODO: whats this
-    // https://mcraiha.github.io/xaml/wpf/avalonia/2020/03/03/Differences-in-wpf-and-avalonia.html
     public bool VarParamsVisibility => _paramsArray;
 
 

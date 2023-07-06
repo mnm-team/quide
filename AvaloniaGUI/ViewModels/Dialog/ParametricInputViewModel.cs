@@ -209,6 +209,7 @@ public class ParametricInputViewModel : ViewModelBase
         _parameters = parList.ToArray();
 
         OnPropertyChanged(nameof(Parameters));
+        DialogInputValid = IsValid;
     }
 
     private void PopulateCandidates()

@@ -58,47 +58,7 @@
 
         <Grid ColumnDefinitions="10,Auto,Auto,*,Auto,10" RowDefinitions="Auto,Auto">
 
-            <ItemsControl
-                Grid.Column="3"
-                Items="{Binding Parameters}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <TextBox
-                            HorizontalAlignment="Stretch"
-                            Height="23"
-                            Margin="0, 3"
-                            Text="{Binding ValueString, Mode=TwoWay}" />
-
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-            <!-- Add Parameter Button -->
-            <ItemsControl
-                Grid.Row="0" Grid.Column="4"
-                Items="{Binding Parameters}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Button
-                            Click="addParam_Click"
-                            Height="23"
-                            Margin="3,3,0,3"
-                            IsVisible="{Binding VarParamsVisibility}"
-                            Content="{x:Static p:Resources.AddParam}" />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
+            <!-- Register Types (e.g. RegisterRef, Register,...) -->
             <ItemsControl
                 Grid.Row="0" Grid.Column="1"
                 Items="{Binding Parameters}">
@@ -118,6 +78,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
+            <!-- Register Names -->
             <ItemsControl
                 Grid.Row="0" Grid.Column="2"
                 Items="{Binding Parameters}">
@@ -133,6 +94,53 @@
                             VerticalAlignment="Center"
                             Margin="10, 3"
                             Text="{Binding Name}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Params -->
+            <ItemsControl Grid.Row="0"
+                          Grid.Column="3"
+                          Items="{Binding Parameters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBox
+                            HorizontalAlignment="Stretch"
+                            Height="23"
+                            Margin="0, 3"
+                            Text="{Binding ValueString, Mode=TwoWay}"
+                            PropertyChanged="ValueChanged" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.Styles>
+                    <Style Selector="ItemsPresenter">
+                        <Setter Property="(KeyboardNavigation.TabNavigation)" Value="Continue" />
+                    </Style>
+                </ItemsControl.Styles>
+            </ItemsControl>
+
+            <!-- Add Param Buttons -->
+            <ItemsControl
+                Grid.Row="0" Grid.Column="4"
+                Items="{Binding Parameters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button
+                            Click="addParam_Click"
+                            Height="23"
+                            Margin="3,3,0,3"
+                            IsVisible="{Binding VarParamsVisibility}"
+                            Content="{x:Static p:Resources.AddParam}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

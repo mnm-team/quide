@@ -1,5 +1,6 @@
 ﻿#region
 
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
@@ -62,5 +63,12 @@ public partial class ParametricInput : UserControl
 
         gateBox = this.FindControl<ComboBox>("gateBox");
         methodBox = this.FindControl<ListBox>("methodBox");
+    }
+
+    private void ValueChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (_dataContext is null) return;
+
+        _dataContext.DialogInputValid = _dataContext.IsValid;
     }
 }
