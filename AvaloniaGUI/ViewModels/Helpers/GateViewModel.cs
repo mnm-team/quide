@@ -80,11 +80,12 @@ public class GateViewModel : ViewModelBase
     {
         get
         {
-            if (Value is not CustomGate) return null;
+            if (Value is not CustomGate) return string.Empty;
 
             CustomGate cg = Value as CustomGate;
 
-            return (cg.End + cg.Begin + 1) / 2 == _row.OffsetToRoot ? cg.FunctionName : null;
+            // text should only be displayed in the middle gate
+            return (cg.End + cg.Begin + 1) / 2 == _row.OffsetToRoot ? cg.FunctionName : string.Empty;
         }
     }
 

@@ -211,8 +211,7 @@
                                                             <Border Margin="0"
                                                                     Height="{Binding GateHeight}"
                                                                     Background="{Binding GateImage}">
-                                                                <Canvas
-                                                                    RenderTransformOrigin="0.5, 0.5">
+                                                                <Canvas>
                                                                     <Viewbox MaxWidth="{Binding GateTextHeight}"
                                                                              MaxHeight="{x:Static vm:CircuitGridViewModel.GateHeight}"
                                                                              Canvas.Top="{x:Static vm:CircuitGridViewModel.GateTextCanvasTop}">
@@ -225,6 +224,7 @@
                                                                     </Viewbox>
                                                                     <Canvas.RenderTransform>
                                                                         <TransformGroup>
+                                                                            <!-- rotate and center text -->
                                                                             <RotateTransform Angle="90" />
                                                                             <TranslateTransform X="0"
                                                                                 Y="{x:Static vm:CircuitGridViewModel.GateTextTranslate}" />

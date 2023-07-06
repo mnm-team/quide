@@ -24,43 +24,26 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel.Gates
     {
         public abstract string FunctionName { get; }
 
-        public override RegisterRefModel? Control
-        {
-            get { return null; }
-        }
+        public override RegisterRefModel? Control => null;
 
         protected RegisterPartModel incRegPart(RegisterPartModel regRef, RegisterModel register, int afterOffset,
             int delta = 1)
         {
-            if (regRef.Register == register)
+            if (regRef.Register != register) return regRef;
+
+            if (regRef.Width + delta == register.Qubits.Count)
             {
-                if (regRef.Width + delta == register.Qubits.Count)
-                {
-                    return new RegisterPartModel()
-                    {
-                        Register = regRef.Register,
-                        Offset = regRef.Offset,
-                        Width = regRef.Width + delta
-                    };
-                }
-                else if (regRef.Offset > afterOffset)
-                {
-                    return new RegisterPartModel()
-                    {
-                        Register = regRef.Register,
-                        Offset = regRef.Offset + delta,
-                        Width = regRef.Width
-                    };
-                }
-                else if (regRef.Offset + regRef.Width - 1 > afterOffset)
-                {
-                    return new RegisterPartModel()
-                    {
-                        Register = regRef.Register,
-                        Offset = regRef.Offset,
-                        Width = regRef.Width + delta
-                    };
-                }
+                return regRef with { Width = regRef.Width + delta };
+            }
+
+            if (regRef.Offset > afterOffset)
+            {
+                return regRef with { Offset = regRef.Offset + delta };
+            }
+
+            if (regRef.Offset + regRef.Width - 1 > afterOffset)
+            {
+                return regRef with { Width = regRef.Width + delta };
             }
 
             return regRef;
@@ -68,7 +51,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel.Gates
 
         protected RegisterPartModel copyRegPart(RegisterPartModel regRef, int referenceBeginRow)
         {
-            return new RegisterPartModel()
+            return new RegisterPartModel
             {
                 Register = null,
                 Offset = regRef.OffsetToRoot - referenceBeginRow,

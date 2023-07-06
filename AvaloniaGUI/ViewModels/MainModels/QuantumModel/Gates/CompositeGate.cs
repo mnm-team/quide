@@ -22,7 +22,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel.Gates
 {
     public class CompositeGate : CustomGate
     {
-        private string _name;
+        private readonly string _name;
         private RegisterPartModel _targetRegister;
 
         public CompositeGate(string name, RegisterPartModel target)
@@ -31,32 +31,18 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel.Gates
             _targetRegister = target;
         }
 
-        public override GateName Name
-        {
-            get { return GateName.Composite; }
-        }
+        public override GateName Name => GateName.Composite;
 
-        public override int Begin
-        {
-            get { return _targetRegister.OffsetToRoot; }
-        }
+        public override int Begin => _targetRegister.OffsetToRoot;
 
-        public override int End
-        {
-            get { return _targetRegister.EndOffsetToRoot; }
-        }
+        public override int End => _targetRegister.EndOffsetToRoot;
 
-        public override RegisterRefModel Target
-        {
-            get
+        public override RegisterRefModel Target =>
+            new()
             {
-                return new RegisterRefModel()
-                {
-                    Register = _targetRegister.Register,
-                    Offset = _targetRegister.Offset
-                };
-            }
-        }
+                Register = _targetRegister.Register,
+                Offset = _targetRegister.Offset
+            };
 
         public override void IncrementRow(RegisterModel register, int afterOffset, int delta = 1)
         {
@@ -69,14 +55,8 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel.Gates
             return new CompositeGate(_name, newTarget);
         }
 
-        public override string FunctionName
-        {
-            get { return _name; }
-        }
+        public override string FunctionName => _name;
 
-        public RegisterPartModel TargetRegister
-        {
-            get { return _targetRegister; }
-        }
+        public RegisterPartModel TargetRegister => _targetRegister;
     }
 }
