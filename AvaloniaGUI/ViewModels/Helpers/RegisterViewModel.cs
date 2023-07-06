@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Avalonia;
 using Avalonia.Interactivity;
+using AvaloniaGUI.CodeHelpers;
 using AvaloniaGUI.ViewModels.Controls;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel;
 
@@ -33,15 +34,20 @@ public class RegisterViewModel : ViewModelBase
 
     private ObservableCollection<QubitViewModel> _qubits;
 
+    private readonly DialogManager _dialogManager;
+
     #endregion // Fields
 
 
     #region Constructor
 
-    public RegisterViewModel(ComputerModel model, int registerIndex)
+    public RegisterViewModel(ComputerModel model, int registerIndex, DialogManager dialogManager)
     {
         _model = model;
         _registerIndex = registerIndex;
+
+        _dialogManager = dialogManager;
+
         _model.Registers[_registerIndex].Qubits.CollectionChanged += Qubits_CollectionChanged;
         _model.StepChanged += _model_StepChanged;
     }
@@ -98,7 +104,7 @@ public class RegisterViewModel : ViewModelBase
         ObservableCollection<QubitViewModel> qubits = new ObservableCollection<QubitViewModel>();
         for (int i = 0; i < _model.Registers[_registerIndex].Qubits.Count; i++)
         {
-            qubits.Add(new QubitViewModel(_model, _registerIndex, i));
+            qubits.Add(new QubitViewModel(_model, _registerIndex, i, _dialogManager));
         }
 
         return qubits;
@@ -114,7 +120,7 @@ public class RegisterViewModel : ViewModelBase
                     int newRow = e.NewStartingIndex;
                     if (item is not QubitModel) continue;
 
-                    _qubits.Insert(newRow, new QubitViewModel(_model, _registerIndex, newRow));
+                    _qubits.Insert(newRow, new QubitViewModel(_model, _registerIndex, newRow, _dialogManager));
                     for (int i = newRow + 1; i < _qubits.Count; i++)
                     {
                         _qubits[i].IncrementRow();

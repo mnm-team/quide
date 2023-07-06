@@ -116,10 +116,7 @@ public class ParametricInputViewModel : ViewModelBase
 
     public ParameterViewModel[] Parameters => _parameters;
 
-    public bool IsValid
-    {
-        get { return _parameters.All(x => x.IsValid); }
-    }
+    public bool IsValid => _parameters.All(x => x.IsValid);
 
     public object[] ParamValues
     {

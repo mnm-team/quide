@@ -234,7 +234,7 @@ public class CircuitGridViewModel : ViewModelBase
         ObservableCollection<RegisterViewModel> registers = new ObservableCollection<RegisterViewModel>();
         for (int i = 0; i < _model.Registers.Count; i++)
         {
-            RegisterViewModel reg = new RegisterViewModel(_model, i);
+            RegisterViewModel reg = new RegisterViewModel(_model, i, _dialogManager);
             reg.QubitsChanged += registers_QubitsChanged;
             registers.Add(reg);
         }
@@ -325,7 +325,7 @@ public class CircuitGridViewModel : ViewModelBase
                     int newRow = e.NewStartingIndex;
                     if (item is RegisterModel)
                     {
-                        RegisterViewModel reg = new RegisterViewModel(_model, newRow);
+                        RegisterViewModel reg = new RegisterViewModel(_model, newRow, _dialogManager);
                         reg.QubitsChanged += registers_QubitsChanged;
                         Registers.Insert(newRow, reg);
                         for (int i = newRow + 1; i < _registers.Count; i++)

@@ -1,12 +1,16 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using AvaloniaGUI.CodeHelpers;
+using AvaloniaGUI.ViewModels.Dialog;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel;
+using AvaloniaGUI.Views.Dialog;
 
 #endregion
 
@@ -16,7 +20,7 @@ public class QubitViewModel : ViewModelBase
 {
     #region Fields
 
-    private ComputerModel _model;
+    private readonly ComputerModel _model;
 
     private int _registerIndex;
     private int _rowIndex;
@@ -30,18 +34,22 @@ public class QubitViewModel : ViewModelBase
     private DelegateCommand _deleteQubit;
     private DelegateCommand _deleteRegister;
 
+    private DialogManager _dialogManager;
+
     #endregion // Fields
 
 
     #region Constructor
 
-    public QubitViewModel(ComputerModel model, int registerIndex, int rowIndex)
+    public QubitViewModel(ComputerModel model, int registerIndex, int rowIndex, DialogManager dialogManager)
     {
         _model = model;
         _registerIndex = registerIndex;
         _rowIndex = rowIndex;
         _model.StepChanged += _model_CurrentStepChanged;
         _deleteRegister = new DelegateCommand(DeleteRegister, x => model.Registers.Count > 1);
+
+        _dialogManager = dialogManager;
     }
 
     #endregion // Constructor
@@ -255,52 +263,45 @@ public class QubitViewModel : ViewModelBase
         // dialog.Show();
     }
 
-    public void InsertRegisterAbove(object parameter)
+    public async void InsertRegisterAbove(object parameter)
     {
-        // MainWindow window = App.Current.MainWindow as MainWindow;
-        // NewRegisterInputViewModel vm = new NewRegisterInputViewModel();
-        // NewRegisterInput input = new NewRegisterInput(vm);
-        // ICustomContentDialog dialog = window.DialogManager.CreateCustomContentDialog(input, DialogMode.OkCancel);
-        // dialog.Ok = () =>
-        // {
-        //     // to update bindings:
-        //     input.normalize.Focus();
-        //     if (!Validation.GetHasError(input.widthBox) &&
-        //         !Validation.GetHasError(input.statesGrid))
-        //     {
-        //         int width = (int)vm.Width;
-        //         Dictionary<ulong, Complex> initStates = vm.GetInitStates();
-        //         if (width > 0 && initStates.Count > 0)
-        //         {
-        //             _model.InsertRegisterAbove(_registerIndex, width, initStates);
-        //         }
-        //     }
-        // };
-        // dialog.Show();
+        NewRegisterInputViewModel vm = new NewRegisterInputViewModel();
+        NewRegisterInput input = new NewRegisterInput(vm);
+        await _dialogManager.ShowDialogAsync(input, () =>
+        {
+            // to update bindings:
+            input.normalize.Focus();
+            // if (Validation.GetHasError(input.widthBox) ||
+            //     Validation.GetHasError(input.statesGrid)) return;
+
+            int width = (int)vm.Width;
+            Dictionary<ulong, Complex> initStates = vm.GetInitStates();
+            if (width > 0 && initStates.Count > 0)
+            {
+                _model.InsertRegisterAbove(_registerIndex, width, initStates);
+            }
+        });
     }
 
-    public void InsertRegisterBelow(object parameter)
+    public async void InsertRegisterBelow(object parameter)
     {
-        // MainWindow window = App.Current.MainWindow as MainWindow;
-        // NewRegisterInputViewModel vm = new NewRegisterInputViewModel();
-        // NewRegisterInput input = new NewRegisterInput(vm);
-        // ICustomContentDialog dialog = window.DialogManager.CreateCustomContentDialog(input, DialogMode.OkCancel);
-        // dialog.Ok = () =>
-        // {
-        //     // to update bindings:
-        //     input.normalize.Focus();
-        //     if (!Validation.GetHasError(input.widthBox) &&
-        //         !Validation.GetHasError(input.statesGrid))
-        //     {
-        //         int width = (int)vm.Width;
-        //         Dictionary<ulong, Complex> initStates = vm.GetInitStates();
-        //         if (width > 0 && initStates.Count > 0)
-        //         {
-        //             _model.InsertRegisterBelow(_registerIndex, width, initStates);
-        //         }
-        //     }
-        // };
-        // dialog.Show();
+        NewRegisterInputViewModel vm = new NewRegisterInputViewModel();
+        NewRegisterInput input = new NewRegisterInput(vm);
+        await _dialogManager.ShowDialogAsync(input, () =>
+        {
+            // TODO: maybe move into viewModel
+            // to update bindings:
+            // input.normalize.Focus();
+            // if (Validation.GetHasError(input.widthBox) ||
+            //     Validation.GetHasError(input.statesGrid)) return;
+
+            int width = (int)vm.Width;
+            Dictionary<ulong, Complex> initStates = vm.GetInitStates();
+            if (width > 0 && initStates.Count > 0)
+            {
+                _model.InsertRegisterBelow(_registerIndex, width, initStates);
+            }
+        });
     }
 
     public void DeleteQubit(object parameter)

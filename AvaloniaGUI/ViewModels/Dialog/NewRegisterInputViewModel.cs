@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Numerics;
 using System.Windows.Input;
 using AvaloniaGUI.CodeHelpers;
@@ -29,9 +30,13 @@ public class NewRegisterInputViewModel : ViewModelBase
 
     #region Public Properties
 
+    /// <summary>
+    /// Number of qubits in register
+    /// TODO: add manual validation, with WidthString and Parser
+    /// </summary>
     public uint Width
     {
-        get { return _width; }
+        get => _width;
         set
         {
             if (value < _width)
@@ -59,7 +64,7 @@ public class NewRegisterInputViewModel : ViewModelBase
         set
         {
             _initStates = value;
-            OnPropertyChanged("InitStates");
+            OnPropertyChanged(nameof(InitStates));
         }
     }
 
@@ -69,15 +74,7 @@ public class NewRegisterInputViewModel : ViewModelBase
         {
             if (_add == null)
             {
-                _add = new DelegateCommand(Add, x =>
-                {
-                    if (Math.Pow(2, _width) > InitStates.Count)
-                    {
-                        return true;
-                    }
-
-                    return false;
-                });
+                _add = new DelegateCommand(Add, x => Math.Pow(2, _width) > InitStates.Count);
             }
 
             return _add;
@@ -118,7 +115,7 @@ public class NewRegisterInputViewModel : ViewModelBase
         {
             if (!values.Contains(i))
             {
-                added = new InitState() { Value = i, Amplitude = Complex.Zero };
+                added = new InitState { Value = i, Amplitude = Complex.Zero };
             }
 
             i++;
@@ -140,19 +137,18 @@ public class NewRegisterInputViewModel : ViewModelBase
 
         double limit = (1.0 / ((ulong)1 << (int)_width)) * QuantumComputer.Epsilon;
 
-        if (Math.Abs(sum - 1.0) > limit)
-        {
-            double sqrtSum = Math.Sqrt(sum);
-            //we need to normalize
-            var oldStates = _initStates;
-            var newStates = new ObservableCollection<InitState>();
-            foreach (var state in oldStates)
-            {
-                newStates.Add(new InitState() { Value = state.Value, Amplitude = state.Amplitude / sqrtSum });
-            }
+        if (!(Math.Abs(sum - 1.0) > limit)) return;
 
-            InitStates = newStates;
+        double sqrtSum = Math.Sqrt(sum);
+        //we need to normalize
+        var oldStates = _initStates;
+        var newStates = new ObservableCollection<InitState>();
+        foreach (var state in oldStates)
+        {
+            newStates.Add(new InitState { Value = state.Value, Amplitude = state.Amplitude / sqrtSum });
         }
+
+        InitStates = newStates;
     }
 
     public Dictionary<ulong, Complex> GetInitStates()
@@ -169,6 +165,8 @@ public class NewRegisterInputViewModel : ViewModelBase
         return states;
     }
 
+    public bool AmplitudesValid => _initStates.All(x => ComplexParser.TryParse(x.AmplitudeString, out _));
+
     #endregion // Public Methods
 
 
@@ -176,8 +174,8 @@ public class NewRegisterInputViewModel : ViewModelBase
 
     private ObservableCollection<InitState> CreateInitStates()
     {
-        ObservableCollection<InitState> states = new ObservableCollection<InitState>();
-        states.Add(new InitState() { Value = 0, Amplitude = Complex.One });
+        ObservableCollection<InitState> states = new ObservableCollection<InitState>
+            { new() { Value = 0, Amplitude = Complex.One } };
         return states;
     }
 
@@ -211,39 +209,36 @@ public class NewRegisterInputViewModel : ViewModelBase
     #endregion // Private Helpers
 }
 
+/// <summary>
+/// Collection of initial states
+/// </summary>
 public class InitState
 {
-    private ulong _value;
     private Complex _amplitude;
     private string _amplitudeString;
 
-    private static IFormatProvider formatter = new ComplexFormatter();
+    private static readonly IFormatProvider Formatter = new ComplexFormatter();
 
-    public ulong Value
-    {
-        get { return _value; }
-        set { _value = value; }
-    }
+    public ulong Value { get; set; }
 
     public Complex Amplitude
     {
-        get { return _amplitude; }
+        get => _amplitude;
         set
         {
             _amplitude = value;
-            _amplitudeString = string.Format(formatter, "{0:I2}", _amplitude);
+            _amplitudeString = string.Format(Formatter, "{0:I2}", _amplitude);
         }
     }
 
     [ComplexNumber]
     public string AmplitudeString
     {
-        get { return _amplitudeString; }
+        get => _amplitudeString;
         set
         {
             _amplitudeString = value;
-            Complex number;
-            if (ComplexParser.TryParse(value, out number))
+            if (ComplexParser.TryParse(value, out var number))
             {
                 // Number is valid 
                 _amplitude = number;
