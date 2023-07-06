@@ -92,13 +92,13 @@
                                                     <StackPanel.RenderTransform>
                                                         <ScaleTransform ScaleX="1" ScaleY="-1" />
                                                     </StackPanel.RenderTransform>
-                                                    
+
                                                     <!-- First Vertical Line -->
                                                     <Rectangle
                                                         Width="5"
                                                         Height="{x:Static vm:CircuitGridViewModel.QubitSize}"
                                                         Fill="{DynamicResource ImgQubitBegin}" />
-                                                    
+
                                                     <!-- RegisterName (X,..) -->
                                                     <TextBlock
                                                         Text="{Binding RegisterName}"
@@ -106,7 +106,7 @@
                                                         FontFamily="Times New Roman"
                                                         FontStyle="Oblique"
                                                         VerticalAlignment="Center" />
-                                                    
+
                                                     <!-- Lowercase index -->
                                                     <TextBlock
                                                         Text="{Binding Index}"
@@ -114,13 +114,13 @@
                                                         FontFamily="Times New Roman"
                                                         FontStyle="Oblique"
                                                         VerticalAlignment="Bottom" />
-                                                    
+
                                                     <!-- First Qubit arrow -->
                                                     <Rectangle
                                                         Width="20"
                                                         Height="{x:Static vm:CircuitGridViewModel.QubitSize}"
                                                         Fill="{DynamicResource ImgQubitEnd}" />
-                                                    
+
                                                     <!-- Equals sign -->
                                                     <TextBlock
                                                         Text="= "
@@ -183,11 +183,10 @@
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Vertical" VerticalAlignment="Top"
                                                             HorizontalAlignment="Stretch"
-                                                            Margin="{Binding StepMargin}" Background="White"
-                                                            RenderTransformOrigin="{Binding ScaleCenterY}">
+                                                            Margin="{Binding StepMargin}" Background="White">
+                                                    <!--RenderTransformOrigin="{Binding ScaleCenterY}"-->
                                                     <StackPanel.RenderTransform>
                                                         <ScaleTransform ScaleX="1" ScaleY="-1" />
-                                                        <!--CenterY="{Binding ScaleCenterY}" /-->
                                                     </StackPanel.RenderTransform>
                                                 </StackPanel>
                                             </ItemsPanelTemplate>
@@ -273,7 +272,6 @@
                     RenderTransformOrigin="0,0">
                     <Canvas.RenderTransform>
                         <ScaleTransform ScaleX="{Binding ScaleFactor}" ScaleY="{Binding ScaleFactor}" />
-                        <!--CenterX="0" CenterY="0"/-->
                     </Canvas.RenderTransform>
                 </Canvas>
             </Grid>

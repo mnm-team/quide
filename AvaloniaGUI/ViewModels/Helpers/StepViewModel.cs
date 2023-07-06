@@ -64,7 +64,10 @@ public class StepViewModel : ViewModelBase
         }
     }
 
-    public double ScaleCenterY => Gates.Count * CircuitGridViewModel.QubitScaleCenter.Point.Y;
+    
+    // not enabled, because adds blue bottom line to the grid
+    public RelativePoint ScaleCenterY =>
+        new(0, Gates.Count * CircuitGridViewModel.QubitScaleCenter.Point.Y, RelativeUnit.Absolute);
 
     public Thickness StepMargin
     {

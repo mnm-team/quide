@@ -14,9 +14,6 @@
 
     <UserControl.Resources>
         <Style x:Key="DefaultButton" Selector="Button" />
-        <!--<Style x:Key="FlatRadioButton" BasedOn="{StaticResource {x:Static ToolBar.RadioButtonStyleKey}}" Selector="RadioButton" />
-        <Style x:Key="FlatButton" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Selector="Button" />
-        <Style x:Key="FlatComboBox" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}" Selector="ComboBox" />-->
         <codeHelpers:ImageConverter x:Key="ImageConverter" />
     </UserControl.Resources>
 
@@ -70,7 +67,7 @@
                        Grid.Row="4"
                        HorizontalAlignment="Left" />
 
-            <!-- probability circle -->
+            <!-- Probability circle -->
             <Canvas
                 IsVisible="{Binding AmplitudeVisibility}"
                 Grid.Row="0"
@@ -87,9 +84,6 @@
                     Stroke="Black" StrokeLineCap="Square"
                     StrokeThickness="4" Opacity="1"
                     StartPoint="0,0" EndPoint="{Binding StatePaneLineEnd}" />
-                <!-- TODO: check if correct
-                StrokeStartLineCap="Round"
-                StrokeEndLineCap="Triangle"-->
                 <Polygon
                     Canvas.Top="100"
                     Canvas.Left="80"
@@ -120,8 +114,7 @@
                 IsChecked="True"
                 Command="{Binding SelectUnitCommand}"
                 CommandParameter="Deg"
-                Content=" [ &#x00b0; ] ">
-                <!--Style="{StaticResource FlatRadioButton}">-->
+                Content=" [ &#x00b0; ] " Classes="ToolBarButton">
             </RadioButton>
             <RadioButton
                 Grid.Row="0" Grid.Column="3"
@@ -129,8 +122,7 @@
                 IsChecked="{Binding Rad, Mode=TwoWay}"
                 Command="{Binding SelectUnitCommand}"
                 CommandParameter="Rad"
-                Content="[rad]">
-                <!--Style="{StaticResource FlatRadioButton}">-->
+                Content="[rad]" Classes="ToolBarButton">
             </RadioButton>
 
             <Grid
@@ -168,15 +160,15 @@
                         Content="{x:Static p:Resources.Pi_8}" />
                 </ComboBox>
             </Grid>
+            <!-- Apply changes -->
             <Button
                 x:Name="ApplyGamma"
                 Grid.Row="2"
                 Grid.Column="2"
                 Grid.ColumnSpan="2"
-                Margin="0, 3"
+                Margin="0, 3" BorderThickness="1" BorderBrush="Gray"
                 Content="{x:Static p:Resources.Apply}"
                 Command="{Binding ApplyGammaCommand}" />
-            <!--Style="{StaticResource DefaultButton}"/>-->
             <TextBlock
                 Grid.Row="3"
                 Grid.ColumnSpan="3" Grid.Column="0"
@@ -221,7 +213,6 @@
                 Content="{x:Static p:Resources.Apply}"
                 Command="{Binding ApplyDistCommand}"
                 Width="{Binding ElementName=ApplyGamma, Path=Width}" />
-            <!--Style="{StaticResource DefaultButton}" />-->
 
             <TextBlock
                 Grid.Row="2"
@@ -346,18 +337,16 @@
                 <Button
                     x:Name="ApplyButton"
                     Margin="2,0"
-                    IsEnabled="False"
+                    IsEnabled="{Binding InputValid}"
                     Content="{x:Static p:Resources.Apply}"
                     Command="{Binding ApplyMatrixCommand}"
                     Width="{Binding ElementName=ApplyGamma, Path=Width}">
-                    <!--Style="{StaticResource DefaultButton}" />-->
                 </Button>
                 <Button
                     Margin="2,0"
                     Content="{x:Static p:Resources.Cancel}"
                     Command="{Binding CancelMatrixCommand}"
                     Width="{Binding ElementName=ApplyGamma, Path=Width}" />
-                <!--Style="{StaticResource DefaultButton}" />-->
             </StackPanel>
         </Grid>
 
@@ -423,7 +412,6 @@
                             IsVisible="{Binding VarParamsVisibility}"
                             Content="{x:Static p:Resources.AddParam}"
                             Width="NaN" />
-                        <!--Style="{StaticResource DefaultButton}" />-->
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -505,7 +493,6 @@
                 IsEnabled="{Binding IsValid}"
                 Content="{x:Static p:Resources.Apply}"
                 Command="{Binding ApplyParamsCommand}">
-                <!--Style="{StaticResource DefaultButton}" >-->
             </Button>
         </Grid>
     </Grid>

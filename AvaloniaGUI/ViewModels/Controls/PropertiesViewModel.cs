@@ -45,7 +45,7 @@ public class PropertiesViewModel : ViewModelBase
     private GateViewModel _selectedGate;
 
     private const double _lineLength = 60;
-    private static ComplexFormatter _complexFormatter = new ComplexFormatter();
+    private static ComplexFormatter _complexFormatter = new();
 
     private DelegateCommand _selectUnit;
     private DelegateCommand _applyGamma;
@@ -79,6 +79,8 @@ public class PropertiesViewModel : ViewModelBase
 
     private CircuitGridViewModel _trackedCircuitGrid;
     private OutputGridViewModel _trackedOutputGrid;
+
+    private bool _inputValid;
 
     #endregion // Fields
 
@@ -372,12 +374,6 @@ public class PropertiesViewModel : ViewModelBase
         }
     }
 
-    // TODO: how bind validation errors to ApplyBtn and ValidationMessage?
-    public bool ApplyBtnEnabled
-    {
-        get { return false; }
-    }
-
     [ComplexNumber]
     public string A00Text
     {
@@ -435,6 +431,18 @@ public class PropertiesViewModel : ViewModelBase
             OnPropertyChanged(nameof(A11Text));
             ComplexParser.TryParse(_a11Text, out _matrix[1, 1]);
             ValidateMatrix();
+        }
+    }
+
+    public bool InputValid
+    {
+        get => _inputValid;
+        set
+        {
+            if (value == _inputValid) return;
+
+            _inputValid = value;
+            OnPropertyChanged(nameof(InputValid));
         }
     }
 
@@ -568,7 +576,7 @@ public class PropertiesViewModel : ViewModelBase
     {
         get
         {
-            if (_selectedType == SelectedType.State) return null;
+            if (_selectedType == SelectedType.State) return string.Empty;
 
             const string imagePath = $"/Assets/Images/";
 
@@ -808,6 +816,8 @@ public class PropertiesViewModel : ViewModelBase
     private void ValidateMatrix()
     {
         _isUnitary = MatrixValidator.IsUnitary2x2(_matrix);
+
+        InputValid = _isUnitary;
         OnPropertyChanged(nameof(ValidationMessage));
     }
 

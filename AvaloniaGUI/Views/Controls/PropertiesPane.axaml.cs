@@ -26,7 +26,7 @@ public partial class PropertiesPane : UserControl
         vm.SetAngle(item.Content as string);
     }
 
-    // TODO: maybe move to ViewModel?
+    // TODO: maybe move to ViewModel? probably solved by binding to enabled property
     private void a_TextChanged(object? sender, AvaloniaPropertyChangedEventArgs avaloniaPropertyChangedEventArgs)
     {
         // PropertiesViewModel vm = DataContext as PropertiesViewModel;

@@ -290,10 +290,9 @@
                                                 Items="{Binding CompositeTools}"
                                                 SelectedItem="{Binding SelectedComposite}"
                                                 SelectionChanged="CompositeTool_SelectionChanged"
-                                                PlaceholderText="{x:Static p:Resources.SelectCompositeGate}">
-                                                <!--Classes="{StaticResource FlatComboBox}"-->
-                                                <!-- TODO: necessary?
-                                                                        IsTextSearchCaseSensitive="False"-->
+                                                GotFocus="CompositeSelectionFocused"
+                                                PlaceholderText="{x:Static p:Resources.SelectCompositeGate}"
+                                                IsTextSearchEnabled="True">
                                             </ComboBox>
                                         </Grid>
                                     </RadioButton>

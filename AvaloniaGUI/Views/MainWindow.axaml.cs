@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Threading;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaGUI.ViewModels;
 using NP.Avalonia.UniDock;
@@ -72,6 +73,17 @@ public partial class MainWindow : Window
 
     private void CompositeTool_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+        MainWindowViewModel.CompositeSelected();
+    }
+
+    private void CompositeSelectionFocused(object? sender, GotFocusEventArgs e)
+    {
+        if (e.Source is not ComboBox comboBox) return;
+
+        this.FindControl<RadioButton>("compositeTool").IsChecked = true;
+
+        if (comboBox.SelectedItem is null) return;
+
         MainWindowViewModel.CompositeSelected();
     }
 }
