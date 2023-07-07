@@ -12,7 +12,7 @@ public class PhaseDistInputViewModel : ViewModelBase
 
     public int? Dist => int.TryParse(_distText, out var dist) ? dist : null;
 
-    [IntegerType]
+    [IntegerNumber]
     public string DistText
     {
         get => _distText;

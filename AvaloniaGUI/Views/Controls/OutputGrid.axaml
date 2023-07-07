@@ -120,8 +120,6 @@
                                         <Rectangle.OpacityMask>
                                             <LinearGradientBrush EndPoint="0.5,1"
                                                                  StartPoint="0.5,0">
-                                                <!-- TODO: how make color rectangle fill the whole rectangle?
-                                                                     MappingMode="RelativeToBoundingBox"-->
                                                 <GradientStop Color="#33000000" />
                                                 <GradientStop Color="White" Offset="0.5" />
                                                 <GradientStop Color="#4C000000" Offset="1" />

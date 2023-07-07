@@ -23,8 +23,8 @@ public class ParameterViewModel : ViewModelBase
     private bool _isValid = false;
     private string _validationMessage = "Parameter not set";
 
-    private bool _paramsArray;
-    private bool _nextParamArray;
+    private readonly bool _paramsArray;
+    private readonly bool _nextParamArray;
 
     public ParameterViewModel(string name, Type type, object value = null,
         bool paramsArray = false, bool nextParamArray = false)

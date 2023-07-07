@@ -21,6 +21,7 @@ public class NewRegisterInputViewModel : ViewModelBase
     #region Fields
 
     private uint _width = ComputerModel.InitialQubitsCount;
+    private string _widthString = ComputerModel.InitialQubitsCount.ToString();
     private ObservableCollection<InitState> _initStates;
 
     private DelegateCommand _add;
@@ -32,12 +33,11 @@ public class NewRegisterInputViewModel : ViewModelBase
 
     /// <summary>
     /// Number of qubits in register
-    /// TODO: add manual validation, with WidthString and Parser
     /// </summary>
     public uint Width
     {
         get => _width;
-        set
+        private set
         {
             if (value < _width)
             {
@@ -46,6 +46,21 @@ public class NewRegisterInputViewModel : ViewModelBase
 
             _width = value;
             _add.CanExecute(null);
+        }
+    }
+
+    [UIntegerNumber]
+    public string WidthString
+    {
+        get => _widthString;
+        set
+        {
+            _widthString = value;
+            OnPropertyChanged(nameof(WidthString));
+
+            if (!uint.TryParse(value, out var result)) return;
+
+            Width = result;
         }
     }
 
@@ -165,7 +180,8 @@ public class NewRegisterInputViewModel : ViewModelBase
         return states;
     }
 
-    public bool AmplitudesValid => _initStates.All(x => ComplexParser.TryParse(x.AmplitudeString, out _));
+    public bool InputsValid => uint.TryParse(WidthString, out _) &&
+                               InitStates.All(x => ComplexParser.TryParse(x.AmplitudeString, out _));
 
     #endregion // Public Methods
 
@@ -224,7 +240,7 @@ public class InitState
     public Complex Amplitude
     {
         get => _amplitude;
-        set
+        init
         {
             _amplitude = value;
             _amplitudeString = string.Format(Formatter, "{0:I2}", _amplitude);
@@ -237,12 +253,12 @@ public class InitState
         get => _amplitudeString;
         set
         {
+            // is indeed used by DataGrid
             _amplitudeString = value;
-            if (ComplexParser.TryParse(value, out var number))
-            {
-                // Number is valid 
-                _amplitude = number;
-            }
+            if (!ComplexParser.TryParse(value, out var number)) return;
+
+            // Number is valid 
+            _amplitude = number;
         }
     }
 }

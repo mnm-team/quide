@@ -13,6 +13,7 @@
     </Design.DataContext>
 
     <UserControl.Resources>
+        <!-- probably artefacts of implementing a Probability color bar, like in OutputGrid -->
         <codeHelpers:ComplexConverter x:Key="ComplexToString" />
         <codeHelpers:AmplitudeColorConverter x:Key="AmplitudeToColor" />
         <Style x:Key="DefaultButton" Selector="Button" />
@@ -37,7 +38,8 @@
                 Grid.Column="1"
                 MinWidth="100"
                 Margin="2"
-                Text="{Binding Width, Mode=TwoWay}"
+                Text="{Binding WidthString, Mode=TwoWay}"
+                PropertyChanged="WidthBox_OnPropertyChanged"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Stretch" />
         </Grid>
@@ -96,15 +98,6 @@
                     <!-- Amplitude -->
                     <DataGridTextColumn Header="{x:Static p:Resources.Amplitude}" SortMemberPath="AmplitudeString"
                                         Binding="{Binding AmplitudeString, Mode=TwoWay}">
-                        <!-- <DataGridTextColumn.Binding> -->
-                        <!--     <Binding Path="AmplitudeString" -->
-                        <!--              Mode="TwoWay" -->
-                        <!--              UpdateSourceTrigger="PropertyChanged"> -->
-                        <!--         <Binding.ValidationRules> -->
-                        <!--             <ViewModels:ComplexValidationRule /> -->
-                        <!--         </Binding.ValidationRules> -->
-                        <!--     </Binding> -->
-                        <!-- </DataGridTextColumn.Binding> -->
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>

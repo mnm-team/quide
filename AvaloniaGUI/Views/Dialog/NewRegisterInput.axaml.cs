@@ -39,9 +39,20 @@ public partial class NewRegisterInput : UserControl
         AvaloniaXamlLoader.Load(this);
     }
 
+    private void ValidateViewModel()
+    {
+        _dataContext.DialogInputValid = _dataContext.InputsValid;
+    }
+
     private void StatesGrid_OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
         if (_dataContext is null) return;
-        _dataContext.DialogInputValid = _dataContext.AmplitudesValid;
+        ValidateViewModel();
+    }
+
+    private void WidthBox_OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (_dataContext is null) return;
+        ValidateViewModel();
     }
 }

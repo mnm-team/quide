@@ -6,13 +6,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AvaloniaGUI.CodeHelpers;
 
-public class IntegerType : ValidationAttribute
+public class UIntegerNumber : ValidationAttribute
 {
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
         // Is a whole number? 
-        return !int.TryParse((string)value, out _)
-            ? new ValidationResult("Not a number.")
+        return !uint.TryParse((string)value, out _)
+            ? new ValidationResult("Not an unsigned number.")
             :
             // Number is valid 
             ValidationResult.Success;

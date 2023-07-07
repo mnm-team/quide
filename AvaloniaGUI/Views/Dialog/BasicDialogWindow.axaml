@@ -24,7 +24,7 @@
 
     <DockPanel>
         <Grid DockPanel.Dock="Bottom" ColumnDefinitions="*,*">
-            <Button IsEnabled="{Binding DialogInputValid}" Grid.Column="0" Click="OK_Clicked">OK</Button>
+            <Button IsDefault="True" IsEnabled="{Binding DialogInputValid}" Grid.Column="0" Click="OK_Clicked">OK</Button>
             <Button IsCancel="True" Grid.Column="1" Click="Cancel_Clicked">Cancel</Button>
         </Grid>
 
