@@ -10,7 +10,9 @@
         x:Class="AvaloniaGUI.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="QuIDE - Quantum Integrated Development Environment"><!-- TODO: Title icon-->
+        Title="QuIDE - Quantum Integrated Development Environment"
+        WindowStartupLocation="CenterScreen">
+        <!-- SizeToContent="WidthAndHeight"> -->
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,

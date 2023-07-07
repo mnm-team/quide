@@ -5,29 +5,32 @@
         xmlns:p="clr-namespace:AvaloniaGUI.Properties"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AvaloniaGUI.Views.Dialog.AboutWindow"
-        Title="AboutWindow">
+        Title="AboutWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterOwner">
     <!--<UserControl.Resources>
         <Style x:Key="DefaultButton" Selector="Button" />
         <Style x:Key="FlatButton" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Selector="Button" />
     </UserControl.Resources>-->
 
-    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto">
-        <TextBlock Text="{x:Static p:Resources.AboutText}" Margin="10" />
-        <TextBlock
-            Grid.Row="1"
-            Text="{x:Static p:Resources.Authors}" Margin="10" />
-        <StackPanel
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Top" Text="{x:Static p:Resources.AboutText}" Margin="10" />
+        <TextBlock DockPanel.Dock="Top"
+                   Text="{x:Static p:Resources.Authors}" Margin="10" />
+        <DockPanel
             VerticalAlignment="Stretch"
-            Margin="10"
-            Grid.Row="2">
-            <TextBlock Text="{x:Static p:Resources.License}" Margin="0 5" />
+            Margin="10">
+            <TextBlock DockPanel.Dock="Top" Text="{x:Static p:Resources.License}" Margin="0 5" />
             <Border
                 Background="White"
                 BorderBrush="DimGray"
-                BorderThickness="1">
-                <TextBlock
-                    Text="{x:Static p:Resources.GPLText}" Margin="10" />
+                BorderThickness="1" Padding="0">
+                <ScrollViewer Height="700">
+                    <TextBlock
+                        Text="{x:Static p:Resources.GPLText}" Margin="10" />
+                </ScrollViewer>
             </Border>
-        </StackPanel>
-    </Grid>
+        </DockPanel>
+    </DockPanel>
 </Window>
