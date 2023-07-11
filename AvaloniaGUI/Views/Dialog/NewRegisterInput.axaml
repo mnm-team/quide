@@ -88,17 +88,15 @@
                 HorizontalGridLinesBrush="LightGray"
                 VerticalGridLinesBrush="LightGray"
                 IsEnabled="True"
-                IsReadOnly="False"
+                IsReadOnly="False" Height="250"
                 PropertyChanged="StatesGrid_OnPropertyChanged">
                 <DataGrid.Columns>
                     <!-- Value -->
                     <DataGridTextColumn Header="{x:Static p:Resources.Value}" SortMemberPath="Value"
-                                        Binding="{Binding Value, Mode=TwoWay}">
-                    </DataGridTextColumn>
+                                        Binding="{Binding Value, Mode=TwoWay}" />
                     <!-- Amplitude -->
                     <DataGridTextColumn Header="{x:Static p:Resources.Amplitude}" SortMemberPath="AmplitudeString"
-                                        Binding="{Binding AmplitudeString, Mode=TwoWay}">
-                    </DataGridTextColumn>
+                                        Binding="{Binding AmplitudeString, Mode=TwoWay}" />
                 </DataGrid.Columns>
             </DataGrid>
         </Border>
