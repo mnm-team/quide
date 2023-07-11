@@ -29,6 +29,12 @@ public partial class BasicDialogWindow : Window
 #endif
     }
 
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        DialogContentControl.Focus();
+    }
+
     public void OK_Clicked(object sender, RoutedEventArgs e)
     {
         Close(DialogToken.OK);

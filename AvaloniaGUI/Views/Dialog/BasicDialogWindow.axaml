@@ -28,6 +28,6 @@
             <Button IsCancel="True" Grid.Column="1" Click="Cancel_Clicked">Cancel</Button>
         </Grid>
 
-        <ContentControl Padding="10" Name="DialogContentControl" />
+        <ContentControl Padding="10" Name="DialogContentControl" Focusable="True" />
     </DockPanel>
 </Window>

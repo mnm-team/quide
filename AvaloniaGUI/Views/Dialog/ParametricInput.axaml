@@ -137,7 +137,6 @@
                     <DataTemplate>
                         <Button
                             Click="addParam_Click"
-                            Height="23"
                             Margin="3,3,0,3"
                             IsVisible="{Binding VarParamsVisibility}"
                             Content="{x:Static p:Resources.AddParam}" />

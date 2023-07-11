@@ -27,17 +27,18 @@ public partial class ParametricInput : UserControl
         InitializeComponent();
     }
 
-    private void UserControl_Loaded(object sender, RoutedEventArgs e)
-    {
-        methodBox.SelectedIndex = 0;
-        // Height = ActualHeight;
-        // Width = ActualWidth;
-    }
-
     private void methodBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         // mandatory
-        if (_dataContext is null) return;
+        if (_dataContext is null || methodBox is null) return;
+
+        // when gateBox_SelectionChanged was called just before, methodBox.SelectedIndex gets set to -1 and
+        // therefore non usable as initializer for _dataContext.MethodIndex.PopulateParams()
+        if (methodBox.SelectedIndex < 0)
+        {
+            _dataContext.MethodIndex = 0;
+            return;
+        }
 
         _dataContext.MethodIndex = methodBox.SelectedIndex;
     }
@@ -63,6 +64,7 @@ public partial class ParametricInput : UserControl
 
         gateBox = this.FindControl<ComboBox>("gateBox");
         methodBox = this.FindControl<ListBox>("methodBox");
+        methodBox.SelectedIndex = 0;
     }
 
     private void ValueChanged(object? sender, AvaloniaPropertyChangedEventArgs e)

@@ -13,7 +13,7 @@
     </Design.DataContext>
 
     <UserControl.Resources>
-        <!-- probably artefacts of implementing a Probability color bar, like in OutputGrid -->
+        <!-- probably artefacts of wanting to implement a Probability color bar, like in OutputGrid -->
         <codeHelpers:ComplexConverter x:Key="ComplexToString" />
         <codeHelpers:AmplitudeColorConverter x:Key="AmplitudeToColor" />
         <Style x:Key="DefaultButton" Selector="Button" />
@@ -88,7 +88,7 @@
                 HorizontalGridLinesBrush="LightGray"
                 VerticalGridLinesBrush="LightGray"
                 IsEnabled="True"
-                IsReadOnly="False" Height="250"
+                IsReadOnly="False" Height="250" Focusable="True"
                 PropertyChanged="StatesGrid_OnPropertyChanged">
                 <DataGrid.Columns>
                     <!-- Value -->

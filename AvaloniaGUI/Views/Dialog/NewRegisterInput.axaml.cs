@@ -2,7 +2,6 @@
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using AvaloniaGUI.ViewModels.Dialog;
 
@@ -27,16 +26,20 @@ public partial class NewRegisterInput : UserControl
         InitializeComponent();
     }
 
-    private void UserControl_Loaded(object sender, RoutedEventArgs e)
-    {
-        // widthBox.Focus();
-        // widthBox.SelectAll();
-    }
-
-
     private void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        Focus();
+
+        widthBox = this.FindControl<TextBox>("widthBox");
+        // TODO: doesnt want to focus to input box right away
+        //widthBox.Focus();
+        widthBox.SelectAll();
     }
 
     private void ValidateViewModel()
