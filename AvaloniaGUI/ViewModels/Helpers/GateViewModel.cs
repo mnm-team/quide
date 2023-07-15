@@ -1052,7 +1052,6 @@ public class GateViewModel : ViewModelBase
 
                     break;
                 case ActionName.Composite:
-                    // TODO: Composite
                     oldGate = _model.Steps[_column].Gates[_row.OffsetToRoot];
                     if (oldGate.Name == GateName.Empty)
                     {

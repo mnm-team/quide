@@ -7,7 +7,6 @@ using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
-using AvaloniaGUI.CodeHelpers;
 using AvaloniaGUI.ViewModels;
 using AvaloniaGUI.ViewModels.Controls;
 using AvaloniaGUI.ViewModels.Helpers;
@@ -19,9 +18,8 @@ namespace AvaloniaGUI.Views.Controls;
 
 public partial class CircuitGrid : UserControl
 {
-    private Line line;
-    private SolidColorBrush black = new SolidColorBrush(Colors.Black);
-    private Canvas Drawing;
+    private Line _line;
+    private readonly SolidColorBrush _drawingColor = new(Colors.Black);
 
     public CircuitGrid()
     {
@@ -54,16 +52,12 @@ public partial class CircuitGrid : UserControl
         {
             Button button = source as Button;
 
-            //TODO: coords correct for every button?
             Point coordinates =
-                new Point(0, 0).Transform(button.TransformToVisual(Drawing)
+                new Point(0, 0).Transform(button.TransformToVisual(drawing)
                     .GetValueOrDefault()) /
                 (DataContext as CircuitGridViewModel).ScaleFactor; //.Transform(new Point(0, 0));
 
             const double diameter = 12;
-            if (button == null) ErrorMessageHelper.ShowMessage("Button is null! Consult developer.");
-
-            var buttonSize = button.DesiredSize;
 
             double centerX = coordinates.X + 0.5 * CircuitGridViewModel.GateWidth;
             double centerY = coordinates.Y + 0.5 * CircuitGridViewModel.QubitSize;
@@ -72,27 +66,27 @@ public partial class CircuitGrid : UserControl
             {
                 Width = diameter,
                 Height = diameter,
-                Fill = black,
-                Stroke = black,
+                Fill = _drawingColor,
+                Stroke = _drawingColor,
                 StrokeThickness = 1
             };
 
             ctrlPoint.SetValue(DragDrop.AllowDropProperty, true); //AllowDrop = true;
             ctrlPoint.AddHandler(DragDrop.DropEvent, ctrlPoint_Drop);
 
-            Drawing.Children.Add(ctrlPoint);
+            drawing.Children.Add(ctrlPoint);
             Canvas.SetTop(ctrlPoint, centerY - 0.5 * diameter);
             Canvas.SetLeft(ctrlPoint, centerX - 0.5 * diameter);
 
-            line = new Line
+            _line = new Line
             {
                 StartPoint = new Point(centerX, centerY),
                 EndPoint = new Point(centerX, centerY),
-                Stroke = black,
+                Stroke = _drawingColor,
                 StrokeThickness = 1
             };
 
-            Drawing.Children.Add(line);
+            drawing.Children.Add(_line);
         }
 
         // fetch grid with gates to draw
@@ -104,16 +98,16 @@ public partial class CircuitGrid : UserControl
         DragDrop.DoDragDrop(e, dragData, DragDropEffects.Link);
     }
 
-    void ctrlPoint_Drop(object? sender, PointerEventArgs pointerEventArgs)
+    private void ctrlPoint_Drop(object? sender, PointerEventArgs pointerEventArgs)
     {
-        line = null;
-        Drawing.Children.Clear();
+        _line = null;
+        drawing.Children.Clear();
     }
 
     private void Drawing_Drop(object? sender, DragEventArgs e)
     {
-        line = null;
-        Drawing.Children.Clear();
+        _line = null;
+        drawing.Children.Clear();
     }
 
     private void GateButton_DragEnter(object sender, DragEventArgs e)
@@ -129,15 +123,15 @@ public partial class CircuitGrid : UserControl
 
     private void GateButton_DragOver(object sender, DragEventArgs e)
     {
-        if (line == null) return;
+        if (_line == null) return;
 
         var scaleFactor = (DataContext as CircuitGridViewModel).ScaleFactor;
 
         var offset = new Vector(-10, 4);
 
-        Point mouse = (e.GetPosition(Drawing) + offset) / scaleFactor;
+        Point mouse = (e.GetPosition(drawing) + offset) / scaleFactor;
 
-        line.EndPoint = new Point(mouse.X, mouse.Y);
+        _line.EndPoint = new Point(mouse.X, mouse.Y);
     }
 
     private void GateButton_Drop(object sender, DragEventArgs e)
@@ -156,8 +150,8 @@ public partial class CircuitGrid : UserControl
 
         vm.SetGate(data.Item1, data.Item2, e.KeyModifiers);
 
-        line = null;
-        Drawing.Children.Clear();
+        _line = null;
+        drawing.Children.Clear();
 
         CircuitGridViewModel circuitVM = DataContext as CircuitGridViewModel;
         circuitVM.SelectedObject = vm;
@@ -174,20 +168,19 @@ public partial class CircuitGrid : UserControl
 
         // if added step
         var extentWidthChange = e.ExtentDelta.X;
-        if (extentWidthChange > 0)
+        if (!(extentWidthChange > 0)) return;
+
+        CircuitGridViewModel circuitVM = DataContext as CircuitGridViewModel;
+        int addedColumn = circuitVM.LastStepAdded;
+
+        if (addedColumn <= 0) return;
+
+        // if newly added step is not fully visible
+        double scrollNeeded = extentWidthChange * (addedColumn + 1) - GatesScroll.Offset.X -
+                              GatesScroll.Viewport.Width;
+        if (scrollNeeded > 0)
         {
-            CircuitGridViewModel circuitVM = DataContext as CircuitGridViewModel;
-            int addedColumn = circuitVM.LastStepAdded;
-            if (addedColumn > 0)
-            {
-                // if newly added step is not fully visible
-                double scrollNeeded = extentWidthChange * (addedColumn + 1) - GatesScroll.Offset.X -
-                                      GatesScroll.Viewport.Width;
-                if (scrollNeeded > 0)
-                {
-                    //GatesScroll.ScrollToHorizontalOffset(GatesScroll.HorizontalOffset + scrollNeeded);
-                }
-            }
+            //GatesScroll.ScrollToHorizontalOffset(GatesScroll.HorizontalOffset + scrollNeeded);
         }
     }
 
@@ -200,7 +193,7 @@ public partial class CircuitGrid : UserControl
     {
         AvaloniaXamlLoader.Load(this);
 
-        Drawing = this.FindControl<Canvas>("drawing");
-        Drawing.AddHandler(DragDrop.DropEvent, Drawing_Drop);
+        drawing = this.FindControl<Canvas>("drawing");
+        drawing.AddHandler(DragDrop.DropEvent, Drawing_Drop);
     }
 }
