@@ -5,7 +5,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using AvaloniaGUI.ViewModels;
 using AvaloniaGUI.ViewModels.Controls;
@@ -24,6 +23,7 @@ public partial class CircuitGrid : UserControl
     public CircuitGrid()
     {
         InitializeComponent();
+        drawing.AddHandler(DragDrop.DropEvent, Drawing_Drop);
     }
 
     private void LayoutRoot_PreviewMouseWheel(object sender, PointerWheelEventArgs e)
@@ -187,13 +187,5 @@ public partial class CircuitGrid : UserControl
     private void RegisterScroll_ScrollChanged(object sender, ScrollChangedEventArgs e)
     {
         //GatesScroll.ScrollToVerticalOffset(e.VerticalOffset);
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-
-        drawing = this.FindControl<Canvas>("drawing");
-        drawing.AddHandler(DragDrop.DropEvent, Drawing_Drop);
     }
 }

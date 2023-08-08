@@ -57,9 +57,6 @@ public class MainWindowViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> About { get; }
 
     // for key bindings
-    public ReactiveCommand<Unit, Unit> Cut { get; }
-    public ReactiveCommand<Unit, Unit> Copy { get; }
-    public ReactiveCommand<Unit, Unit> Paste { get; }
     public ReactiveCommand<Unit, Unit> Delete { get; }
 
 
@@ -145,6 +142,12 @@ public class MainWindowViewModel : ViewModelBase
     private DelegateCommand _open;
     private DelegateCommand _save;
     private DelegateCommand _saveAs;
+
+    // not implemented
+    private DelegateCommand _print;
+    private DelegateCommand _cut;
+    private DelegateCommand _copy;
+    private DelegateCommand _paste;
 
     private static DelegateCommand _calculatorCommand;
 
@@ -582,6 +585,58 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    public ICommand PrintCommand
+    {
+        get
+        {
+            if (_print == null)
+            {
+                _print = new DelegateCommand(Print, x => true);
+            }
+
+            return _print;
+        }
+    }
+
+    public ICommand CutCommand
+    {
+        get
+        {
+            if (_cut == null)
+            {
+                _cut = new DelegateCommand(Cut, x => true);
+            }
+
+            return _cut;
+        }
+    }
+
+    public ICommand CopyCommand
+    {
+        get
+        {
+            if (_copy == null)
+            {
+                _copy = new DelegateCommand(Copy, x => true);
+            }
+
+            return _copy;
+        }
+    }
+
+    public ICommand PasteCommand
+    {
+        get
+        {
+            if (_paste == null)
+            {
+                _paste = new DelegateCommand(Paste, x => true);
+            }
+
+            return _paste;
+        }
+    }
+
     #endregion // Commands
 
 
@@ -855,7 +910,6 @@ public class MainWindowViewModel : ViewModelBase
     //     return _calcWindow;
     // }
 
-    //TODO:
     public async void ShowAbout(object o)
     {
         await new AboutWindow().ShowDialog(_window);
@@ -961,6 +1015,23 @@ public class MainWindowViewModel : ViewModelBase
         // }
 
         return true;
+    }
+
+    // for editor, not implemented yet
+    public void Print(object parameter)
+    {
+    }
+
+    public void Cut(object parameter)
+    {
+    }
+
+    public void Copy(object parameter)
+    {
+    }
+
+    public void Paste(object parameter)
+    {
     }
 
     #endregion // Public Methods

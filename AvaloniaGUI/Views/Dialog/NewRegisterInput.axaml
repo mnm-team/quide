@@ -81,7 +81,7 @@
             <DataGrid
                 x:Name="statesGrid"
                 Margin="2"
-                Items="{Binding InitStates}"
+                ItemsSource="{Binding InitStates}"
                 AutoGenerateColumns="False"
                 CanUserResizeColumns="True"
                 CanUserSortColumns="True"

@@ -119,50 +119,57 @@ public class GateViewModel : ViewModelBase
         get
         {
             Gate gate = Value;
-            if (gate.Control.HasValue)
-            {
-                if (_row.OffsetToRoot == gate.Begin)
-                {
-                    if (_row.Equals(gate.Control.Value))
-                    {
-                        return Application.Current.FindResource("ImgDownC") as VisualBrush;
-                    }
-
-                    return Application.Current.FindResource("ImgDown") as VisualBrush;
-                }
-
-                if (_row.OffsetToRoot != gate.End) return Application.Current.FindResource("ImgLine") as VisualBrush;
-
-                if (_row.Equals(gate.Control.Value))
-                {
-                    return Application.Current.FindResource("ImgUpC") as VisualBrush;
-                }
-
-                return Application.Current.FindResource("ImgUp") as VisualBrush;
-            }
-
-            if (gate is not MultiControlledGate) return Application.Current.FindResource("ImgEmpty") as VisualBrush;
-
-            if (_row.OffsetToRoot == gate.Begin)
-            {
-                if (_row.OffsetToRoot != gate.End)
-                {
-                    return Application.Current.FindResource("ImgDown") as VisualBrush;
-                }
-
-                return Application.Current.FindResource("ImgEmpty") as VisualBrush;
-            }
-
-            if (_row.OffsetToRoot == gate.End)
-            {
-                return Application.Current.FindResource("ImgUp") as VisualBrush;
-            }
-
-            return Application.Current.FindResource("ImgLine") as VisualBrush;
+            var brush = SwitchBackgroundBrush(gate);
+            //RenderOptions.SetBitmapInterpolationMode(brush,BitmapInterpolationMode.LowQuality));
+            return brush;
         }
     }
 
-    public VisualBrush GateImage
+    private VisualBrush SwitchBackgroundBrush(Gate gate)
+    {
+        if (gate.Control.HasValue)
+        {
+            if (_row.OffsetToRoot == gate.Begin)
+            {
+                if (_row.Equals(gate.Control.Value))
+                {
+                    return Application.Current.FindResource("ImgDownC") as VisualBrush;
+                }
+
+                return Application.Current.FindResource("ImgDown") as VisualBrush;
+            }
+
+            if (_row.OffsetToRoot != gate.End) return Application.Current.FindResource("ImgLine") as VisualBrush;
+
+            if (_row.Equals(gate.Control.Value))
+            {
+                return Application.Current.FindResource("ImgUpC") as VisualBrush;
+            }
+
+            return Application.Current.FindResource("ImgUp") as VisualBrush;
+        }
+
+        if (gate is not MultiControlledGate) return Application.Current.FindResource("ImgEmpty") as VisualBrush;
+
+        if (_row.OffsetToRoot == gate.Begin)
+        {
+            if (_row.OffsetToRoot != gate.End)
+            {
+                return Application.Current.FindResource("ImgDown") as VisualBrush;
+            }
+
+            return Application.Current.FindResource("ImgEmpty") as VisualBrush;
+        }
+
+        if (_row.OffsetToRoot == gate.End)
+        {
+            return Application.Current.FindResource("ImgUp") as VisualBrush;
+        }
+
+        return Application.Current.FindResource("ImgLine") as VisualBrush;
+    }
+
+    public VisualBrush? GateImage
     {
         get
         {

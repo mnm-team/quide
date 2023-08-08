@@ -3,7 +3,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using AvaloniaGUI.ViewModels.Controls;
 
 #endregion
@@ -52,13 +51,5 @@ public partial class PropertiesPane : UserControl
     {
         PropertiesViewModel vm = DataContext as PropertiesViewModel;
         vm.AddParam();
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-
-        ApplyButton = this.FindControl<Button>("ApplyButton");
-        methodBox = this.FindControl<ListBox>("methodBox");
     }
 }

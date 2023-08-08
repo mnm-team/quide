@@ -3,7 +3,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using AvaloniaGUI.ViewModels.Dialog;
 
 #endregion
@@ -25,6 +24,8 @@ public partial class ParametricInput : UserControl
         _dataContext = vm;
 
         InitializeComponent();
+
+        methodBox.SelectedIndex = 0;
     }
 
     private void methodBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -55,16 +56,6 @@ public partial class ParametricInput : UserControl
     private void addParam_Click(object sender, RoutedEventArgs e)
     {
         _dataContext.AddParam();
-    }
-
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-
-        gateBox = this.FindControl<ComboBox>("gateBox");
-        methodBox = this.FindControl<ListBox>("methodBox");
-        methodBox.SelectedIndex = 0;
     }
 
     private void ValueChanged(object? sender, AvaloniaPropertyChangedEventArgs e)

@@ -1,7 +1,6 @@
 ﻿#region
 
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using AvaloniaGUI.ViewModels.Dialog;
 
 #endregion
@@ -34,10 +33,5 @@ public partial class GammaInput : UserControl
 
         ComboBoxItem item = e.AddedItems[0] as ComboBoxItem;
         _dataContext.SetAngle(item.Content as string);
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
     }
 }

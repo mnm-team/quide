@@ -39,7 +39,7 @@
                         Grid.Column="1"
                         HorizontalAlignment="Stretch"
                         Margin="2"
-                        Items="{Binding RegistersNames}"
+                        ItemsSource="{Binding RegistersNames}"
                         SelectedItem="{Binding SelectedRegister, Mode=TwoWay}"
                         SelectionChanged="RegisterBox_OnSelectionChanged" IsTextSearchEnabled="True">
                     </ComboBox>
@@ -77,7 +77,7 @@
 
         <Border Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Margin="5">
             <DataGrid x:Name="statesList"
-                      Items="{Binding States}"
+                      ItemsSource="{Binding States}"
                       Background="White" Margin="0"
                       SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
                       GotFocus="statesList_GotFocus"

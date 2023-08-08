@@ -5,6 +5,7 @@
              xmlns:vm="using:AvaloniaGUI.ViewModels.Controls"
              xmlns:p="clr-namespace:AvaloniaGUI.Properties"
              xmlns:codeHelpers="clr-namespace:AvaloniaGUI.CodeHelpers"
+             xmlns:helpers="clr-namespace:AvaloniaGUI.ViewModels.Helpers"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AvaloniaGUI.Views.Controls.PropertiesPane"
              x:DataType="vm:PropertiesViewModel">
@@ -367,7 +368,7 @@
                     x:Name="methodBox"
                     Margin="0,3"
                     HorizontalAlignment="Stretch"
-                    Items="{Binding Candidates}"
+                    ItemsSource="{Binding Candidates}"
                     SelectionMode="Single"
                     SelectionChanged="methodBox_SelectionChanged" />
             </StackPanel>
@@ -375,14 +376,14 @@
             <ItemsControl
                 Grid.Row="1"
                 Grid.Column="3"
-                Items="{Binding Parameters}">
+                ItemsSource="{Binding Parameters}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="helpers:ParameterViewModel">
                         <TextBox
                             Height="23"
                             Margin="0, 3"
@@ -397,14 +398,14 @@
             <ItemsControl
                 Grid.Row="1"
                 Grid.Column="4"
-                Items="{Binding Parameters}">
+                ItemsSource="{Binding Parameters}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="helpers:ParameterViewModel">
                         <Button
                             Click="addParam_Click"
                             Height="23"
@@ -419,14 +420,14 @@
             <ItemsControl
                 Grid.Row="1"
                 Grid.Column="1"
-                Items="{Binding Parameters}">
+                ItemsSource="{Binding Parameters}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="helpers:ParameterViewModel">
                         <TextBlock
                             Height="23"
                             VerticalAlignment="Center"
@@ -439,14 +440,14 @@
             <ItemsControl
                 Grid.Row="1"
                 Grid.Column="2"
-                Items="{Binding Parameters}">
+                ItemsSource="{Binding Parameters}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="helpers:ParameterViewModel">
                         <TextBlock
                             Height="23"
                             VerticalAlignment="Center"
@@ -466,7 +467,7 @@
                 Grid.Row="2"
                 Grid.Column="1"
                 Grid.ColumnSpan="3"
-                Items="{Binding Parameters}">
+                ItemsSource="{Binding Parameters}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical"
@@ -475,7 +476,7 @@
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="helpers:ParameterViewModel">
                         <TextBlock
                             Margin="0, 3"
                             TextWrapping="Wrap"

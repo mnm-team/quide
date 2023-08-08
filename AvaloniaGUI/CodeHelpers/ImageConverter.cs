@@ -3,7 +3,6 @@
 using System;
 using System.Globalization;
 using System.Reflection;
-using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -29,7 +28,7 @@ public class ImageConverter : IValueConverter
         if (string.IsNullOrEmpty(value as string))
             return null;
 
-        if (value is not string rawUri || !targetType.IsAssignableFrom(typeof(IBitmap)))
+        if (value is not string rawUri || !targetType.IsAssignableFrom(typeof(Bitmap)))
             throw new NotSupportedException();
 
         Uri uri;
@@ -45,8 +44,7 @@ public class ImageConverter : IValueConverter
             uri = new Uri($"avares://{assemblyName}{rawUri}");
         }
 
-        var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
-        var asset = assets?.Open(uri);
+        var asset = AssetLoader.Open(uri);
 
         return new Bitmap(asset);
     }

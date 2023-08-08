@@ -1,14 +1,15 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="using:AvaloniaGUI"
-             x:Class="AvaloniaGUI.App">
+             x:Class="AvaloniaGUI.App"
+             RequestedThemeVariant="Light">
 
     <Application.DataTemplates>
         <local:ViewLocator />
     </Application.DataTemplates>
 
     <Application.Styles>
-        <FluentTheme Mode="Light" />
+        <FluentTheme />
 
         <!-- to display dataGrid -->
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
@@ -17,10 +18,19 @@
             <Setter Property="Background" Value="Transparent"></Setter>
         </Style>
 
-        <!-- only effects Brushes outside of Rsrc Dictionaries -->
-        <Style Selector="VisualBrush">
-            <Setter Property="RenderOptions.BitmapInterpolationMode" Value="LowQuality" />
+        <Style Selector="Separator.Vertical">
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <RotateTransform Angle="90" />
+                </Setter.Value>
+            </Setter>
         </Style>
+
+        <!-- only effects Brushes outside of Rsrc Dictionaries -->
+        <!-- TODO: no longer supported -->
+        <!-- <Style Selector="VisualBrush"> -->
+        <!--     <Setter Property="RenderOptions.BitmapInterpolationMode" Value="LowQuality" /> -->
+        <!-- </Style> -->
 
         <!-- Toolbar radio button design -->
         <Style Selector="RadioButton.ToolBarButton">

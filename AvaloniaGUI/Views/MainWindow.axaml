@@ -12,7 +12,7 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="QuIDE - Quantum Integrated Development Environment"
         WindowStartupLocation="CenterScreen">
-        <!-- SizeToContent="WidthAndHeight"> -->
+    <!-- SizeToContent="WidthAndHeight"> -->
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -67,13 +67,13 @@
                     <Image Source="/Assets/Images/SaveAs.png" Width="16" />
                 </Button>
 
-                <Separator Margin="5,2" />
+                <Separator Classes="Vertical" Margin="5,0" />
 
                 <Button Command="{Binding PrintCommand}" ToolTip.Tip="{x:Static p:Resources.Print}">
                     <Image Source="/Assets/Images/Print_11009.png" Width="16" />
                 </Button>
 
-                <Separator Margin="5,2" />
+                <Separator Classes="Vertical" Margin="5,2" />
 
                 <Button Command="{Binding CutCommand}" ToolTip.Tip="{x:Static p:Resources.Cut}">
                     <Image Source="/Assets/Images/Cut_6523.png" Width="16" />
@@ -85,7 +85,7 @@
                     <Image Source="/Assets/Images/Paste_6520.png" Width="16" />
                 </Button>
 
-                <Separator Margin="5,2" />
+                <Separator Classes="Vertical" Margin="5,2" />
 
                 <Button Command="{Binding GenerateFromCodeCommand}"
                         ToolTip.Tip="{x:Static p:Resources.GenerateFromCode}">
@@ -206,7 +206,7 @@
                                         <Image Source="/Assets/Images/GotoLastRow_288.png" Width="16" />
                                     </Button>
 
-                                    <Separator Margin="5,2" />
+                                    <Separator Classes="Vertical" Margin="5,2" />
 
                                     <Button x:Name="generateCode"
                                             ToolTip.Tip="{x:Static p:Resources.GenerateCode}"
@@ -281,7 +281,7 @@
                                         </Border>
                                     </Button>
 
-                                    <Separator Margin="5,2" />
+                                    <Separator Classes="Vertical" Margin="5,2" />
 
                                     <RadioButton GroupName="Actions"
                                                  x:Name="compositeTool"
@@ -289,7 +289,7 @@
                                         <Grid>
                                             <ComboBox
                                                 Name="cb"
-                                                Items="{Binding CompositeTools}"
+                                                ItemsSource="{Binding CompositeTools}"
                                                 SelectedItem="{Binding SelectedComposite}"
                                                 SelectionChanged="CompositeTool_SelectionChanged"
                                                 GotFocus="CompositeSelectionFocused"

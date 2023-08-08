@@ -1,7 +1,6 @@
 ﻿#region
 
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using AvaloniaGUI.ViewModels.Dialog;
 
 #endregion
@@ -20,10 +19,5 @@ public partial class MatrixInput : UserControl
         DataContext = vm;
 
         InitializeComponent();
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
     }
 }

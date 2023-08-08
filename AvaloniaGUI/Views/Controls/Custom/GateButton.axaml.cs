@@ -90,11 +90,11 @@ public class GateButton : TemplatedControl
         set => SetValue(RenderTransformProperty, value);
     }
 
-    public static readonly StyledProperty<IControl> ContentProperty = AvaloniaProperty.Register<GateButton, IControl>(
+    public static readonly StyledProperty<Control> ContentProperty = AvaloniaProperty.Register<GateButton, Control>(
         nameof(Content));
 
     [Content]
-    public IControl Content
+    public Control Content
     {
         get => GetValue(ContentProperty);
         set => SetValue(ContentProperty, value);

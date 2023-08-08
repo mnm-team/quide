@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:AvaloniaGUI.ViewModels.Dialog"
              xmlns:p="clr-namespace:AvaloniaGUI.Properties"
+             xmlns:helpers="clr-namespace:AvaloniaGUI.ViewModels.Helpers"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:ParametricInputViewModel"
              x:Class="AvaloniaGUI.Views.Dialog.ParametricInput">
@@ -34,7 +35,7 @@
                 x:Name="gateBox"
                 Margin="0,3"
                 HorizontalAlignment="Stretch"
-                Items="{Binding CompositeNames}"
+                ItemsSource="{Binding CompositeNames}"
                 SelectedIndex="{Binding GateIndex}"
                 SelectionChanged="gateBox_SelectionChanged" IsTextSearchEnabled="True" />
         </StackPanel>
@@ -51,7 +52,7 @@
             <ListBox
                 x:Name="methodBox"
                 Margin="0,3"
-                Items="{Binding Candidates}"
+                ItemsSource="{Binding Candidates}"
                 SelectionMode="Single"
                 SelectionChanged="methodBox_SelectionChanged" />
         </StackPanel>
@@ -61,14 +62,14 @@
             <!-- Register Types (e.g. RegisterRef, Register,...) -->
             <ItemsControl
                 Grid.Row="0" Grid.Column="1"
-                Items="{Binding Parameters}">
+                ItemsSource="{Binding Parameters}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="helpers:ParameterViewModel">
                         <TextBlock
                             Height="23"
                             VerticalAlignment="Center"
@@ -81,14 +82,14 @@
             <!-- Register Names -->
             <ItemsControl
                 Grid.Row="0" Grid.Column="2"
-                Items="{Binding Parameters}">
+                ItemsSource="{Binding Parameters}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="helpers:ParameterViewModel">
                         <TextBlock
                             Height="23"
                             VerticalAlignment="Center"
@@ -101,14 +102,14 @@
             <!-- Params -->
             <ItemsControl Grid.Row="0"
                           Grid.Column="3"
-                          Items="{Binding Parameters}">
+                          ItemsSource="{Binding Parameters}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="helpers:ParameterViewModel">
                         <TextBox
                             HorizontalAlignment="Stretch"
                             Height="23"
@@ -127,14 +128,14 @@
             <!-- Add Param Buttons -->
             <ItemsControl
                 Grid.Row="0" Grid.Column="4"
-                Items="{Binding Parameters}">
+                ItemsSource="{Binding Parameters}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="helpers:ParameterViewModel">
                         <Button
                             Click="addParam_Click"
                             Margin="3,3,0,3"
@@ -155,7 +156,7 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Grid.ColumnSpan="4"
-                Items="{Binding Parameters}">
+                ItemsSource="{Binding Parameters}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical"
@@ -164,7 +165,7 @@
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="helpers:ParameterViewModel">
                         <TextBlock
                             Margin="0, 3"
                             TextWrapping="Wrap"

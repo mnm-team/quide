@@ -4,7 +4,6 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using AvaloniaGUI.CodeHelpers;
 using AvaloniaGUI.ViewModels.Controls;
 
@@ -92,13 +91,5 @@ public partial class OutputGrid : UserControl
     private void SortProbability_Click(object sender, RoutedEventArgs e)
     {
         _dataContext.Sort(SortField.Probability);
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-
-        registerBox = this.FindControl<ComboBox>("registerBox");
-        statesList = this.FindControl<DataGrid>("statesList");
     }
 }

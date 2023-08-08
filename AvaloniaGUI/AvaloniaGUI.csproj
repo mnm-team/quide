@@ -9,36 +9,36 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Models"/>
-        <Folder Include="Models\"/>
-        <AvaloniaResource Include="Assets\**"/>
-        <None Remove="Assets\Images\CopyHS.png"/>
-        <AvaloniaResource Include="Assets\Images\CopyHS.png"/>
-        <None Remove="Assets\Images\CutHS.png"/>
-        <AvaloniaResource Include="Assets\Images\CutHS.png"/>
-        <None Remove="Assets\Images\NewDocumentHS.png"/>
-        <AvaloniaResource Include="Assets\Images\NewDocumentHS.png"/>
-        <None Remove="Assets\Images\openHS.png"/>
-        <AvaloniaResource Include="Assets\Images\openHS.png"/>
-        <None Remove="Assets\Images\saveHS.png"/>
-        <AvaloniaResource Include="Assets\Images\saveHS.png"/>
-        <None Remove="Assets\Styles.xaml"/>
-        <AvaloniaResource Include="Assets\Styles.xaml"/>
+        <Folder Include="Models" />
+        <Folder Include="Models\" />
+        <AvaloniaResource Include="Assets\**" />
+        <None Remove="Assets\Images\CopyHS.png" />
+        <AvaloniaResource Include="Assets\Images\CopyHS.png" />
+        <None Remove="Assets\Images\CutHS.png" />
+        <AvaloniaResource Include="Assets\Images\CutHS.png" />
+        <None Remove="Assets\Images\NewDocumentHS.png" />
+        <AvaloniaResource Include="Assets\Images\NewDocumentHS.png" />
+        <None Remove="Assets\Images\openHS.png" />
+        <AvaloniaResource Include="Assets\Images\openHS.png" />
+        <None Remove="Assets\Images\saveHS.png" />
+        <AvaloniaResource Include="Assets\Images\saveHS.png" />
+        <None Remove="Assets\Styles.xaml" />
+        <AvaloniaResource Include="Assets\Styles.xaml" />
     </ItemGroup>
 
     <ItemGroup>
-        <TrimmerRootAssembly Include="Avalonia.Themes.Fluent"/>
+        <TrimmerRootAssembly Include="Avalonia.Themes.Fluent" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="0.10.21"/>
-        <PackageReference Include="Avalonia.Desktop" Version="0.10.21"/>
+        <PackageReference Include="Avalonia" Version="11.0.2" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.0.2" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.21"/>
-        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.21"/>
-        <PackageReference Include="MessageBox.Avalonia" Version="2.1.0"/>
-        <PackageReference Include="NP.Avalonia.UniDock" Version="1.0.51"/>
-        <PackageReference Include="XamlNameReferenceGenerator" Version="1.6.1"/>
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.2" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.2" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.2" />
+        <PackageReference Include="MessageBox.Avalonia" Version="2.1.0" />
+        <PackageReference Include="NP.Avalonia.UniDock" Version="1.0.51" />
     </ItemGroup>
 
     <ItemGroup>
@@ -48,46 +48,46 @@
     </ItemGroup>
 
     <ItemGroup>
-        <AvaloniaResource Include="Assets\Images\BuildSolution_104.png"/>
-        <AvaloniaResource Include="Assets\Images\Calculator.png"/>
-        <AvaloniaResource Include="Assets\Images\Clearallrequests_8816.png"/>
-        <AvaloniaResource Include="Assets\Images\Console.png"/>
-        <AvaloniaResource Include="Assets\Images\Copy_6524.png"/>
-        <AvaloniaResource Include="Assets\Images\Cut_6523.png"/>
-        <AvaloniaResource Include="Assets\Images\EraseTool_203.png"/>
-        <AvaloniaResource Include="Assets\Images\GotoFirstRow_287.png"/>
-        <AvaloniaResource Include="Assets\Images\GotoLastRow_288.png"/>
-        <AvaloniaResource Include="Assets\Images\GotoNextRow_289.png"/>
-        <AvaloniaResource Include="Assets\Images\imgCNot.gif"/>
-        <AvaloniaResource Include="Assets\Images\imgH.gif"/>
-        <AvaloniaResource Include="Assets\Images\imgInvRk.gif"/>
-        <AvaloniaResource Include="Assets\Images\imgR.gif"/>
-        <AvaloniaResource Include="Assets\Images\imgRk.gif"/>
-        <AvaloniaResource Include="Assets\Images\imgRx.gif"/>
-        <AvaloniaResource Include="Assets\Images\imgRy.gif"/>
-        <AvaloniaResource Include="Assets\Images\imgRz.gif"/>
-        <AvaloniaResource Include="Assets\Images\imgSigmaX.gif"/>
-        <AvaloniaResource Include="Assets\Images\imgSigmaY.gif"/>
-        <AvaloniaResource Include="Assets\Images\imgSigmaZ.gif"/>
-        <AvaloniaResource Include="Assets\Images\imgSqrtX.gif"/>
-        <AvaloniaResource Include="Assets\Images\imgTheta.gif"/>
-        <AvaloniaResource Include="Assets\Images\imgToffoli.gif"/>
-        <AvaloniaResource Include="Assets\Images\imgToffoliSmall.gif"/>
-        <AvaloniaResource Include="Assets\Images\Information.png"/>
-        <AvaloniaResource Include="Assets\Images\MovePrevious_7195.png"/>
-        <AvaloniaResource Include="Assets\Images\NewFile_6276.png"/>
-        <AvaloniaResource Include="Assets\Images\Open_6529.png"/>
-        <AvaloniaResource Include="Assets\Images\Paste_6520.png"/>
-        <AvaloniaResource Include="Assets\Images\PointerHS.png"/>
-        <AvaloniaResource Include="Assets\Images\Pointer_6127.png"/>
-        <AvaloniaResource Include="Assets\Images\Print_11009.png"/>
-        <AvaloniaResource Include="Assets\Images\ResultstoFile_9946.png"/>
-        <AvaloniaResource Include="Assets\Images\SaveAs.png"/>
-        <AvaloniaResource Include="Assets\Images\Save_6530.png"/>
+        <AvaloniaResource Include="Assets\Images\BuildSolution_104.png" />
+        <AvaloniaResource Include="Assets\Images\Calculator.png" />
+        <AvaloniaResource Include="Assets\Images\Clearallrequests_8816.png" />
+        <AvaloniaResource Include="Assets\Images\Console.png" />
+        <AvaloniaResource Include="Assets\Images\Copy_6524.png" />
+        <AvaloniaResource Include="Assets\Images\Cut_6523.png" />
+        <AvaloniaResource Include="Assets\Images\EraseTool_203.png" />
+        <AvaloniaResource Include="Assets\Images\GotoFirstRow_287.png" />
+        <AvaloniaResource Include="Assets\Images\GotoLastRow_288.png" />
+        <AvaloniaResource Include="Assets\Images\GotoNextRow_289.png" />
+        <AvaloniaResource Include="Assets\Images\imgCNot.gif" />
+        <AvaloniaResource Include="Assets\Images\imgH.gif" />
+        <AvaloniaResource Include="Assets\Images\imgInvRk.gif" />
+        <AvaloniaResource Include="Assets\Images\imgR.gif" />
+        <AvaloniaResource Include="Assets\Images\imgRk.gif" />
+        <AvaloniaResource Include="Assets\Images\imgRx.gif" />
+        <AvaloniaResource Include="Assets\Images\imgRy.gif" />
+        <AvaloniaResource Include="Assets\Images\imgRz.gif" />
+        <AvaloniaResource Include="Assets\Images\imgSigmaX.gif" />
+        <AvaloniaResource Include="Assets\Images\imgSigmaY.gif" />
+        <AvaloniaResource Include="Assets\Images\imgSigmaZ.gif" />
+        <AvaloniaResource Include="Assets\Images\imgSqrtX.gif" />
+        <AvaloniaResource Include="Assets\Images\imgTheta.gif" />
+        <AvaloniaResource Include="Assets\Images\imgToffoli.gif" />
+        <AvaloniaResource Include="Assets\Images\imgToffoliSmall.gif" />
+        <AvaloniaResource Include="Assets\Images\Information.png" />
+        <AvaloniaResource Include="Assets\Images\MovePrevious_7195.png" />
+        <AvaloniaResource Include="Assets\Images\NewFile_6276.png" />
+        <AvaloniaResource Include="Assets\Images\Open_6529.png" />
+        <AvaloniaResource Include="Assets\Images\Paste_6520.png" />
+        <AvaloniaResource Include="Assets\Images\PointerHS.png" />
+        <AvaloniaResource Include="Assets\Images\Pointer_6127.png" />
+        <AvaloniaResource Include="Assets\Images\Print_11009.png" />
+        <AvaloniaResource Include="Assets\Images\ResultstoFile_9946.png" />
+        <AvaloniaResource Include="Assets\Images\SaveAs.png" />
+        <AvaloniaResource Include="Assets\Images\Save_6530.png" />
     </ItemGroup>
 
     <ItemGroup>
-        <Resource Include="Assets\Gates_files\image0.png"/>
+        <Resource Include="Assets\Gates_files\image0.png" />
     </ItemGroup>
 
     <ItemGroup>
@@ -106,15 +106,15 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Page Include="Assets\Gates.xaml"/>
+        <Page Include="Assets\Gates.xaml" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Quantum\Quantum.csproj"/>
+        <ProjectReference Include="..\Quantum\Quantum.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="DefaultLayout.xml"/>
+        <None Remove="DefaultLayout.xml" />
         <Content Include="DefaultLayout.xml">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>

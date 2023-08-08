@@ -29,7 +29,7 @@
                     <!-- Qubit view -->
                     <StackPanel Orientation="Vertical">
                         <ItemsControl x:Name="registerItemsControl" Background="White"
-                                      Items="{Binding Registers}"
+                                      ItemsSource="{Binding Registers}"
                                       Margin="0,0,0,0"
                                       RenderTransformOrigin="0,0">
                             <ItemsControl.RenderTransform>
@@ -46,7 +46,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <ItemsControl Items="{Binding Qubits}"
+                                    <ItemsControl ItemsSource="{Binding Qubits}"
                                                   Margin="0">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
@@ -159,7 +159,7 @@
                     <!-- Circuit line view -->
                     <ItemsControl x:Name="stepItemsControl"
                                   Background="White"
-                                  Items="{Binding Steps}"
+                                  ItemsSource="{Binding Steps}"
                                   Margin="0,0,0,0"
                                   RenderTransformOrigin="0,0">
                         <ItemsControl.RenderTransform>
@@ -177,7 +177,7 @@
                             <DataTemplate>
                                 <Border BorderBrush="Transparent" BorderThickness="0"
                                         Background="{DynamicResource HighLightColorBrush}" Padding="0">
-                                    <ItemsControl x:Name="Gates" Items="{Binding Gates}"
+                                    <ItemsControl x:Name="Gates" ItemsSource="{Binding Gates}"
                                                   Margin="0,0,0,0">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>

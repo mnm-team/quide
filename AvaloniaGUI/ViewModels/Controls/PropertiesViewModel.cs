@@ -10,7 +10,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Input;
 using Avalonia;
-using Avalonia.Visuals.Media.Imaging;
+using Avalonia.Media.Imaging;
 using AvaloniaGUI.CodeHelpers;
 using AvaloniaGUI.Properties;
 using AvaloniaGUI.ViewModels.Helpers;

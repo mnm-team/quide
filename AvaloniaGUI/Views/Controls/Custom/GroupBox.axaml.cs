@@ -20,11 +20,11 @@ public class GroupBox : TemplatedControl
         set => SetValue(HeaderProperty, value);
     }
 
-    public static readonly StyledProperty<IControl> ContentProperty = AvaloniaProperty.Register<GroupBox, IControl>(
+    public static readonly StyledProperty<Control> ContentProperty = AvaloniaProperty.Register<GroupBox, Control>(
         nameof(Content));
 
     [Content]
-    public IControl Content
+    public Control Content
     {
         get => GetValue(ContentProperty);
         set => SetValue(ContentProperty, value);

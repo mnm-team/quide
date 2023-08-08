@@ -3,7 +3,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using AvaloniaGUI.CodeHelpers;
 using AvaloniaGUI.ViewModels;
 
@@ -23,10 +22,9 @@ public partial class BasicDialogWindow : Window
     {
         _content = content;
         DataContext = (ViewModelBase)content.DataContext;
-        InitializeComponent();
-#if DEBUG
-        this.AttachDevTools();
-#endif
+        InitializeComponent(); // TODO: devtools dont wire up correctly, maybe due to focus issues for keyboard
+
+        DialogContentControl.Content = _content;
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -43,14 +41,5 @@ public partial class BasicDialogWindow : Window
     public void Cancel_Clicked(object sender, RoutedEventArgs e)
     {
         Close(DialogToken.Cancel);
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-
-        DialogContentControl = this.FindControl<ContentControl>("DialogContentControl");
-
-        DialogContentControl.Content = _content;
     }
 }

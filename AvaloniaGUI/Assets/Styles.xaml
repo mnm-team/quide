@@ -43,17 +43,18 @@
         <GradientStop Color="#FFC8D9ED" Offset="0.478" />
     </LinearGradientBrush>
 
-    <Style x:Key="ToolTip" Selector="ToolTip">
-        <Setter Property="ContentTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <StackPanel>
-                        <TextBlock Text="{Binding}" MaxWidth="300" TextWrapping='Wrap' />
-                    </StackPanel>
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+    <!-- TODO: unknown DataType for Binding here -->
+    <!-- <Style x:Key="ToolTip" Selector="ToolTip"> -->
+    <!--     <Setter Property="ContentTemplate"> -->
+    <!--         <Setter.Value> -->
+    <!--             <DataTemplate> -->
+    <!--                 <StackPanel> -->
+    <!--                     <TextBlock Text="{Binding}" MaxWidth="300" TextWrapping='Wrap' /> -->
+    <!--                 </StackPanel> -->
+    <!--             </DataTemplate> -->
+    <!--         </Setter.Value> -->
+    <!--     </Setter> -->
+    <!-- </Style> -->
 
     <Style x:Key="MenuLabel" Selector="TextBlock">
         <Setter Property="FontSize" Value="18" />
@@ -514,17 +515,18 @@
         </Setter>
     </Style>
 
+    <!-- TODO: unknown DataType for Binding here -->
     <!-- DataTemplate for Origins -->
-    <DataTemplate x:Key="OriginsDataTemplate">
-        <Grid Width="370" Background="#AA000000">
-            <TextBlock Foreground="#22ffffff" Margin="4,2" FontSize="30" Text="{Binding Name}" />
-            <StackPanel HorizontalAlignment="Right" Margin="0, 0, 8, 0">
-                <TextBlock Text="count: " Foreground="White" />
-                <TextBlock HorizontalAlignment="Right" Foreground="White"
-                           Text="{Binding Count}" Padding="2" />
-            </StackPanel>
-        </Grid>
-    </DataTemplate>
+    <!-- <DataTemplate x:Key="OriginsDataTemplate"> -->
+    <!--     <Grid Width="370" Background="#AA000000"> -->
+    <!--         <TextBlock Foreground="#22ffffff" Margin="4,2" FontSize="30" Text="{Binding Name}" /> -->
+    <!--         <StackPanel HorizontalAlignment="Right" Margin="0, 0, 8, 0"> -->
+    <!--             <TextBlock Text="count: " Foreground="White" /> -->
+    <!--             <TextBlock HorizontalAlignment="Right" Foreground="White" -->
+    <!--                        Text="{Binding Count}" Padding="2" /> -->
+    <!--         </StackPanel> -->
+    <!--     </Grid> -->
+    <!-- </DataTemplate> -->
 
     <!-- Login PasswordBox Style -->
     <Style x:Key="PasswordBoxStyle" Selector="TextBox">
