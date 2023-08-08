@@ -270,7 +270,7 @@ public class QubitViewModel : ViewModelBase
         await _dialogManager.ShowDialogAsync(input, () =>
         {
             // to update bindings:
-            input.normalize.Focus();
+            // input.normalize.Focus();
             // if (Validation.GetHasError(input.widthBox) ||
             //     Validation.GetHasError(input.statesGrid)) return;
 
