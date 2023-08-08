@@ -1,7 +1,7 @@
 ﻿#region
 
-using MessageBox.Avalonia;
-using MessageBox.Avalonia.Enums;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 
 #endregion
 
@@ -15,13 +15,13 @@ public static class ErrorMessageHelper
     /// <param name="title">Title</param>
     /// <param name="msg">Message</param>
     /// <param name="icon">Icon look up <see cref="Icon"/> enum for available options other then default error.</param>
-    public static void ShowMessage(string msg = "An error occurred. Please contact the developer.",
+    public static async void ShowMessage(string msg = "An error occurred. Please contact the developer.",
         string title = "Error", Icon icon = Icon.Error)
     {
         var messageBoxWindow =
-            MessageBoxManager.GetMessageBoxStandardWindow(title, msg, ButtonEnum.Ok,
+            MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.Ok,
                 icon);
 
-        messageBoxWindow.Show();
+        await messageBoxWindow.ShowAsync();
     }
 }
