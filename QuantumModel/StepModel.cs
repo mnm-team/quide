@@ -18,12 +18,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Net;
-using System.Windows;
-using System.Windows.Input;
 
 namespace QuantumModel
 {

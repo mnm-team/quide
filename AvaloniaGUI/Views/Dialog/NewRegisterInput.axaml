@@ -1,0 +1,104 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:AvaloniaGUI.ViewModels.Dialog"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:codeHelpers="clr-namespace:AvaloniaGUI.CodeHelpers"
+             xmlns:p="clr-namespace:AvaloniaGUI.Properties"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaGUI.Views.Dialog.NewRegisterInput"
+             x:DataType="vm:NewRegisterInputViewModel">
+    <Design.DataContext>
+        <vm:NewRegisterInputViewModel />
+    </Design.DataContext>
+
+    <UserControl.Resources>
+        <!-- probably artefacts of wanting to implement a Probability color bar, like in OutputGrid -->
+        <codeHelpers:ComplexConverter x:Key="ComplexToString" />
+        <codeHelpers:AmplitudeColorConverter x:Key="AmplitudeToColor" />
+        <Style x:Key="DefaultButton" Selector="Button" />
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="Button">
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="Gray" />
+        </Style>
+    </UserControl.Styles>
+
+    <DockPanel>
+        <!-- number of new qubits -->
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="*,*">
+            <TextBlock
+                Text="{x:Static p:Resources.QubitsNumber}"
+                Margin="2"
+                VerticalAlignment="Center" />
+            <TextBox
+                x:Name="widthBox"
+                Grid.Column="1"
+                MinWidth="100"
+                Margin="2"
+                Text="{Binding WidthString, Mode=TwoWay}"
+                PropertyChanged="WidthBox_OnPropertyChanged"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Stretch" />
+        </Grid>
+
+        <!-- Table caption -->
+        <TextBlock
+            DockPanel.Dock="Top"
+            Text="{x:Static p:Resources.InitState}"
+            Margin="2, 20, 2, 2"
+            VerticalAlignment="Center" />
+
+        <!-- Caution text -->
+        <TextBlock
+            DockPanel.Dock="Bottom"
+            TextWrapping="Wrap"
+            Width="300"
+            Text="{x:Static p:Resources.AmplitudesNormalizationCaution}"
+            Margin="2, 20, 2, 2" />
+
+        <!-- Buttons -->
+        <StackPanel
+            DockPanel.Dock="Bottom"
+            Orientation="Horizontal"
+            HorizontalAlignment="Right">
+            <Button
+                Margin="2"
+                MinWidth="50"
+                Content="Add"
+                Command="{Binding AddCommand}" />
+            <Button
+                x:Name="normalize"
+                Margin="2"
+                MinWidth="50"
+                Content="Normalize"
+                Command="{Binding NormalizeCommand}" />
+        </StackPanel>
+
+        <Border Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Margin="5">
+            <DataGrid
+                x:Name="statesGrid"
+                Margin="2"
+                Items="{Binding InitStates}"
+                AutoGenerateColumns="False"
+                CanUserResizeColumns="True"
+                CanUserSortColumns="True"
+                HorizontalGridLinesBrush="LightGray"
+                VerticalGridLinesBrush="LightGray"
+                IsEnabled="True"
+                IsReadOnly="False" Height="250" Focusable="True"
+                PropertyChanged="StatesGrid_OnPropertyChanged">
+                <DataGrid.Columns>
+                    <!-- Value -->
+                    <DataGridTextColumn Header="{x:Static p:Resources.Value}" SortMemberPath="Value"
+                                        Binding="{Binding Value, Mode=TwoWay}" />
+                    <!-- Amplitude -->
+                    <DataGridTextColumn Header="{x:Static p:Resources.Amplitude}" SortMemberPath="AmplitudeString"
+                                        Binding="{Binding AmplitudeString, Mode=TwoWay}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </DockPanel>
+</UserControl>

@@ -121,56 +121,5 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <!--<DataGrid        
-                Margin="5"
-                IsEnabled="False"
-            ItemsSource="{Binding InitStates}"
-            AutoGenerateColumns="False"
-            HorizontalGridLinesBrush="LightGray"
-            VerticalGridLinesBrush="LightGray">
-                <DataGrid.Columns>
-                    <DataGridTextColumn
-                    IsReadOnly="True"
-                    Header="{x:Static p:Resources.Qubits}">
-                        <DataGridTextColumn.Binding>
-                            <Binding Path="Representation" />
-                        </DataGridTextColumn.Binding>
-                    </DataGridTextColumn>
-                    <DataGridTemplateColumn
-                    IsReadOnly="True"
-                    Header="{x:Static p:Resources.Probability}">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Rectangle Fill="{Binding Amplitude, Converter={StaticResource AmplitudeToColor}}"
-                                       RadiusX="2" RadiusY="2" Stroke="DimGray"
-                                       Height="15" Width="100"
-                                                   Margin="0" HorizontalAlignment="Left">
-                                    <Rectangle.OpacityMask>
-                                        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                                            <GradientStop Color="#33000000"/>
-                                            <GradientStop Color="White" Offset="0.5"/>
-                                            <GradientStop Color="#4C000000" Offset="1"/>
-                                            <GradientStop Color="#99FFFFFF" Offset="0.25"/>
-                                            <GradientStop Color="#B2FFFFFF" Offset="0.75"/>
-                                        </LinearGradientBrush>
-                                    </Rectangle.OpacityMask>
-                                    <Rectangle.RenderTransform>
-                                        <ScaleTransform ScaleX="{Binding Path=Probability}" />
-                                    </Rectangle.RenderTransform>
-                                </Rectangle>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>-->
-
-        <!--<TextBox 
-            Grid.Column="1"
-            Grid.Row="1"
-            x:Name="initValBox" 
-                     MinWidth="100"
-                     Margin="2"
-            Text="{Binding InitValueText, Mode=TwoWay}"
-            VerticalAlignment="Center"/>-->
     </DockPanel>
 </UserControl>

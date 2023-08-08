@@ -1,0 +1,154 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:codeHelpers="clr-namespace:AvaloniaGUI.CodeHelpers"
+             xmlns:vm="using:AvaloniaGUI.ViewModels.Controls"
+             xmlns:p="clr-namespace:AvaloniaGUI.Properties"
+             xmlns:helpers="clr-namespace:AvaloniaGUI.ViewModels.Helpers"
+             xmlns:custom="clr-namespace:AvaloniaGUI.Views.Controls.Custom"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaGUI.Views.Controls.OutputGrid"
+             x:DataType="vm:OutputGridViewModel">
+    <Design.DataContext>
+        <vm:OutputGridViewModel />
+    </Design.DataContext>
+
+    <UserControl.Resources>
+        <!--<Style x:Key="DefaultButton" Selector="Button" >
+        </Style>
+        <Style x:Key="FlatComboBox" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}" Selector="ComboBox" />-->
+        <codeHelpers:AmplitudeColorConverter x:Key="AmplitudeToColor" />
+        <codeHelpers:ComplexConverter x:Key="ComplexToString" />
+    </UserControl.Resources>
+
+    <DockPanel x:Name="LayoutRoot" Background="White">
+        <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
+            <!-- Register selector -->
+            <Border
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="1"
+                Background="LightGray" Margin="4">
+                <Grid ColumnDefinitions="Auto,*">
+                    <TextBlock
+                        Margin="2"
+                        VerticalAlignment="Center"
+                        Text="Output from register:" />
+                    <ComboBox
+                        x:Name="registerBox"
+                        Grid.Column="1"
+                        HorizontalAlignment="Stretch"
+                        Margin="2"
+                        Items="{Binding RegistersNames}"
+                        SelectedItem="{Binding SelectedRegister, Mode=TwoWay}"
+                        SelectionChanged="RegisterBox_OnSelectionChanged" IsTextSearchEnabled="True">
+                    </ComboBox>
+                </Grid>
+            </Border>
+
+            <!-- States visibility -->
+            <custom:GroupBox Header="{x:Static p:Resources.StatesVisibility}">
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton GroupName="StatesVisibilityMode"
+                                 Content="{x:Static p:Resources.ShowAll}"
+                                 Margin="10,2"
+                                 IsChecked="{Binding ShowAll, Mode=TwoWay}" />
+                    <RadioButton GroupName="StatesVisibilityMode"
+                                 Content="{x:Static p:Resources.ShowOnlyNonZero}"
+                                 Margin="10,2"
+                                 IsChecked="True" />
+                </StackPanel>
+            </custom:GroupBox>
+
+            <!-- Probability scale -->
+            <custom:GroupBox Header="{x:Static p:Resources.ProbabilityScale}">
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton GroupName="ScaleMode"
+                                 Content="{x:Static p:Resources.Absolute}"
+                                 Margin="10,2"
+                                 IsChecked="True" />
+                    <RadioButton GroupName="ScaleMode"
+                                 Content="{x:Static p:Resources.Relative}"
+                                 Margin="10,2"
+                                 IsChecked="{Binding ScaleRelative, Mode=TwoWay}" />
+                </StackPanel>
+            </custom:GroupBox>
+        </StackPanel>
+
+        <Border Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Margin="5">
+            <DataGrid x:Name="statesList"
+                      Items="{Binding States}"
+                      Background="White" Margin="0"
+                      SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
+                      GotFocus="statesList_GotFocus"
+                      CanUserReorderColumns="True"
+                      CanUserSortColumns="True"
+                      AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="{x:Static p:Resources.Value}" CanUserSort="True"
+                                            SortMemberPath="Value">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="helpers:StateViewModel">
+                                <TextBlock
+                                    Text="{Binding Value, StringFormat='|\{0\}>'}"
+                                    ToolTip.Tip="{x:Static p:Resources.StateValue}">
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="{x:Static p:Resources.Qubits}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="helpers:StateViewModel">
+                                <TextBlock
+                                    Text="{Binding Representation}"
+                                    ToolTip.Tip="{x:Static p:Resources.StateQubits}">
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="{x:Static p:Resources.Probability}" CanUserSort="True"
+                                            SortMemberPath="ProbabilityFloat">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="helpers:StateViewModel">
+                                <Grid Margin="0" Width="{Binding RectangleMaxWidth}">
+                                    <Rectangle
+                                        Fill="{Binding Amplitude, Converter={StaticResource AmplitudeToColor}}"
+                                        Stroke="DimGray" Width="{Binding RectangleWidth}"
+                                        Margin="4" HorizontalAlignment="Left">
+                                        <!-- TODO: no rounded corners in Avalonia as of yet
+                                            RadiusX="2" RadiusY="2"-->
+                                        <Rectangle.OpacityMask>
+                                            <LinearGradientBrush EndPoint="0.5,1"
+                                                                 StartPoint="0.5,0">
+                                                <GradientStop Color="#33000000" />
+                                                <GradientStop Color="White" Offset="0.5" />
+                                                <GradientStop Color="#4C000000" Offset="1" />
+                                                <GradientStop Color="#99FFFFFF" Offset="0.25" />
+                                                <GradientStop Color="#B2FFFFFF" Offset="0.75" />
+                                            </LinearGradientBrush>
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                    <TextBlock Text="{Binding ProbabilityFloat, StringFormat='P = \{0\}'}"
+                                               Width="{Binding RectangleMaxWidth}"
+                                               TextAlignment="Left" Padding="6"
+                                               ToolTip.Tip="{x:Static p:Resources.StateProbability}">
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="{x:Static p:Resources.Amplitude}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="helpers:StateViewModel">
+                                <TextBlock
+                                    Text="{Binding Amplitude, Converter={StaticResource ComplexToString}}"
+                                    ToolTip.Tip="{x:Static p:Resources.StateAmplitude}">
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </DockPanel>
+</UserControl>

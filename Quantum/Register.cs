@@ -605,10 +605,10 @@ namespace Quantum
 
         /// <summary>
         /// Returns a vector of amplitudes of each possible state.
-        /// If register is a part of other register, this method returns null (see <see cref="Register.GetAmplitudes"/>).
+        /// If register is a part of other register, this method returns null (see <see cref="Register.GetAmplitudes()"/>).
         /// </summary>
-        /// <seealso cref="Register.GetAmplitudes"/>
-        /// <returns>An array of complex numbers representing amplitudes of each register's state, or null (see <see cref="Register.GetAmplitudes"/>.
+        /// <seealso cref="Register.GetAmplitudes()"/>
+        /// <returns>An array of complex numbers representing amplitudes of each register's state, or null (see <see cref="Register.GetAmplitudes()"/>.
         /// </returns>
         public Complex[] GetVector()
         {
@@ -1335,7 +1335,7 @@ namespace Quantum
         /// </summary>
         /// <param name="gamma">The phase value.</param>
         /// <param name="target">The position of target qubit in register (0 indicates the Least Significant Bit).</param>
-        /// <param name="control">Optional argument. If given, the method performs a controlled phase shift operation. This argument destribes the control qubit's position.</param>
+        /// <param name="controls">Optional argument. If given, the method performs a controlled phase shift operation. This argument destribes the control qubit's position.</param>
         public void PhaseKick(double gamma, int target, params int[] controls)
         {
             if (Root != this)

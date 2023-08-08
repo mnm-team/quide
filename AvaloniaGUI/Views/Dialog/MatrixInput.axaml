@@ -1,0 +1,69 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:AvaloniaGUI.ViewModels.Dialog"
+             xmlns:p="clr-namespace:AvaloniaGUI.Properties"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:MatrixInputViewModel"
+             x:Class="AvaloniaGUI.Views.Dialog.MatrixInput">
+
+    <Design.DataContext>
+        <vm:MatrixInputViewModel />
+    </Design.DataContext>
+
+    <UserControl.Resources>
+        <Style x:Key="DefaultButton" Selector="Button" />
+        <!-- <Style x:Key="FlatButton" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Selector="Button" /> -->
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="TextBox">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto">
+
+        <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0 4">
+            <TextBlock Text="{x:Static p:Resources.OperationMatrix}" Margin="0 0 10 0" />
+
+            <TextBlock
+                Text="{Binding ValidationMessage}"
+                Foreground="Red" />
+        </StackPanel>
+
+        <!-- Matrix -->
+        <Grid Margin="10"
+              Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" ColumnDefinitions="100,100" RowDefinitions="Auto,Auto">
+
+            <TextBox x:Name="a00"
+                     MinWidth="100"
+                     Margin="2"
+                     Grid.Row="0"
+                     Grid.Column="0" Text="{Binding A00Text}">
+            </TextBox>
+
+            <TextBox x:Name="a01"
+                     MinWidth="100"
+                     Margin="2"
+                     Grid.Row="0"
+                     Grid.Column="1" Text="{Binding A01Text}">
+            </TextBox>
+
+            <TextBox x:Name="a10"
+                     MinWidth="100"
+                     Margin="2"
+                     Grid.Row="1"
+                     Grid.Column="0" Text="{Binding A10Text}">
+            </TextBox>
+
+            <TextBox x:Name="a11"
+                     MinWidth="100"
+                     Margin="2"
+                     Grid.Row="1"
+                     Grid.Column="1" Text="{Binding A11Text}">
+            </TextBox>
+        </Grid>
+    </Grid>
+</UserControl>
