@@ -195,7 +195,7 @@ public class MainWindowViewModel : ViewModelBase
         //     TextEditor editor = ActiveTab.Content as TextEditor;
         //     return editor.Text;
         // }
-        null;
+        string.Empty;
 
     public string ConsoleOutput => _consoleWriter.Text;
 
@@ -220,9 +220,9 @@ public class MainWindowViewModel : ViewModelBase
 
     #region Nested Classes
 
-    //TODO:
     private class DocumentInfo
     {
+        //TODO:
         // public LayoutDocument Tab { get; private set; }
         //
         // public TextEditor Editor { get; private set; }
@@ -673,9 +673,9 @@ public class MainWindowViewModel : ViewModelBase
         _model.Delete();
     }
 
-    //TODO:
     public void GenerateCode(object parameter)
     {
+        //TODO:
         var code = _codeGenerator.GenerateCode();
 
         var filename = GetNewFilename();
@@ -683,9 +683,9 @@ public class MainWindowViewModel : ViewModelBase
         // info.Editor.Text = code;
     }
 
-    //TODO:
     public void GenerateFromCode(object parameter)
     {
+        //TODO:
         // _window.CircuitTab.IsSelected = true;
         //
         // string code = Code;
@@ -844,18 +844,18 @@ public class MainWindowViewModel : ViewModelBase
         await new AboutWindow().ShowDialog(_window);
     }
 
-    //TODO:
     public void New(object parameter)
     {
+        //TODO:
         var filename = GetNewFilename();
         // DocumentInfo info = CreateTab(null, filename);
         // info.Editor.Text = _exampleCode;
         // info.Editor.IsModified = false;
     }
 
-    //TODO:
     public void Open(object parameter)
     {
+        //TODO:
         // OpenFileDialog dialog = new OpenFileDialog();
         //
         // // Set filter options and filter index.
@@ -885,9 +885,9 @@ public class MainWindowViewModel : ViewModelBase
         // }
     }
 
-    //TODO:
     public void Save(object parameter)
     {
+        //TODO:
         // LayoutDocument activeTab = ActiveTab;
         // if (activeTab != null)
         // {
@@ -897,9 +897,9 @@ public class MainWindowViewModel : ViewModelBase
         // }
     }
 
-    //TODO:
     public void SaveAs(object parameter)
     {
+        //TODO:
         // LayoutDocument activeTab = ActiveTab;
         // if (activeTab != null)
         // {
@@ -909,7 +909,6 @@ public class MainWindowViewModel : ViewModelBase
         // }
     }
 
-    //TODO:
     public bool Window_Closing()
     {
         //TODO:
@@ -946,7 +945,7 @@ public class MainWindowViewModel : ViewModelBase
         return true;
     }
 
-    // for editor, not implemented yet
+    // for editor, not implemented originally
     public void Print(object parameter)
     {
     }
@@ -994,9 +993,9 @@ public class MainWindowViewModel : ViewModelBase
         OnPropertyChanged(nameof(ConsoleOutput));
     }
 
-    //TODO:
     private void Save(DocumentInfo info)
     {
+        //TODO:
         // if (string.IsNullOrWhiteSpace(info.FullPath))
         // {
         //     SaveAs(info);
@@ -1007,7 +1006,6 @@ public class MainWindowViewModel : ViewModelBase
         // }
     }
 
-    //TODO:
     private void SaveAs(DocumentInfo info)
     {
         //TODO:
@@ -1037,7 +1035,6 @@ public class MainWindowViewModel : ViewModelBase
         // }
     }
 
-    //TODO:
     private DocumentInfo CreateTab(string fullPath, string title)
     {
         //TODO:
@@ -1066,9 +1063,9 @@ public class MainWindowViewModel : ViewModelBase
         return null; //info;
     }
 
-    //TODO:
     private void document_Closing(object sender, CancelEventArgs e)
     {
+        //TODO:
         // LayoutDocument document = sender as LayoutDocument;
         // int id = int.Parse(document.ContentId);
         // DocumentInfo info = _documents[id];
