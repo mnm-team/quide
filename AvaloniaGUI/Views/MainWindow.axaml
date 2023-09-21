@@ -20,7 +20,7 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <!-- TODO: necessary?
+    <!-- 
     Window.InputBindings>
         <KeyBinding Command="New" Key="N" Modifiers="Control"/>
         <KeyBinding Command="Open" Key="O" Modifiers="Control"/>
@@ -294,8 +294,7 @@
                                                 SelectionChanged="CompositeTool_SelectionChanged"
                                                 GotFocus="CompositeSelectionFocused"
                                                 PlaceholderText="{x:Static p:Resources.SelectCompositeGate}"
-                                                IsTextSearchEnabled="True">
-                                            </ComboBox>
+                                                IsTextSearchEnabled="True" />
                                         </Grid>
                                     </RadioButton>
                                 </StackPanel>
