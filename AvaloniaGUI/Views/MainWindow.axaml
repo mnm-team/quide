@@ -443,8 +443,17 @@
                 </TabItem>
             </TabControl>
 
-            <StackPanel>
+            <StackPanel Orientation="Vertical">
                 <!--########################################### Editor #############################################-->
+                <ItemsControl ItemsSource="{Binding CompositeTools, Mode=OneWay}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding }" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Separator />
+                <TextBlock Text="{Binding SelectedComposite}" />
             </StackPanel>
         </DockPanel>
     </DockPanel>

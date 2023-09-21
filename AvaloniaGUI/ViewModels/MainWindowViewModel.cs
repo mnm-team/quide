@@ -2,20 +2,19 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Reactive;
-using System.Reflection;
 using System.Windows.Input;
 using Avalonia.Interactivity;
 using AvaloniaGUI.CodeHelpers;
 using AvaloniaGUI.ViewModels.Controls;
 using AvaloniaGUI.ViewModels.Dialog;
 using AvaloniaGUI.ViewModels.MainModels.QuantumModel;
-using AvaloniaGUI.ViewModels.MainModels.QuantumModel.Gates;
 using AvaloniaGUI.ViewModels.MainModels.QuantumParser;
 using AvaloniaGUI.Views;
 using AvaloniaGUI.Views.Dialog;
+using NP.Utilities;
 using ReactiveUI;
 
 #endregion
@@ -59,6 +58,205 @@ public class MainWindowViewModel : ViewModelBase
     // for key bindings
     public ReactiveCommand<Unit, Unit> Delete { get; }
 
+    public CircuitGridViewModel CircuitGrid
+    {
+        get
+        {
+            if (_circuitGridVM != null) return _circuitGridVM;
+
+            _circuitGridVM = new CircuitGridViewModel(_model, _dialogManager);
+
+            if (_propertiesVM != null) _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
+
+            if (_outputGridVM != null) _outputGridVM.AddQubitsTracing(_circuitGridVM);
+
+            return _circuitGridVM;
+        }
+        private set
+        {
+            if (value == _circuitGridVM)
+                return;
+
+            _circuitGridVM = value;
+
+            if (_propertiesVM != null) _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
+
+            if (_outputGridVM != null) _outputGridVM.AddQubitsTracing(_circuitGridVM);
+
+            OnPropertyChanged(nameof(CircuitGrid));
+        }
+    }
+
+    public OutputGridViewModel OutputGrid
+    {
+        get
+        {
+            if (_outputGridVM == null)
+            {
+                _outputGridVM = new OutputGridViewModel();
+                _outputGridVM.LoadModel(_model, _outputModel);
+                if (_circuitGridVM != null) _outputGridVM.AddQubitsTracing(_circuitGridVM);
+
+                if (_propertiesVM != null) _propertiesVM.AddSelectionTracing(_outputGridVM);
+            }
+
+            return _outputGridVM;
+        }
+        private set
+        {
+            if (value == _outputGridVM)
+                return;
+
+            _outputGridVM = value;
+
+            if (_circuitGridVM != null) _outputGridVM.AddQubitsTracing(_circuitGridVM);
+
+            if (_propertiesVM != null) _propertiesVM.AddSelectionTracing(_outputGridVM);
+
+            OnPropertyChanged(nameof(OutputGrid));
+        }
+    }
+
+    public PropertiesViewModel PropertiesPane
+    {
+        get
+        {
+            if (_propertiesVM != null) return _propertiesVM;
+
+            _propertiesVM = new PropertiesViewModel(CircuitGrid, OutputGrid);
+            if (_outputGridVM != null) _propertiesVM.AddSelectionTracing(_outputGridVM);
+
+            if (_circuitGridVM != null) _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
+
+            return _propertiesVM;
+        }
+        private set
+        {
+            if (value == _propertiesVM)
+                return;
+
+            _propertiesVM = value;
+
+            if (_outputGridVM != null) _propertiesVM.AddSelectionTracing(_outputGridVM);
+
+            if (_circuitGridVM != null) _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
+
+            OnPropertyChanged(nameof(PropertiesPane));
+        }
+    }
+
+    public ObservableCollection<string> CompositeTools
+    {
+        get
+        {
+            if (_toolsVM != null) return _toolsVM;
+
+            var eval = CircuitEvaluator.GetInstance();
+            var dict = eval.GetExtensionGates();
+            _toolsVM = dict.Keys.ToObservableCollection();
+            return _toolsVM;
+        }
+        private set
+        {
+            _toolsVM = value;
+            OnPropertyChanged(nameof(CompositeTools));
+        }
+    }
+
+    public object SelectedObject => _window.outputGrid.statesList.SelectedItem;
+
+    public static ActionName SelectedAction { get; private set; }
+
+    public string SelectedComposite
+    {
+        get => _selectedComposite;
+        set
+        {
+            _selectedComposite = value;
+            SelectedCompositeStatic = value;
+            OnPropertyChanged(nameof(SelectedComposite));
+        }
+    }
+
+    public static string SelectedCompositeStatic { get; private set; }
+
+    // public LayoutDocument ActiveTab
+    // {
+    //     get
+    //     {
+    //         return _window.DocumentPane.SelectedContent as LayoutDocument;
+    //     }
+    // }
+    //
+    public string Code =>
+        //TODO:
+        // if (ActiveTab != null)
+        // {
+        //     TextEditor editor = ActiveTab.Content as TextEditor;
+        //     return editor.Text;
+        // }
+        null;
+
+    public string ConsoleOutput => _consoleWriter.Text;
+
+
+    #region Constructor
+
+    public void InitializeWindow(MainWindow window)
+    {
+        _window = window;
+        _dialogManager = new DialogManager(_window);
+
+        // they need dialogManager
+        InitFromModel(ComputerModel.CreateModelForGUI());
+
+        _codeGenerator = new CodeGenerator();
+        _consoleWriter = new ConsoleWriter();
+        _consoleWriter.TextChanged += _consoleWriter_TextChanged;
+    }
+
+    #endregion // Constructor
+
+
+    #region Nested Classes
+
+    //TODO:
+    private class DocumentInfo
+    {
+        // public LayoutDocument Tab { get; private set; }
+        //
+        // public TextEditor Editor { get; private set; }
+        //
+        // public bool IsModified
+        // {
+        //     get { return Editor.IsModified; }
+        // }
+        //
+        // public DocumentInfo(string fullPath, string title, LayoutDocument tab, TextEditor editor)
+        // {
+        //     ID = GenerateNextID();
+        //     FullPath = fullPath;
+        //     Title = title;
+        //     Tab = tab;
+        //     Editor = editor;
+        // }
+
+        private static int _nextID = -1;
+
+        public string FullPath;
+
+        public string Title;
+        public int ID { get; private set; }
+
+        private static int GenerateNextID()
+        {
+            _nextID++;
+            return _nextID;
+        }
+    }
+
+    #endregion // Nested Classes
+
 
     #region Events
 
@@ -87,7 +285,8 @@ public class MainWindowViewModel : ViewModelBase
     private OutputGridViewModel _outputGridVM;
     private PropertiesViewModel _propertiesVM;
 
-    private List<string> _toolsVM;
+    private ObservableCollection<string> _toolsVM;
+    private string _selectedComposite;
 
     private ConsoleWriter _consoleWriter;
 
@@ -111,11 +310,11 @@ public class MainWindowViewModel : ViewModelBase
                                          "\t}\n" +
                                          "}\n";
 
-    private Dictionary<int, DocumentInfo> _documents = new Dictionary<int, DocumentInfo>();
-    private Dictionary<string, int> _openFiles = new Dictionary<string, int>();
+    private Dictionary<int, DocumentInfo> _documents = new();
+    private Dictionary<string, int> _openFiles = new();
 
-    private string _newFilename = "Class";
-    private string _newFileNameExt = ".cs";
+    private readonly string _newFilename = "Class";
+    private readonly string _newFileNameExt = ".cs";
     private int _newFilenameCount = 1;
 
     private DelegateCommand _selectAction;
@@ -157,196 +356,6 @@ public class MainWindowViewModel : ViewModelBase
     #endregion // Fields
 
 
-    #region Constructor
-
-    public void InitializeWindow(MainWindow window)
-    {
-        _window = window;
-        _dialogManager = new DialogManager(_window);
-
-        // they need dialogManager
-        InitFromModel(ComputerModel.CreateModelForGUI());
-
-        _codeGenerator = new CodeGenerator();
-        _consoleWriter = new ConsoleWriter();
-        _consoleWriter.TextChanged += _consoleWriter_TextChanged;
-    }
-
-    #endregion // Constructor
-
-    public CircuitGridViewModel CircuitGrid
-    {
-        get
-        {
-            if (_circuitGridVM != null) return _circuitGridVM;
-
-            _circuitGridVM = new CircuitGridViewModel(_model, _dialogManager);
-
-            if (_propertiesVM != null)
-            {
-                _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
-            }
-
-            if (_outputGridVM != null)
-            {
-                _outputGridVM.AddQubitsTracing(_circuitGridVM);
-            }
-
-            return _circuitGridVM;
-        }
-        private set
-        {
-            if (value == _circuitGridVM)
-                return;
-
-            _circuitGridVM = value;
-
-            if (_propertiesVM != null)
-            {
-                _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
-            }
-
-            if (_outputGridVM != null)
-            {
-                _outputGridVM.AddQubitsTracing(_circuitGridVM);
-            }
-
-            OnPropertyChanged(nameof(CircuitGrid));
-        }
-    }
-
-    public OutputGridViewModel OutputGrid
-    {
-        get
-        {
-            if (_outputGridVM == null)
-            {
-                _outputGridVM = new OutputGridViewModel();
-                _outputGridVM.LoadModel(_model, _outputModel);
-                if (_circuitGridVM != null)
-                {
-                    _outputGridVM.AddQubitsTracing(_circuitGridVM);
-                }
-
-                if (_propertiesVM != null)
-                {
-                    _propertiesVM.AddSelectionTracing(_outputGridVM);
-                }
-            }
-
-            return _outputGridVM;
-        }
-        private set
-        {
-            if (value == _outputGridVM)
-                return;
-
-            _outputGridVM = value;
-
-            if (_circuitGridVM != null)
-            {
-                _outputGridVM.AddQubitsTracing(_circuitGridVM);
-            }
-
-            if (_propertiesVM != null)
-            {
-                _propertiesVM.AddSelectionTracing(_outputGridVM);
-            }
-
-            base.OnPropertyChanged(nameof(OutputGrid));
-        }
-    }
-
-    public PropertiesViewModel PropertiesPane
-    {
-        get
-        {
-            if (_propertiesVM != null) return _propertiesVM;
-
-            _propertiesVM = new PropertiesViewModel(CircuitGrid, OutputGrid);
-            if (_outputGridVM != null)
-            {
-                _propertiesVM.AddSelectionTracing(_outputGridVM);
-            }
-
-            if (_circuitGridVM != null)
-            {
-                _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
-            }
-
-            return _propertiesVM;
-        }
-        private set
-        {
-            if (value == _propertiesVM)
-                return;
-
-            _propertiesVM = value;
-
-            if (_outputGridVM != null)
-            {
-                _propertiesVM.AddSelectionTracing(_outputGridVM);
-            }
-
-            if (_circuitGridVM != null)
-            {
-                _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
-            }
-
-            base.OnPropertyChanged(nameof(PropertiesPane));
-        }
-    }
-
-    public List<string> CompositeTools
-    {
-        get
-        {
-            if (_toolsVM != null) return _toolsVM;
-
-            CircuitEvaluator eval = CircuitEvaluator.GetInstance();
-            Dictionary<string, List<MethodInfo>> dict = eval.GetExtensionGates();
-            _toolsVM = dict.Keys.ToList();
-
-            return _toolsVM;
-        }
-        private set
-        {
-            _toolsVM = value;
-            OnPropertyChanged(nameof(CompositeTools));
-        }
-    }
-
-    public object SelectedObject => _window.outputGrid.statesList.SelectedItem;
-
-    public static ActionName SelectedAction { get; private set; }
-
-    public static string SelectedComposite { get; set; }
-
-    // public LayoutDocument ActiveTab
-    // {
-    //     get
-    //     {
-    //         return _window.DocumentPane.SelectedContent as LayoutDocument;
-    //     }
-    // }
-    //
-    public string Code
-    {
-        get
-        {
-            //TODO:
-            // if (ActiveTab != null)
-            // {
-            //     TextEditor editor = ActiveTab.Content as TextEditor;
-            //     return editor.Text;
-            // }
-            return null;
-        }
-    }
-
-    public string ConsoleOutput => _consoleWriter.Text;
-
-
     #region Commands
 
     public static ICommand CalculatorCommand => _calculatorCommand;
@@ -355,10 +364,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_aboutCommand == null)
-            {
-                _aboutCommand = new DelegateCommand(ShowAbout, x => true);
-            }
+            if (_aboutCommand == null) _aboutCommand = new DelegateCommand(ShowAbout, x => true);
 
             return _aboutCommand;
         }
@@ -368,10 +374,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_selectAction == null)
-            {
-                _selectAction = new DelegateCommand(SelectAction, x => true);
-            }
+            if (_selectAction == null) _selectAction = new DelegateCommand(SelectAction, x => true);
 
             return _selectAction;
         }
@@ -381,10 +384,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_group == null)
-            {
-                _group = new DelegateCommand(MakeComposite, x => true);
-            }
+            if (_group == null) _group = new DelegateCommand(MakeComposite, x => true);
 
             return _group;
         }
@@ -394,10 +394,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_clearCircuit == null)
-            {
-                _clearCircuit = new DelegateCommand(ClearCircuit, x => true);
-            }
+            if (_clearCircuit == null) _clearCircuit = new DelegateCommand(ClearCircuit, x => true);
 
             return _clearCircuit;
         }
@@ -407,10 +404,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_cutGates == null)
-            {
-                _cutGates = new DelegateCommand(CutGates, x => true);
-            }
+            if (_cutGates == null) _cutGates = new DelegateCommand(CutGates, x => true);
 
             return _cutGates;
         }
@@ -420,10 +414,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_copyGates == null)
-            {
-                _copyGates = new DelegateCommand(CopyGates, x => true);
-            }
+            if (_copyGates == null) _copyGates = new DelegateCommand(CopyGates, x => true);
 
             return _copyGates;
         }
@@ -433,10 +424,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_pasteGates == null)
-            {
-                _pasteGates = new DelegateCommand(PasteGates, x => true);
-            }
+            if (_pasteGates == null) _pasteGates = new DelegateCommand(PasteGates, x => true);
 
             return _pasteGates;
         }
@@ -446,10 +434,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_generateCode == null)
-            {
-                _generateCode = new DelegateCommand(GenerateCode, x => true);
-            }
+            if (_generateCode == null) _generateCode = new DelegateCommand(GenerateCode, x => true);
 
             return _generateCode;
         }
@@ -459,10 +444,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_generateFromCode == null)
-            {
-                _generateFromCode = new DelegateCommand(GenerateFromCode, x => true);
-            }
+            if (_generateFromCode == null) _generateFromCode = new DelegateCommand(GenerateFromCode, x => true);
 
             return _generateFromCode;
         }
@@ -472,10 +454,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_runInConsole == null)
-            {
-                _runInConsole = new DelegateCommand(RunInConsole, x => true);
-            }
+            if (_runInConsole == null) _runInConsole = new DelegateCommand(RunInConsole, x => true);
 
             return _runInConsole;
         }
@@ -485,10 +464,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_restart == null)
-            {
-                _restart = new DelegateCommand(Restart, x => true);
-            }
+            if (_restart == null) _restart = new DelegateCommand(Restart, x => true);
 
             return _restart;
         }
@@ -498,10 +474,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_prevStep == null)
-            {
-                _prevStep = new DelegateCommand(PrevStep, x => true);
-            }
+            if (_prevStep == null) _prevStep = new DelegateCommand(PrevStep, x => true);
 
             return _prevStep;
         }
@@ -511,10 +484,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_nextStep == null)
-            {
-                _nextStep = new DelegateCommand(NextStep, x => true);
-            }
+            if (_nextStep == null) _nextStep = new DelegateCommand(NextStep, x => true);
 
             return _nextStep;
         }
@@ -524,10 +494,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_run == null)
-            {
-                _run = new DelegateCommand(RunToEnd, x => true);
-            }
+            if (_run == null) _run = new DelegateCommand(RunToEnd, x => true);
 
             return _run;
         }
@@ -537,10 +504,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_new == null)
-            {
-                _new = new DelegateCommand(New, x => true);
-            }
+            if (_new == null) _new = new DelegateCommand(New, x => true);
 
             return _new;
         }
@@ -550,10 +514,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_open == null)
-            {
-                _open = new DelegateCommand(Open, x => true);
-            }
+            if (_open == null) _open = new DelegateCommand(Open, x => true);
 
             return _open;
         }
@@ -563,10 +524,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_save == null)
-            {
-                _save = new DelegateCommand(Save, x => true);
-            }
+            if (_save == null) _save = new DelegateCommand(Save, x => true);
 
             return _save;
         }
@@ -576,10 +534,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_saveAs == null)
-            {
-                _saveAs = new DelegateCommand(SaveAs, x => true);
-            }
+            if (_saveAs == null) _saveAs = new DelegateCommand(SaveAs, x => true);
 
             return _saveAs;
         }
@@ -589,10 +544,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_print == null)
-            {
-                _print = new DelegateCommand(Print, x => true);
-            }
+            if (_print == null) _print = new DelegateCommand(Print, x => true);
 
             return _print;
         }
@@ -602,10 +554,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_cut == null)
-            {
-                _cut = new DelegateCommand(Cut, x => true);
-            }
+            if (_cut == null) _cut = new DelegateCommand(Cut, x => true);
 
             return _cut;
         }
@@ -615,10 +564,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_copy == null)
-            {
-                _copy = new DelegateCommand(Copy, x => true);
-            }
+            if (_copy == null) _copy = new DelegateCommand(Copy, x => true);
 
             return _copy;
         }
@@ -628,10 +574,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_paste == null)
-            {
-                _paste = new DelegateCommand(Paste, x => true);
-            }
+            if (_paste == null) _paste = new DelegateCommand(Paste, x => true);
 
             return _paste;
         }
@@ -679,10 +622,10 @@ public class MainWindowViewModel : ViewModelBase
         try
         {
             // throws if no selection
-            List<Gate> toGroup = _model.GetSelectedGates();
+            var toGroup = _model.GetSelectedGates();
 
-            Dictionary<string, List<MethodInfo>> dict = CircuitEvaluator.GetInstance().GetExtensionGates();
-            CompositeInputViewModel compositeVM = new CompositeInputViewModel(dict, _model);
+            var dict = CircuitEvaluator.GetInstance().GetExtensionGates();
+            var compositeVM = new CompositeInputViewModel(dict, _model);
 
             await _dialogManager.ShowDialogAsync(new CompositeInput(compositeVM), () =>
             {
@@ -692,9 +635,10 @@ public class MainWindowViewModel : ViewModelBase
 
                 if (_toolsVM.Contains(name)) return;
 
-                List<string> newTools = _toolsVM;
+                var newTools = _toolsVM;
                 newTools.Add(name);
                 CompositeTools = newTools;
+                SelectedComposite = name;
             });
         }
         catch (Exception ex)
@@ -732,9 +676,9 @@ public class MainWindowViewModel : ViewModelBase
     //TODO:
     public void GenerateCode(object parameter)
     {
-        string code = _codeGenerator.GenerateCode();
+        var code = _codeGenerator.GenerateCode();
 
-        string filename = GetNewFilename();
+        var filename = GetNewFilename();
         // DocumentInfo info = CreateTab(null, filename);
         // info.Editor.Text = code;
     }
@@ -783,10 +727,10 @@ public class MainWindowViewModel : ViewModelBase
     {
         _window.ConsoleTab.IsSelected = true;
         _consoleWriter.Reset();
-        Parser parser = new Parser();
+        var parser = new Parser();
         try
         {
-            Assembly asm = parser.CompileForRun(Code);
+            var asm = parser.CompileForRun(Code);
             parser.Execute(asm, _consoleWriter);
         }
         catch (Exception e)
@@ -800,7 +744,7 @@ public class MainWindowViewModel : ViewModelBase
         try
         {
             _model.CurrentStep = 0;
-            CircuitEvaluator eval = CircuitEvaluator.GetInstance();
+            var eval = CircuitEvaluator.GetInstance();
 
             _outputModel = eval.InitFromModel(_model);
             OutputGrid.LoadModel(_model, _outputModel);
@@ -815,7 +759,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         try
         {
-            int currentStep = _model.CurrentStep;
+            var currentStep = _model.CurrentStep;
             if (currentStep == 0)
             {
                 Restart(parameter);
@@ -824,14 +768,11 @@ public class MainWindowViewModel : ViewModelBase
             {
                 if (_model.CanStepBack(currentStep - 1))
                 {
-                    CircuitEvaluator eval = CircuitEvaluator.GetInstance();
-                    StepEvaluator se = eval.GetStepEvaluator();
-                    bool outputChanged = se.RunStep(_model.Steps[currentStep - 1].Gates, true);
+                    var eval = CircuitEvaluator.GetInstance();
+                    var se = eval.GetStepEvaluator();
+                    var outputChanged = se.RunStep(_model.Steps[currentStep - 1].Gates, true);
                     _model.CurrentStep = currentStep - 1;
-                    if (outputChanged)
-                    {
-                        _outputModel.Update(eval.RootRegister);
-                    }
+                    if (outputChanged) _outputModel.Update(eval.RootRegister);
                 }
             }
         }
@@ -845,23 +786,17 @@ public class MainWindowViewModel : ViewModelBase
     {
         try
         {
-            CircuitEvaluator eval = CircuitEvaluator.GetInstance();
+            var eval = CircuitEvaluator.GetInstance();
 
-            int currentStep = _model.CurrentStep;
-            if (currentStep == 0)
-            {
-                eval.InitFromModel(_model);
-            }
+            var currentStep = _model.CurrentStep;
+            if (currentStep == 0) eval.InitFromModel(_model);
 
             if (currentStep < _model.Steps.Count)
             {
-                StepEvaluator se = eval.GetStepEvaluator();
-                bool outputChanged = se.RunStep(_model.Steps[currentStep].Gates);
+                var se = eval.GetStepEvaluator();
+                var outputChanged = se.RunStep(_model.Steps[currentStep].Gates);
                 _model.CurrentStep = currentStep + 1;
-                if (outputChanged)
-                {
-                    _outputModel.Update(eval.RootRegister);
-                }
+                if (outputChanged) _outputModel.Update(eval.RootRegister);
             }
         }
         catch (Exception e)
@@ -874,21 +809,15 @@ public class MainWindowViewModel : ViewModelBase
     {
         try
         {
-            CircuitEvaluator eval = CircuitEvaluator.GetInstance();
+            var eval = CircuitEvaluator.GetInstance();
 
-            int currentStep = _model.CurrentStep;
-            if (currentStep == 0)
-            {
-                eval.InitFromModel(_model);
-            }
+            var currentStep = _model.CurrentStep;
+            if (currentStep == 0) eval.InitFromModel(_model);
 
-            StepEvaluator se = eval.GetStepEvaluator();
-            bool outputChanged = se.RunToEnd(_model.Steps, currentStep);
+            var se = eval.GetStepEvaluator();
+            var outputChanged = se.RunToEnd(_model.Steps, currentStep);
             _model.CurrentStep = _model.Steps.Count;
-            if (outputChanged)
-            {
-                _outputModel.Update(eval.RootRegister);
-            }
+            if (outputChanged) _outputModel.Update(eval.RootRegister);
         }
         catch (Exception e)
         {
@@ -918,7 +847,7 @@ public class MainWindowViewModel : ViewModelBase
     //TODO:
     public void New(object parameter)
     {
-        string filename = GetNewFilename();
+        var filename = GetNewFilename();
         // DocumentInfo info = CreateTab(null, filename);
         // info.Editor.Text = _exampleCode;
         // info.Editor.IsModified = false;
@@ -1043,23 +972,19 @@ public class MainWindowViewModel : ViewModelBase
     {
         if (_model != null)
         {
-            Dictionary<string, List<Gate>> oldComposites = _model.CompositeGates;
-            Dictionary<string, List<Gate>> newComposites = model.CompositeGates;
+            var oldComposites = _model.CompositeGates;
+            var newComposites = model.CompositeGates;
 
             foreach (var pair in oldComposites)
-            {
                 if (!newComposites.ContainsKey(pair.Key))
-                {
                     newComposites[pair.Key] = pair.Value;
-                }
-            }
         }
 
         _model = model;
 
         CircuitGrid = new CircuitGridViewModel(_model, _dialogManager);
 
-        CircuitEvaluator eval = CircuitEvaluator.GetInstance();
+        var eval = CircuitEvaluator.GetInstance();
         _outputModel = eval.InitFromModel(_model);
         OutputGrid.LoadModel(_model, _outputModel);
     }
@@ -1179,62 +1104,18 @@ public class MainWindowViewModel : ViewModelBase
 
     private string GetNewFilename()
     {
-        string name = _newFilename + _newFilenameCount + _newFileNameExt;
+        var name = _newFilename + _newFilenameCount + _newFileNameExt;
         _newFilenameCount++;
         return name;
     }
 
     private static void PrintException(Exception e)
     {
-        string message = e.Message;
-        if (e.InnerException != null)
-        {
-            message = message + ":\n" + e.InnerException.Message;
-        }
+        var message = e.Message;
+        if (e.InnerException != null) message = message + ":\n" + e.InnerException.Message;
 
         ErrorMessageHelper.ShowMessage(message);
     }
 
     #endregion // Private Helpers
-
-
-    #region Nested Classes
-
-    //TODO:
-    private class DocumentInfo
-    {
-        public int ID { get; private set; }
-
-        public string FullPath;
-
-        public string Title;
-
-        // public LayoutDocument Tab { get; private set; }
-        //
-        // public TextEditor Editor { get; private set; }
-        //
-        // public bool IsModified
-        // {
-        //     get { return Editor.IsModified; }
-        // }
-        //
-        // public DocumentInfo(string fullPath, string title, LayoutDocument tab, TextEditor editor)
-        // {
-        //     ID = GenerateNextID();
-        //     FullPath = fullPath;
-        //     Title = title;
-        //     Tab = tab;
-        //     Editor = editor;
-        // }
-
-        private static int _nextID = -1;
-
-        private static int GenerateNextID()
-        {
-            _nextID++;
-            return _nextID;
-        }
-    }
-
-    #endregion // Nested Classes
 }

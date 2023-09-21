@@ -20,10 +20,10 @@ public partial class MainWindow : Window
 
     public MainWindow()
     {
-        CultureInfo current = CultureInfo.CurrentCulture;
-        CultureInfo invariant = CultureInfo.InvariantCulture;
+        var current = CultureInfo.CurrentCulture;
+        var invariant = CultureInfo.InvariantCulture;
 
-        CultureInfo myCulture = new CultureInfo(current.Name)
+        var myCulture = new CultureInfo(current.Name)
         {
             NumberFormat = invariant.NumberFormat
         };
@@ -52,7 +52,7 @@ public partial class MainWindow : Window
     }
 
     /// <summary>
-    /// Would save new default file under bin/.../DefaultLayout.xml
+    ///     Would save new default file under bin/.../DefaultLayout.xml
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -64,11 +64,8 @@ public partial class MainWindow : Window
     private void Window_Closing(object sender, CancelEventArgs e)
     {
         // TODO: handle window closing
-        bool canClose = true; //_dataContext.Window_Closing();
-        if (!canClose)
-        {
-            e.Cancel = true;
-        }
+        var canClose = true; //_dataContext.Window_Closing();
+        if (!canClose) e.Cancel = true;
     }
 
     private void CompositeTool_SelectionChanged(object sender, SelectionChangedEventArgs e)
