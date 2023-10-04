@@ -14,7 +14,6 @@ using AvaloniaGUI.ViewModels.MainModels.QuantumModel;
 using AvaloniaGUI.ViewModels.MainModels.QuantumParser;
 using AvaloniaGUI.Views;
 using AvaloniaGUI.Views.Dialog;
-using NP.Utilities;
 using ReactiveUI;
 
 #endregion
@@ -153,7 +152,7 @@ public class MainWindowViewModel : ViewModelBase
 
             var eval = CircuitEvaluator.GetInstance();
             var dict = eval.GetExtensionGates();
-            _toolsVM = dict.Keys.ToObservableCollection();
+            _toolsVM = new ObservableCollection<string>(dict.Keys);
             return _toolsVM;
         }
         private set
