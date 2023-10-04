@@ -114,11 +114,6 @@
                     </Border>
                 </Button>
             </StackPanel>
-            <!--
-            <Button x:Name="SaveLayoutButton"
-                    Content="Save Layout"
-                    Margin="0,5"
-                    HorizontalAlignment="Right" />-->
             <Button
                 DockPanel.Dock="Right"
                 ToolTip.Tip="{x:Static p:Resources.ShowAbout}"
@@ -445,15 +440,7 @@
 
             <StackPanel Orientation="Vertical">
                 <!--########################################### Editor #############################################-->
-                <ItemsControl ItemsSource="{Binding CompositeTools, Mode=OneWay}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding }" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <Separator />
-                <TextBlock Text="{Binding SelectedComposite}" />
+                
             </StackPanel>
         </DockPanel>
     </DockPanel>

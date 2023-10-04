@@ -69,12 +69,7 @@
             <Setter Property="Width" Value="36" />
             <Setter Property="Height" Value="28" />
         </Style>
-
-
-        <!-- NP.Avalonia.UniDock -->
-        <!--<StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/TextStyles.axaml" />
-        <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/CustomWindowStyles.axaml" />
-        <StyleInclude Source="avares://NP.Avalonia.UniDock/Themes/DockStyles.axaml" />-->
+        
 
         <StyleInclude Source="/Views/Controls/Custom/GateButton.axaml" />
         <StyleInclude Source="/Views/Controls/Custom/GroupBox.axaml" />
@@ -86,9 +81,7 @@
                 <ResourceInclude Source="/Assets/Styles.xaml" />
                 <ResourceInclude Source="/Assets/Gates.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
-            <!-- NP.Avalonia.UniDock -->
-            <!-- <uniDock:DockManager x:Key="TheDockManager" IsInEditableState="False" /> -->
+            
         </ResourceDictionary>
     </Application.Resources>
 </Application>
