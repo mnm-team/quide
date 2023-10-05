@@ -162,7 +162,7 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public object SelectedObject => _window.outputGrid.statesList.SelectedItem;
+    // public object SelectedObject => _window.outputGrid.statesList.SelectedItem;
 
     public static ActionName SelectedAction { get; private set; }
 

@@ -6,9 +6,9 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AvaloniaGUI.Views.Dialog.AboutWindow"
         Title="AboutWindow"
-        Icon="/Assets/avalonia-logo.ico"
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterOwner">
+    <!-- Icon="/Assets/avalonia-logo.ico"> -->
     <!--<UserControl.Resources>
         <Style x:Key="DefaultButton" Selector="Button" />
         <Style x:Key="FlatButton" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Selector="Button" />
