@@ -1,7 +1,6 @@
 ﻿#region
 
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reactive;
@@ -141,6 +140,26 @@ public class MainWindowViewModel : ViewModelBase
             if (_circuitGridVM != null) _propertiesVM.AddSelectionAndQubitsTracing(_circuitGridVM);
 
             OnPropertyChanged(nameof(PropertiesPane));
+        }
+    }
+
+    public EditorViewModel EditorPane
+    {
+        get
+        {
+            if (_editorVM != null) return _editorVM;
+
+            _editorVM = new EditorViewModel();
+            return _editorVM;
+        }
+        private set
+        {
+            if (value == _editorVM)
+                return;
+
+            _editorVM = value;
+
+            OnPropertyChanged(nameof(EditorPane));
         }
     }
 
@@ -284,6 +303,8 @@ public class MainWindowViewModel : ViewModelBase
     private OutputGridViewModel _outputGridVM;
     private PropertiesViewModel _propertiesVM;
 
+    private EditorViewModel _editorVM;
+
     private ObservableCollection<string> _toolsVM;
     private string _selectedComposite;
 
@@ -308,9 +329,8 @@ public class MainWindowViewModel : ViewModelBase
                                          "\t\t}\n" +
                                          "\t}\n" +
                                          "}\n";
-
-    private Dictionary<int, DocumentInfo> _documents = new();
-    private Dictionary<string, int> _openFiles = new();
+    // private Dictionary<int, DocumentInfo> _documents = new();
+    // private Dictionary<string, int> _openFiles = new();
 
     private readonly string _newFilename = "Class";
     private readonly string _newFileNameExt = ".cs";
@@ -363,7 +383,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (_aboutCommand == null) _aboutCommand = new DelegateCommand(ShowAbout, x => true);
+            if (_aboutCommand == null) _aboutCommand = new DelegateCommand(ShowAbout, _ => true);
 
             return _aboutCommand;
         }

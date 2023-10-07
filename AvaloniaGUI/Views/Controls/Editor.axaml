@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:AvaloniaGUI.ViewModels.Controls"
+             xmlns:helpers="clr-namespace:AvaloniaGUI.ViewModels.Helpers"
+             xmlns:views="clr-namespace:AvaloniaGUI.Views.Helpers"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaGUI.Views.Controls.Editor"
+             x:DataType="vm:EditorViewModel">
+    <Design.DataContext>
+        <vm:EditorViewModel />
+    </Design.DataContext>
+
+    <UserControl.Styles>
+        <Style Selector="Button.CloseButton">
+            <Setter Property="Padding" Value="2" />
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="TextBlock.DocumentHeader">
+            <Setter Property="Margin" Value="0 0 20 0" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="TabControl">
+            <Setter Property="Background" Value="LightGray" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="Margin" Value="2" />
+        </Style>
+        <Style Selector="TabItem">
+            <Setter Property="BorderBrush" Value="Gray" />
+            <Setter Property="BorderThickness" Value="0 0 0.6 0.6" />
+            <Setter Property="CornerRadius" Value=" 0 0 5 0" />
+            <Setter Property="Margin" Value="2 1" />
+        </Style>
+    </UserControl.Styles>
+
+    <TabControl ItemsSource="{Binding Documents}" SelectedItem="{Binding SelectedDocument}" Name="TabControl">
+        <TabControl.ItemTemplate>
+            <DataTemplate>
+                <DockPanel>
+                    <Button DockPanel.Dock="Right" Classes="CloseButton"
+                            Command="{Binding ((vm:EditorViewModel)DataContext).CloseDocumentCommand, 
+                            RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                            CommandParameter="{Binding Header}">
+                        X
+                    </Button>
+                    <TextBlock Text="{Binding Header}" Classes="DocumentHeader" />
+                </DockPanel>
+            </DataTemplate>
+        </TabControl.ItemTemplate>
+        <TabControl.ContentTemplate>
+            <DataTemplate x:DataType="helpers:EditorDocumentViewModel">
+                <views:EditorDocument DataContext="{Binding}" />
+            </DataTemplate>
+        </TabControl.ContentTemplate>
+    </TabControl>
+</UserControl>
