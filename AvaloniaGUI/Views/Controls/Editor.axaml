@@ -37,7 +37,8 @@
         </Style>
     </UserControl.Styles>
 
-    <TabControl ItemsSource="{Binding Documents}" SelectedItem="{Binding SelectedDocument}" Name="TabControl">
+    <TabControl SelectionChanged="TabControl_OnSelectionChanged" ItemsSource="{Binding Documents}"
+                SelectedItem="{Binding SelectedDocument}" Name="TabControl">
         <TabControl.ItemTemplate>
             <DataTemplate>
                 <DockPanel>

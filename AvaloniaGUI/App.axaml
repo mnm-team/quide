@@ -13,6 +13,8 @@
 
         <!-- to display dataGrid -->
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+        <!-- to display AvaloniaEdit -->
+        <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
 
         <Style Selector="Button">
             <Setter Property="Background" Value="Transparent" />
@@ -69,7 +71,7 @@
             <Setter Property="Width" Value="36" />
             <Setter Property="Height" Value="28" />
         </Style>
-        
+
 
         <StyleInclude Source="/Views/Controls/Custom/GateButton.axaml" />
         <StyleInclude Source="/Views/Controls/Custom/GroupBox.axaml" />
@@ -81,7 +83,7 @@
                 <ResourceInclude Source="/Assets/Styles.xaml" />
                 <ResourceInclude Source="/Assets/Gates.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

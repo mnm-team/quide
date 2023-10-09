@@ -30,7 +30,8 @@
         <!-- TODO: 
             toolbar in https://github.com/Splitwirez/Mechanism-for-Avalonia/-->
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
-            <Button Command="{Binding NewCommand}" ToolTip.Tip="{x:Static p:Resources.New}" HotKey="Ctrl+N">
+            <Button Command="{Binding EditorPane.NewDocumentCommand}" ToolTip.Tip="{x:Static p:Resources.New}"
+                    HotKey="Ctrl+N">
                 <Image Source="/Assets/Images/NewFile_6276.png" Width="16" />
             </Button>
             <Button Command="{Binding OpenCommand}" ToolTip.Tip="{x:Static p:Resources.Open}" HotKey="Ctrl+O">
@@ -52,13 +53,15 @@
 
             <Separator Classes="Vertical" Margin="5,2" />
 
-            <Button Command="{Binding CutCommand}" ToolTip.Tip="{x:Static p:Resources.Cut}">
+            <Button Command="{Binding EditorPane.CutCommand}" ToolTip.Tip="{x:Static p:Resources.Cut}" HotKey="Ctrl+X">
                 <Image Source="/Assets/Images/Cut_6523.png" Width="16" />
             </Button>
-            <Button Command="{Binding CopyCommand}" ToolTip.Tip="{x:Static p:Resources.Copy}">
+            <Button Command="{Binding EditorPane.CopyCommand}" ToolTip.Tip="{x:Static p:Resources.Copy}"
+                    HotKey="Ctrl+C">
                 <Image Source="/Assets/Images/Copy_6524.png" Width="16" />
             </Button>
-            <Button Command="{Binding PasteCommand}" ToolTip.Tip="{x:Static p:Resources.Paste}">
+            <Button Command="{Binding EditorPane.PasteCommand}" ToolTip.Tip="{x:Static p:Resources.Paste}"
+                    HotKey="Ctrl+V">
                 <Image Source="/Assets/Images/Paste_6520.png" Width="16" />
             </Button>
 
