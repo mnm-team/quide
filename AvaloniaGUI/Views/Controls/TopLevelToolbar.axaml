@@ -30,24 +30,36 @@
         <!-- TODO: 
             toolbar in https://github.com/Splitwirez/Mechanism-for-Avalonia/-->
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+            <Button Command="{Binding EditorPane.UndoCommand}" ToolTip.Tip="{x:Static p:Resources.Undo}"
+                    HotKey="Ctrl+Z">
+                <Image Source="/Assets/Images/undo.png" Width="16" />
+            </Button>
+            <Button Command="{Binding EditorPane.RedoCommand}" ToolTip.Tip="{x:Static p:Resources.Redo}"
+                    HotKey="Ctrl+Shift+Z">
+                <Image Source="/Assets/Images/redo.png" Width="16" />
+            </Button>
+
+            <Separator Classes="Vertical" Margin="5,2" />
+
             <Button Command="{Binding EditorPane.NewDocumentCommand}" ToolTip.Tip="{x:Static p:Resources.New}"
                     HotKey="Ctrl+N">
                 <Image Source="/Assets/Images/NewFile_6276.png" Width="16" />
             </Button>
-            <Button Command="{Binding OpenCommand}" ToolTip.Tip="{x:Static p:Resources.Open}" HotKey="Ctrl+O">
+            <Button Command="{Binding EditorPane.OpenDocumentCommand}" ToolTip.Tip="{x:Static p:Resources.Open}" HotKey="Ctrl+O">
                 <Image Source="/Assets/Images/Open_6529.png" Width="16" />
             </Button>
-            <Button Command="{Binding SaveCommand}" ToolTip.Tip="{x:Static p:Resources.Save}" HotKey="Ctrl+S">
+            <Button Command="{Binding EditorPane.SaveDocumentAsCommand}" ToolTip.Tip="{x:Static p:Resources.Save}"
+                    HotKey="Ctrl+S">
                 <Image Source="/Assets/Images/Save_6530.png" Width="16" />
             </Button>
-            <Button Command="{Binding SaveAsCommand}" ToolTip.Tip="{x:Static p:Resources.SaveAs}"
+            <Button Command="{Binding EditorPane.SaveDocumentAsCommand}" ToolTip.Tip="{x:Static p:Resources.SaveAs}"
                     HotKey="Ctrl+Alt+S">
                 <Image Source="/Assets/Images/SaveAs.png" Width="16" />
             </Button>
 
             <Separator Classes="Vertical" Margin="5,0" />
 
-            <Button Command="{Binding PrintCommand}" ToolTip.Tip="{x:Static p:Resources.Print}">
+            <Button Command="{Binding EditorPane.PrintDocumentCommand}" ToolTip.Tip="{x:Static p:Resources.Print}">
                 <Image Source="/Assets/Images/Print_11009.png" Width="16" />
             </Button>
 

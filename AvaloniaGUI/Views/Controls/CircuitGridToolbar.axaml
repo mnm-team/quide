@@ -36,7 +36,7 @@
 
                 <Button x:Name="generateCode"
                         ToolTip.Tip="{x:Static p:Resources.GenerateCode}"
-                        Command="{Binding GenerateCode}">
+                        Command="{Binding EditorPane.GenerateCodeCommand}">
                     <Border
                         BorderBrush="DimGray"
                         BorderThickness="1"
@@ -63,7 +63,7 @@
                 </Button>
 
                 <Button x:Name="delete" ToolTip.Tip="{x:Static p:Resources.ClearSelection}"
-                        Command="{Binding DeleteGates}" HotKey="Delete">
+                        Command="{Binding DeleteGatesCommand}" HotKey="Delete">
                     <Image Source="/Assets/Images/Clearallrequests_8816.png" Width="16"
                            Margin="2" />
                 </Button>

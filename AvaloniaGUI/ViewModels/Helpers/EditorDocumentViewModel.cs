@@ -1,11 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Media;
+using Avalonia.Platform.Storage;
 using AvaloniaEdit;
+using AvaloniaEdit.Document;
 using AvaloniaEdit.Indentation.CSharp;
 using AvaloniaEdit.TextMate;
 using CommunityToolkit.Mvvm.Input;
@@ -15,22 +19,22 @@ namespace AvaloniaGUI.ViewModels.Helpers;
 
 public partial class EditorDocumentViewModel : ViewModelBase
 {
+    private readonly Delegate _notifyEditorCommands;
+    private string _currentlySavedText;
     private TextEditor _editor;
     private ThemeName _editorTheme;
-    private string _header;
+
     private bool _isModified;
 
     private RegistryOptions _registryOptions;
     private Language _selectedLanguage;
     private TextMate.Installation _textMateInstallation;
 
-    public EditorDocumentViewModel(string header, string content) :
+    public EditorDocumentViewModel(TextDocument document, Delegate notifyEditorCommands) :
         this()
     {
-        _header = header;
-        _isModified = false;
-
-        InitializeEditor(content);
+        _notifyEditorCommands = notifyEditorCommands;
+        InitializeEditor(document);
     }
 
     public EditorDocumentViewModel()
@@ -49,13 +53,24 @@ public partial class EditorDocumentViewModel : ViewModelBase
         get => _selectedLanguage;
         set
         {
-            // TODO: after tab switching null value gets passed here -> combobox no selection
-            if (value is null) return;
+            if (value is null) return; //TODO: weirdly null whenever creating new document a second time
             if (value == _selectedLanguage) return;
 
             _selectedLanguage = value;
             _textMateInstallation.SetGrammar(_registryOptions.GetScopeByLanguageId(value.Id));
             OnPropertyChanged(nameof(SelectedLanguage));
+        }
+    }
+
+    public bool IsModified
+    {
+        get => _isModified;
+        set
+        {
+            _isModified = value;
+            OnPropertyChanged(nameof(IsModified));
+            // notify EditorViewModel to update its commands
+            _notifyEditorCommands.DynamicInvoke();
         }
     }
 
@@ -69,24 +84,9 @@ public partial class EditorDocumentViewModel : ViewModelBase
         }
     }
 
-    public string Header
+    public void DisposeTextMate()
     {
-        get => _header;
-        set
-        {
-            _header = value;
-            OnPropertyChanged(nameof(Header));
-        }
-    }
-
-    public bool IsModified
-    {
-        get => _isModified;
-        set
-        {
-            _isModified = value;
-            OnPropertyChanged(nameof(Header));
-        }
+        _textMateInstallation.Dispose();
     }
 
     private static ObservableCollection<Language> SetSupportedLanguages(RegistryOptions registryOptions)
@@ -97,18 +97,24 @@ public partial class EditorDocumentViewModel : ViewModelBase
         };
     }
 
-    private void InitializeEditor(string content = "")
+    private void InitializeEditor(TextDocument document, bool unsaved = false)
     {
-        _editorTheme = ThemeName.Light;
+        _editorTheme = ThemeName.LightPlus;
         _registryOptions = new RegistryOptions(
             _editorTheme);
 
         Languages = SetSupportedLanguages(_registryOptions);
         _selectedLanguage = Languages[0];
 
-        var editor = new TextEditor
+        _currentlySavedText = document.Text;
+        _isModified = unsaved;
+
+        // handler to update IsModified property
+        document.UpdateFinished += (_, _) => { IsModified = _currentlySavedText != document.Text; };
+
+        _editor = new TextEditor
         {
-            Text = content,
+            Document = document,
             ShowLineNumbers = true,
             Margin = new Thickness(5),
             HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
@@ -145,14 +151,12 @@ public partial class EditorDocumentViewModel : ViewModelBase
             }
         };
 
-        editor.TextArea.IndentationStrategy = new CSharpIndentationStrategy(editor.Options);
+        _editor.TextArea.IndentationStrategy = new CSharpIndentationStrategy(_editor.Options);
 
         var csharpLanguage = _registryOptions.GetLanguageByExtension(".cs");
 
-        _textMateInstallation = editor.InstallTextMate(_registryOptions);
+        _textMateInstallation = _editor.InstallTextMate(_registryOptions);
         _textMateInstallation.SetGrammar(_registryOptions.GetScopeByLanguageId(csharpLanguage.Id));
-
-        _editor = editor;
     }
 
     [RelayCommand]
@@ -171,5 +175,29 @@ public partial class EditorDocumentViewModel : ViewModelBase
     private void Cut()
     {
         _editor.Cut();
+    }
+
+    [RelayCommand]
+    private void Undo()
+    {
+        _editor.Undo();
+    }
+
+    [RelayCommand]
+    private void Redo()
+    {
+        _editor.Redo();
+    }
+
+    public async void SaveDocument(IStorageFile file)
+    {
+        await using var stream = await file.OpenWriteAsync();
+        await using var streamWriter = new StreamWriter(stream);
+        // Write some content to the file.
+        var text = Editor.Document.Text;
+        await streamWriter.WriteLineAsync(text);
+
+        _currentlySavedText = text;
+        IsModified = false;
     }
 }

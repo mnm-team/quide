@@ -2,10 +2,9 @@
 
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Reactive;
+using System.Linq;
 using System.Windows.Input;
-using Avalonia.Interactivity;
+using Avalonia.Controls;
 using AvaloniaGUI.CodeHelpers;
 using AvaloniaGUI.ViewModels.Controls;
 using AvaloniaGUI.ViewModels.Dialog;
@@ -13,7 +12,7 @@ using AvaloniaGUI.ViewModels.MainModels.QuantumModel;
 using AvaloniaGUI.ViewModels.MainModels.QuantumParser;
 using AvaloniaGUI.Views;
 using AvaloniaGUI.Views.Dialog;
-using ReactiveUI;
+using CommunityToolkit.Mvvm.Input;
 
 #endregion
 
@@ -43,19 +42,10 @@ public enum ActionName
     Composite
 }
 
-public class MainWindowViewModel : ViewModelBase
+public partial class MainWindowViewModel : ViewModelBase
 {
-    // for key bindings
-    public ReactiveCommand<Unit, Unit> NavFirst { get; }
-    public ReactiveCommand<Unit, Unit> NavPrev { get; }
-    public ReactiveCommand<Unit, Unit> NavNext { get; }
-    public ReactiveCommand<Unit, Unit> NavLast { get; }
-    public ReactiveCommand<Unit, Unit> Calc { get; }
-    public ReactiveCommand<Unit, Unit> About { get; }
-
-    // for key bindings
-    public ReactiveCommand<Unit, Unit> Delete { get; }
-
+    // TODO: bad style for Properties: should be initialized once and then assumed as non-null
+    // because they are interconnected preferably in a single place
     public CircuitGridViewModel CircuitGrid
     {
         get
@@ -145,20 +135,13 @@ public class MainWindowViewModel : ViewModelBase
 
     public EditorViewModel EditorPane
     {
-        get
-        {
-            if (_editorVM != null) return _editorVM;
-
-            _editorVM = new EditorViewModel();
-            return _editorVM;
-        }
+        get => _editorVM;
         private set
         {
             if (value == _editorVM)
                 return;
 
             _editorVM = value;
-
             OnPropertyChanged(nameof(EditorPane));
         }
     }
@@ -181,8 +164,6 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    // public object SelectedObject => _window.outputGrid.statesList.SelectedItem;
-
     public static ActionName SelectedAction { get; private set; }
 
     public string SelectedComposite
@@ -196,24 +177,7 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public static string SelectedCompositeStatic { get; private set; }
-
-    // public LayoutDocument ActiveTab
-    // {
-    //     get
-    //     {
-    //         return _window.DocumentPane.SelectedContent as LayoutDocument;
-    //     }
-    // }
-    //
-    public string Code =>
-        //TODO:
-        // if (ActiveTab != null)
-        // {
-        //     TextEditor editor = ActiveTab.Content as TextEditor;
-        //     return editor.Text;
-        // }
-        string.Empty;
+    public static string SelectedCompositeStatic { get; private set; } = string.Empty;
 
     public string ConsoleOutput => _consoleWriter.Text;
 
@@ -228,64 +192,27 @@ public class MainWindowViewModel : ViewModelBase
         // they need dialogManager
         InitFromModel(ComputerModel.CreateModelForGUI());
 
-        _codeGenerator = new CodeGenerator();
+        // inject dialogManager and notify handler
+        EditorPane = new EditorViewModel(_dialogManager, NotifyEditorDependentCommands);
+        _window.Closing += WindowClosing;
+
         _consoleWriter = new ConsoleWriter();
         _consoleWriter.TextChanged += _consoleWriter_TextChanged;
     }
 
+    private async void WindowClosing(object? sender, WindowClosingEventArgs args)
+    {
+        args.Cancel = true;
+
+        var canClose = await EditorPane.EditorCanClose();
+        if (!canClose) return;
+
+        // Detach self and close with default handler
+        _window.Closing -= WindowClosing;
+        _window.Close();
+    }
+
     #endregion // Constructor
-
-
-    #region Nested Classes
-
-    private class DocumentInfo
-    {
-        //TODO:
-        // public LayoutDocument Tab { get; private set; }
-        //
-        // public TextEditor Editor { get; private set; }
-        //
-        // public bool IsModified
-        // {
-        //     get { return Editor.IsModified; }
-        // }
-        //
-        // public DocumentInfo(string fullPath, string title, LayoutDocument tab, TextEditor editor)
-        // {
-        //     ID = GenerateNextID();
-        //     FullPath = fullPath;
-        //     Title = title;
-        //     Tab = tab;
-        //     Editor = editor;
-        // }
-
-        private static int _nextID = -1;
-
-        public string FullPath;
-
-        public string Title;
-        public int ID { get; private set; }
-
-        private static int GenerateNextID()
-        {
-            _nextID++;
-            return _nextID;
-        }
-    }
-
-    #endregion // Nested Classes
-
-
-    #region Events
-
-    public event EventHandler? CodeChanged;
-
-    private void OnCodeChanged()
-    {
-        CodeChanged?.Invoke(this, new RoutedEventArgs());
-    }
-
-    #endregion // Events
 
 
     #region Fields
@@ -295,8 +222,6 @@ public class MainWindowViewModel : ViewModelBase
 
     private ComputerModel _model;
     private OutputViewModel _outputModel;
-
-    private CodeGenerator _codeGenerator;
 
     private CircuitGridViewModel _circuitGridVM;
 
@@ -309,32 +234,6 @@ public class MainWindowViewModel : ViewModelBase
     private string _selectedComposite;
 
     private ConsoleWriter _consoleWriter;
-
-    private static string _exampleCode = "using Quantum;\n" +
-                                         "using Quantum.Operations;\n" +
-                                         "using System;\n" +
-                                         "using System.Numerics;\n" +
-                                         "using System.Collections.Generic;\n\n" +
-                                         "namespace QuantumConsole\n" +
-                                         "{\n" +
-                                         "\tpublic class QuantumTest\n" +
-                                         "\t{\n" +
-                                         "\t\tpublic static void Main()\n" +
-                                         "\t\t{\n" +
-                                         "\t\t\tQuantumComputer comp = QuantumComputer.GetInstance();\n\n" +
-                                         "\t\t\t// create new register with initial value = 0, and width = 3 \n" +
-                                         "\t\t\tRegister x = comp.NewRegister(0, 3);\n\n" +
-                                         "\t\t\t// example: apply Hadamard Gate on qubit number 0 (least significant) \n" +
-                                         "\t\t\t//x.Hadamard(0);\n" +
-                                         "\t\t}\n" +
-                                         "\t}\n" +
-                                         "}\n";
-    // private Dictionary<int, DocumentInfo> _documents = new();
-    // private Dictionary<string, int> _openFiles = new();
-
-    private readonly string _newFilename = "Class";
-    private readonly string _newFileNameExt = ".cs";
-    private int _newFilenameCount = 1;
 
     private DelegateCommand _selectAction;
 
@@ -449,33 +348,13 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public ICommand GenerateCodeCommand
+    public ICommand DeleteGatesCommand
     {
         get
         {
-            if (_generateCode == null) _generateCode = new DelegateCommand(GenerateCode, x => true);
+            if (_pasteGates == null) _pasteGates = new DelegateCommand(DeleteGates, x => true);
 
-            return _generateCode;
-        }
-    }
-
-    public ICommand GenerateFromCodeCommand
-    {
-        get
-        {
-            if (_generateFromCode == null) _generateFromCode = new DelegateCommand(GenerateFromCode, x => true);
-
-            return _generateFromCode;
-        }
-    }
-
-    public ICommand RunInConsoleCommand
-    {
-        get
-        {
-            if (_runInConsole == null) _runInConsole = new DelegateCommand(RunInConsole, x => true);
-
-            return _runInConsole;
+            return _pasteGates;
         }
     }
 
@@ -516,86 +395,6 @@ public class MainWindowViewModel : ViewModelBase
             if (_run == null) _run = new DelegateCommand(RunToEnd, x => true);
 
             return _run;
-        }
-    }
-
-    public ICommand NewCommand
-    {
-        get
-        {
-            if (_new == null) _new = new DelegateCommand(New, x => true);
-
-            return _new;
-        }
-    }
-
-    public ICommand OpenCommand
-    {
-        get
-        {
-            if (_open == null) _open = new DelegateCommand(Open, x => true);
-
-            return _open;
-        }
-    }
-
-    public ICommand SaveCommand
-    {
-        get
-        {
-            if (_save == null) _save = new DelegateCommand(Save, x => true);
-
-            return _save;
-        }
-    }
-
-    public ICommand SaveAsCommand
-    {
-        get
-        {
-            if (_saveAs == null) _saveAs = new DelegateCommand(SaveAs, x => true);
-
-            return _saveAs;
-        }
-    }
-
-    public ICommand PrintCommand
-    {
-        get
-        {
-            if (_print == null) _print = new DelegateCommand(Print, x => true);
-
-            return _print;
-        }
-    }
-
-    public ICommand CutCommand
-    {
-        get
-        {
-            if (_cut == null) _cut = new DelegateCommand(Cut, x => true);
-
-            return _cut;
-        }
-    }
-
-    public ICommand CopyCommand
-    {
-        get
-        {
-            if (_copy == null) _copy = new DelegateCommand(Copy, x => true);
-
-            return _copy;
-        }
-    }
-
-    public ICommand PasteCommand
-    {
-        get
-        {
-            if (_paste == null) _paste = new DelegateCommand(Paste, x => true);
-
-            return _paste;
         }
     }
 
@@ -662,95 +461,87 @@ public class MainWindowViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            ErrorMessageHelper.ShowMessage("Unable to create composite gate from selection:\n" + ex.Message,
+            SimpleDialogHandler.ShowMessage("Unable to create composite gate from selection:\n" + ex.Message,
                 "Unable to create composite gate");
         }
     }
 
-    public void ClearCircuit(object parameter)
+    private void ClearCircuit(object parameter)
     {
         InitFromModel(ComputerModel.CreateModelForGUI());
     }
 
-    public void CutGates(object parameter)
+    private void CutGates(object parameter)
     {
         _model.Cut();
     }
 
-    public void CopyGates(object parameter)
+    private void CopyGates(object parameter)
     {
         _model.Copy();
     }
 
-    public void PasteGates(object parameter)
+    private void PasteGates(object parameter)
     {
         _model.Paste();
     }
 
-    public void DeleteGates()
+    private void DeleteGates(object parameter)
     {
         _model.Delete();
     }
 
-    public void GenerateCode(object parameter)
+    [RelayCommand(CanExecute = nameof(EditorDocumentSelected))]
+    private void GenerateFromCode()
     {
-        //TODO:
-        var code = _codeGenerator.GenerateCode();
+        var parser = new Parser();
 
-        var filename = GetNewFilename();
-        // DocumentInfo info = CreateTab(null, filename);
-        // info.Editor.Text = code;
+        try
+        {
+            var code = EditorPane.SelectedDocument?.Editor.Document.Text;
+            if (string.IsNullOrWhiteSpace(code)) throw new NullReferenceException("Code is empty or not existing");
+
+            var asmToBuild = parser.CompileForBuild(code);
+            var eval = CircuitEvaluator.GetInstance();
+
+            var methods = parser.GetMethodsCodes(code);
+            if (methods.Count > 0)
+            {
+                var asmToRun = parser.CompileForRun(code);
+                eval.LoadLibMethods(asmToRun);
+                eval.LoadParserMethods(asmToBuild);
+                eval.LoadMethodsCodes(methods);
+            }
+
+            var dict = eval.GetExtensionGates();
+            CompositeTools = new ObservableCollection<string>(dict.Keys);
+            PropertiesPane.LoadParametrics(dict);
+
+            var generatedModel = parser.BuildModel(asmToBuild);
+            InitFromModel(generatedModel);
+
+            _window.CircuitTab.IsSelected = true;
+        }
+        catch (Exception e)
+        {
+            SimpleDialogHandler.ShowMessage(e.Message);
+        }
     }
 
-    public void GenerateFromCode(object parameter)
+    [RelayCommand(CanExecute = nameof(EditorDocumentSelected))]
+    private void RunInConsole()
     {
-        //TODO:
-        // _window.CircuitTab.IsSelected = true;
-        //
-        // string code = Code;
-        // if (string.IsNullOrWhiteSpace(code))
-        // {
-        //     return;
-        // }
-        //
-        // Parser parser = new Parser();
-        //
-        // try
-        // {
-        //     Assembly asmToBuild = parser.CompileForBuild(code);
-        //     CircuitEvaluator eval = CircuitEvaluator.GetInstance();
-        //
-        //     Dictionary<string, List<MethodCode>> methods = parser.GetMethodsCodes(code);
-        //     if (methods.Count > 0)
-        //     {
-        //         Assembly asmToRun = parser.CompileForRun(code);
-        //         eval.LoadLibMethods(asmToRun);
-        //         eval.LoadParserMethods(asmToBuild);
-        //         eval.LoadMethodsCodes(methods);
-        //     }
-        //
-        //     Dictionary<string, List<MethodInfo>> dict = eval.GetExtensionGates();
-        //     CompositeTools = dict.Keys.ToList();
-        //     PropertiesPane.LoadParametrics(dict);
-        //
-        //     ComputerModel generatedModel = parser.BuildModel(asmToBuild);
-        //     InitFromModel(generatedModel);
-        // }
-        // catch (Exception e)
-        // {
-        //     MessageBox.Show(e.Message);
-        // }
-    }
-
-    public void RunInConsole(object parameter)
-    {
-        _window.ConsoleTab.IsSelected = true;
         _consoleWriter.Reset();
         var parser = new Parser();
         try
         {
-            var asm = parser.CompileForRun(Code);
+            var code = EditorPane.SelectedDocument?.Editor.Document.Text;
+            if (string.IsNullOrWhiteSpace(code)) throw new NullReferenceException("Code is empty or not existing");
+
+            var asm = parser.CompileForRun(code);
             parser.Execute(asm, _consoleWriter);
+
+            _window.ConsoleTab.IsSelected = true;
         }
         catch (Exception e)
         {
@@ -758,7 +549,18 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public void Restart(object parameter)
+    private bool EditorDocumentSelected()
+    {
+        return EditorPane.SelectedDocument != null;
+    }
+
+    private void NotifyEditorDependentCommands()
+    {
+        RunInConsoleCommand.NotifyCanExecuteChanged();
+        GenerateFromCodeCommand.NotifyCanExecuteChanged();
+    }
+
+    private void Restart(object parameter)
     {
         try
         {
@@ -774,7 +576,7 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public void PrevStep(object parameter)
+    private void PrevStep(object parameter)
     {
         try
         {
@@ -785,36 +587,12 @@ public class MainWindowViewModel : ViewModelBase
             }
             else
             {
-                if (_model.CanStepBack(currentStep - 1))
-                {
-                    var eval = CircuitEvaluator.GetInstance();
-                    var se = eval.GetStepEvaluator();
-                    var outputChanged = se.RunStep(_model.Steps[currentStep - 1].Gates, true);
-                    _model.CurrentStep = currentStep - 1;
-                    if (outputChanged) _outputModel.Update(eval.RootRegister);
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            PrintException(e);
-        }
-    }
+                if (!_model.CanStepBack(currentStep - 1)) return;
 
-    public void NextStep(object parameter)
-    {
-        try
-        {
-            var eval = CircuitEvaluator.GetInstance();
-
-            var currentStep = _model.CurrentStep;
-            if (currentStep == 0) eval.InitFromModel(_model);
-
-            if (currentStep < _model.Steps.Count)
-            {
+                var eval = CircuitEvaluator.GetInstance();
                 var se = eval.GetStepEvaluator();
-                var outputChanged = se.RunStep(_model.Steps[currentStep].Gates);
-                _model.CurrentStep = currentStep + 1;
+                var outputChanged = se.RunStep(_model.Steps[currentStep - 1].Gates, true);
+                _model.CurrentStep = currentStep - 1;
                 if (outputChanged) _outputModel.Update(eval.RootRegister);
             }
         }
@@ -824,7 +602,29 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public void RunToEnd(object parameter)
+    private void NextStep(object parameter)
+    {
+        try
+        {
+            var eval = CircuitEvaluator.GetInstance();
+
+            var currentStep = _model.CurrentStep;
+            if (currentStep == 0) eval.InitFromModel(_model);
+
+            if (currentStep >= _model.Steps.Count) return;
+
+            var se = eval.GetStepEvaluator();
+            var outputChanged = se.RunStep(_model.Steps[currentStep].Gates);
+            _model.CurrentStep = currentStep + 1;
+            if (outputChanged) _outputModel.Update(eval.RootRegister);
+        }
+        catch (Exception e)
+        {
+            PrintException(e);
+        }
+    }
+
+    private void RunToEnd(object parameter)
     {
         try
         {
@@ -858,127 +658,9 @@ public class MainWindowViewModel : ViewModelBase
     //     return _calcWindow;
     // }
 
-    public async void ShowAbout(object o)
+    private async void ShowAbout(object o)
     {
         await new AboutWindow().ShowDialog(_window);
-    }
-
-    public void New(object parameter)
-    {
-        //TODO:
-        var filename = GetNewFilename();
-        // DocumentInfo info = CreateTab(null, filename);
-        // info.Editor.Text = _exampleCode;
-        // info.Editor.IsModified = false;
-    }
-
-    public void Open(object parameter)
-    {
-        //TODO:
-        // OpenFileDialog dialog = new OpenFileDialog();
-        //
-        // // Set filter options and filter index.
-        // dialog.Filter = "C# Files (*.cs)|*.cs|Text Files (.txt)|*.txt|All Files (*.*)|*.*";
-        // dialog.FilterIndex = 1;
-        //
-        // // Call the ShowDialog method to show the dialog box.
-        // bool? userClickedOK = dialog.ShowDialog();
-        //
-        // // Process input if the user clicked OK.
-        // if (userClickedOK == true)
-        // {
-        //     string filename = dialog.SafeFileName;
-        //     string fullPath = dialog.FileName;
-        //
-        //     int openedId;
-        //     if (_openFiles.TryGetValue(fullPath, out openedId))
-        //     {
-        //         DocumentInfo info = _documents[openedId];
-        //         info.Tab.IsSelected = true;
-        //     }
-        //     else
-        //     {
-        //         DocumentInfo info = CreateTab(fullPath, filename);
-        //         _openFiles[fullPath] = info.ID;
-        //     }
-        // }
-    }
-
-    public void Save(object parameter)
-    {
-        //TODO:
-        // LayoutDocument activeTab = ActiveTab;
-        // if (activeTab != null)
-        // {
-        //     int id = int.Parse(activeTab.ContentId);
-        //     DocumentInfo info = _documents[id];
-        //     Save(info);
-        // }
-    }
-
-    public void SaveAs(object parameter)
-    {
-        //TODO:
-        // LayoutDocument activeTab = ActiveTab;
-        // if (activeTab != null)
-        // {
-        //     int id = int.Parse(activeTab.ContentId);
-        //     DocumentInfo info = _documents[id];
-        //     SaveAs(info);
-        // }
-    }
-
-    public bool Window_Closing()
-    {
-        //TODO:
-        // IEnumerable<DocumentInfo> notSaved = _documents.Values.Where<DocumentInfo>(x => x.IsModified);
-        //
-        // if (notSaved.Count<DocumentInfo>() > 0)
-        // {
-        //     MessageBoxResult result = MessageBox.Show("There are unsaved changes. Do you want to save?",
-        //         "Quantum Simulator",
-        //         MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
-        //     if (result == MessageBoxResult.Yes)
-        //     {
-        //         foreach (DocumentInfo info in notSaved)
-        //         {
-        //             Save(info);
-        //             if (info.IsModified)
-        //             {
-        //                 return false;
-        //             }
-        //             else
-        //             {
-        //                 info.Tab.Close();
-        //             }
-        //         }
-        //
-        //         return true;
-        //     }
-        //     else if (result == MessageBoxResult.Cancel)
-        //     {
-        //         return false;
-        //     }
-        // }
-
-        return true;
-    }
-
-    // for editor, not implemented originally
-    public void Print(object parameter)
-    {
-    }
-
-    public void Cut(object parameter)
-    {
-    }
-
-    public void Copy(object parameter)
-    {
-    }
-
-    public void Paste(object parameter)
-    {
     }
 
     #endregion // Public Methods
@@ -993,9 +675,8 @@ public class MainWindowViewModel : ViewModelBase
             var oldComposites = _model.CompositeGates;
             var newComposites = model.CompositeGates;
 
-            foreach (var pair in oldComposites)
-                if (!newComposites.ContainsKey(pair.Key))
-                    newComposites[pair.Key] = pair.Value;
+            foreach (var pair in oldComposites.Where(pair => !newComposites.ContainsKey(pair.Key)))
+                newComposites[pair.Key] = pair.Value;
         }
 
         _model = model;
@@ -1012,7 +693,7 @@ public class MainWindowViewModel : ViewModelBase
         OnPropertyChanged(nameof(ConsoleOutput));
     }
 
-    private void Save(DocumentInfo info)
+    private void Save() //DocumentInfo info)
     {
         //TODO:
         // if (string.IsNullOrWhiteSpace(info.FullPath))
@@ -1025,7 +706,7 @@ public class MainWindowViewModel : ViewModelBase
         // }
     }
 
-    private void SaveAs(DocumentInfo info)
+    private void SaveAs() //DocumentInfo info)
     {
         //TODO:
         // SaveFileDialog dialog = new SaveFileDialog();
@@ -1054,83 +735,12 @@ public class MainWindowViewModel : ViewModelBase
         // }
     }
 
-    private DocumentInfo CreateTab(string fullPath, string title)
-    {
-        //TODO:
-        // TextEditor editor = new TextEditor();
-        // editor.FontFamily = new FontFamily("Consolas");
-        // editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#");
-        // editor.ShowLineNumbers = true;
-        // if (!string.IsNullOrWhiteSpace(fullPath))
-        // {
-        //     editor.Load(fullPath);
-        // }
-        //
-        // LayoutDocument document = new LayoutDocument();
-        // document.Title = title;
-        // document.Content = editor;
-        // document.Closing += document_Closing;
-        //
-        // _window.DocumentPane.InsertChildAt(_window.DocumentPane.ChildrenCount, document);
-        // document.IsSelected = true;
-        //
-        // DocumentInfo info = new DocumentInfo(fullPath, title, document, editor);
-        // _documents[info.ID] = info;
-        //
-        // document.ContentId = info.ID.ToString();
-        //
-        return null; //info;
-    }
-
-    private void document_Closing(object sender, CancelEventArgs e)
-    {
-        //TODO:
-        // LayoutDocument document = sender as LayoutDocument;
-        // int id = int.Parse(document.ContentId);
-        // DocumentInfo info = _documents[id];
-        //
-        // if (info.IsModified)
-        // {
-        //     MessageBoxResult result = MessageBox.Show("There are unsaved changes. Do you want to save?",
-        //         "Quantum Simulator",
-        //         MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
-        //     if (result == MessageBoxResult.Yes)
-        //     {
-        //         Save(info);
-        //         if (info.IsModified)
-        //         {
-        //             e.Cancel = true;
-        //         }
-        //     }
-        //     else if (result == MessageBoxResult.Cancel)
-        //     {
-        //         e.Cancel = true;
-        //     }
-        // }
-        //
-        // if (e.Cancel == false)
-        // {
-        //     if (info.FullPath != null)
-        //     {
-        //         _openFiles.Remove(info.FullPath);
-        //         _documents.Remove(info.ID);
-        //     }
-        // }
-    }
-
-    private string GetNewFilename()
-    {
-        var name = _newFilename + _newFilenameCount + _newFileNameExt;
-        _newFilenameCount++;
-        return name;
-    }
-
     private static void PrintException(Exception e)
     {
         var message = e.Message;
         if (e.InnerException != null) message = message + ":\n" + e.InnerException.Message;
 
-        ErrorMessageHelper.ShowMessage(message);
+        SimpleDialogHandler.ShowMessage(message);
     }
 
     #endregion // Private Helpers

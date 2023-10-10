@@ -47,7 +47,7 @@ public partial class OutputGrid : UserControl
         }
         catch (Exception ex)
         {
-            ErrorMessageHelper.ShowMessage(ex.Message);
+            SimpleDialogHandler.ShowMessage(ex.Message);
         }
     }
 
@@ -56,7 +56,7 @@ public partial class OutputGrid : UserControl
         if (e.Key != Key.Enter) return;
 
         // if key is Enter, apply selection
-        OutputGridViewModel vm = DataContext as OutputGridViewModel;
+        var vm = DataContext as OutputGridViewModel;
         try
         {
             vm.SetRegister(registerBox.SelectedItem.ToString());
@@ -64,13 +64,13 @@ public partial class OutputGrid : UserControl
         }
         catch (Exception ex)
         {
-            ErrorMessageHelper.ShowMessage(ex.Message);
+            SimpleDialogHandler.ShowMessage(ex.Message);
         }
     }
 
     private void registerBox_DropDownClosed(object sender, EventArgs e)
     {
-        OutputGridViewModel vm = DataContext as OutputGridViewModel;
+        var vm = DataContext as OutputGridViewModel;
 
         try
         {
@@ -79,7 +79,7 @@ public partial class OutputGrid : UserControl
         }
         catch (Exception ex)
         {
-            ErrorMessageHelper.ShowMessage(ex.Message);
+            SimpleDialogHandler.ShowMessage(ex.Message);
         }
     }
 

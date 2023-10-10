@@ -934,7 +934,7 @@ public class GateViewModel : ViewModelBase
                                 var msg = "Unable to ungroup gate. Its parameters are invalid.\n" +
                                           "Inner exception:\n" +
                                           (ex.InnerException == null ? ex.Message : ex.InnerException.Message);
-                                ErrorMessageHelper.ShowMessage(msg);
+                                SimpleDialogHandler.ShowMessage(msg);
                             }
 
                             break;
@@ -1023,7 +1023,7 @@ public class GateViewModel : ViewModelBase
                             }
                             catch (Exception ex)
                             {
-                                ErrorMessageHelper.ShowMessage(ex.Message);
+                                SimpleDialogHandler.ShowMessage(ex.Message);
                             }
                         });
                     }
@@ -1164,7 +1164,7 @@ public class GateViewModel : ViewModelBase
             var msg = "Unable to add gate. The parameters are invalid.\n" +
                       "Inner exception:\n" +
                       (ex.InnerException != null ? ex.InnerException.Message : ex.Message);
-            ErrorMessageHelper.ShowMessage(msg);
+            SimpleDialogHandler.ShowMessage(msg);
         }
     }
 

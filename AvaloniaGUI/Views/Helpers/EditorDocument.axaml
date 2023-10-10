@@ -15,7 +15,7 @@
                     DockPanel.Dock="Top"
                     Spacing="5"
                     Margin="3">
-            <ComboBox SelectionChanged="SyntaxModeCombo_OnSelectionChanged" Name="SyntaxModeCombo"
+            <ComboBox Name="SyntaxModeCombo"
                       VerticalAlignment="Stretch" VerticalContentAlignment="Center"
                       ItemsSource="{Binding Languages}"
                       SelectedItem="{Binding SelectedLanguage}" />
@@ -23,13 +23,4 @@
 
         <ContentControl Content="{Binding Editor}" />
     </DockPanel>
-
-    <!-- <avaloniaEdit:TextEditor Name="Editor" -->
-    <!--                          FontFamily="Cascadia Code,Consolas,Menlo,Monospace" -->
-    <!--                          ShowLineNumbers="True" -->
-    <!--                          Margin="30" -->
-    <!--                          HorizontalScrollBarVisibility="Auto" -->
-    <!--                          VerticalScrollBarVisibility="Visible" -->
-    <!--                          FontWeight="Light" -->
-    <!--                          FontSize="14" Text="Sass" /> -->
 </UserControl>

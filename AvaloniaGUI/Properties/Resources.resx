@@ -1,457 +1,462 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+    <!-- 
+      Microsoft ResX Schema 
+      
+      Version 2.0
+      
+      The primary goals of this format is to allow a simple XML format 
+      that is mostly human readable. The generation and parsing of the 
+      various data types are done through the TypeConverter classes 
+      associated with the data types.
+      
+      Example:
+      
+      ... ado.net/XML headers & schema ...
+      <resheader name="resmimetype">text/microsoft-resx</resheader>
+      <resheader name="version">2.0</resheader>
+      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+          <value>[base64 mime encoded serialized .NET Framework object]</value>
+      </data>
+      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+          <comment>This is a comment</comment>
+      </data>
+                  
+      There are any number of "resheader" rows that contain simple 
+      name/value pairs.
+      
+      Each data row contains a name, and value. The row also contains a 
+      type or mimetype. Type corresponds to a .NET class that support 
+      text/value conversion through the TypeConverter architecture. 
+      Classes that don't support this are serialized and stored with the 
+      mimetype set.
+      
+      The mimetype is used for serialized objects, and tells the 
+      ResXResourceReader how to depersist the object. This is currently not 
+      extensible. For a given mimetype the value must be set accordingly:
+      
+      Note - application/x-microsoft.net.object.binary.base64 is the format 
+      that the ResXResourceWriter will generate, however the reader can 
+      read any of the formats listed below.
+      
+      mimetype: application/x-microsoft.net.object.binary.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+              : and then encoded with base64 encoding.
+      
+      mimetype: application/x-microsoft.net.object.soap.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+              : and then encoded with base64 encoding.
+  
+      mimetype: application/x-microsoft.net.object.bytearray.base64
+      value   : The object must be serialized into a byte array 
+              : using a System.ComponentModel.TypeConverter
+              : and then encoded with base64 encoding.
+      -->
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root"
+                xmlns="">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string"/>
+                            <xsd:attribute name="type" type="xsd:string"/>
+                            <xsd:attribute name="mimetype" type="xsd:string"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string"/>
+                            <xsd:attribute name="name" type="xsd:string"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="Absolute" xml:space="preserve">
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <data name="Absolute" xml:space="preserve">
     <value>Absolute</value>
   </data>
-  <data name="AddControl" xml:space="preserve">
+    <data name="AddControl" xml:space="preserve">
     <value>Add Control Bit</value>
   </data>
-  <data name="AddQubit" xml:space="preserve">
+    <data name="AddQubit" xml:space="preserve">
     <value>Add Qubit to Register</value>
   </data>
-  <data name="AddRegister" xml:space="preserve">
+    <data name="AddRegister" xml:space="preserve">
     <value>Add New Register</value>
   </data>
-  <data name="AddStep" xml:space="preserve">
+    <data name="AddStep" xml:space="preserve">
     <value>Add Step</value>
   </data>
-  <data name="Amplitude" xml:space="preserve">
+    <data name="Amplitude" xml:space="preserve">
     <value>Amplitude</value>
   </data>
-  <data name="AngleValue" xml:space="preserve">
+    <data name="AngleValue" xml:space="preserve">
     <value>Angle Value :</value>
   </data>
-  <data name="Apply" xml:space="preserve">
+    <data name="Apply" xml:space="preserve">
     <value>Apply</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
+    <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <data name="CircuitDesigner" xml:space="preserve">
+    <data name="CircuitDesigner" xml:space="preserve">
     <value>Circuit Designer</value>
   </data>
-  <data name="ClearCircuit" xml:space="preserve">
+    <data name="ClearCircuit" xml:space="preserve">
     <value>Clear Circuit</value>
   </data>
-  <data name="Composite" xml:space="preserve">
+    <data name="Composite" xml:space="preserve">
     <value>Composite Gate</value>
   </data>
-  <data name="ConsoleOutput" xml:space="preserve">
+    <data name="ConsoleOutput" xml:space="preserve">
     <value>Console Output</value>
   </data>
-  <data name="Copy" xml:space="preserve">
+    <data name="Copy" xml:space="preserve">
     <value>Copy [Ctrl+C]</value>
   </data>
-  <data name="CPhaseShift" xml:space="preserve">
+    <data name="CPhaseShift" xml:space="preserve">
     <value>Conditional Phase Kick (Phase Shift) Gate For QFT</value>
   </data>
-  <data name="Cut" xml:space="preserve">
+    <data name="Cut" xml:space="preserve">
     <value>Cut [Ctrl+X]</value>
   </data>
-  <data name="DeleteColumn" xml:space="preserve">
+    <data name="DeleteColumn" xml:space="preserve">
     <value>Delete Column</value>
   </data>
-  <data name="DeleteQubit" xml:space="preserve">
+    <data name="DeleteQubit" xml:space="preserve">
     <value>Delete Qubit</value>
   </data>
-  <data name="DeleteRegister" xml:space="preserve">
+    <data name="DeleteRegister" xml:space="preserve">
     <value>Delete Register</value>
   </data>
-  <data name="DeleteRow" xml:space="preserve">
+    <data name="DeleteRow" xml:space="preserve">
     <value>Delete Row</value>
   </data>
-  <data name="DistValue" xml:space="preserve">
+    <data name="DistValue" xml:space="preserve">
     <value>Phase Distance Value (k) :</value>
   </data>
-  <data name="DragGates" xml:space="preserve">
+    <data name="DragGates" xml:space="preserve">
     <value>Drag and Drop selected gates</value>
   </data>
-  <data name="EraseGate" xml:space="preserve">
+    <data name="EraseGate" xml:space="preserve">
     <value>Erase Gate</value>
   </data>
-  <data name="FlipBit" xml:space="preserve">
+    <data name="FlipBit" xml:space="preserve">
     <value>Flip Bit</value>
   </data>
-  <data name="GenerateCode" xml:space="preserve">
+    <data name="GenerateCode" xml:space="preserve">
     <value>Generate Code From Circuit</value>
   </data>
-  <data name="GenerateFromCode" xml:space="preserve">
+    <data name="GenerateFromCode" xml:space="preserve">
     <value>Generate Circuit From Code</value>
   </data>
-  <data name="Hadamard" xml:space="preserve">
+    <data name="Hadamard" xml:space="preserve">
     <value>Hadamard Gate</value>
   </data>
-  <data name="InsertColumnLeft" xml:space="preserve">
+    <data name="InsertColumnLeft" xml:space="preserve">
     <value>Insert Column on the Left</value>
   </data>
-  <data name="InsertColumnRight" xml:space="preserve">
+    <data name="InsertColumnRight" xml:space="preserve">
     <value>Insert Column on the Right</value>
   </data>
-  <data name="InsertQubitAbove" xml:space="preserve">
+    <data name="InsertQubitAbove" xml:space="preserve">
     <value>Insert Qubit Above</value>
   </data>
-  <data name="InsertQubitBelow" xml:space="preserve">
+    <data name="InsertQubitBelow" xml:space="preserve">
     <value>Insert Qubit Below</value>
   </data>
-  <data name="InsertRegisterAbove" xml:space="preserve">
+    <data name="InsertRegisterAbove" xml:space="preserve">
     <value>Insert Register Above</value>
   </data>
-  <data name="InsertRegisterBelow" xml:space="preserve">
+    <data name="InsertRegisterBelow" xml:space="preserve">
     <value>Insert Register Below</value>
   </data>
-  <data name="InsertRowAbove" xml:space="preserve">
+    <data name="InsertRowAbove" xml:space="preserve">
     <value>Insert Row Above</value>
   </data>
-  <data name="InsertRowBelow" xml:space="preserve">
+    <data name="InsertRowBelow" xml:space="preserve">
     <value>Insert Row Below</value>
   </data>
-  <data name="InvCPhaseShift" xml:space="preserve">
+    <data name="InvCPhaseShift" xml:space="preserve">
     <value>Inversed Conditional Phase Kick (Phase Shift) Gate For QFT</value>
   </data>
-  <data name="MatrixNotUnitary" xml:space="preserve">
+    <data name="MatrixNotUnitary" xml:space="preserve">
     <value>The matrix is not unitary.</value>
   </data>
-  <data name="Measure" xml:space="preserve">
+    <data name="Measure" xml:space="preserve">
     <value>Measurement</value>
   </data>
-  <data name="New" xml:space="preserve">
+    <data name="New" xml:space="preserve">
     <value>New [Ctrl+N]</value>
   </data>
-  <data name="NextStep" xml:space="preserve">
+    <data name="NextStep" xml:space="preserve">
     <value>Step Forward [F7]</value>
   </data>
-  <data name="Open" xml:space="preserve">
+    <data name="Open" xml:space="preserve">
     <value>Open [Ctrl+O]</value>
   </data>
-  <data name="OperationMatrix" xml:space="preserve">
+    <data name="OperationMatrix" xml:space="preserve">
     <value>Operation Matrix :</value>
   </data>
-  <data name="Output" xml:space="preserve">
+    <data name="Output" xml:space="preserve">
     <value>Output</value>
   </data>
-  <data name="Paste" xml:space="preserve">
+    <data name="Paste" xml:space="preserve">
     <value>Paste [Ctrl+V]</value>
   </data>
-  <data name="PhaseKick" xml:space="preserve">
+    <data name="PhaseKick" xml:space="preserve">
     <value>Phase Kick (Phase Shift) Gate</value>
   </data>
-  <data name="PhaseScale" xml:space="preserve">
+    <data name="PhaseScale" xml:space="preserve">
     <value>Phase Scale Gate</value>
   </data>
-  <data name="Pi" xml:space="preserve">
+    <data name="Pi" xml:space="preserve">
     <value>π</value>
   </data>
-  <data name="Pi_2" xml:space="preserve">
+    <data name="Pi_2" xml:space="preserve">
     <value>π / 2</value>
   </data>
-  <data name="Pi_3" xml:space="preserve">
+    <data name="Pi_3" xml:space="preserve">
     <value>π / 3</value>
   </data>
-  <data name="Pi_4" xml:space="preserve">
+    <data name="Pi_4" xml:space="preserve">
     <value>π / 4</value>
   </data>
-  <data name="Pi_6" xml:space="preserve">
+    <data name="Pi_6" xml:space="preserve">
     <value>π / 6</value>
   </data>
-  <data name="Pi_8" xml:space="preserve">
+    <data name="Pi_8" xml:space="preserve">
     <value>π / 8</value>
   </data>
-  <data name="Pointer" xml:space="preserve">
+    <data name="Pointer" xml:space="preserve">
     <value>Pointer</value>
   </data>
-  <data name="PrevStep" xml:space="preserve">
+    <data name="PrevStep" xml:space="preserve">
     <value>Step Back [F6]</value>
   </data>
-  <data name="Print" xml:space="preserve">
+    <data name="Print" xml:space="preserve">
     <value>Print</value>
   </data>
-  <data name="Probability" xml:space="preserve">
+    <data name="Probability" xml:space="preserve">
     <value>Probability</value>
   </data>
-  <data name="ProbabilityScale" xml:space="preserve">
+    <data name="ProbabilityScale" xml:space="preserve">
     <value>Probability Scale</value>
   </data>
-  <data name="Properties" xml:space="preserve">
+    <data name="Properties" xml:space="preserve">
     <value>Properties</value>
   </data>
-  <data name="QFT" xml:space="preserve">
+    <data name="QFT" xml:space="preserve">
     <value>Quantum Fourier Transform</value>
   </data>
-  <data name="Qubits" xml:space="preserve">
+    <data name="Qubits" xml:space="preserve">
     <value>Qubits</value>
   </data>
-  <data name="Relative" xml:space="preserve">
+    <data name="Relative" xml:space="preserve">
     <value>Relative</value>
   </data>
-  <data name="RemoveQubit" xml:space="preserve">
+    <data name="RemoveQubit" xml:space="preserve">
     <value>Remove Qubit from Register</value>
   </data>
-  <data name="Restart" xml:space="preserve">
+    <data name="Restart" xml:space="preserve">
     <value>Restart [F5]</value>
   </data>
-  <data name="RotateX" xml:space="preserve">
+    <data name="RotateX" xml:space="preserve">
     <value>Rotate X Gate</value>
   </data>
-  <data name="RotateY" xml:space="preserve">
+    <data name="RotateY" xml:space="preserve">
     <value>Rotate Y Gate</value>
   </data>
-  <data name="RotateZ" xml:space="preserve">
+    <data name="RotateZ" xml:space="preserve">
     <value>Rotate Z Gate</value>
   </data>
-  <data name="Run" xml:space="preserve">
+    <data name="Run" xml:space="preserve">
     <value>Run To End [F8]</value>
   </data>
-  <data name="RunInConsole" xml:space="preserve">
+    <data name="RunInConsole" xml:space="preserve">
     <value>Run In Console</value>
   </data>
-  <data name="Save" xml:space="preserve">
+    <data name="Save" xml:space="preserve">
     <value>Save [Ctrl+S]</value>
   </data>
-  <data name="SaveAs" xml:space="preserve">
+    <data name="SaveAs" xml:space="preserve">
     <value>Save As... [Ctrl+Alt+S]</value>
   </data>
-  <data name="SelectCompositeGate" xml:space="preserve">
+    <data name="SelectCompositeGate" xml:space="preserve">
     <value>Select Composite Gate...</value>
   </data>
-  <data name="SelectMethod" xml:space="preserve">
+    <data name="SelectMethod" xml:space="preserve">
     <value>Selected Method :</value>
   </data>
-  <data name="ShowAll" xml:space="preserve">
+    <data name="ShowAll" xml:space="preserve">
     <value>Show All</value>
   </data>
-  <data name="ShowOnlyNonZero" xml:space="preserve">
+    <data name="ShowOnlyNonZero" xml:space="preserve">
     <value>Show Only Non-Zero</value>
   </data>
-  <data name="SigmaX" xml:space="preserve">
+    <data name="SigmaX" xml:space="preserve">
     <value>Sigma X Gate (Not)</value>
   </data>
-  <data name="SigmaY" xml:space="preserve">
+    <data name="SigmaY" xml:space="preserve">
     <value>Sigma Y Gate</value>
   </data>
-  <data name="SigmaZ" xml:space="preserve">
+    <data name="SigmaZ" xml:space="preserve">
     <value>Sigma Z Gate</value>
   </data>
-  <data name="SqrtX" xml:space="preserve">
+    <data name="SqrtX" xml:space="preserve">
     <value>Square Root of Not Gate</value>
   </data>
-  <data name="StateAmplitude" xml:space="preserve">
+    <data name="StateAmplitude" xml:space="preserve">
     <value>Amplitude of the state. It is a complex number, which squared magnitude gives the probability of the state.</value>
   </data>
-  <data name="StateProbability" xml:space="preserve">
+    <data name="StateProbability" xml:space="preserve">
     <value>Probability of the state. The bar's length represents probability value. Color represents the phase of state's amplitude (which is complex number).</value>
   </data>
-  <data name="StateQubits" xml:space="preserve">
+    <data name="StateQubits" xml:space="preserve">
     <value>State binary representation</value>
   </data>
-  <data name="StatesVisibility" xml:space="preserve">
+    <data name="StatesVisibility" xml:space="preserve">
     <value>States Visibility</value>
   </data>
-  <data name="StateValue" xml:space="preserve">
+    <data name="StateValue" xml:space="preserve">
     <value>Decimal value of the state</value>
   </data>
-  <data name="Ungroup" xml:space="preserve">
+    <data name="Ungroup" xml:space="preserve">
     <value>Ungroup</value>
   </data>
-  <data name="Unitary" xml:space="preserve">
+    <data name="Unitary" xml:space="preserve">
     <value>Custom Unitary Gate</value>
   </data>
-  <data name="Value" xml:space="preserve">
+    <data name="Value" xml:space="preserve">
     <value>Value</value>
   </data>
-  <data name="SelectedCompositeGate" xml:space="preserve">
+    <data name="SelectedCompositeGate" xml:space="preserve">
     <value>Selected Composite Gate :</value>
   </data>
-  <data name="AddParam" xml:space="preserve">
+    <data name="AddParam" xml:space="preserve">
     <value>Add Parameter</value>
   </data>
-  <data name="Group" xml:space="preserve">
+    <data name="Group" xml:space="preserve">
     <value>Group</value>
   </data>
-  <data name="GroupTip" xml:space="preserve">
+    <data name="GroupTip" xml:space="preserve">
     <value>Create Composite Gate from selected gates</value>
   </data>
-  <data name="UngroupTip" xml:space="preserve">
+    <data name="UngroupTip" xml:space="preserve">
     <value>Ungroup Composite Gate</value>
   </data>
-  <data name="EnterName" xml:space="preserve">
+    <data name="EnterName" xml:space="preserve">
     <value>Enter Name for the new Composite Gate :</value>
   </data>
-  <data name="InitValue" xml:space="preserve">
+    <data name="InitValue" xml:space="preserve">
     <value>Initial register value</value>
   </data>
-  <data name="QubitsNumber" xml:space="preserve">
+    <data name="QubitsNumber" xml:space="preserve">
     <value>Number of new qubits</value>
   </data>
-  <data name="InitState" xml:space="preserve">
+    <data name="InitState" xml:space="preserve">
     <value>Initial register state:</value>
   </data>
-  <data name="AmplitudesNormalizationCaution" xml:space="preserve">
+    <data name="AmplitudesNormalizationCaution" xml:space="preserve">
     <value>If amplitudes are not normalized (probabilities of possible states do not sum up to 1), they will be automatically normalized before register creation.</value>
   </data>
-  <data name="Calculator" xml:space="preserve">
+    <data name="Calculator" xml:space="preserve">
     <value>Calculator</value>
   </data>
-  <data name="CopyResult" xml:space="preserve">
+    <data name="CopyResult" xml:space="preserve">
     <value>Copy Result</value>
   </data>
-  <data name="ShowCalculator" xml:space="preserve">
+    <data name="ShowCalculator" xml:space="preserve">
     <value>Show Calculator [Ctrl+K]</value>
   </data>
-  <data name="ClearAll" xml:space="preserve">
+    <data name="ClearAll" xml:space="preserve">
     <value>Clear</value>
   </data>
-  <data name="ClearSelection" xml:space="preserve">
+    <data name="ClearSelection" xml:space="preserve">
     <value>Clear Selection [Delete]</value>
   </data>
-  <data name="InConsole" xml:space="preserve">
+    <data name="InConsole" xml:space="preserve">
     <value>Run In Console</value>
   </data>
-  <data name="Selection" xml:space="preserve">
+    <data name="Selection" xml:space="preserve">
     <value>Selection [Shift] (to move selected, press Shift+Ctrl)</value>
   </data>
-  <data name="ToCircuit" xml:space="preserve">
+    <data name="ToCircuit" xml:space="preserve">
     <value>Build Circuit</value>
   </data>
-  <data name="ToCode" xml:space="preserve">
+    <data name="ToCode" xml:space="preserve">
     <value>To Code</value>
   </data>
-  <data name="Edit" xml:space="preserve">
+    <data name="Edit" xml:space="preserve">
     <value>Edit...</value>
   </data>
-  <data name="About" xml:space="preserve">
+    <data name="About" xml:space="preserve">
     <value>About</value>
   </data>
-  <data name="ShowAbout" xml:space="preserve">
+    <data name="ShowAbout" xml:space="preserve">
     <value>About QuIDE...</value>
   </data>
-  <data name="AboutText" xml:space="preserve">
+    <data name="AboutText" xml:space="preserve">
     <value>QuIDE - Quantum Integrated Development Environment
 Version: 1.0.0
 © 2014 Joanna Patrzyk, Bartłomiej Patrzyk</value>
   </data>
-  <data name="Authors" xml:space="preserve">
+    <data name="Authors" xml:space="preserve">
     <value>Authors:
 Joanna Patrzyk (jpatrzyk@quide.eu)
 Bartłomiej Patrzyk (bpatrzyk@quide.eu)</value>
   </data>
-  <data name="GPLText" xml:space="preserve">
+    <data name="GPLText" xml:space="preserve">
     <value>GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
@@ -1127,7 +1132,13 @@ the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 &lt;http://www.gnu.org/philosophy/why-not-lgpl.html&gt;.</value>
   </data>
-  <data name="License" xml:space="preserve">
+    <data name="License" xml:space="preserve">
     <value>QuIDE is available under the GNU General Public License:</value>
+  </data>
+    <data name="Redo" xml:space="preserve">
+    <value>Redo [Ctrl+Shift+Z]</value>
+  </data>
+    <data name="Undo" xml:space="preserve">
+    <value>Undo [Ctrl+Z]</value>
   </data>
 </root>

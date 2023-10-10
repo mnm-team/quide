@@ -1,7 +1,6 @@
 #region
 
 using System;
-using System.ComponentModel;
 using System.Globalization;
 using System.Threading;
 using Avalonia.Controls;
@@ -35,12 +34,5 @@ public partial class MainWindow : Window
 
         var vm = DataContext as MainWindowViewModel;
         vm?.InitializeWindow(this);
-    }
-
-    private void Window_Closing(object sender, CancelEventArgs e)
-    {
-        // TODO: handle window closing
-        var canClose = true; //_dataContext.Window_Closing();
-        if (!canClose) e.Cancel = true;
     }
 }

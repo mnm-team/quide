@@ -22,6 +22,16 @@ public enum SortField
 
 public class OutputGridViewModel : ViewModelBase
 {
+    #region Constructor
+
+    // only for design
+    public OutputGridViewModel()
+    {
+        _selectedRegister = new ParameterViewModel("register", typeof(Register), "root");
+    }
+
+    #endregion // Constructor
+
     #region Events
 
     public event EventHandler? SelectionChanged;
@@ -41,12 +51,12 @@ public class OutputGridViewModel : ViewModelBase
     private StateViewModel[]? _states;
 
     private string[] _registersNames;
-    private ParameterViewModel _selectedRegister;
+    private readonly ParameterViewModel _selectedRegister;
 
-    private int _selectedIndex = 0;
+    private int _selectedIndex;
 
     private SortField _sortBy = SortField.Value;
-    private bool _sortDesc = false;
+    private bool _sortDesc;
 
     private double _maxProbability;
 
@@ -56,16 +66,6 @@ public class OutputGridViewModel : ViewModelBase
     private CircuitGridViewModel _trackedCircuitGrid;
 
     #endregion // Fields
-
-    #region Constructor
-
-    // only for design
-    public OutputGridViewModel()
-    {
-        _selectedRegister = new ParameterViewModel("register", typeof(Register), "root");
-    }
-
-    #endregion // Constructor
 
 
     #region Model Properties
@@ -79,10 +79,7 @@ public class OutputGridViewModel : ViewModelBase
     {
         get
         {
-            if (_selectedIndex >= 0 && _selectedIndex < States.Length)
-            {
-                return States[_selectedIndex].Model;
-            }
+            if (_selectedIndex >= 0 && _selectedIndex < States.Length) return States[_selectedIndex].Model;
 
             return null;
         }
@@ -112,11 +109,10 @@ public class OutputGridViewModel : ViewModelBase
 
             _selectedRegister.ValueString = value;
             if (_selectedRegister.IsValid)
-            {
                 try
                 {
-                    CircuitEvaluator eval = CircuitEvaluator.GetInstance();
-                    Register selected = _selectedRegister.Value as Register;
+                    var eval = CircuitEvaluator.GetInstance();
+                    var selected = _selectedRegister.Value as Register;
                     _outputModel.Update(eval.RootRegister, selected.ToPartModel());
                     OnSelectionChanged();
                 }
@@ -124,11 +120,8 @@ public class OutputGridViewModel : ViewModelBase
                 {
                     PrintException(e);
                 }
-            }
             else
-            {
                 throw new Exception(_selectedRegister.ValidationMessage);
-            }
         }
     }
 
@@ -141,10 +134,7 @@ public class OutputGridViewModel : ViewModelBase
     {
         get
         {
-            if (_registersNames == null)
-            {
-                _registersNames = new[] { "root" };
-            }
+            if (_registersNames == null) _registersNames = new[] { "root" };
 
             return _registersNames;
         }
@@ -164,7 +154,7 @@ public class OutputGridViewModel : ViewModelBase
 
             _showAll = value;
             OnPropertyChanged(nameof(ShowAll));
-            int prevIndex = SelectedIndex;
+            var prevIndex = SelectedIndex;
             _states = CreateStates();
             _states = ScaleProbability(_states);
             OnPropertyChanged(nameof(States));
@@ -195,12 +185,9 @@ public class OutputGridViewModel : ViewModelBase
         _outputModel = outputModel;
         _outputModel.OutputChanged += _model_OutputChanged;
 
-        string[] regNames = new string[_model.Registers.Count + 1];
+        var regNames = new string[_model.Registers.Count + 1];
         regNames[0] = "root";
-        for (int i = 1; i < regNames.Length; i++)
-        {
-            regNames[i] = _model.Registers[i - 1].Name;
-        }
+        for (var i = 1; i < regNames.Length; i++) regNames[i] = _model.Registers[i - 1].Name;
 
         RegistersNames = regNames;
     }
@@ -211,11 +198,10 @@ public class OutputGridViewModel : ViewModelBase
 
         _selectedRegister.ValueString = value;
         if (_selectedRegister.IsValid)
-        {
             try
             {
-                CircuitEvaluator eval = CircuitEvaluator.GetInstance();
-                Register selected = _selectedRegister.Value as Register;
+                var eval = CircuitEvaluator.GetInstance();
+                var selected = _selectedRegister.Value as Register;
                 _outputModel.Update(eval.RootRegister, selected.ToPartModel());
                 OnSelectionChanged();
             }
@@ -223,20 +209,17 @@ public class OutputGridViewModel : ViewModelBase
             {
                 PrintException(e);
             }
-        }
         else
-        {
             throw new Exception(_selectedRegister.ValidationMessage);
-        }
     }
 
     public void Sort(SortField field)
     {
-        int prevIndex = SelectedIndex;
+        var prevIndex = SelectedIndex;
 
         if (field != _sortBy)
         {
-            ulong selectedState = States[prevIndex].Value;
+            var selectedState = States[prevIndex].Value;
 
             _sortBy = field;
             _sortDesc = false;
@@ -260,7 +243,7 @@ public class OutputGridViewModel : ViewModelBase
 
             OnPropertyChanged(nameof(States));
 
-            for (int i = 0; i < _states.Length; i++)
+            for (var i = 0; i < _states.Length; i++)
             {
                 if (_states[i].Value != selectedState) continue;
 
@@ -297,16 +280,13 @@ public class OutputGridViewModel : ViewModelBase
 
     private void _model_OutputChanged(object? sender, EventArgs eventArgs)
     {
-        string[] regNames = new string[_model.Registers.Count + 1];
+        var regNames = new string[_model.Registers.Count + 1];
         regNames[0] = "root";
-        for (int i = 1; i < regNames.Length; i++)
-        {
-            regNames[i] = _model.Registers[i - 1].Name;
-        }
+        for (var i = 1; i < regNames.Length; i++) regNames[i] = _model.Registers[i - 1].Name;
 
         RegistersNames = regNames;
 
-        int prevIndex = SelectedIndex;
+        var prevIndex = SelectedIndex;
         _states = CreateStatesFromModel();
         OnPropertyChanged(nameof(States));
         SelectedIndex = prevIndex;
@@ -315,7 +295,7 @@ public class OutputGridViewModel : ViewModelBase
     private StateViewModel[] CreateStatesFromModel()
     {
         SetMaxProbability();
-        StateViewModel[] states = CreateStates();
+        var states = CreateStates();
         return ScaleProbability(states);
     }
 
@@ -330,29 +310,22 @@ public class OutputGridViewModel : ViewModelBase
         {
             if (_showAll)
             {
-                int width = _outputModel.Width;
-                int statesCount = (int)Math.Pow(2, width);
-                StateViewModel[] states = new StateViewModel[statesCount];
+                var width = _outputModel.Width;
+                var statesCount = (int)Math.Pow(2, width);
+                var states = new StateViewModel[statesCount];
 
-                foreach (OutputState state in _outputModel.States)
-                {
-                    states[state.Value] = new StateViewModel(state);
-                }
+                foreach (var state in _outputModel.States) states[state.Value] = new StateViewModel(state);
 
-                bool amplitudeHasValue = _outputModel.States.First().Amplitude.HasValue;
+                var amplitudeHasValue = _outputModel.States.First().Amplitude.HasValue;
 
-                for (int i = 0; i < statesCount; i++)
+                for (var i = 0; i < statesCount; i++)
                 {
                     if (states[i] != null) continue;
 
                     if (amplitudeHasValue)
-                    {
                         states[i] = new StateViewModel(new OutputState((ulong)i, Complex.Zero, width));
-                    }
                     else
-                    {
                         states[i] = new StateViewModel(new OutputState((ulong)i, 0.0, width));
-                    }
                 }
 
                 switch (_sortBy)
@@ -369,9 +342,9 @@ public class OutputGridViewModel : ViewModelBase
             }
             else
             {
-                int statesCount = _outputModel.States.Count;
-                StateViewModel[] states = new StateViewModel[statesCount];
-                int i = 0;
+                var statesCount = _outputModel.States.Count;
+                var states = new StateViewModel[statesCount];
+                var i = 0;
 
                 IEnumerable<OutputState> sorted = _outputModel.States;
                 switch (_sortBy)
@@ -391,7 +364,7 @@ public class OutputGridViewModel : ViewModelBase
                         break;
                 }
 
-                foreach (OutputState state in sorted)
+                foreach (var state in sorted)
                 {
                     states[i] = new StateViewModel(state);
                     i++;
@@ -411,29 +384,20 @@ public class OutputGridViewModel : ViewModelBase
     private StateViewModel[] ScaleProbability(StateViewModel[] states)
     {
         foreach (var t in states)
-        {
             if (_scaleRelative)
-            {
                 t.RelativeProbability = t.Probability / _maxProbability;
-            }
             else
-            {
                 t.RelativeProbability = t.Probability;
-            }
-        }
 
         return states;
     }
 
     private static void PrintException(Exception e)
     {
-        string message = e.Message;
-        if (e.InnerException != null)
-        {
-            message = message + ":\n" + e.InnerException.Message;
-        }
+        var message = e.Message;
+        if (e.InnerException != null) message = message + ":\n" + e.InnerException.Message;
 
-        ErrorMessageHelper.ShowMessage(message);
+        SimpleDialogHandler.ShowMessage(message);
     }
 
     #endregion // Private Helpers

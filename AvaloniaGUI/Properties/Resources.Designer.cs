@@ -789,6 +789,15 @@ namespace AvaloniaGUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Redo [Ctrl+Shift+Z].
+        /// </summary>
+        public static string Redo {
+            get {
+                return ResourceManager.GetString("Redo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Relative.
         /// </summary>
         public static string Relative {
@@ -1046,6 +1055,15 @@ namespace AvaloniaGUI.Properties {
         public static string ToCode {
             get {
                 return ResourceManager.GetString("ToCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Undo [Ctrl+Z].
+        /// </summary>
+        public static string Undo {
+            get {
+                return ResourceManager.GetString("Undo", resourceCulture);
             }
         }
         

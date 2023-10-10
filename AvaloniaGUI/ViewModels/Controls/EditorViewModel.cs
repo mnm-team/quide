@@ -1,5 +1,10 @@
+using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using AvaloniaEdit.Document;
+using AvaloniaGUI.CodeHelpers;
 using AvaloniaGUI.ViewModels.Helpers;
 using CommunityToolkit.Mvvm.Input;
 
@@ -7,37 +12,37 @@ namespace AvaloniaGUI.ViewModels.Controls;
 
 public partial class EditorViewModel : ViewModelBase
 {
-    private static readonly string _exampleCode = "using Quantum;\n" +
-                                                  "using Quantum.Operations;\n" +
-                                                  "using System;\n" +
-                                                  "using System.Numerics;\n" +
-                                                  "using System.Collections.Generic;\n\n" +
-                                                  "namespace QuantumConsole\n" +
-                                                  "{\n" +
-                                                  "\tpublic class QuantumTest\n" +
-                                                  "\t{\n" +
-                                                  "\t\tpublic static void Main()\n" +
-                                                  "\t\t{\n" +
-                                                  "\t\t\tQuantumComputer comp = QuantumComputer.GetInstance();\n\n" +
-                                                  "\t\t\t// create new register with initial value = 0, and width = 3 \n" +
-                                                  "\t\t\tRegister x = comp.NewRegister(0, 3);\n\n" +
-                                                  "\t\t\t// example: apply Hadamard Gate on qubit number 0 (least significant) \n" +
-                                                  "\t\t\t//x.Hadamard(0);\n" +
-                                                  "\t\t}\n" +
-                                                  "\t}\n" +
-                                                  "}\n";
+    private const string ExampleCode = "using Quantum;\n" + "using Quantum.Operations;\n" + "using System;\n" +
+                                       "using System.Numerics;\n" + "using System.Collections.Generic;\n\n" +
+                                       "namespace QuantumConsole\n" + "{\n" + "\tpublic class QuantumTest\n" + "\t{\n" +
+                                       "\t\tpublic static void Main()\n" + "\t\t{\n" +
+                                       "\t\t\tQuantumComputer comp = QuantumComputer.GetInstance();\n\n" +
+                                       "\t\t\t// create new register with initial value = 0, and width = 3 \n" +
+                                       "\t\t\tRegister x = comp.NewRegister(0, 3);\n\n" +
+                                       "\t\t\t// example: apply Hadamard Gate on qubit number 0 (least significant) \n" +
+                                       "\t\t\t//x.Hadamard(0);\n" + "\t\t}\n" + "\t}\n" + "}\n";
+
+    private readonly CodeGenerator _codeGenerator = new();
+
+    private readonly DialogManager _dialogManager;
+    private readonly Delegate _notifyMainWindowCommands;
+
+    private int _newFilenameCount = 1;
 
     private EditorDocumentViewModel? _selectedDocument;
 
-    public EditorViewModel()
+    public EditorViewModel(DialogManager dialogManager, Delegate notifyMainWindowCommands):this()
     {
-        // should be initialized as in original
-        Documents = new ObservableCollection<EditorDocumentViewModel>
-            { new("Document 1", "Content 1"), new("Document2", "Content 2") };
-        SelectedDocument = Documents[1];
+        _dialogManager = dialogManager;
+        _notifyMainWindowCommands = notifyMainWindowCommands;
     }
 
-    public ObservableCollection<EditorDocumentViewModel> Documents { get; set; }
+    public EditorViewModel()
+    {
+        //Avalonia designer needs this
+    }
+
+    public ObservableCollection<EditorDocumentViewModel> Documents { get; set; } = new();
 
     public EditorDocumentViewModel? SelectedDocument
     {
@@ -46,63 +51,177 @@ public partial class EditorViewModel : ViewModelBase
         {
             _selectedDocument = value;
             OnPropertyChanged(nameof(SelectedDocument));
+            // either last remaining document was closed or the first new document was created
+            if (Documents.Count <= 1) NotifyCommands();
         }
     }
 
     [RelayCommand]
-    private void GenerateDocument((string, string) headerAndContent)
+    private async Task CloseDocument(string fileName)
     {
-        // TODO: check if unique
-        Documents.Add(new EditorDocumentViewModel(headerAndContent.Item1, headerAndContent.Item2));
+        var documentToRemove = Documents.FirstOrDefault(x => x.Editor.Document.FileName == fileName);
+        if (documentToRemove is null)
+            throw new NullReferenceException("Document to remove was not found.This should not happen.");
+        if (documentToRemove.IsModified)
+        {
+            // unsafe to remove -> display dialog for confirmation
+            var result = await _dialogManager.ShowConfirmationDialogAsync("Are you sure you want to close this file?");
+            if (result is DialogToken.Cancel) return;
+        }
+
+        if (Documents.Count > 1)
+        {
+            // set selected document to the one before the one we are closing
+            var currentIndex = Documents.IndexOf(documentToRemove);
+            var priorDocument = Documents.ElementAtOrDefault(currentIndex - 1);
+            SelectedDocument = priorDocument;
+        }
+        else
+        {
+            SelectedDocument = null;
+        }
+
+        RemoveDocument(documentToRemove);
     }
 
-    [RelayCommand]
-    private void ExecuteDocument()
+    private void RemoveDocument(EditorDocumentViewModel document)
     {
-        // TODO: execute selectedDocument
-    }
-
-    [RelayCommand]
-    private void CloseDocument(string header)
-    {
-        var documentToRemove = Documents.FirstOrDefault(x => x.Header == header);
-        if (documentToRemove != null) Documents.Remove(documentToRemove);
+        document.DisposeTextMate();
+        Documents.Remove(document);
     }
 
     [RelayCommand]
     private void NewDocument()
     {
-        var newDocument = new EditorDocumentViewModel("New Document", _exampleCode);
-        Documents.Add(newDocument);
-        SelectedDocument = newDocument;
+        AddNewDocument(CreateNewFileName(), ExampleCode);
     }
 
     [RelayCommand]
-    private void OpenDocument()
+    private async Task OpenDocument()
     {
+        var filesToOpen = await _dialogManager.OpenFileDialog();
+        if (filesToOpen.Count == 0) return;
+
+        foreach (var storageFile in filesToOpen)
+        {
+            await using var stream = await storageFile.OpenReadAsync();
+            using var streamReader = new StreamReader(stream);
+            // Reads all the content of file as a text.
+            var fileContent = await streamReader.ReadToEndAsync();
+
+            AddNewDocument(storageFile.Name, fileContent);
+        }
     }
 
-    [RelayCommand]
-    private void SaveDocument(string? location)
+    [RelayCommand(CanExecute = nameof(Savable))]
+    private async Task SaveDocumentAs()
     {
+        if (SelectedDocument is null) return;
+        var fileToSave = await _dialogManager.SaveFileDialog(SelectedDocument.Editor.Document);
+        if (fileToSave is null) return;
+
+        // update filename in editor if user changed it during save dialog
+        if (fileToSave.Name != SelectedDocument.Editor.Document.FileName)
+            SelectedDocument.Editor.Document.FileName = fileToSave.Name;
+        SelectedDocument.SaveDocument(fileToSave);
     }
 
     [RelayCommand]
+    private void PrintDocument()
+    {
+        // TODO: originally not implemented
+    }
+
+    [RelayCommand]
+    private void GenerateCode()
+    {
+        var code = _codeGenerator.GenerateCode();
+        AddNewDocument(CreateNewFileName(), code);
+    }
+
+    [RelayCommand(CanExecute = nameof(SelectionAvailable))]
     private void Copy()
     {
-        // TODO: doesnt want to fire and .subscribe() doesnt work without argument
         SelectedDocument?.CopyCommand.Execute(null);
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(SelectionAvailable))]
     private void Paste()
     {
         SelectedDocument?.PasteCommand.Execute(null);
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(SelectionAvailable))]
     private void Cut()
     {
         SelectedDocument?.CutCommand.Execute(null);
+    }
+
+    [RelayCommand(CanExecute = nameof(SelectionAvailable))]
+    private void Undo()
+    {
+        SelectedDocument?.UndoCommand.Execute(null);
+    }
+
+    [RelayCommand(CanExecute = nameof(SelectionAvailable))]
+    private void Redo()
+    {
+        SelectedDocument?.RedoCommand.Execute(null);
+    }
+
+    private bool SelectionAvailable()
+    {
+        return SelectedDocument is not null;
+    }
+
+    private bool Savable()
+    {
+        return SelectedDocument is not null && SelectedDocument.IsModified;
+    }
+
+    private void NotifyCommands()
+    {
+        CopyCommand.NotifyCanExecuteChanged();
+        PasteCommand.NotifyCanExecuteChanged();
+        CutCommand.NotifyCanExecuteChanged();
+        UndoCommand.NotifyCanExecuteChanged();
+        RedoCommand.NotifyCanExecuteChanged();
+
+        // notify main window commands
+        _notifyMainWindowCommands.DynamicInvoke();
+    }
+
+    private void NotifySaveCommands()
+    {
+        SaveDocumentAsCommand.NotifyCanExecuteChanged();
+    }
+
+    private string CreateNewFileName()
+    {
+        var name = "Class" + _newFilenameCount + ".cs";
+        _newFilenameCount++;
+        return name;
+    }
+
+    private void AddNewDocument(string header, string content)
+    {
+        var newDocument = new TextDocument
+        {
+            FileName = header,
+            Text = content
+        };
+        var newDocumentTab = new EditorDocumentViewModel(newDocument, NotifySaveCommands);
+        Documents.Add(newDocumentTab);
+        SelectedDocument = newDocumentTab;
+    }
+
+    public async Task<bool> EditorCanClose()
+    {
+        var closable = Documents.All(editorDocumentViewModel => !editorDocumentViewModel.IsModified);
+        if (closable) return true;
+
+        var result = await _dialogManager.ShowConfirmationDialogAsync(
+            "There are unsaved changes. Are you sure you want to exit?");
+        return result is DialogToken.OK;
     }
 }

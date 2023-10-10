@@ -37,18 +37,22 @@
         </Style>
     </UserControl.Styles>
 
-    <TabControl SelectionChanged="TabControl_OnSelectionChanged" ItemsSource="{Binding Documents}"
-                SelectedItem="{Binding SelectedDocument}" Name="TabControl">
+    <TabControl ItemsSource="{Binding Documents}"
+                SelectedItem="{Binding SelectedDocument}">
         <TabControl.ItemTemplate>
             <DataTemplate>
                 <DockPanel>
                     <Button DockPanel.Dock="Right" Classes="CloseButton"
                             Command="{Binding ((vm:EditorViewModel)DataContext).CloseDocumentCommand, 
                             RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                            CommandParameter="{Binding Header}">
+                            CommandParameter="{Binding Editor.Document.FileName}">
                         X
                     </Button>
-                    <TextBlock Text="{Binding Header}" Classes="DocumentHeader" />
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse IsVisible="{Binding IsModified}" Width="10" Height="10" Fill="DarkSlateGray"
+                                 Margin="0 0 5 0" />
+                        <TextBlock Text="{Binding Editor.Document.FileName}" Classes="DocumentHeader" />
+                    </StackPanel>
                 </DockPanel>
             </DataTemplate>
         </TabControl.ItemTemplate>
