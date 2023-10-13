@@ -53,7 +53,6 @@ public partial class Parser
 
     public Assembly CompileForRun(string code)
     {
-        code = Preprocess(code);
         var compResults = CompilerResults(code);
 
         return compResults;
@@ -61,8 +60,6 @@ public partial class Parser
 
     public Assembly CompileForBuild(string code)
     {
-        code = Preprocess(code);
-
         var compResults = CompilerResults(code);
 
         return compResults;
@@ -70,6 +67,8 @@ public partial class Parser
 
     private Assembly CompilerResults(string code)
     {
+        code = Preprocess(code);
+        
         // Check for safety
         Validate(code);
 
@@ -101,7 +100,7 @@ public partial class Parser
 
             ms.Dispose();
 
-            builder.Append(Environment.NewLine + code);
+            //builder.Append(Environment.NewLine + code);
             throw new Exception(builder.ToString());
         }
 
@@ -127,13 +126,13 @@ public partial class Parser
         try
         {
             // Call the static method Main to modify existing QuantumComputer instance from Parser!
-            method.Invoke(null, null);
+            method?.Invoke(null, null);
         }
         catch (Exception ex)
         {
             var builder = new StringBuilder("Circuit builder errors:\n\n");
-            builder.Append(ex.InnerException.GetType()).Append(": ")
-                .AppendLine(ex.InnerException.Message);
+            builder.Append(ex.InnerException?.GetType()).Append(": ")
+                .AppendLine(ex.InnerException?.Message);
             throw new Exception(builder.ToString());
         }
 
@@ -168,8 +167,18 @@ public partial class Parser
         localComp.Reset(emptyModel);
 
         var method = asm.EntryPoint;
-        // Call the static method 'Generate'
-        method.Invoke(null, null);
+        try
+        {
+            // Call the static method Main to modify existing QuantumComputer instance from Parser!
+            method?.Invoke(null, null);
+        }
+        catch (Exception ex)
+        {
+            var builder = new StringBuilder("Circuit builder errors:\n\n");
+            builder.Append(ex.InnerException?.GetType()).Append(": ")
+                .AppendLine(ex.InnerException?.Message);
+            throw new Exception(builder.ToString());
+        }
 
         var model = localComp.GetModel();
         var currentStep = model.CurrentStep;
