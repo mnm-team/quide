@@ -504,7 +504,7 @@ public partial class MainWindowViewModel : ViewModelBase
             var asmToBuild = parser.CompileForBuild(code);
             var eval = CircuitEvaluator.GetInstance();
 
-            var methods = parser.GetMethodsCodes(code);
+            var methods = Parser.GetMethodsCodes(code);
             if (methods.Count > 0)
             {
                 var asmToRun = parser.CompileForRun(code);
@@ -517,7 +517,7 @@ public partial class MainWindowViewModel : ViewModelBase
             CompositeTools = new ObservableCollection<string>(dict.Keys);
             PropertiesPane.LoadParametrics(dict);
 
-            var generatedModel = parser.BuildModel(asmToBuild);
+            var generatedModel = Parser.BuildModel(asmToBuild);
             InitFromModel(generatedModel);
 
             _window.CircuitTab.IsSelected = true;
@@ -539,7 +539,7 @@ public partial class MainWindowViewModel : ViewModelBase
             if (string.IsNullOrWhiteSpace(code)) throw new NullReferenceException("Code is empty or not existing");
 
             var asm = parser.CompileForRun(code);
-            parser.Execute(asm, _consoleWriter);
+            Parser.Execute(asm, _consoleWriter);
 
             _window.ConsoleTab.IsSelected = true;
         }

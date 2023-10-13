@@ -2,7 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="using:AvaloniaGUI"
              x:Class="AvaloniaGUI.App"
-             RequestedThemeVariant="Light">
+             RequestedThemeVariant="Light"
+             Name="QuIDE - Quantum Integrated Development Environment">
 
     <Application.DataTemplates>
         <local:ViewLocator />

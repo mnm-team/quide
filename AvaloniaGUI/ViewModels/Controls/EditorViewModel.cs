@@ -12,15 +12,30 @@ namespace AvaloniaGUI.ViewModels.Controls;
 
 public partial class EditorViewModel : ViewModelBase
 {
-    private const string ExampleCode = "using Quantum;\n" + "using Quantum.Operations;\n" + "using System;\n" +
-                                       "using System.Numerics;\n" + "using System.Collections.Generic;\n\n" +
-                                       "namespace QuantumConsole\n" + "{\n" + "\tpublic class QuantumTest\n" + "\t{\n" +
-                                       "\t\tpublic static void Main()\n" + "\t\t{\n" +
-                                       "\t\t\tQuantumComputer comp = QuantumComputer.GetInstance();\n\n" +
-                                       "\t\t\t// create new register with initial value = 0, and width = 3 \n" +
-                                       "\t\t\tRegister x = comp.NewRegister(0, 3);\n\n" +
-                                       "\t\t\t// example: apply Hadamard Gate on qubit number 0 (least significant) \n" +
-                                       "\t\t\t//x.Hadamard(0);\n" + "\t\t}\n" + "\t}\n" + "}\n";
+    private const string ExampleCode = """
+                                       using Quantum;
+                                       using Quantum.Operations;
+                                       using System;
+                                       using System.Numerics;
+                                       using System.Collections.Generic;
+
+                                       namespace QuantumConsole
+                                       {
+                                           public class QuantumTest
+                                           {
+                                               public static void Main()
+                                               {
+                                                   QuantumComputer comp = QuantumComputer.GetInstance();
+                                       
+                                                   // create new register with initial value = 0, and width = 3
+                                                   Register x = comp.NewRegister(0, 3);
+                                       
+                                                   // example: apply Hadamard Gate on qubit number 0 (least significant)
+                                                   //x.Hadamard(0);
+                                               }
+                                           }
+                                       }
+                                       """;
 
     private readonly CodeGenerator _codeGenerator = new();
 
@@ -31,7 +46,7 @@ public partial class EditorViewModel : ViewModelBase
 
     private EditorDocumentViewModel? _selectedDocument;
 
-    public EditorViewModel(DialogManager dialogManager, Delegate notifyMainWindowCommands):this()
+    public EditorViewModel(DialogManager dialogManager, Delegate notifyMainWindowCommands) : this()
     {
         _dialogManager = dialogManager;
         _notifyMainWindowCommands = notifyMainWindowCommands;
@@ -126,10 +141,15 @@ public partial class EditorViewModel : ViewModelBase
         SelectedDocument.SaveDocument(fileToSave);
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanPrintExecute))]
     private void PrintDocument()
     {
         // TODO: originally not implemented
+    }
+
+    private static bool CanPrintExecute()
+    {
+        return false;
     }
 
     [RelayCommand]
