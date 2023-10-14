@@ -6,14 +6,11 @@
              xmlns:p="clr-namespace:AvaloniaGUI.Properties"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AvaloniaGUI.Views.Controls.TopLevelToolbar"
-             x:DataType="vm:MainWindowViewModel">
+             x:DataType="vm:MainWindowViewModel"
+             Padding="1">
 
     <!-- 
     Window.InputBindings>
-        <KeyBinding Command="New" Key="N" Modifiers="Control"/>
-        <KeyBinding Command="Open" Key="O" Modifiers="Control"/>
-        <KeyBinding Command="Save" Key="S" Modifiers="Control"/>
-        <KeyBinding Command="SaveAs" Key="S" Modifiers="Control+Alt"/>
         <KeyBinding Command="FirstPage" Key="F5" />
         <KeyBinding Command="PreviousPage" Key="F6" />
         <KeyBinding Command="NextPage" Key="F7" />
@@ -45,7 +42,8 @@
                     HotKey="Ctrl+N">
                 <Image Source="/Assets/Images/NewFile_6276.png" Width="16" />
             </Button>
-            <Button Command="{Binding EditorPane.OpenDocumentCommand}" ToolTip.Tip="{x:Static p:Resources.Open}" HotKey="Ctrl+O">
+            <Button Command="{Binding EditorPane.OpenDocumentCommand}" ToolTip.Tip="{x:Static p:Resources.Open}"
+                    HotKey="Ctrl+O">
                 <Image Source="/Assets/Images/Open_6529.png" Width="16" />
             </Button>
             <Button Command="{Binding EditorPane.SaveDocumentCommand}" ToolTip.Tip="{x:Static p:Resources.Save}"
@@ -65,7 +63,8 @@
 
             <Separator Classes="Vertical" Margin="5,2" />
 
-            <Button Command="{Binding EditorPane.CutCommand}" ToolTip.Tip="{x:Static p:Resources.Cut}" HotKey="Ctrl+X">
+            <Button Command="{Binding EditorPane.CutCommand}" ToolTip.Tip="{x:Static p:Resources.Cut}"
+                    HotKey="Ctrl+X">
                 <Image Source="/Assets/Images/Cut_6523.png" Width="16" />
             </Button>
             <Button Command="{Binding EditorPane.CopyCommand}" ToolTip.Tip="{x:Static p:Resources.Copy}"
@@ -125,7 +124,7 @@
         <Button
             DockPanel.Dock="Right"
             ToolTip.Tip="{x:Static p:Resources.ShowAbout}"
-            Command="{x:Static vm:MainWindowViewModel.CalculatorCommand}">
+            Command="{Binding CalculatorCommand}">
             <!-- Style="{StaticResource FlatButton}"-->
             <Border
                 BorderBrush="DimGray"
@@ -139,5 +138,4 @@
             </Border>
         </Button>
     </DockPanel>
-
 </UserControl>

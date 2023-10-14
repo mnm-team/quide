@@ -265,7 +265,15 @@ public partial class MainWindowViewModel : ViewModelBase
 
     #region Commands
 
-    public static ICommand CalculatorCommand => _calculatorCommand;
+    public ICommand CalculatorCommand
+    {
+        get
+        {
+            if (_calculatorCommand == null) _calculatorCommand = new DelegateCommand(null, _ => false);
+
+            return _calculatorCommand;
+        }
+    }
 
     public ICommand AboutCommand
     {

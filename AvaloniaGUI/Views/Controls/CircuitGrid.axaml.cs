@@ -17,8 +17,8 @@ namespace AvaloniaGUI.Views.Controls;
 
 public partial class CircuitGrid : UserControl
 {
-    private Line _line;
     private readonly SolidColorBrush _drawingColor = new(Colors.Black);
+    private Line _line;
 
     public CircuitGrid()
     {
@@ -28,41 +28,39 @@ public partial class CircuitGrid : UserControl
 
     private void LayoutRoot_PreviewMouseWheel(object sender, PointerWheelEventArgs e)
     {
-        CircuitGridViewModel vm = DataContext as CircuitGridViewModel;
+        var vm = DataContext as CircuitGridViewModel;
         vm.LayoutRoot_PreviewMouseWheel(e);
     }
 
     /// <summary>
-    /// Is called by PointerPressed event on GateButton.
+    ///     Is called by PointerPressed event on GateButton.
     /// </summary>
     /// <param name="sender">GateButton</param>
     /// <param name="e">event</param>
     private void GateButton_MouseDown(object sender, PointerPressedEventArgs e)
     {
-        Control source = sender as Control;
+        var source = sender as Control;
 
         if (e.GetCurrentPoint(source).Properties.IsRightButtonPressed) return;
 
-        bool shiftPressed = e.KeyModifiers == KeyModifiers.Shift;
+        var shiftPressed = e.KeyModifiers == KeyModifiers.Shift;
 
-        GateViewModel vm = source.DataContext as GateViewModel;
+        var vm = source.DataContext as GateViewModel;
 
         // perform drawing operation for control gate
         if (MainWindowViewModel.SelectedAction == ActionName.Control && !shiftPressed)
         {
-            Button button = source as Button;
+            var button = source as Button;
 
-            Point coordinates =
-                new Point(0, 0).Transform(button.TransformToVisual(drawing)
-                    .GetValueOrDefault()) /
-                (DataContext as CircuitGridViewModel).ScaleFactor; //.Transform(new Point(0, 0));
+            var coordinates = new Point(0, 0).Transform(button.TransformToVisual(drawing)
+                .GetValueOrDefault()) / (DataContext as CircuitGridViewModel).ScaleFactor;
 
             const double diameter = 12;
 
-            double centerX = coordinates.X + 0.5 * CircuitGridViewModel.GateWidth;
-            double centerY = coordinates.Y + 0.5 * CircuitGridViewModel.QubitSize;
+            var centerX = coordinates.X + 0.5 * CircuitGridViewModel.GateWidth;
+            var centerY = coordinates.Y + 0.5 * CircuitGridViewModel.QubitSize;
 
-            Ellipse ctrlPoint = new Ellipse
+            var ctrlPoint = new Ellipse
             {
                 Width = diameter,
                 Height = diameter,
@@ -90,9 +88,9 @@ public partial class CircuitGrid : UserControl
         }
 
         // fetch grid with gates to draw
-        Tuple<int, RegisterRefModel> data = new Tuple<int, RegisterRefModel>(vm.Column, vm.Row);
+        var data = new Tuple<int, RegisterRefModel>(vm.Column, vm.Row);
 
-        DataObject dragData = new DataObject();
+        var dragData = new DataObject();
         dragData.Set(typeof(Tuple<int, RegisterRefModel>).ToString(), data);
 
         DragDrop.DoDragDrop(e, dragData, DragDropEffects.Link);
@@ -129,14 +127,14 @@ public partial class CircuitGrid : UserControl
 
         var offset = new Vector(-10, 4);
 
-        Point mouse = (e.GetPosition(drawing) + offset) / scaleFactor;
+        var mouse = (e.GetPosition(drawing) + offset) / scaleFactor;
 
         _line.EndPoint = new Point(mouse.X, mouse.Y);
     }
 
     private void GateButton_Drop(object sender, DragEventArgs e)
     {
-        Control target = sender as Control;
+        var target = sender as Control;
 
         // check for Tuple<int, RegisterRefModel>
         var dataFormat = typeof(Tuple<int, RegisterRefModel>).ToString();
@@ -144,16 +142,16 @@ public partial class CircuitGrid : UserControl
         if (!e.Data.Contains(dataFormat))
             return;
 
-        Tuple<int, RegisterRefModel> data =
+        var data =
             e.Data.Get(dataFormat) as Tuple<int, RegisterRefModel>;
-        GateViewModel vm = target.DataContext as GateViewModel;
+        var vm = target.DataContext as GateViewModel;
 
         vm.SetGate(data.Item1, data.Item2, e.KeyModifiers);
 
         _line = null;
         drawing.Children.Clear();
 
-        CircuitGridViewModel circuitVM = DataContext as CircuitGridViewModel;
+        var circuitVM = DataContext as CircuitGridViewModel;
         circuitVM.SelectedObject = vm;
     }
 
@@ -170,14 +168,14 @@ public partial class CircuitGrid : UserControl
         var extentWidthChange = e.ExtentDelta.X;
         if (!(extentWidthChange > 0)) return;
 
-        CircuitGridViewModel circuitVM = DataContext as CircuitGridViewModel;
-        int addedColumn = circuitVM.LastStepAdded;
+        var circuitVM = DataContext as CircuitGridViewModel;
+        var addedColumn = circuitVM.LastStepAdded;
 
         if (addedColumn <= 0) return;
 
         // if newly added step is not fully visible
-        double scrollNeeded = extentWidthChange * (addedColumn + 1) - GatesScroll.Offset.X -
-                              GatesScroll.Viewport.Width;
+        var scrollNeeded = extentWidthChange * (addedColumn + 1) - GatesScroll.Offset.X -
+                           GatesScroll.Viewport.Width;
         if (scrollNeeded > 0)
         {
             //GatesScroll.ScrollToHorizontalOffset(GatesScroll.HorizontalOffset + scrollNeeded);

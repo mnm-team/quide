@@ -105,13 +105,10 @@ public class GateViewModel : ViewModelBase
     {
         get
         {
-            if (Value is CustomGate)
-            {
-                var endMinusBegin = Value.End - Value.Begin;
-                return CircuitGridViewModel.GateHeight + (endMinusBegin + 1) / 2 * CircuitGridViewModel.QubitSize;
-            }
+            if (Value is not CustomGate) return CircuitGridViewModel.GateHeight;
 
-            return CircuitGridViewModel.GateHeight;
+            var endMinusBegin = Value.End - Value.Begin;
+            return CircuitGridViewModel.GateHeight + (endMinusBegin + 1) / 2 * CircuitGridViewModel.QubitSize;
         }
     }
 

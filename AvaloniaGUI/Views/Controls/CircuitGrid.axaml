@@ -35,13 +35,11 @@
                             <ItemsControl.RenderTransform>
                                 <ScaleTransform
                                     ScaleX="{Binding ScaleFactor}" ScaleY="{Binding ScaleFactor}" />
-                                <!-- CenterX="0" CenterY="0"/-->
                             </ItemsControl.RenderTransform>
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Vertical" VerticalAlignment="Top"
-                                                HorizontalAlignment="Left" Margin="0,0,0,0">
-                                    </StackPanel>
+                                                HorizontalAlignment="Left" Margin="0,0,0,0" />
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
@@ -56,7 +54,6 @@
                                                             RenderTransformOrigin="{Binding ScaleCenterY}">
                                                     <StackPanel.RenderTransform>
                                                         <ScaleTransform ScaleX="1" ScaleY="-1" />
-                                                        <!--CenterY="{Binding ScaleCenterY}" /-->
                                                     </StackPanel.RenderTransform>
                                                 </StackPanel>
                                             </ItemsPanelTemplate>
@@ -164,7 +161,6 @@
                                   RenderTransformOrigin="0,0">
                         <ItemsControl.RenderTransform>
                             <ScaleTransform ScaleX="{Binding ScaleFactor}" ScaleY="{Binding ScaleFactor}" />
-                            <!--CenterX="0" CenterY="0"/-->
                         </ItemsControl.RenderTransform>
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -219,8 +215,7 @@
                                                                             Margin="2"
                                                                             FontFamily="Cambria"
                                                                             FontStyle="Italic"
-                                                                            Text="{Binding GateText}">
-                                                                        </TextBlock>
+                                                                            Text="{Binding GateText}" />
                                                                     </Viewbox>
                                                                     <Canvas.RenderTransform>
                                                                         <TransformGroup>
@@ -236,8 +231,7 @@
                                                     </Grid>
                                                     <!-- Additional properties -->
                                                     <custom:GateButton.Transform>
-                                                        <ScaleTransform ScaleX="1" ScaleY="-1">
-                                                        </ScaleTransform>
+                                                        <ScaleTransform ScaleX="1" ScaleY="-1" />
                                                     </custom:GateButton.Transform>
                                                     <custom:GateButton.ContextMenu>
                                                         <ContextMenu>
