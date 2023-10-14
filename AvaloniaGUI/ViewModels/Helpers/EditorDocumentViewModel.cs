@@ -12,6 +12,7 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Indentation.CSharp;
 using AvaloniaEdit.TextMate;
+using AvaloniaGUI.CodeHelpers;
 using CommunityToolkit.Mvvm.Input;
 using TextMateSharp.Grammars;
 
@@ -25,15 +26,19 @@ public partial class EditorDocumentViewModel : ViewModelBase
     private ThemeName _editorTheme;
 
     private bool _isModified;
+    public string? Location;
 
     private RegistryOptions _registryOptions;
     private Language _selectedLanguage;
     private TextMate.Installation _textMateInstallation;
 
-    public EditorDocumentViewModel(TextDocument document, Delegate notifyEditorCommands) :
+    public EditorDocumentViewModel(TextDocument document, bool isModified, Delegate notifyEditorCommands, string? location) :
         this()
     {
         _notifyEditorCommands = notifyEditorCommands;
+        _isModified = isModified;
+        Location = location;
+        
         InitializeEditor(document);
     }
 
@@ -97,7 +102,7 @@ public partial class EditorDocumentViewModel : ViewModelBase
         };
     }
 
-    private void InitializeEditor(TextDocument document, bool unsaved = false)
+    private void InitializeEditor(TextDocument document)
     {
         _editorTheme = ThemeName.LightPlus;
         _registryOptions = new RegistryOptions(
@@ -107,7 +112,6 @@ public partial class EditorDocumentViewModel : ViewModelBase
         _selectedLanguage = Languages[0];
 
         _currentlySavedText = document.Text;
-        _isModified = unsaved;
 
         // handler to update IsModified property
         document.UpdateFinished += (_, _) => { IsModified = _currentlySavedText != document.Text; };
@@ -189,15 +193,41 @@ public partial class EditorDocumentViewModel : ViewModelBase
         _editor.Redo();
     }
 
-    public async void SaveDocument(IStorageFile file)
+    public async void SaveDocumentAs(IStorageFile file)
     {
-        await using var stream = await file.OpenWriteAsync();
-        await using var streamWriter = new StreamWriter(stream);
-        // Write some content to the file.
-        var text = Editor.Document.Text;
-        await streamWriter.WriteLineAsync(text);
+        try
+        {
+            await using var stream = await file.OpenWriteAsync();
+            await using var streamWriter = new StreamWriter(stream);
+            // Write some content to the file.
+            var text = Editor.Document.Text;
+            await streamWriter.WriteLineAsync(text);
 
-        _currentlySavedText = text;
-        IsModified = false;
+            _currentlySavedText = text;
+            IsModified = false;
+            Location = file.TryGetLocalPath();
+        }
+        catch (Exception e)
+        {
+            SimpleDialogHandler.ShowSimpleMessage(e.Message);
+        }
+    }
+
+    public void SaveDocument()
+    {
+        if(Location is null) return;
+        
+        try
+        {
+            var text = Editor.Document.Text;
+            File.WriteAllText(Location, text);
+            
+            _currentlySavedText = text;
+            IsModified = false;
+        }
+        catch (Exception e)
+        {
+            SimpleDialogHandler.ShowSimpleMessage(e.Message);
+        }
     }
 }

@@ -48,7 +48,7 @@
             <Button Command="{Binding EditorPane.OpenDocumentCommand}" ToolTip.Tip="{x:Static p:Resources.Open}" HotKey="Ctrl+O">
                 <Image Source="/Assets/Images/Open_6529.png" Width="16" />
             </Button>
-            <Button Command="{Binding EditorPane.SaveDocumentAsCommand}" ToolTip.Tip="{x:Static p:Resources.Save}"
+            <Button Command="{Binding EditorPane.SaveDocumentCommand}" ToolTip.Tip="{x:Static p:Resources.Save}"
                     HotKey="Ctrl+S">
                 <Image Source="/Assets/Images/Save_6530.png" Width="16" />
             </Button>

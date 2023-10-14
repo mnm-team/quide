@@ -397,7 +397,7 @@ public class OutputGridViewModel : ViewModelBase
         var message = e.Message;
         if (e.InnerException != null) message = message + ":\n" + e.InnerException.Message;
 
-        SimpleDialogHandler.ShowMessage(message);
+        SimpleDialogHandler.ShowSimpleMessage(message);
     }
 
     #endregion // Private Helpers

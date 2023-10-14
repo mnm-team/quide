@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Platform.Storage;
 using AvaloniaEdit.Document;
 using AvaloniaGUI.CodeHelpers;
 using AvaloniaGUI.ViewModels.Helpers;
@@ -108,7 +109,7 @@ public partial class EditorViewModel : ViewModelBase
     [RelayCommand]
     private void NewDocument()
     {
-        AddNewDocument(CreateNewFileName(), ExampleCode);
+        AddNewDocument(CreateNewFileName(), ExampleCode, true);
     }
 
     [RelayCommand]
@@ -119,16 +120,37 @@ public partial class EditorViewModel : ViewModelBase
 
         foreach (var storageFile in filesToOpen)
         {
+            // dont open already opened files
+            if(Documents.Any(x => x.Editor.Document.FileName == storageFile.Name)) continue;
+            
             await using var stream = await storageFile.OpenReadAsync();
             using var streamReader = new StreamReader(stream);
             // Reads all the content of file as a text.
             var fileContent = await streamReader.ReadToEndAsync();
 
-            AddNewDocument(storageFile.Name, fileContent);
+            AddNewDocument(storageFile.Name, fileContent, false, storageFile.TryGetLocalPath());
         }
     }
 
     [RelayCommand(CanExecute = nameof(Savable))]
+    private async Task SaveDocument()
+    {
+        if (SelectedDocument is null) return;
+
+        var location = SelectedDocument.Location;
+        
+        // if file was not saved before, use saveAs to actually set location as well
+        if (location is null)
+        {
+            await SaveDocumentAs();
+            return;
+        }
+        
+        SelectedDocument.SaveDocument();
+        NotifySaveCommands();
+    }
+
+    [RelayCommand(CanExecute = nameof(SavableAs))]
     private async Task SaveDocumentAs()
     {
         if (SelectedDocument is null) return;
@@ -138,7 +160,8 @@ public partial class EditorViewModel : ViewModelBase
         // update filename in editor if user changed it during save dialog
         if (fileToSave.Name != SelectedDocument.Editor.Document.FileName)
             SelectedDocument.Editor.Document.FileName = fileToSave.Name;
-        SelectedDocument.SaveDocument(fileToSave);
+        SelectedDocument.SaveDocumentAs(fileToSave);
+        NotifySaveCommands();
     }
 
     [RelayCommand(CanExecute = nameof(CanPrintExecute))]
@@ -156,7 +179,7 @@ public partial class EditorViewModel : ViewModelBase
     private void GenerateCode()
     {
         var code = _codeGenerator.GenerateCode();
-        AddNewDocument(CreateNewFileName(), code);
+        AddNewDocument(CreateNewFileName(), code, true);
     }
 
     [RelayCommand(CanExecute = nameof(SelectionAvailable))]
@@ -199,6 +222,11 @@ public partial class EditorViewModel : ViewModelBase
         return SelectedDocument is not null && SelectedDocument.IsModified;
     }
 
+    private bool SavableAs()
+    {
+        return SelectedDocument is not null;
+    }
+
     private void NotifyCommands()
     {
         CopyCommand.NotifyCanExecuteChanged();
@@ -213,6 +241,7 @@ public partial class EditorViewModel : ViewModelBase
 
     private void NotifySaveCommands()
     {
+        SaveDocumentCommand.NotifyCanExecuteChanged();
         SaveDocumentAsCommand.NotifyCanExecuteChanged();
     }
 
@@ -223,16 +252,17 @@ public partial class EditorViewModel : ViewModelBase
         return name;
     }
 
-    private void AddNewDocument(string header, string content)
+    private void AddNewDocument(string header, string content, bool isModified, string? location = null)
     {
         var newDocument = new TextDocument
         {
             FileName = header,
             Text = content
         };
-        var newDocumentTab = new EditorDocumentViewModel(newDocument, NotifySaveCommands);
+        var newDocumentTab = new EditorDocumentViewModel(newDocument, isModified, NotifySaveCommands, location);
         Documents.Add(newDocumentTab);
         SelectedDocument = newDocumentTab;
+        NotifySaveCommands();
     }
 
     public async Task<bool> EditorCanClose()

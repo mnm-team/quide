@@ -255,17 +255,6 @@ public partial class MainWindowViewModel : ViewModelBase
     private DelegateCommand _nextStep;
     private DelegateCommand _run;
 
-    private DelegateCommand _new;
-    private DelegateCommand _open;
-    private DelegateCommand _save;
-    private DelegateCommand _saveAs;
-
-    // not implemented
-    private DelegateCommand _print;
-    private DelegateCommand _cut;
-    private DelegateCommand _copy;
-    private DelegateCommand _paste;
-
     private static DelegateCommand _calculatorCommand;
 
     private DelegateCommand _aboutCommand;
@@ -461,7 +450,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            SimpleDialogHandler.ShowMessage("Unable to create composite gate from selection:\n" + ex.Message,
+            SimpleDialogHandler.ShowSimpleMessage("Unable to create composite gate from selection:\n" + ex.Message,
                 "Unable to create composite gate");
         }
     }
@@ -524,7 +513,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         catch (Exception e)
         {
-            SimpleDialogHandler.ShowMessage(e.Message);
+            PrintException(e);
         }
     }
 
@@ -693,54 +682,12 @@ public partial class MainWindowViewModel : ViewModelBase
         OnPropertyChanged(nameof(ConsoleOutput));
     }
 
-    private void Save() //DocumentInfo info)
-    {
-        //TODO:
-        // if (string.IsNullOrWhiteSpace(info.FullPath))
-        // {
-        //     SaveAs(info);
-        // }
-        // else
-        // {
-        //     info.Editor.Save(info.FullPath);
-        // }
-    }
-
-    private void SaveAs() //DocumentInfo info)
-    {
-        //TODO:
-        // SaveFileDialog dialog = new SaveFileDialog();
-        // dialog.Filter = "C# Files (*.cs)|*.cs|Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
-        // dialog.AddExtension = true;
-        // dialog.DefaultExt = ".cs";
-        // dialog.FileName = info.Title;
-        // bool? result = dialog.ShowDialog();
-        //
-        // // If the file name is not an empty string open it for saving.
-        // if (result == true && !string.IsNullOrWhiteSpace(dialog.FileName))
-        // {
-        //     TextEditor editor = info.Editor;
-        //     editor.Save(dialog.FileName);
-        //
-        //     if (info.FullPath != null)
-        //     {
-        //         _openFiles.Remove(info.FullPath);
-        //     }
-        //
-        //     _openFiles[dialog.FileName] = info.ID;
-        //
-        //     info.FullPath = dialog.FileName;
-        //     info.Title = dialog.SafeFileName;
-        //     info.Tab.Title = dialog.SafeFileName;
-        // }
-    }
-
     private static void PrintException(Exception e)
     {
         var message = e.Message;
         if (e.InnerException != null) message = message + ":\n" + e.InnerException.Message;
 
-        SimpleDialogHandler.ShowMessage(message);
+        SimpleDialogHandler.ShowSimpleMessage(message);
     }
 
     #endregion // Private Helpers

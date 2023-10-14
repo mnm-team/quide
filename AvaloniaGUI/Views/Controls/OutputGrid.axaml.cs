@@ -47,7 +47,7 @@ public partial class OutputGrid : UserControl
         }
         catch (Exception ex)
         {
-            SimpleDialogHandler.ShowMessage(ex.Message);
+            SimpleDialogHandler.ShowSimpleMessage(ex.Message);
         }
     }
 
@@ -64,7 +64,7 @@ public partial class OutputGrid : UserControl
         }
         catch (Exception ex)
         {
-            SimpleDialogHandler.ShowMessage(ex.Message);
+            SimpleDialogHandler.ShowSimpleMessage(ex.Message);
         }
     }
 
@@ -79,7 +79,7 @@ public partial class OutputGrid : UserControl
         }
         catch (Exception ex)
         {
-            SimpleDialogHandler.ShowMessage(ex.Message);
+            SimpleDialogHandler.ShowSimpleMessage(ex.Message);
         }
     }
 
