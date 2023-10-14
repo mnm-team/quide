@@ -15,8 +15,8 @@
                         Content="{TemplateBinding Content}" RenderTransform="{TemplateBinding Transform}"
                         ContextMenu="{TemplateBinding ContextMenu}">
                     <Button.Styles>
-                        <Style Selector="Button:pressed">
-                            <Setter Property="RenderTransform" Value="scale(1,-1)"></Setter>
+                        <Style Selector="Button:focus-within">
+                            <Setter Property="RenderTransform" Value="scale(1,-1)" />
                         </Style>
                     </Button.Styles>
                 </Button>

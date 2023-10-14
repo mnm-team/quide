@@ -26,19 +26,20 @@ public partial class EditorDocumentViewModel : ViewModelBase
     private ThemeName _editorTheme;
 
     private bool _isModified;
-    public string? Location;
+    private string? _location;
 
     private RegistryOptions _registryOptions;
     private Language _selectedLanguage;
     private TextMate.Installation _textMateInstallation;
 
-    public EditorDocumentViewModel(TextDocument document, bool isModified, Delegate notifyEditorCommands, string? location) :
+    public EditorDocumentViewModel(TextDocument document, bool isModified, Delegate notifyEditorCommands,
+        string? location) :
         this()
     {
         _notifyEditorCommands = notifyEditorCommands;
         _isModified = isModified;
-        Location = location;
-        
+        _location = location;
+
         InitializeEditor(document);
     }
 
@@ -76,6 +77,16 @@ public partial class EditorDocumentViewModel : ViewModelBase
             OnPropertyChanged(nameof(IsModified));
             // notify EditorViewModel to update its commands
             _notifyEditorCommands.DynamicInvoke();
+        }
+    }
+
+    public string? Location
+    {
+        get => _location;
+        set
+        {
+            _location = value;
+            OnPropertyChanged(nameof(Location));
         }
     }
 
@@ -215,13 +226,13 @@ public partial class EditorDocumentViewModel : ViewModelBase
 
     public void SaveDocument()
     {
-        if(Location is null) return;
-        
+        if (Location is null) return;
+
         try
         {
             var text = Editor.Document.Text;
             File.WriteAllText(Location, text);
-            
+
             _currentlySavedText = text;
             IsModified = false;
         }
