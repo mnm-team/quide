@@ -15,10 +15,9 @@ namespace AvaloniaGUI.ViewModels.Dialog;
 
 public class CompositeInputViewModel : ViewModelBase
 {
-    private string _name = string.Empty;
-
     private readonly Dictionary<string, List<MethodInfo>> _extensionGates;
     private readonly ComputerModel _model;
+    private string _name = string.Empty;
 
     private bool _nameValid;
 
@@ -26,6 +25,10 @@ public class CompositeInputViewModel : ViewModelBase
     {
         _extensionGates = extensionGates;
         _model = model;
+    }
+
+    public CompositeInputViewModel()
+    {
     }
 
     [CompositeName]

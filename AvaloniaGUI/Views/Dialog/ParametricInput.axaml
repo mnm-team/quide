@@ -71,9 +71,10 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="helpers:ParameterViewModel">
                         <TextBlock
-                            Height="23"
+                            MinHeight="32"
                             VerticalAlignment="Center"
                             Margin="0, 3"
+                            Padding="0,5,0,0"
                             Text="{Binding TypeString}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -91,10 +92,12 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="helpers:ParameterViewModel">
                         <TextBlock
-                            Height="23"
+                            MinHeight="32"
                             VerticalAlignment="Center"
                             Margin="10, 3"
+                            Padding="0,5,0,0"
                             Text="{Binding Name}" />
+                        <!-- MinHeight="{x:Static TextBlock.MinHeightProperty}" -->
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -102,7 +105,8 @@
             <!-- Params -->
             <ItemsControl Grid.Row="0"
                           Grid.Column="3"
-                          ItemsSource="{Binding Parameters}">
+                          ItemsSource="{Binding Parameters}"
+                          Name="ParamInputs">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical" />
@@ -112,7 +116,6 @@
                     <DataTemplate x:DataType="helpers:ParameterViewModel">
                         <TextBox
                             HorizontalAlignment="Stretch"
-                            Height="23"
                             Margin="0, 3"
                             Text="{Binding ValueString, Mode=TwoWay}"
                             PropertyChanged="ValueChanged" />
