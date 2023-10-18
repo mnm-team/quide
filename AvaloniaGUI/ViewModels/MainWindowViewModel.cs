@@ -694,6 +694,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         var message = e.Message;
         if (e.InnerException != null) message = message + ":\n" + e.InnerException.Message;
+        message = message + "\n" + e.StackTrace;
 
         SimpleDialogHandler.ShowSimpleMessage(message);
     }
