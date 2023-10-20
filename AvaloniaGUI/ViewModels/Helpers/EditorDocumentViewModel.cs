@@ -125,7 +125,11 @@ public partial class EditorDocumentViewModel : ViewModelBase
         _currentlySavedText = document.Text;
 
         // handler to update IsModified property
-        document.UpdateFinished += (_, _) => { IsModified = _currentlySavedText != document.Text; };
+        document.UpdateFinished += (_, _) =>
+        {
+            // always new document
+            IsModified = string.IsNullOrWhiteSpace(_location) || _currentlySavedText != document.Text;
+        };
 
         _editor = new TextEditor
         {

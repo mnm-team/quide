@@ -28,51 +28,52 @@
             toolbar in https://github.com/Splitwirez/Mechanism-for-Avalonia/-->
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
             <Button Command="{Binding EditorPane.UndoCommand}" ToolTip.Tip="{x:Static p:Resources.Undo}"
-                    HotKey="Ctrl+Z">
+                    HotKey="{OnPlatform Ctrl+Z, macOS=⌘+Z}">
                 <Image Source="/Assets/Images/undo.png" Width="16" />
             </Button>
             <Button Command="{Binding EditorPane.RedoCommand}" ToolTip.Tip="{x:Static p:Resources.Redo}"
-                    HotKey="Ctrl+Shift+Z">
+                    HotKey="{OnPlatform Ctrl+Shift+Z, macOS=⌘+Shift+Z}">
                 <Image Source="/Assets/Images/redo.png" Width="16" />
             </Button>
 
             <Separator Classes="Vertical" Margin="5,2" />
 
             <Button Command="{Binding EditorPane.NewDocumentCommand}" ToolTip.Tip="{x:Static p:Resources.New}"
-                    HotKey="Ctrl+N">
+                    HotKey="{OnPlatform Ctrl+N, macOS=⌘+N}">
                 <Image Source="/Assets/Images/NewFile_6276.png" Width="16" />
             </Button>
             <Button Command="{Binding EditorPane.OpenDocumentCommand}" ToolTip.Tip="{x:Static p:Resources.Open}"
-                    HotKey="Ctrl+O">
+                    HotKey="{OnPlatform Ctrl+O, macOS=⌘+O}">
                 <Image Source="/Assets/Images/Open_6529.png" Width="16" />
             </Button>
             <Button Command="{Binding EditorPane.SaveDocumentCommand}" ToolTip.Tip="{x:Static p:Resources.Save}"
-                    HotKey="Ctrl+S">
+                    HotKey="{OnPlatform Ctrl+S, macOS=⌘+S}">
                 <Image Source="/Assets/Images/Save_6530.png" Width="16" />
             </Button>
             <Button Command="{Binding EditorPane.SaveDocumentAsCommand}" ToolTip.Tip="{x:Static p:Resources.SaveAs}"
-                    HotKey="Ctrl+Alt+S">
+                    HotKey="{OnPlatform Ctrl+A, macOS=⌘+A}">
                 <Image Source="/Assets/Images/SaveAs.png" Width="16" />
             </Button>
 
             <Separator Classes="Vertical" Margin="5,0" />
 
-            <Button Command="{Binding EditorPane.PrintDocumentCommand}" ToolTip.Tip="{x:Static p:Resources.Print}">
+            <Button Command="{Binding EditorPane.PrintDocumentCommand}" ToolTip.Tip="{x:Static p:Resources.Print}"
+                    HotKey="{OnPlatform Ctrl+P, macOS=⌘+P}">
                 <Image Source="/Assets/Images/Print_11009.png" Width="16" />
             </Button>
 
             <Separator Classes="Vertical" Margin="5,2" />
 
             <Button Command="{Binding EditorPane.CutCommand}" ToolTip.Tip="{x:Static p:Resources.Cut}"
-                    HotKey="Ctrl+X">
+                    HotKey="{OnPlatform Ctrl+X, macOS=⌘+X}">
                 <Image Source="/Assets/Images/Cut_6523.png" Width="16" />
             </Button>
             <Button Command="{Binding EditorPane.CopyCommand}" ToolTip.Tip="{x:Static p:Resources.Copy}"
-                    HotKey="Ctrl+C">
+                    HotKey="{OnPlatform Ctrl+C, macOS=⌘+C}">
                 <Image Source="/Assets/Images/Copy_6524.png" Width="16" />
             </Button>
             <Button Command="{Binding EditorPane.PasteCommand}" ToolTip.Tip="{x:Static p:Resources.Paste}"
-                    HotKey="Ctrl+V">
+                    HotKey="{OnPlatform Ctrl+V, macOS=⌘+V}">
                 <Image Source="/Assets/Images/Paste_6520.png" Width="16" />
             </Button>
 

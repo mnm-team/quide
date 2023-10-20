@@ -69,15 +69,18 @@
                 </Button>
 
                 <Button x:Name="cut" ToolTip.Tip="{x:Static p:Resources.Cut}"
-                        Command="{Binding CutGatesCommand}" HotKey="Ctrl+X">
+                        Command="{Binding CutGatesCommand}"
+                        HotKey="{OnPlatform Ctrl+X, macOS=⌘+X}">
                     <Image Source="/Assets/Images/Cut_6523.png" Width="16" />
                 </Button>
                 <Button x:Name="copy" ToolTip.Tip="{x:Static p:Resources.Copy}"
-                        Command="{Binding CopyGatesCommand}" HotKey="Ctrl+C">
+                        Command="{Binding CopyGatesCommand}"
+                        HotKey="{OnPlatform Ctrl+C, macOS=⌘+C}">
                     <Image Source="/Assets/Images/Copy_6524.png" Width="16" />
                 </Button>
                 <Button x:Name="paste" ToolTip.Tip="{x:Static p:Resources.Paste}"
-                        Command="{Binding PasteGatesCommand}" HotKey="Ctrl+V">
+                        Command="{Binding PasteGatesCommand}"
+                        HotKey="{OnPlatform Ctrl+V, macOS=⌘+V}">
                     <Image Source="/Assets/Images/Paste_6520.png" Width="16" />
                 </Button>
             </StackPanel>
