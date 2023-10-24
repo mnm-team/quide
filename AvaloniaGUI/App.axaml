@@ -20,6 +20,10 @@
         <Style Selector="Button">
             <Setter Property="Background" Value="Transparent" />
         </Style>
+        <Style Selector="Button:disabled">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Opacity" Value="0.3" />
+        </Style>
 
         <Style Selector="Separator.Vertical">
             <Setter Property="RenderTransform">
