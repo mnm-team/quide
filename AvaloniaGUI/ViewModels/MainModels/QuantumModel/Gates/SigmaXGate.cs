@@ -28,8 +28,6 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel.Gates
 {
     public class SigmaXGate : SingleGate
     {
-        private RegisterRefModel _target;
-
         public SigmaXGate(RegisterRefModel target)
             : base(target)
         {

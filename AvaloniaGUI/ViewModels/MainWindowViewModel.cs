@@ -245,11 +245,6 @@ public partial class MainWindowViewModel : ViewModelBase
     private DelegateCommand _copyGates;
     private DelegateCommand _pasteGates;
 
-    private DelegateCommand _generateCode;
-
-    private DelegateCommand _generateFromCode;
-    private DelegateCommand _runInConsole;
-
     private DelegateCommand _restart;
     private DelegateCommand _prevStep;
     private DelegateCommand _nextStep;
@@ -258,7 +253,6 @@ public partial class MainWindowViewModel : ViewModelBase
     private static DelegateCommand _calculatorCommand;
 
     private DelegateCommand _aboutCommand;
-    //private CalcWindow _calcWindow;
 
     #endregion // Fields
 

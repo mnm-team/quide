@@ -73,11 +73,6 @@ public class StepViewModel : ViewModelBase
     {
         get
         {
-            if (_stepMargin == null)
-            {
-                return _model.CurrentStep == _column ? currentMargin : noMargin;
-            }
-
             return _stepMargin;
         }
         set
