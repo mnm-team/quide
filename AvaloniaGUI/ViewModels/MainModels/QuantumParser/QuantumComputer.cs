@@ -549,7 +549,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
             return new Register(_model, reg, regModel);
         }
 
-        private void Registers_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        private void Registers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (_listenToModelChanges)
             {
@@ -557,7 +557,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumParser
             }
         }
 
-        private void Qubits_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        private void Qubits_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             InitFromModel(_model);
         }

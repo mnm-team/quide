@@ -45,7 +45,7 @@ public partial class EditorViewModel : ViewModelBase
 
     private int _newFilenameCount = 1;
 
-    private EditorDocumentViewModel? _selectedDocument;
+    private EditorDocumentViewModel _selectedDocument;
 
     public EditorViewModel(DialogManager dialogManager, Delegate notifyMainWindowCommands) : this()
     {
@@ -60,7 +60,7 @@ public partial class EditorViewModel : ViewModelBase
 
     public ObservableCollection<EditorDocumentViewModel> Documents { get; set; } = new();
 
-    public EditorDocumentViewModel? SelectedDocument
+    public EditorDocumentViewModel SelectedDocument
     {
         get => _selectedDocument;
         set
@@ -252,7 +252,7 @@ public partial class EditorViewModel : ViewModelBase
         return name;
     }
 
-    private void AddNewDocument(string header, string content, bool isModified, string? location = null)
+    private void AddNewDocument(string header, string content, bool isModified, string location = null)
     {
         var newDocument = new TextDocument
         {

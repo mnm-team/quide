@@ -16,7 +16,7 @@ public partial class CircuitGridToolbar : UserControl
         MainWindowViewModel.CompositeSelected();
     }
 
-    private void CompositeSelectionFocused(object? sender, GotFocusEventArgs e)
+    private void CompositeSelectionFocused(object sender, GotFocusEventArgs e)
     {
         if (e.Source is not ComboBox comboBox) return;
 

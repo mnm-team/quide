@@ -34,7 +34,7 @@ public class QubitViewModel : ViewModelBase
 
     #region Private Helpers
 
-    private void _model_CurrentStepChanged(object? sender, EventArgs eventArgs)
+    private void _model_CurrentStepChanged(object sender, EventArgs eventArgs)
     {
         OnPropertyChanged(nameof(IsEnabled));
     }

@@ -8,7 +8,7 @@ namespace AvaloniaGUI.CodeHelpers;
 
 public class UIntegerNumber : ValidationAttribute
 {
-    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
     {
         // Is a whole number? 
         return !uint.TryParse((string)value, out _)

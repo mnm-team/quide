@@ -71,7 +71,7 @@ public class DialogManager
         return resultString is "Yes" ? DialogToken.OK : DialogToken.Cancel;
     }
 
-    public async Task<IStorageFile?> SaveFileDialog(TextDocument documentToSave, string defaultExtension = ".cs")
+    public async Task<IStorageFile> SaveFileDialog(TextDocument documentToSave, string defaultExtension = ".cs")
     {
         var handler = _hostWindow.StorageProvider;
 

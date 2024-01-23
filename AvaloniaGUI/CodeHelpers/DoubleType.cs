@@ -8,7 +8,7 @@ namespace AvaloniaGUI.CodeHelpers;
 
 public class DoubleType : ValidationAttribute
 {
-    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
     {
         // Is a number? 
         return !double.TryParse((string)value, out _)

@@ -58,7 +58,7 @@ public partial class ParametricInput : UserControl
         _dataContext.AddParam();
     }
 
-    private void ValueChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    private void ValueChanged(object sender, AvaloniaPropertyChangedEventArgs e)
     {
         if (_dataContext is null) return;
 

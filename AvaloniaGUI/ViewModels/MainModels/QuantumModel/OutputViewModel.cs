@@ -34,7 +34,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
     {
         #region Events
 
-        public event EventHandler? OutputChanged;
+        public event EventHandler OutputChanged;
 
         private void OnOutputChanged()
         {

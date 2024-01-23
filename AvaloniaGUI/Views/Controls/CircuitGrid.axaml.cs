@@ -96,13 +96,13 @@ public partial class CircuitGrid : UserControl
         DragDrop.DoDragDrop(e, dragData, DragDropEffects.Link);
     }
 
-    private void ctrlPoint_Drop(object? sender, PointerEventArgs pointerEventArgs)
+    private void ctrlPoint_Drop(object sender, PointerEventArgs pointerEventArgs)
     {
         _line = null;
         drawing.Children.Clear();
     }
 
-    private void Drawing_Drop(object? sender, DragEventArgs e)
+    private void Drawing_Drop(object sender, DragEventArgs e)
     {
         _line = null;
         drawing.Children.Clear();

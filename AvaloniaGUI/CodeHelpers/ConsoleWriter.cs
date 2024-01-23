@@ -49,7 +49,7 @@ public class ConsoleWriter : StringWriter
 
     #region Events
 
-    public event EventHandler? TextChanged;
+    public event EventHandler TextChanged;
 
     private void OnTextChanged()
     {

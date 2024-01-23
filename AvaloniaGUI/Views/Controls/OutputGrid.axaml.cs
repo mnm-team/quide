@@ -34,7 +34,7 @@ public partial class OutputGrid : UserControl
         _dataContext.SelectedIndex = statesList.SelectedIndex;
     }
 
-    private void RegisterBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    private void RegisterBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         try
         {

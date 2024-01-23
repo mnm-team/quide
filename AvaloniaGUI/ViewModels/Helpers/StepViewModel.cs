@@ -137,7 +137,7 @@ public class StepViewModel : ViewModelBase
         return gates;
     }
 
-    private void Gates_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void Gates_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
         if (_dialogManager is null) return;
 

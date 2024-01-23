@@ -734,19 +734,19 @@ public class PropertiesViewModel : ViewModelBase
 
     #region Private Helpers
 
-    private void outputGrid_SelectionChanged(object? sender, EventArgs eventArgs)
+    private void outputGrid_SelectionChanged(object sender, EventArgs eventArgs)
     {
         OutputGridViewModel outputGrid = sender as OutputGridViewModel;
         SelectedObject = outputGrid.SelectedObject;
     }
 
-    private void circuitGrid_SelectionChanged(object? sender, EventArgs eventArgs)
+    private void circuitGrid_SelectionChanged(object sender, EventArgs eventArgs)
     {
         CircuitGridViewModel grid = sender as CircuitGridViewModel;
         SelectedObject = grid.SelectedObject;
     }
 
-    private void circuitGrid_QubitsChanged(object? sender, EventArgs eventArgs)
+    private void circuitGrid_QubitsChanged(object sender, EventArgs eventArgs)
     {
         OnPropertyChanged(nameof(Value));
         OnPropertyChanged(nameof(Qubits));
@@ -970,7 +970,7 @@ public class PropertiesViewModel : ViewModelBase
         }
     }
 
-    private void parameter_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void parameter_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName.Equals("IsValid"))
         {

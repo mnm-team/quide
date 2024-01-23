@@ -22,7 +22,7 @@ namespace AvaloniaGUI.CodeHelpers;
 /// </summary>
 public class ImageConverter : IValueConverter
 {
-    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         // Display no image (path was set to null)
         if (string.IsNullOrEmpty(value as string))
@@ -40,7 +40,7 @@ public class ImageConverter : IValueConverter
         }
         else
         {
-            string? assemblyName = Assembly.GetEntryAssembly()?.GetName().Name;
+            string assemblyName = Assembly.GetEntryAssembly()?.GetName().Name;
             uri = new Uri($"avares://{assemblyName}{rawUri}");
         }
 
@@ -49,7 +49,7 @@ public class ImageConverter : IValueConverter
         return new Bitmap(asset);
     }
 
-    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
         throw new NotSupportedException();
     }

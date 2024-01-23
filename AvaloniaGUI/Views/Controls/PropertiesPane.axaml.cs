@@ -26,7 +26,7 @@ public partial class PropertiesPane : UserControl
     }
 
     // TODO: maybe move to ViewModel? probably solved by binding to enabled property
-    private void a_TextChanged(object? sender, AvaloniaPropertyChangedEventArgs avaloniaPropertyChangedEventArgs)
+    private void a_TextChanged(object sender, AvaloniaPropertyChangedEventArgs avaloniaPropertyChangedEventArgs)
     {
         // PropertiesViewModel vm = DataContext as PropertiesViewModel;
         //

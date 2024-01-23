@@ -17,7 +17,7 @@ public class RegisterViewModel : ViewModelBase
 {
     #region Events
 
-    public event EventHandler? QubitsChanged;
+    public event EventHandler QubitsChanged;
 
     private void OnQubitsChanged()
     {
@@ -162,7 +162,7 @@ public class RegisterViewModel : ViewModelBase
         OnQubitsChanged();
     }
 
-    private void _model_StepChanged(object? sender, EventArgs eventArgs)
+    private void _model_StepChanged(object sender, EventArgs eventArgs)
     {
         OnPropertyChanged(nameof(AddQubitEnabled));
     }

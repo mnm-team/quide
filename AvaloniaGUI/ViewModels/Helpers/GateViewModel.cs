@@ -41,7 +41,7 @@ public class GateViewModel : ViewModelBase
 
     #region Private Helpers
 
-    private void _model_CurrentStepChanged(object? sender, EventArgs eventArgs)
+    private void _model_CurrentStepChanged(object sender, EventArgs eventArgs)
     {
         IsEnabled = _model.CurrentStep <= Column;
         OnPropertyChanged(nameof(IsEnabled));
@@ -158,7 +158,7 @@ public class GateViewModel : ViewModelBase
         return Application.Current.FindResource("ImgLine") as VisualBrush;
     }
 
-    public VisualBrush? GateImage
+    public VisualBrush GateImage
     {
         get
         {

@@ -596,7 +596,7 @@ public partial class Parser
     }
 
     internal static IEnumerable<MethodInfo> GetExtensionMethods(Assembly assembly, Type extendedType,
-        string? methodName = null)
+        string methodName = null)
     {
         var query = from type in assembly.GetTypes()
             where type != typeof(GatesExtension)

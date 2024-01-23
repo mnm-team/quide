@@ -47,13 +47,13 @@ public partial class NewRegisterInput : UserControl
         _dataContext.DialogInputValid = _dataContext.InputsValid;
     }
 
-    private void StatesGrid_OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    private void StatesGrid_OnPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
     {
         if (_dataContext is null) return;
         ValidateViewModel();
     }
 
-    private void WidthBox_OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    private void WidthBox_OnPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
     {
         if (_dataContext is null) return;
         ValidateViewModel();

@@ -195,7 +195,7 @@ public class NewRegisterInputViewModel : ViewModelBase
         return states;
     }
 
-    private void _initStates_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void _initStates_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
         switch (e.Action)
         {

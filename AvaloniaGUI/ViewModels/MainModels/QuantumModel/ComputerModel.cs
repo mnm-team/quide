@@ -36,14 +36,14 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
     {
         #region Events
 
-        public event EventHandler? StepChanged;
+        public event EventHandler StepChanged;
 
         private void OnStepChanged()
         {
             StepChanged?.Invoke(this, new RoutedEventArgs());
         }
 
-        public event EventHandler? SelectionChanged;
+        public event EventHandler SelectionChanged;
 
         private void OnSelectionChanged()
         {
@@ -892,7 +892,7 @@ namespace AvaloniaGUI.ViewModels.MainModels.QuantumModel
             }
         }
 
-        public List<Gate>? FindComposite(string name)
+        public List<Gate> FindComposite(string name)
         {
             _compositeGates.TryGetValue(name, out var result);
             return result;

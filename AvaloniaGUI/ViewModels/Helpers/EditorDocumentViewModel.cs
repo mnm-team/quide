@@ -26,14 +26,14 @@ public partial class EditorDocumentViewModel : ViewModelBase
     private ThemeName _editorTheme;
 
     private bool _isModified;
-    private string? _location;
+    private string _location;
 
     private RegistryOptions _registryOptions;
     private Language _selectedLanguage;
     private TextMate.Installation _textMateInstallation;
 
     public EditorDocumentViewModel(TextDocument document, bool isModified, Delegate notifyEditorCommands,
-        string? location) :
+        string location) :
         this()
     {
         _notifyEditorCommands = notifyEditorCommands;
@@ -80,7 +80,7 @@ public partial class EditorDocumentViewModel : ViewModelBase
         }
     }
 
-    public string? Location
+    public string Location
     {
         get => _location;
         set

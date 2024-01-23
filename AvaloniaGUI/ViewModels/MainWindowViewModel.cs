@@ -200,7 +200,7 @@ public partial class MainWindowViewModel : ViewModelBase
         _consoleWriter.TextChanged += _consoleWriter_TextChanged;
     }
 
-    private async void WindowClosing(object? sender, WindowClosingEventArgs args)
+    private async void WindowClosing(object sender, WindowClosingEventArgs args)
     {
         args.Cancel = true;
 
@@ -685,7 +685,7 @@ public partial class MainWindowViewModel : ViewModelBase
         OutputGrid.LoadModel(_model, _outputModel);
     }
 
-    private void _consoleWriter_TextChanged(object? sender, EventArgs eventArgs)
+    private void _consoleWriter_TextChanged(object sender, EventArgs eventArgs)
     {
         OnPropertyChanged(nameof(ConsoleOutput));
     }

@@ -31,14 +31,14 @@ public class CircuitGridViewModel : ViewModelBase
 
     #region Events
 
-    public event EventHandler? SelectionChanged;
+    public event EventHandler SelectionChanged;
 
     private void OnSelectionChanged()
     {
         SelectionChanged?.Invoke(this, new RoutedEventArgs());
     }
 
-    public event EventHandler? QubitsChanged;
+    public event EventHandler QubitsChanged;
 
     private void OnQubitsChanged()
     {
@@ -166,7 +166,7 @@ public class CircuitGridViewModel : ViewModelBase
 
     #region Private Helpers
 
-    private void CurrentStepChanged(object? sender, EventArgs eventArgs)
+    private void CurrentStepChanged(object sender, EventArgs eventArgs)
     {
         if (_currentStep < _steps.Count) _steps[_currentStep].UnsetAsCurrent();
 
@@ -176,7 +176,7 @@ public class CircuitGridViewModel : ViewModelBase
         OnPropertyChanged("AddQubitEnabled"); // TODO: remove??
     }
 
-    private void _model_SelectionChanged(object? sender, EventArgs eventArgs)
+    private void _model_SelectionChanged(object sender, EventArgs eventArgs)
     {
         if (_model.UnselectedItems.HasValue)
         {
@@ -215,7 +215,7 @@ public class CircuitGridViewModel : ViewModelBase
         return registers;
     }
 
-    private void registers_QubitsChanged(object? sender, EventArgs eventArgs)
+    private void registers_QubitsChanged(object sender, EventArgs eventArgs)
     {
         OnQubitsChanged();
     }
@@ -229,7 +229,7 @@ public class CircuitGridViewModel : ViewModelBase
         return steps;
     }
 
-    private void Steps_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void Steps_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
         StepModel step;
         switch (e.Action)
@@ -269,7 +269,7 @@ public class CircuitGridViewModel : ViewModelBase
         }
     }
 
-    private void Registers_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void Registers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
         switch (e.Action)
         {

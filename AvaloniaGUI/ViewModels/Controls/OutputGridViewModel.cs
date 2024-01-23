@@ -34,7 +34,7 @@ public class OutputGridViewModel : ViewModelBase
 
     #region Events
 
-    public event EventHandler? SelectionChanged;
+    public event EventHandler SelectionChanged;
 
     private void OnSelectionChanged()
     {
@@ -48,7 +48,7 @@ public class OutputGridViewModel : ViewModelBase
     private ComputerModel _model;
     private OutputViewModel _outputModel;
 
-    private StateViewModel[]? _states;
+    private StateViewModel[] _states;
 
     private string[] _registersNames;
     private readonly ParameterViewModel _selectedRegister;
@@ -273,12 +273,12 @@ public class OutputGridViewModel : ViewModelBase
 
     #region Private Helpers
 
-    private void circuitGrid_QubitsChanged(object? sender, EventArgs eventArgs)
+    private void circuitGrid_QubitsChanged(object sender, EventArgs eventArgs)
     {
         OnPropertyChanged(nameof(States));
     }
 
-    private void _model_OutputChanged(object? sender, EventArgs eventArgs)
+    private void _model_OutputChanged(object sender, EventArgs eventArgs)
     {
         var regNames = new string[_model.Registers.Count + 1];
         regNames[0] = "root";

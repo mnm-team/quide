@@ -9,7 +9,7 @@ namespace AvaloniaGUI.CodeHelpers;
 
 public class CompositeName : ValidationAttribute
 {
-    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
     {
         const string pattern = @"^\s*[a-zA-Z_][a-zA-Z0-9_]*\s*$";
         Regex regex = new Regex(pattern);
