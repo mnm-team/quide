@@ -448,13 +448,16 @@
   </data>
     <data name="AboutText" xml:space="preserve">
     <value>QuIDE - Quantum Integrated Development Environment
-Version: 1.0.0
-© 2014 Joanna Patrzyk, Bartłomiej Patrzyk</value>
+Version: 2.0
+© 2014 Joanna Patrzyk, Bartłomiej Patrzyk
+© 2023 Marc Fichtner
+© 2023-2024 MNM-Team</value>
   </data>
     <data name="Authors" xml:space="preserve">
     <value>Authors:
 Joanna Patrzyk (jpatrzyk@quide.eu)
-Bartłomiej Patrzyk (bpatrzyk@quide.eu)</value>
+Bartłomiej Patrzyk (bpatrzyk@quide.eu)
+MNM-Team (mnm-team.org)</value>
   </data>
     <data name="GPLText" xml:space="preserve">
     <value>GNU GENERAL PUBLIC LICENSE
