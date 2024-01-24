@@ -1,8 +1,20 @@
-# QuIDE
+# QuIDE 2.0
 
-## Compile on Linux
+Quantum Integrated Development Environment
 
-- Install `dotnet-sdk-8.0` (Ubuntu)
-- run `dotnet build AvaloniaGUI/AvaloniaGUI.csproj`
-- run `./AvaloniaGUI/bin/Debug/net8.0/AvaloniaGUI`
-- happy hacking
+- fork of QuIDE 1.0.0 from [quide.eu](http://quide.eu/)
+- refactored with [Avalonia](https://www.avaloniaui.net/) to be cross-compilable on Linux and Windows
+
+## Compile yourself
+
+- Install the .NET-SDK 8.0, which can be found at [Microsoft](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) or at your local paket manager, e.g. `dotnet-sdk-8.0` on Ubuntu.
+- Run `dotnet build --configuration Release` in the repository
+
+### Build single-file-app
+
+- To build a single-file-app you can use dotnet publish, e.g.: `dotnet publish AvaloniaGUI/QuIDE.csproj -r linux-x64 -f net8.0 -p:PublishSingleFile=true --self-contained false -o out/` on Linux, then the App is in `out/QuIDE` and all shared libraries (except dotnet-runtime) are included.
+
+## Start program
+
+- Run `./AvaloniaGUI/bin/Release/net8.0/QuIDE`
+- User Documentation for Version 1.0.0 can be found [here](https://bitbucket.org/quide/quide/downloads/UserManual_EN.pdf), which should also be suitable for newer versions. 
