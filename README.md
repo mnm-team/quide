@@ -12,9 +12,9 @@ Quantum Integrated Development Environment
 
 ### Build single-file-app
 
-- To build a single-file-app you can use dotnet publish, e.g.: `dotnet publish AvaloniaGUI/QuIDE.csproj -r linux-x64 -f net8.0 -p:PublishSingleFile=true --self-contained false -o out/` on Linux, then the App is in `out/QuIDE` and all shared libraries (except dotnet-runtime) are included.
+- To build a single-file-app you can use dotnet publish, e.g.: `dotnet publish QuIDE/QuIDE.csproj -r linux-x64 -f net8.0 -p:PublishSingleFile=true --self-contained false -o out/` on Linux, then the App is in `out/QuIDE` and all shared libraries (except dotnet-runtime) are included.
 
 ## Start program
 
-- Run `./AvaloniaGUI/bin/Release/net8.0/QuIDE`
+- Run `./QuIDE/bin/Release/net8.0/QuIDE`
 - User Documentation for Version 1.0.0 can be found [here](https://bitbucket.org/quide/quide/downloads/UserManual_EN.pdf), which should also be suitable for newer versions. 

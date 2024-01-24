@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quantum", "Quantum\Quantum.csproj", "{D75FE2F6-E0EF-493D-961E-6BFC46FD7DAB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuIDE", "AvaloniaGUI\QuIDE.csproj", "{D8C3697E-6E4B-4BFA-90E4-E68667407202}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuIDE", "QuIDE\QuIDE.csproj", "{D8C3697E-6E4B-4BFA-90E4-E68667407202}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,86 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:QuIDE.ViewModels.Dialog"
+             xmlns:p="clr-namespace:QuIDE.Properties"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:GammaInputViewModel"
+             x:Class="QuIDE.Views.Dialog.GammaInput">
+
+    <Design.DataContext>
+        <vm:GammaInputViewModel />
+    </Design.DataContext>
+
+    <UserControl.Resources>
+        <Style x:Key="DefaultButton" Selector="Button" />
+        <!-- <Style x:Key="FlatRadioButton" BasedOn="{StaticResource {x:Static ToolBar.RadioButtonStyleKey}}" -->
+        <!--        Selector="RadioButton" /> -->
+        <!-- <Style x:Key="FlatComboBox" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}" Selector="ComboBox" /> -->
+    </UserControl.Resources>
+
+    <Grid ColumnDefinitions="Auto,*,Auto,Auto,10" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+        <!-- Angle Value Unit Type-->
+        <TextBlock
+            Grid.ColumnSpan="2"
+            Margin="5,3"
+            Text="{x:Static p:Resources.AngleValue}" />
+
+        <RadioButton
+            x:Name="Deg"
+            Grid.Row="0" Grid.Column="2"
+            GroupName="Unit"
+            IsChecked="True"
+            Command="{Binding SelectUnitCommand}"
+            CommandParameter="Deg"
+            Content=" [ &#x00b0; ] " Classes="ToolBarButton">
+            <!-- Style="{StaticResource FlatRadioButton}"> -->
+        </RadioButton>
+        <RadioButton
+            Grid.Row="0" Grid.Column="3"
+            GroupName="Unit"
+            IsChecked="{Binding Rad, Mode=TwoWay}"
+            Command="{Binding SelectUnitCommand}"
+            CommandParameter="Rad"
+            Content="[rad]" Classes="ToolBarButton">
+            <!-- Style="{StaticResource FlatRadioButton}"> -->
+        </RadioButton>
+
+        <Grid
+            Grid.Row="1"
+            Grid.ColumnSpan="4" Grid.Column="0" ColumnDefinitions="Auto,*,Auto">
+            <TextBlock
+                Margin="5,3"
+                VerticalAlignment="Center"
+                FontFamily="Times New Roman"
+                FontStyle="Italic"
+                Text="&#x03b3; = " />
+            <TextBox
+                x:Name="gammaBox"
+                Grid.Column="1"
+                Margin="1,3" Text="{Binding GammaText}">
+            </TextBox>
+            <ComboBox
+                Margin="0,3"
+                Padding="10,0"
+                Width="{Binding RelativeSource={RelativeSource Self}, Path=Height}"
+                Grid.Column="2"
+                SelectionChanged="ComboBox_SelectionChanged"
+                FontFamily="Times New Roman"
+                FontStyle="Italic">
+                <ComboBoxItem
+                    Content="{x:Static p:Resources.Pi}" />
+                <ComboBoxItem
+                    Content="{x:Static p:Resources.Pi_2}" />
+                <ComboBoxItem
+                    Content="{x:Static p:Resources.Pi_3}" />
+                <ComboBoxItem
+                    Content="{x:Static p:Resources.Pi_4}" />
+                <ComboBoxItem
+                    Content="{x:Static p:Resources.Pi_6}" />
+                <ComboBoxItem
+                    Content="{x:Static p:Resources.Pi_8}" />
+            </ComboBox>
+        </Grid>
+    </Grid>
+</UserControl>

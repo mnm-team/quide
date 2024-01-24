@@ -1,0 +1,36 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:p="clr-namespace:QuIDE.Properties"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="QuIDE.Views.Dialog.AboutWindow"
+        Title="AboutWindow"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterOwner">
+    <!-- Icon="/Assets/avalonia-logo.ico"> -->
+    <!--<UserControl.Resources>
+        <Style x:Key="DefaultButton" Selector="Button" />
+        <Style x:Key="FlatButton" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Selector="Button" />
+    </UserControl.Resources>-->
+
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Top" Text="{x:Static p:Resources.AboutText}" Margin="10" />
+        <TextBlock DockPanel.Dock="Top"
+                   Text="{x:Static p:Resources.Authors}" Margin="10" />
+        <DockPanel
+            VerticalAlignment="Stretch"
+            Margin="10">
+            <TextBlock DockPanel.Dock="Top" Text="{x:Static p:Resources.License}" Margin="0 5" />
+            <Border
+                Background="White"
+                BorderBrush="DimGray"
+                BorderThickness="1" Padding="0">
+                <ScrollViewer Height="700">
+                    <TextBlock
+                        Text="{x:Static p:Resources.GPLText}" Margin="10" />
+                </ScrollViewer>
+            </Border>
+        </DockPanel>
+    </DockPanel>
+</Window>
