@@ -3,15 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuantumParser", "QuantumParser\QuantumParser.csproj", "{87DDB840-93EE-4F8C-B168-974514E28F1D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuantumModel", "QuantumModel\QuantumModel.csproj", "{ED8881B1-694A-4D32-AE2F-F22854B02CED}"
-EndProject
+#Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuantumParser", "QuantumParser\QuantumParser.csproj", "{87DDB840-93EE-4F8C-B168-974514E28F1D}"
+#EndProject
+#Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuantumModel", "QuantumModel\QuantumModel.csproj", "{ED8881B1-694A-4D32-AE2F-F22854B02CED}"
+#EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quantum", "Quantum\Quantum.csproj", "{D75FE2F6-E0EF-493D-961E-6BFC46FD7DAB}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuIDE", "QuantumGUI\QuIDE.csproj", "{5D997F81-A709-456A-BD1C-FB80539CD475}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfDialogManagement", "WpfDialogManagement\WpfDialogManagement.csproj", "{17AB3F9B-C80C-40E7-95CE-54A8EA711D7B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AvaloniaGUI", "AvaloniaGUI\AvaloniaGUI.csproj", "{D8C3697E-6E4B-4BFA-90E4-E68667407202}"
 EndProject
