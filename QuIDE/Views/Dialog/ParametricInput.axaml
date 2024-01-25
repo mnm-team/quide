@@ -1,0 +1,182 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:QuIDE.ViewModels.Dialog"
+             xmlns:p="clr-namespace:QuIDE.Properties"
+             xmlns:helpers="clr-namespace:QuIDE.ViewModels.Helpers"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:ParametricInputViewModel"
+             x:Class="QuIDE.Views.Dialog.ParametricInput">
+
+    <Design.DataContext>
+        <vm:ParametricInputViewModel />
+    </Design.DataContext>
+
+    <UserControl.Resources>
+        <!-- <Style x:Key="FlatComboBox" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}" Selector="ComboBox" /> -->
+        <Style x:Key="DefaultButton" Selector="Button" />
+    </UserControl.Resources>
+
+    <DockPanel
+        MinHeight="300"
+        MinWidth="500">
+
+        <!-- SelectedCompositeGate -->
+        <StackPanel
+            DockPanel.Dock="Top"
+            Orientation="Vertical"
+            Margin="10">
+            <TextBlock
+                Margin="0, 3"
+                HorizontalAlignment="Stretch"
+                Text="{x:Static p:Resources.SelectedCompositeGate}" />
+            <ComboBox
+                x:Name="gateBox"
+                Margin="0,3"
+                HorizontalAlignment="Stretch"
+                ItemsSource="{Binding CompositeNames}"
+                SelectedIndex="{Binding GateIndex}"
+                SelectionChanged="gateBox_SelectionChanged" IsTextSearchEnabled="True" />
+        </StackPanel>
+
+        <!-- SelectedMethod -->
+        <StackPanel
+            DockPanel.Dock="Top"
+            Orientation="Vertical"
+            Margin="10">
+            <TextBlock
+                Margin="0, 3"
+                HorizontalAlignment="Stretch"
+                Text="{x:Static p:Resources.SelectMethod}" />
+            <ListBox
+                x:Name="methodBox"
+                Margin="0,3"
+                ItemsSource="{Binding Candidates}"
+                SelectionMode="Single"
+                SelectionChanged="methodBox_SelectionChanged" />
+        </StackPanel>
+
+        <Grid ColumnDefinitions="10,Auto,Auto,*,Auto,10" RowDefinitions="Auto,Auto">
+
+            <!-- Register Types (e.g. RegisterRef, Register,...) -->
+            <ItemsControl
+                Grid.Row="0" Grid.Column="1"
+                ItemsSource="{Binding Parameters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="helpers:ParameterViewModel">
+                        <TextBlock
+                            MinHeight="32"
+                            VerticalAlignment="Center"
+                            Margin="0, 3"
+                            Padding="0,5,0,0"
+                            Text="{Binding TypeString}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Register Names -->
+            <ItemsControl
+                Grid.Row="0" Grid.Column="2"
+                ItemsSource="{Binding Parameters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="helpers:ParameterViewModel">
+                        <TextBlock
+                            MinHeight="32"
+                            VerticalAlignment="Center"
+                            Margin="10, 3"
+                            Padding="0,5,0,0"
+                            Text="{Binding Name}" />
+                        <!-- MinHeight="{x:Static TextBlock.MinHeightProperty}" -->
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Params -->
+            <ItemsControl Grid.Row="0"
+                          Grid.Column="3"
+                          ItemsSource="{Binding Parameters}"
+                          Name="ParamInputs">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="helpers:ParameterViewModel">
+                        <TextBox
+                            HorizontalAlignment="Stretch"
+                            Margin="0, 3"
+                            Text="{Binding ValueString, Mode=TwoWay}"
+                            PropertyChanged="ValueChanged" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.Styles>
+                    <Style Selector="ItemsPresenter">
+                        <Setter Property="(KeyboardNavigation.TabNavigation)" Value="Continue" />
+                    </Style>
+                </ItemsControl.Styles>
+            </ItemsControl>
+
+            <!-- Add Param Buttons -->
+            <ItemsControl
+                Grid.Row="0" Grid.Column="4"
+                ItemsSource="{Binding Parameters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="helpers:ParameterViewModel">
+                        <Button
+                            Click="addParam_Click"
+                            Margin="3,3,0,3"
+                            IsVisible="{Binding VarParamsVisibility}"
+                            Content="{x:Static p:Resources.AddParam}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Rectangle
+                x:Name="widthRef"
+                Grid.Row="1"
+                Grid.Column="1"
+                Grid.ColumnSpan="4" />
+
+            <!-- Validation Messages -->
+            <ItemsControl
+                Grid.Row="1"
+                Grid.Column="1"
+                Grid.ColumnSpan="4"
+                ItemsSource="{Binding Parameters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"
+                                    Width="{Binding ElementName=widthRef, Path=Width}"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="helpers:ParameterViewModel">
+                        <TextBlock
+                            Margin="0, 3"
+                            TextWrapping="Wrap"
+                            Foreground="Red"
+                            Text="{Binding ValidationMessage}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </DockPanel>
+</UserControl>

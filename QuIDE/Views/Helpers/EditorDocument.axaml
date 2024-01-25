@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:helpers="clr-namespace:QuIDE.ViewModels.Helpers"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="QuIDE.Views.Helpers.EditorDocument"
+             x:DataType="helpers:EditorDocumentViewModel">
+    <Design.DataContext>
+        <helpers:EditorDocumentViewModel />
+    </Design.DataContext>
+
+    <DockPanel>
+        <StackPanel Orientation="Horizontal"
+                    DockPanel.Dock="Top"
+                    Spacing="5"
+                    Margin="3">
+            <ComboBox Name="SyntaxModeCombo"
+                      VerticalAlignment="Stretch" VerticalContentAlignment="Center"
+                      ItemsSource="{Binding Languages}"
+                      SelectedItem="{Binding SelectedLanguage}" />
+        </StackPanel>
+
+        <ContentControl Content="{Binding Editor}" />
+    </DockPanel>
+</UserControl>

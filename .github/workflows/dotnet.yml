@@ -1,0 +1,41 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+    - name: Build Linux-single-file-app
+      run: dotnet publish QuIDE/QuIDE.csproj -r linux-x64 -f net8.0 -p:PublishSingleFile=true --self-contained false -o out/
+    - name: Build Windows-single-file-app
+      run: dotnet publish QuIDE/QuIDE.csproj -r win-x64 -f net8.0 -p:PublishSingleFile=true --self-contained false -o out/
+
+    - name: Upload Linux artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: Linux App
+        path: out/QuIDE
+    - name: Upload Windows artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: Windows App
+        path: out/QuIDE.exe

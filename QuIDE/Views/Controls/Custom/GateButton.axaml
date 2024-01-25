@@ -1,0 +1,26 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:custom="clr-namespace:QuIDE.Views.Controls.Custom">
+    <Design.PreviewWith>
+        <custom:GateButton />
+    </Design.PreviewWith>
+
+    <Style Selector="custom|GateButton">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Button x:Name="DraggableButton" VerticalAlignment="Top" Padding="0"
+                        IsEnabled="{TemplateBinding Enabled}"
+                        RenderTransformOrigin="{TemplateBinding RenderTransform}" DragDrop.AllowDrop="True"
+                        Content="{TemplateBinding Content}" RenderTransform="{TemplateBinding Transform}"
+                        ContextMenu="{TemplateBinding ContextMenu}">
+                    <Button.Styles>
+                        <Style Selector="Button:focus-within">
+                            <Setter Property="RenderTransform" Value="scale(1,-1)" />
+                        </Style>
+                    </Button.Styles>
+                </Button>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

@@ -1,0 +1,94 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:QuIDE"
+             x:Class="QuIDE.App"
+             RequestedThemeVariant="Light"
+             Name="QuIDE - Quantum Integrated Development Environment">
+
+    <Application.DataTemplates>
+        <local:ViewLocator />
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <FluentTheme />
+
+        <!-- to display dataGrid -->
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+        <!-- to display AvaloniaEdit -->
+        <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
+
+        <Style Selector="Button">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="Button:disabled">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Opacity" Value="0.3" />
+        </Style>
+
+        <Style Selector="Separator.Vertical">
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <RotateTransform Angle="90" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- only effects Brushes outside of Rsrc Dictionaries -->
+        <!-- TODO: no longer supported -->
+        <!-- <Style Selector="VisualBrush"> -->
+        <!--     <Setter Property="RenderOptions.BitmapInterpolationMode" Value="LowQuality" /> -->
+        <!-- </Style> -->
+
+        <!-- Toolbar radio button design -->
+        <Style Selector="RadioButton.ToolBarButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border
+                            Height="{TemplateBinding Height}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Width="{TemplateBinding Width}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter
+                                Name="PART_ContentPresenter"
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                RecognizesAccessKey="True" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="RadioButton.ToolBarButton:pointerover">
+            <Setter Property="Background" Value="{DynamicResource StandardButtonBackgroundOnHoverOver}" />
+        </Style>
+        <Style Selector="RadioButton.ToolBarButton:checked">
+            <Setter Property="Background" Value="#66000000" />
+        </Style>
+
+        <!-- Gate Display Style for rectangle -->
+        <Style Selector="Rectangle.GateDisplay">
+            <Setter Property="Width" Value="36" />
+            <Setter Property="Height" Value="28" />
+        </Style>
+
+
+        <StyleInclude Source="/Views/Controls/Custom/GateButton.axaml" />
+        <StyleInclude Source="/Views/Controls/Custom/GroupBox.axaml" />
+    </Application.Styles>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Assets/Styles.xaml" />
+                <ResourceInclude Source="/Assets/Gates.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -198,7 +198,7 @@ namespace Quantum.Operations
         /// <param name="comp">The <see cref="Quantum.QuantumComputer"/> instance.</param>
         /// <param name="gamma">The phase value.</param>
         /// <param name="target">The reference to target qubit.</param>
-        /// <param name="control">Optional argument. If given, the method performs controlled gate operation. 
+        /// <param name="controls">Optional argument. If given, the method performs controlled gate operation. 
         /// Destribes the reference to control qubit.</param>
         public static void PhaseKick(this QuantumComputer comp, double gamma, RegisterRef target, params RegisterRef[] controls)
         {
