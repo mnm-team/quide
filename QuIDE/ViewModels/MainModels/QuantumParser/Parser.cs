@@ -33,6 +33,7 @@ using QuIDE.ViewModels.MainModels.QuantumModel;
 using QuIDE.ViewModels.MainModels.QuantumParser.Operations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using System.Reflection.Metadata;
 
 #endregion
 
@@ -65,6 +66,19 @@ public partial class Parser
         return compResults;
     }
 
+    private MetadataReference GetMetadataReference(Assembly a)
+    {
+        // to avoid Assembly.Location, which does not work in single-file-app
+        // see https://github.com/dotnet/runtime/issues/36590#issuecomment-689883856
+        unsafe
+        {
+            a.TryGetRawMetadata(out byte* blob, out int length);
+            var moduleMetadata = ModuleMetadata.CreateFromMetadata((IntPtr)blob, length);
+            var assemblyMetadata = AssemblyMetadata.Create(moduleMetadata);
+            return assemblyMetadata.GetReference();
+        }
+    }
+
     private Assembly CompilerResults(string code)
     {
         code = Preprocess(code);
@@ -87,9 +101,8 @@ public partial class Parser
         var compilation = CSharpCompilation.Create(
             $"QuantumComputer{_assemblyLoads++}",
             new[] { syntaxTree },
-            assemblies.Select(a => MetadataReference.CreateFromFile(a.Location)),
+            assemblies.Select(GetMetadataReference),
             new CSharpCompilationOptions(OutputKind.ConsoleApplication)); // needs an entry point apparently
-
         var ms = new MemoryStream();
         var result = compilation.Emit(ms);
 
