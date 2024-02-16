@@ -39,14 +39,9 @@ using System.Reflection.Metadata;
 
 namespace QuIDE.ViewModels.MainModels.QuantumParser;
 
-public class KeywordNotAllowedException : Exception
-{
-    public KeywordNotAllowedException(string keyword)
-        : base("Code cannot contain some special keywords. Please remove them. \nForbidden keyword found: " +
-               keyword)
-    {
-    }
-}
+public class KeywordNotAllowedException(string keyword) : Exception(
+    "Code cannot contain some special keywords. Please remove them. \nForbidden keyword found: " +
+    keyword);
 
 public partial class Parser
 {
@@ -66,7 +61,7 @@ public partial class Parser
         return compResults;
     }
 
-    private MetadataReference GetMetadataReference(Assembly a)
+    private static MetadataReference GetMetadataReference(Assembly a)
     {
         // to avoid Assembly.Location, which does not work in single-file-app
         // see https://github.com/dotnet/runtime/issues/36590#issuecomment-689883856
@@ -93,6 +88,7 @@ public partial class Parser
         {
             typeof(object).Assembly,
             GetType().Assembly,
+            Assembly.Load(new AssemblyName("System.Console")), // useful for debugging
             Assembly.Load(new AssemblyName("System.Runtime")),
             Assembly.Load(new AssemblyName("System.Runtime.Numerics"))
         };
