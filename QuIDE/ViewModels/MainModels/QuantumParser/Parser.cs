@@ -282,55 +282,7 @@ public partial class Parser
         pattern = @"namespace\s+[a-zA-Z_][a-zA-Z0-9_]*\s*{";
         replacement = "namespace QuantumParser.Test\n{";
         rgx = new Regex(pattern);
-        result = rgx.Replace(result, replacement);
-
-        // remove all comments
-        var noComments = RemoveSingleLineComments(result);
-        noComments = RemoveMultiLineComments(noComments);
-
-        var extDefs = GetExtensionDefs(noComments);
-
-        foreach (var def in extDefs)
-        {
-            var sb = new StringBuilder("\n");
-
-            var methodName = GetName(def);
-
-            var paramDef = GetParamDef(def);
-            paramDef = RemoveSqares(paramDef);
-            paramDef = RemoveAngles(paramDef);
-            paramDef = RemoveRounds(paramDef);
-            paramDef = RemoveBraces(paramDef);
-            var pars = GetParams(paramDef);
-
-            var compName = GetKeywordTypeName(pars[0]).Item3;
-
-            sb.Append("if (").Append(compName).AppendLine(".Group)");
-            sb.AppendLine("{");
-            sb.Append("object[] parameters = new object[] { ").Append(compName);
-
-            for (var i = 1; i < pars.Length; i++)
-            {
-                var keyTypeName = GetKeywordTypeName(pars[i]);
-                if (!string.IsNullOrWhiteSpace(keyTypeName.Item3)) sb.Append(", ").Append(keyTypeName.Item3);
-            }
-
-            sb.AppendLine(" };");
-            sb.Append(compName).Append(".AddParametricGate(\"");
-            sb.Append(methodName).AppendLine("\", parameters);");
-            sb.AppendLine("return;");
-            sb.AppendLine("}");
-            sb.AppendLine("else");
-            sb.AppendLine("{");
-            sb.Append(compName).AppendLine(".Group = true;");
-            sb.AppendLine("}");
-
-            var defInd = noComments.IndexOf(def);
-            var leftBraceInd = noComments.IndexOf("{", defInd + def.Length);
-            noComments = noComments.Insert(leftBraceInd + 1, sb.ToString());
-        }
-
-        return noComments;
+        return rgx.Replace(result, replacement);
     }
 
     private static void Validate(string code)
