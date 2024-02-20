@@ -1,4 +1,4 @@
-﻿/**
+﻿/*
     This file is part of QuIDE.
 
     QuIDE - The Quantum IDE
@@ -18,30 +18,22 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#region
-
 using System;
 using System.Collections.Generic;
 using System.Numerics;
 using Avalonia.Interactivity;
 using Quantum;
 
-#endregion
-
 namespace QuIDE.ViewModels.MainModels.QuantumModel
 {
     public class OutputViewModel
     {
-        #region Events
-
         public event EventHandler OutputChanged;
 
         private void OnOutputChanged()
         {
             OutputChanged?.Invoke(this, new RoutedEventArgs());
         }
-
-        #endregion // Events
 
 
         #region Fields

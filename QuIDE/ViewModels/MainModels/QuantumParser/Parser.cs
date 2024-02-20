@@ -1,8 +1,9 @@
-﻿/**
+﻿/*
     This file is part of QuIDE.
 
     QuIDE - The Quantum IDE
     Copyright (C) 2014  Joanna Patrzyk, Bartłomiej Patrzyk
+    Copyright (C) 2023-2024 MNM-Team
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,8 +19,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#region
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,8 +33,6 @@ using QuIDE.ViewModels.MainModels.QuantumParser.Operations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System.Reflection.Metadata;
-
-#endregion
 
 namespace QuIDE.ViewModels.MainModels.QuantumParser;
 
@@ -193,16 +190,24 @@ public partial class Parser
         var currentStep = model.CurrentStep;
 
         var eval = CircuitEvaluator.GetInstance();
-        eval.InitFromModel(model);
+        try
+        {
+            eval.InitFromModel(model);
+            var se = eval.GetStepEvaluator();
+            se.RunToEnd(model.Steps, currentStep);
+            model.CurrentStep = model.Steps.Count;
 
-        var se = eval.GetStepEvaluator();
-        se.RunToEnd(model.Steps, currentStep);
-        model.CurrentStep = model.Steps.Count;
-
-        Console.WriteLine();
-        Console.WriteLine(@"Register values after execution:");
-        Console.WriteLine();
-        Console.WriteLine(eval.RootRegister);
+            Console.WriteLine();
+            Console.WriteLine(@"Register values after execution:");
+            Console.WriteLine();
+            Console.WriteLine(eval.RootRegister);
+        }
+        // catch if there is no circuit in the code
+        catch (NullReferenceException)
+        {
+            Console.WriteLine();
+            Console.WriteLine(@"No Register values to show");
+        }
     }
 
     public static Dictionary<string, List<MethodCode>> GetMethodsCodes(string code)
