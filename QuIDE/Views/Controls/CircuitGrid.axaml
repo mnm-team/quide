@@ -19,7 +19,7 @@
 
     <Grid x:Name="LayoutRoot" Background="White" PointerWheelChanged="LayoutRoot_PreviewMouseWheel">
         <Border Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
-            <Grid x:Name="mainGrid" Background="White" ColumnDefinitions="Auto,*">
+            <Grid x:Name="MainGrid" Background="White" ColumnDefinitions="Auto,*">
 
                 <ScrollViewer x:Name="RegisterScroll"
                               HorizontalScrollBarVisibility="Disabled"
@@ -28,7 +28,7 @@
 
                     <!-- Qubit view -->
                     <StackPanel Orientation="Vertical">
-                        <ItemsControl x:Name="registerItemsControl" Background="White"
+                        <ItemsControl x:Name="RegisterItemsControl" Background="White"
                                       ItemsSource="{Binding Registers}"
                                       Margin="0,0,0,0"
                                       RenderTransformOrigin="0,0">

@@ -8,29 +8,13 @@
         Title="AboutWindow"
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterOwner">
-    <!-- Icon="/Assets/avalonia-logo.ico"> -->
-    <!--<UserControl.Resources>
-        <Style x:Key="DefaultButton" Selector="Button" />
-        <Style x:Key="FlatButton" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Selector="Button" />
-    </UserControl.Resources>-->
 
     <DockPanel>
-        <TextBlock DockPanel.Dock="Top" Text="{x:Static p:Resources.AboutText}" Margin="10" />
+        <TextBlock DockPanel.Dock="Top" Text="{x:Static p:Resources.Name}" Margin="10" />
+        <TextBlock DockPanel.Dock="Top" Text="{x:Static p:Resources.Version}" Margin="10" />
+        <TextBlock DockPanel.Dock="Top" Text="{x:Static p:Resources.Copyright}" Margin="10" />
         <TextBlock DockPanel.Dock="Top"
                    Text="{x:Static p:Resources.Authors}" Margin="10" />
-        <DockPanel
-            VerticalAlignment="Stretch"
-            Margin="10">
-            <TextBlock DockPanel.Dock="Top" Text="{x:Static p:Resources.License}" Margin="0 5" />
-            <Border
-                Background="White"
-                BorderBrush="DimGray"
-                BorderThickness="1" Padding="0">
-                <ScrollViewer Height="700">
-                    <TextBlock
-                        Text="{x:Static p:Resources.GPLText}" Margin="10" />
-                </ScrollViewer>
-            </Border>
-        </DockPanel>
+        <TextBlock Text="{x:Static p:Resources.GPLText}" Margin="10" />
     </DockPanel>
 </Window>

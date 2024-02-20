@@ -8,6 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.Reflection;
+
 namespace QuIDE.Properties {
     using System;
     
@@ -71,12 +73,19 @@ namespace QuIDE.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to QuIDE - Quantum Integrated Development Environment
-        ///Version: 1.0.0
-        ///© 2014 Joanna Patrzyk, Bartłomiej Patrzyk.
         /// </summary>
-        public static string AboutText {
+        public static string Name {
             get {
-                return ResourceManager.GetString("AboutText", resourceCulture);
+                return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to QuIDE - Quantum Integrated Development Environment
+        /// </summary>
+        public static string Copyright {
+            get {
+                return ResourceManager.GetString("Copyright", resourceCulture);
             }
         }
         
@@ -1100,6 +1109,14 @@ namespace QuIDE.Properties {
         public static string Value {
             get {
                 return ResourceManager.GetString("Value", resourceCulture);
+            }
+        }
+
+        public static string Version
+        {
+            get
+            {
+                return "Version: " + Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
             }
         }
     }

@@ -16,8 +16,6 @@ namespace QuIDE.ViewModels.Helpers;
 
 public class QubitViewModel : ViewModelBase
 {
-    #region Constructor
-
     public QubitViewModel(ComputerModel model, int registerIndex, int rowIndex, DialogManager dialogManager)
     {
         _model = model;
@@ -29,19 +27,11 @@ public class QubitViewModel : ViewModelBase
         _dialogManager = dialogManager;
     }
 
-    #endregion // Constructor
-
-
-    #region Private Helpers
 
     private void _model_CurrentStepChanged(object sender, EventArgs eventArgs)
     {
         OnPropertyChanged(nameof(IsEnabled));
     }
-
-    #endregion // Private Helpers
-
-    #region Fields
 
     private readonly ComputerModel _model;
 
@@ -58,10 +48,6 @@ public class QubitViewModel : ViewModelBase
 
     private readonly DialogManager _dialogManager;
 
-    #endregion // Fields
-
-
-    #region Properties
 
     public ICommand ChangeValueCommand
     {
@@ -179,34 +165,30 @@ public class QubitViewModel : ViewModelBase
 
     public bool IsEnabled => _model.CurrentStep == 0;
 
-    #endregion // Properties
-
-
-    #region Public Methods
 
     public void Refresh()
     {
         OnPropertyChanged(nameof(QubitImage));
     }
 
-    public void ChangeValue(object parameter)
+    private void ChangeValue(object parameter)
     {
         var old = Value;
         _model.Registers[_registerIndex].ResetQubit(Index, old);
         Value = old == QubitModel.Zero ? QubitModel.One : QubitModel.Zero;
     }
 
-    public void InsertQubitAbove(object parameter)
+    private void InsertQubitAbove(object parameter)
     {
         _model.InsertQubitAbove(_registerIndex, Index);
     }
 
-    public void InsertQubitBelow(object parameter)
+    private void InsertQubitBelow(object parameter)
     {
         _model.InsertQubitBelow(_registerIndex, Index);
     }
 
-    public async void EditRegister(object parameter)
+    private async void EditRegister(object parameter)
     {
         var vm = new NewRegisterInputViewModel();
         var input = new NewRegisterInput(vm);
@@ -237,7 +219,7 @@ public class QubitViewModel : ViewModelBase
         });
     }
 
-    public async void InsertRegisterAbove(object parameter)
+    private async void InsertRegisterAbove(object parameter)
     {
         var vm = new NewRegisterInputViewModel();
         var input = new NewRegisterInput(vm);
@@ -249,7 +231,7 @@ public class QubitViewModel : ViewModelBase
         });
     }
 
-    public async void InsertRegisterBelow(object parameter)
+    private async void InsertRegisterBelow(object parameter)
     {
         var vm = new NewRegisterInputViewModel();
         var input = new NewRegisterInput(vm);
@@ -261,12 +243,12 @@ public class QubitViewModel : ViewModelBase
         });
     }
 
-    public void DeleteQubit(object parameter)
+    private void DeleteQubit(object parameter)
     {
         _model.DeleteQubit(_registerIndex, Index);
     }
 
-    public void DeleteRegister(object parameter)
+    private void DeleteRegister(object parameter)
     {
         _model.DeleteRegister(_registerIndex);
     }
@@ -295,6 +277,4 @@ public class QubitViewModel : ViewModelBase
         _deleteQubit = new DelegateCommand(DeleteQubit, x => canExecute);
         OnPropertyChanged(nameof(DeleteQubitCommand));
     }
-
-    #endregion // Public Methods
 }
