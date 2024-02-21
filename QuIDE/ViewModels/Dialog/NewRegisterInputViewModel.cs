@@ -8,9 +8,9 @@ using System.Linq;
 using System.Numerics;
 using System.Windows.Input;
 using QuIDE.CodeHelpers;
-using QuIDE.ViewModels.MainModels.QuantumModel;
 using Quantum;
 using Quantum.Helpers;
+using QuIDE.QuantumModel;
 
 #endregion
 

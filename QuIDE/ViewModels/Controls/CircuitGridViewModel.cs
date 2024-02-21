@@ -7,8 +7,8 @@ using Avalonia;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using QuIDE.CodeHelpers;
+using QuIDE.QuantumModel;
 using QuIDE.ViewModels.Helpers;
-using QuIDE.ViewModels.MainModels.QuantumModel;
 
 #endregion
 

@@ -3,7 +3,7 @@
 using System;
 using System.ComponentModel;
 using System.Text;
-using QuIDE.ViewModels.MainModels.QuantumModel;
+using QuIDE.QuantumModel;
 using QuIDE.ViewModels.MainModels.QuantumParser;
 
 #endregion

@@ -23,8 +23,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using QuIDE.ViewModels.MainModels.QuantumModel;
-using QuIDE.ViewModels.MainModels.QuantumModel.Gates;
+using QuIDE.QuantumModel;
+using QuIDE.QuantumModel.Gates;
 
 #endregion
 

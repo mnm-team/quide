@@ -13,6 +13,7 @@
     <ItemGroup>
         <Folder Include="Models"/>
         <AvaloniaResource Include="Assets\**"/>
+        <Folder Include="ViewModels\MainModels\QuantumModel\Gates\" />
         <None Remove="Assets\Images\CopyHS.png"/>
         <AvaloniaResource Include="Assets\Images\CopyHS.png"/>
         <None Remove="Assets\Images\CutHS.png"/>

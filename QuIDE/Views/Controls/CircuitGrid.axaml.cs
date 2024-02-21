@@ -6,10 +6,10 @@ using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Media;
+using QuIDE.QuantumModel;
 using QuIDE.ViewModels;
 using QuIDE.ViewModels.Controls;
 using QuIDE.ViewModels.Helpers;
-using QuIDE.ViewModels.MainModels.QuantumModel;
 
 #endregion
 

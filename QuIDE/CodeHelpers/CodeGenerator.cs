@@ -7,8 +7,8 @@ using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using System.Text;
-using QuIDE.ViewModels.MainModels.QuantumModel;
-using QuIDE.ViewModels.MainModels.QuantumModel.Gates;
+using QuIDE.QuantumModel;
+using QuIDE.QuantumModel.Gates;
 using QuIDE.ViewModels.MainModels.QuantumParser;
 
 #endregion

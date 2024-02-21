@@ -6,8 +6,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using QuIDE.CodeHelpers;
+using QuIDE.QuantumModel;
 using QuIDE.ViewModels.Dialog;
-using QuIDE.ViewModels.MainModels.QuantumModel;
 using QuIDE.Views.Dialog;
 
 #endregion

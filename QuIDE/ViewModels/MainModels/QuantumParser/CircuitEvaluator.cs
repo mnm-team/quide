@@ -25,8 +25,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using QuIDE.ViewModels.MainModels.QuantumModel;
-using QuIDE.ViewModels.MainModels.QuantumModel.Gates;
+using QuIDE.QuantumModel;
+using QuIDE.QuantumModel.Gates;
 
 #endregion
 

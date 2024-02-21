@@ -8,11 +8,11 @@ using Avalonia.Controls;
 using QuIDE.CodeHelpers;
 using QuIDE.ViewModels.Controls;
 using QuIDE.ViewModels.Dialog;
-using QuIDE.ViewModels.MainModels.QuantumModel;
 using QuIDE.ViewModels.MainModels.QuantumParser;
 using QuIDE.Views;
 using QuIDE.Views.Dialog;
 using CommunityToolkit.Mvvm.Input;
+using QuIDE.QuantumModel;
 
 #endregion
 

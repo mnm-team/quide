@@ -1,7 +1,7 @@
 ﻿#region
 
 using System.Numerics;
-using QuIDE.ViewModels.MainModels.QuantumModel;
+using QuIDE.QuantumModel;
 
 #endregion
 

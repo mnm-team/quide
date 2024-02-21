@@ -27,8 +27,8 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
-using QuIDE.ViewModels.MainModels.QuantumModel;
-using QuIDE.ViewModels.MainModels.QuantumModel.Gates;
+using QuIDE.QuantumModel;
+using QuIDE.QuantumModel.Gates;
 
 #endregion
 

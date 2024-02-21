@@ -7,7 +7,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using QuIDE.CodeHelpers;
-using QuIDE.ViewModels.MainModels.QuantumModel;
+using QuIDE.QuantumModel;
 
 #endregion
 

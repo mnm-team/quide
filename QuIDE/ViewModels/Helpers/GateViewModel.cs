@@ -11,10 +11,10 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
 using QuIDE.CodeHelpers;
+using QuIDE.QuantumModel;
+using QuIDE.QuantumModel.Gates;
 using QuIDE.ViewModels.Controls;
 using QuIDE.ViewModels.Dialog;
-using QuIDE.ViewModels.MainModels.QuantumModel;
-using QuIDE.ViewModels.MainModels.QuantumModel.Gates;
 using QuIDE.ViewModels.MainModels.QuantumParser;
 using QuIDE.Views.Dialog;
 

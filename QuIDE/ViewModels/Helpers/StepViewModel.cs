@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Avalonia;
 using QuIDE.CodeHelpers;
+using QuIDE.QuantumModel;
+using QuIDE.QuantumModel.Gates;
 using QuIDE.ViewModels.Controls;
-using QuIDE.ViewModels.MainModels.QuantumModel;
-using QuIDE.ViewModels.MainModels.QuantumModel.Gates;
 
 #endregion
 

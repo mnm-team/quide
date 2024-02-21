@@ -28,11 +28,11 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
 using System.Text;
 using System.Text.RegularExpressions;
-using QuIDE.ViewModels.MainModels.QuantumModel;
 using QuIDE.ViewModels.MainModels.QuantumParser.Operations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System.Reflection.Metadata;
+using QuIDE.QuantumModel;
 
 namespace QuIDE.ViewModels.MainModels.QuantumParser;
 
@@ -74,7 +74,7 @@ public partial class Parser
     private Assembly CompilerResults(string code)
     {
         code = Preprocess(code);
-        
+
         // Check for safety
         Validate(code);
 

@@ -6,8 +6,8 @@ using System.Linq;
 using System.Numerics;
 using Avalonia.Interactivity;
 using QuIDE.CodeHelpers;
+using QuIDE.QuantumModel;
 using QuIDE.ViewModels.Helpers;
-using QuIDE.ViewModels.MainModels.QuantumModel;
 using QuIDE.ViewModels.MainModels.QuantumParser;
 
 #endregion
