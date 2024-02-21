@@ -14,11 +14,11 @@ using Avalonia.Media.Imaging;
 using QuIDE.CodeHelpers;
 using QuIDE.Properties;
 using QuIDE.ViewModels.Helpers;
-using QuIDE.ViewModels.MainModels.QuantumParser;
-using QuIDE.ViewModels.MainModels.QuantumParser.Validation;
 using Quantum.Helpers;
 using QuIDE.QuantumModel;
 using QuIDE.QuantumModel.Gates;
+using QuIDE.QuantumParser;
+using QuIDE.QuantumParser.Validation;
 
 #endregion
 

@@ -25,7 +25,7 @@ using System.Numerics;
 
 #endregion
 
-namespace QuIDE.ViewModels.MainModels.QuantumParser
+namespace QuIDE.QuantumParser
 {
     interface IRegister
     {

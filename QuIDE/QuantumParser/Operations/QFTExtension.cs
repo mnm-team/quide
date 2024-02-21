@@ -22,7 +22,7 @@
 
 #endregion
 
-namespace QuIDE.ViewModels.MainModels.QuantumParser.Operations
+namespace QuIDE.QuantumParser.Operations
 {
     public static class QFTExtension
     {

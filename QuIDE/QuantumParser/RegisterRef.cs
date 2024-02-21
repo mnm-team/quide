@@ -24,7 +24,7 @@ using QuIDE.QuantumModel;
 
 #endregion
 
-namespace QuIDE.ViewModels.MainModels.QuantumParser
+namespace QuIDE.QuantumParser
 {
     public struct RegisterRef
     {

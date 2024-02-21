@@ -13,9 +13,9 @@ using Avalonia.Media;
 using QuIDE.CodeHelpers;
 using QuIDE.QuantumModel;
 using QuIDE.QuantumModel.Gates;
+using QuIDE.QuantumParser;
 using QuIDE.ViewModels.Controls;
 using QuIDE.ViewModels.Dialog;
-using QuIDE.ViewModels.MainModels.QuantumParser;
 using QuIDE.Views.Dialog;
 
 #endregion

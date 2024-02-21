@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -8,13 +6,12 @@ using Avalonia.Controls;
 using QuIDE.CodeHelpers;
 using QuIDE.ViewModels.Controls;
 using QuIDE.ViewModels.Dialog;
-using QuIDE.ViewModels.MainModels.QuantumParser;
 using QuIDE.Views;
 using QuIDE.Views.Dialog;
 using CommunityToolkit.Mvvm.Input;
 using QuIDE.QuantumModel;
-
-#endregion
+using QuIDE.QuantumParser;
+using Parser = QuIDE.QuantumParser.Parser;
 
 namespace QuIDE.ViewModels;
 
@@ -392,8 +389,6 @@ public partial class MainWindowViewModel : ViewModelBase
     #endregion // Commands
 
 
-    #region Public Methods
-
     public static void CompositeSelected()
     {
         SelectedAction = ActionName.Composite;
@@ -653,8 +648,6 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         await new AboutWindow().ShowDialog(_window);
     }
-
-    #endregion // Public Methods
 
 
     #region Private Helpers

@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Text;
 using QuIDE.QuantumModel;
 using QuIDE.QuantumModel.Gates;
-using QuIDE.ViewModels.MainModels.QuantumParser;
+using QuIDE.QuantumParser;
 
 #endregion
 

@@ -30,7 +30,7 @@ using QuIDE.QuantumModel.Gates;
 
 #endregion
 
-namespace QuIDE.ViewModels.MainModels.QuantumParser
+namespace QuIDE.QuantumParser
 {
     public class CircuitEvaluator
     {

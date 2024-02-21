@@ -27,11 +27,11 @@ using System.Numerics;
 using System.Text;
 using QuIDE.QuantumModel;
 using QuIDE.QuantumModel.Gates;
-using QuIDE.ViewModels.MainModels.QuantumParser.Validation;
+using QuIDE.QuantumParser.Validation;
 
 #endregion
 
-namespace QuIDE.ViewModels.MainModels.QuantumParser
+namespace QuIDE.QuantumParser
 {
     public class Register : IRegister
     {

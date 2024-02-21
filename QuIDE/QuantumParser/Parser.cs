@@ -24,17 +24,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
 using System.Text;
 using System.Text.RegularExpressions;
-using QuIDE.ViewModels.MainModels.QuantumParser.Operations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using System.Reflection.Metadata;
 using QuIDE.QuantumModel;
+using QuIDE.QuantumParser.Operations;
 
-namespace QuIDE.ViewModels.MainModels.QuantumParser;
+namespace QuIDE.QuantumParser;
 
 public class KeywordNotAllowedException(string keyword) : Exception(
     "Code cannot contain some special keywords. Please remove them. \nForbidden keyword found: " +
@@ -271,7 +271,7 @@ public partial class Parser
 
     private static string Preprocess(string code)
     {
-        const string parserLocation = "using QuIDE.ViewModels.MainModels.QuantumParser";
+        const string parserLocation = "using QuIDE.QuantumParser";
 
         // Delete "using Quantum{.Operations};" with QuantumParser equivalents
         var pattern = @"using\s+Quantum\s*;";

@@ -24,7 +24,7 @@ using System;
 
 #endregion
 
-namespace QuIDE.ViewModels.MainModels.QuantumParser.Operations
+namespace QuIDE.QuantumParser.Operations
 {
     // Quantum networks for elementary arithmetic operations
     // Vlatko Vedral, Adriano Barenco, and Artur Ekert

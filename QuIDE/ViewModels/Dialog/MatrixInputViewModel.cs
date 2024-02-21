@@ -3,7 +3,7 @@
 using System.Numerics;
 using QuIDE.CodeHelpers;
 using QuIDE.Properties;
-using QuIDE.ViewModels.MainModels.QuantumParser.Validation;
+using QuIDE.QuantumParser.Validation;
 
 #endregion
 

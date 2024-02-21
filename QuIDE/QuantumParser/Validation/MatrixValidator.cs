@@ -24,7 +24,7 @@ using System.Numerics;
 
 #endregion
 
-namespace QuIDE.ViewModels.MainModels.QuantumParser.Validation
+namespace QuIDE.QuantumParser.Validation
 {
     public static class MatrixValidator
     {
