@@ -18,54 +18,35 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Quantum
 {
     /// <summary>
-    /// This structure represents a reference to a qubit in quantum register.
+    ///     This structure represents a reference to a qubit in quantum register.
     /// </summary>
     public struct RegisterRef
     {
         /// <summary>
-        /// The register containing the referenced qubit.
+        ///     The register containing the referenced qubit.
         /// </summary>
-        public Register Register
-        {
-            get;
-            set;
-        }
+        public Register Register { get; set; }
 
         /// <summary>
-        /// The offset of referenced qubit in the <see cref="RegisterRef.Register"/>. 
-        /// 0 means the Least Significant Bit.
+        ///     The offset of referenced qubit in the <see cref="RegisterRef.Register" />.
+        ///     0 means the Least Significant Bit.
         /// </summary>
-        public int Offset
-        {
-            get;
-            set;
-        }
+        public int Offset { get; set; }
 
         /// <summary>
-        /// <para>
-        /// The offset of referenced qubit, but in the root register. 
-        /// It is the same as <see cref="RegisterRef.Offset"/>, when the <see cref="RegisterRef.Register"/> is independent. 
-        /// </para>
-        /// <para>
-        /// The idea of root register is described in <see cref="QuantumComputer.GetRootRegister"/> ,
-        /// or in <see cref="Quantum.Register.GetAmplitudes()"/>.
-        /// </para>
+        ///     <para>
+        ///         The offset of referenced qubit, but in the root register.
+        ///         It is the same as <see cref="RegisterRef.Offset" />, when the <see cref="RegisterRef.Register" /> is
+        ///         independent.
+        ///     </para>
+        ///     <para>
+        ///         The idea of root register is described in <see cref="QuantumComputer.GetRootRegister" /> ,
+        ///         or in <see cref="Quantum.Register.GetAmplitudes()" />.
+        ///     </para>
         /// </summary>
-        public int OffsetToRoot
-        {
-            get
-            {
-                return Register.OffsetToRoot + Offset;
-            }
-        }
+        public int OffsetToRoot => Register.OffsetToRoot + Offset;
     }
 }

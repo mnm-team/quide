@@ -19,69 +19,63 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Quantum.Operations;
 using System.Numerics;
+using Quantum.Operations;
 
 namespace Quantum.Algorithms
 {
     public class Shor2n : Shor
     {
-        //Parameters
-        private int N;
-        private int a;
-        private int width;
-        private byte[] result;
-        private ulong[] expTab;
-        private int L;
+        private readonly int a;
 
         //Quantum
-        private QuantumComputer comp = null;
-        private Register regX = null;
-        private Register regC = null;
-        private Register ctrl = null;
-        private Register reg0 = null;
+        private QuantumComputer comp;
+        private Register ctrl;
+        private ulong[] expTab;
+
+        private int L;
+
+        //Parameters
+        private readonly int N;
+        private Register reg0;
+        private Register regC;
+        private Register regX;
+        private byte[] result;
+        private int width;
 
         public Shor2n(int N, int a)
         {
             this.N = N;
             this.a = a;
 
-            if (N < 15)
-            {
-                throw new System.ArgumentException("Invalid number", "N");
-            }
+            if (N < 15) throw new ArgumentException("Invalid number", "N");
         }
 
         public int FindPeriod()
         {
-            this.Initialize();
-            this.ClassicalPreprocess();
-            this.QuantumComputation();
-            int result = this.ClassicalPostprocess();
-            this.Dispose();
+            Initialize();
+            ClassicalPreprocess();
+            QuantumComputation();
+            var result = ClassicalPostprocess();
+            Dispose();
             return result;
         }
 
 
-
         public void Initialize()
         {
-            this.width = Utils.CalculateRegisterWidth((ulong)N);
+            width = Utils.CalculateRegisterWidth((ulong)N);
             L = 2 * width;
 
-            this.comp = QuantumComputer.GetInstance();
+            comp = QuantumComputer.GetInstance();
 
             //Register regTemp = comp.NewRegister(1, 2 * width + 3, (int)(Math.Pow(2, 2 * (width + 1))));
-            Register regTemp = comp.NewRegister(1, 2 * width + 3);
+            var regTemp = comp.NewRegister(1, 2 * width + 3);
 
-            this.regX = regTemp[0, width];
-            this.reg0 = regTemp[width, width + 1];
-            this.regC = regTemp[2 * width + 1, 1];
-            this.ctrl = regTemp[2 * width + 2, 1];
+            regX = regTemp[0, width];
+            reg0 = regTemp[width, width + 1];
+            regC = regTemp[2 * width + 1, 1];
+            ctrl = regTemp[2 * width + 2, 1];
 
             //this.regX = comp.NewRegister(1, width);
             //this.regC = comp.NewRegister(0, 1);
@@ -98,16 +92,13 @@ namespace Quantum.Algorithms
         public void ClassicalPreprocess()
         {
             //Console.WriteLine("Before preprocess");
-            for (int i = 0; i < L; i++)
-            {
-                expTab[i] = (ulong)BigInteger.ModPow(a, BigInteger.Pow(2, i), N);
-            }
+            for (var i = 0; i < L; i++) expTab[i] = (ulong)BigInteger.ModPow(a, BigInteger.Pow(2, i), N);
             //Console.WriteLine("After preprocess");
         }
 
         public void QuantumComputation()
         {
-            for (int i = 0; i < L; i++)
+            for (var i = 0; i < L; i++)
             {
                 //Console.WriteLine("Quantum {0} / {1}", i, L);
                 comp.Hadamard(regC[0]);
@@ -116,18 +107,13 @@ namespace Quantum.Algorithms
                 //Console.WriteLine("After CTRL-Ua");
                 if (i > 0)
                 {
-                    double gamma = 0.0;
+                    var gamma = 0.0;
 
-                    for (int k = 0; k < i; k++)
-                    {
+                    for (var k = 0; k < i; k++)
                         if (result[k] > 0)
-                        {
-                            gamma += (double)1 / (double)(1 << (i - k));
-                        }
+                            gamma += 1 / (double)(1 << (i - k));
 
-                    }
-
-                    gamma *= ((double)-1) * Math.PI;
+                    gamma *= -1 * Math.PI;
 
                     comp.PhaseKick(gamma, regC[0]);
                 }
@@ -136,30 +122,24 @@ namespace Quantum.Algorithms
 
                 result[i] = regC.Measure(0);
 
-                if (result[i] != 0)
-                {
-                    comp.SigmaX(regC[0]);
-                }
-
+                if (result[i] != 0) comp.SigmaX(regC[0]);
             }
         }
 
         public int ClassicalPostprocess()
         {
-            int Q = (int)(1 << 2 * width);
-            int inputMeasured = 0;
+            var Q = 1 << (2 * width);
+            var inputMeasured = 0;
 
-            for (int i = 0; i < 2 * width; i++)
-            {
-                inputMeasured += (1 << i) * result[i];
-            }
+            for (var i = 0; i < 2 * width; i++) inputMeasured += (1 << i) * result[i];
 
             /*int reversed = Utils.getReverseBits(inputMeasured, 2 * width);
             Console.WriteLine("rev = {0}, int = {1}", reversed, inputMeasured);
             inputMeasured = reversed;*/
 
-            Tuple<int, int> finalResult = Utils.FractionalApproximation(inputMeasured, Q, 2 * width);
-            Console.WriteLine("Fractional approximation:  {0} / {1}, y = {2}, width = {3}", finalResult.Item1, finalResult.Item2, inputMeasured, width);
+            var finalResult = Utils.FractionalApproximation(inputMeasured, Q, 2 * width);
+            Console.WriteLine("Fractional approximation:  {0} / {1}, y = {2}, width = {3}", finalResult.Item1,
+                finalResult.Item2, inputMeasured, width);
             //if (finalResult.Item2 % 2 == 1) // odd denominator
             //{
             //    // try multiplication by 2

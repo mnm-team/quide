@@ -18,74 +18,67 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using Quantum.Operations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+using Quantum.Operations;
 
 namespace Quantum.Algorithms
 {
     public class Shor7n : Shor
     {
-        //Parameters
-        private int N = 0;
-        private int a;
-        private int width;
+        private readonly int a;
+
+        //Quantum
+        private QuantumComputer comp;
+
         private int inputMeasured;
+
         //private byte[] result;
         //private ulong[] expTab;
         private double kMax;
 
-        //Quantum
-        private QuantumComputer comp = null;
-        private Register regX = null;
-        private Register regX1 = null;
-        Register rega;
-        Register regb;
-        Register regc;
-        Register regN;
+        //Parameters
+        private readonly int N;
+        private Register rega;
+        private Register regb;
+        private Register regc;
+        private Register regN;
+        private Register regX;
+        private Register regX1;
+        private int width;
 
         public Shor7n(int N, int a)
         {
             this.N = N;
             this.a = a;
 
-            if (N < 15)
-            {
-                throw new System.ArgumentException("Invalid number", "N");
-            }
+            if (N < 15) throw new ArgumentException("Invalid number", "N");
         }
 
         public int FindPeriod()
         {
-            this.Initialize();
-            this.ClassicalPreprocess();
-            this.QuantumComputation();
-            int result = this.ClassicalPostprocess();
-            this.Dispose();
+            Initialize();
+            ClassicalPreprocess();
+            QuantumComputation();
+            var result = ClassicalPostprocess();
+            Dispose();
             return result;
         }
 
 
-
         public void Initialize()
         {
-            this.width = Utils.CalculateRegisterWidth((ulong)N);
-            this.kMax = Math.Log(2 * width, 2);
+            width = Utils.CalculateRegisterWidth((ulong)N);
+            kMax = Math.Log(2 * width, 2);
 
-            this.comp = QuantumComputer.GetInstance();
+            comp = QuantumComputer.GetInstance();
 
-            regX = comp.NewRegister(0, 2 * width/*, (int)(Math.Pow(2, 2 * width))*/);
+            regX = comp.NewRegister(0, 2 * width /*, (int)(Math.Pow(2, 2 * width))*/);
             regX1 = comp.NewRegister(1, width + 1);
             rega = comp.NewRegister(0, regX1.Width - 1);
             regb = comp.NewRegister(0, regX1.Width);
             regc = comp.NewRegister(0, regX1.Width);
             regN = comp.NewRegister((ulong)N, regX1.Width - 1);
 
-            
 
             //result = new byte[width];
             //expTab = new ulong[width];
@@ -93,7 +86,6 @@ namespace Quantum.Algorithms
 
         public void ClassicalPreprocess()
         {
-
         }
 
         public void QuantumComputation()
@@ -114,17 +106,18 @@ namespace Quantum.Algorithms
 
             // getting the input register
             inputMeasured = (int)regX.Measure();
-            int reversed = Utils.getReverseBits(inputMeasured, 2 * width);
+            var reversed = Utils.getReverseBits(inputMeasured, 2 * width);
             Console.WriteLine("rev = {0}, int = {1}", reversed, inputMeasured);
             inputMeasured = reversed;
         }
 
         public int ClassicalPostprocess()
         {
-            int Q = (int)(1 << 2*width);
+            var Q = 1 << (2 * width);
 
-            Tuple<int, int> result = Utils.FractionalApproximation(inputMeasured, Q, 2*width);
-            Console.WriteLine("Fractional approximation:  {0} / {1}, y = {2}, width = {3}", result.Item1, result.Item2, inputMeasured, width);
+            var result = Utils.FractionalApproximation(inputMeasured, Q, 2 * width);
+            Console.WriteLine("Fractional approximation:  {0} / {1}, y = {2}, width = {3}", result.Item1, result.Item2,
+                inputMeasured, width);
             //if (result.Item2 % 2 == 1) // odd denominator
             //{
             //    // try multiplication by 2

@@ -18,17 +18,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Quantum.Operations
 {
     public static class AddModuloQFTExtension
     {
-        public static void AddModuloQFTPhi(this QuantumComputer comp, ulong a, ulong N, RegisterRef ctrl, Register b, params RegisterRef[] controls)
+        public static void AddModuloQFTPhi(this QuantumComputer comp, ulong a, ulong N, RegisterRef ctrl, Register b,
+            params RegisterRef[] controls)
         {
             comp.AddQFTPhi(a, b, controls);
             comp.InverseAddQFTPhi(N, b);
@@ -49,7 +44,8 @@ namespace Quantum.Operations
             comp.AddQFTPhi(a, b, controls);
         }
 
-        public static void InverseAddModuloQFTPhi(this QuantumComputer comp, ulong a, ulong N, RegisterRef ctrl, Register b, params RegisterRef[] controls)
+        public static void InverseAddModuloQFTPhi(this QuantumComputer comp, ulong a, ulong N, RegisterRef ctrl,
+            Register b, params RegisterRef[] controls)
         {
             comp.InverseAddQFTPhi(a, b, controls);
 
@@ -68,22 +64,24 @@ namespace Quantum.Operations
 
             comp.AddQFTPhi(N, b);
             comp.InverseAddQFTPhi(a, b, controls);
-   
         }
 
-        public static void AddModuloQFT(this QuantumComputer comp, ulong a, ulong N, Register b, params RegisterRef[] controls)
+        public static void AddModuloQFT(this QuantumComputer comp, ulong a, ulong N, Register b,
+            params RegisterRef[] controls)
         {
-            Register ctrl = comp.NewRegister(0, 1);
+            var ctrl = comp.NewRegister(0, 1);
             comp.AddModuloQFT(a, N, ctrl, b, controls);
         }
 
-        public static void InverseAddModuloQFT(this QuantumComputer comp, ulong a, ulong N, Register b, params RegisterRef[] controls)
+        public static void InverseAddModuloQFT(this QuantumComputer comp, ulong a, ulong N, Register b,
+            params RegisterRef[] controls)
         {
-            Register ctrl = comp.NewRegister(0, 1);
+            var ctrl = comp.NewRegister(0, 1);
             comp.InverseAddModuloQFT(a, N, ctrl, b, controls);
         }
 
-        public static void AddModuloQFT(this QuantumComputer comp, ulong a, ulong N, RegisterRef ctrl, Register b, params RegisterRef[] controls)
+        public static void AddModuloQFT(this QuantumComputer comp, ulong a, ulong N, RegisterRef ctrl, Register b,
+            params RegisterRef[] controls)
         {
             Validate(a, b, N);
             comp.QFT(b);
@@ -91,7 +89,8 @@ namespace Quantum.Operations
             comp.InverseQFT(b);
         }
 
-        public static void InverseAddModuloQFT(this QuantumComputer comp, ulong a, ulong N, RegisterRef ctrl, Register b, params RegisterRef[] controls)
+        public static void InverseAddModuloQFT(this QuantumComputer comp, ulong a, ulong N, RegisterRef ctrl,
+            Register b, params RegisterRef[] controls)
         {
             Validate(a, b, N);
             comp.QFT(b);
@@ -101,7 +100,6 @@ namespace Quantum.Operations
 
         private static void Validate(ulong a, Register b, ulong N)
         {
-
             if (b.Width != Utils.CalculateRegisterWidth(N) + 1)
             {
                 //throw new System.ArgumentException("Register b must be able to contain N + 1 bit");

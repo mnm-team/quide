@@ -19,14 +19,11 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Quantum.Operations
 {
     /// <summary>
-    /// Extensions for performing the Quantum Fourier Transform.
+    ///     Extensions for performing the Quantum Fourier Transform.
     /// </summary>
     public static class QFTExtension
     {
@@ -57,92 +54,79 @@ namespace Quantum.Operations
         //}
 
         /// <summary>
-        /// <para>
-        /// Performs the Quantum Fourier Transform on given <see cref="Quantum.Register"/>.
-        /// </para>
+        ///     <para>
+        ///         Performs the Quantum Fourier Transform on given <see cref="Quantum.Register" />.
+        ///     </para>
         /// </summary>
-        /// <param name="comp">The <see cref="Quantum.QuantumComputer"/> instance.</param>
-        /// <param name="register">The <see cref="Quantum.Register"/> on which the operation is performed.</param>
+        /// <param name="comp">The <see cref="Quantum.QuantumComputer" /> instance.</param>
+        /// <param name="register">The <see cref="Quantum.Register" /> on which the operation is performed.</param>
         public static void QFT(this QuantumComputer comp, Register register)
         {
-            int width = register.Width;
-            for (int i = width - 1; i >= 0; i--)
+            var width = register.Width;
+            for (var i = width - 1; i >= 0; i--)
             {
                 register.Hadamard(i);
                 //for (int j = width - 1; j > i; j--)
-                for (int j = i - 1; j >= 0; j--)
-                {
+                for (var j = i - 1; j >= 0; j--)
                     //HACK przerobić na phasekick
-                    register.PhaseKick(Math.PI/(double)(1 << (i - j)), i, j);
-                    //register.CPhaseShift(i - j, i, j);
-                }
+                    register.PhaseKick(Math.PI / (1 << (i - j)), i, j);
+                //register.CPhaseShift(i - j, i, j);
                 //register.Hadamard(i);
             }
         }
 
         /// <summary>
-        /// <para>
-        /// Performs an exact inversion of Quantum Fourier Transform (see <see cref="QFT(QuantumComputer, Register)"/>).
-        /// </para>
+        ///     <para>
+        ///         Performs an exact inversion of Quantum Fourier Transform (see <see cref="QFT(QuantumComputer, Register)" />).
+        ///     </para>
         /// </summary>
-        /// <param name="comp">The <see cref="Quantum.QuantumComputer"/> instance.</param>
-        /// <param name="register">The <see cref="Quantum.Register"/> on which the operation is performed.</param>
+        /// <param name="comp">The <see cref="Quantum.QuantumComputer" /> instance.</param>
+        /// <param name="register">The <see cref="Quantum.Register" /> on which the operation is performed.</param>
         public static void InverseQFT(this QuantumComputer comp, Register register)
         {
-            int width = register.Width;
-            for (int i = 0; i < width; i++)
+            var width = register.Width;
+            for (var i = 0; i < width; i++)
             {
                 //register.Hadamard(i);
 
                 //for (int j = i + 1; j < width; j++)
-                for (int j = i - 1; j >= 0; j--)
-                {
+                for (var j = i - 1; j >= 0; j--)
                     //HACK przerobić na phasekick (odwrotny argument!!)
-                    register.PhaseKick(((double)-1) * Math.PI / (double)(1 << (i - j)), i, j);
-                    //register.InverseCPhaseShift(i - j, i, j);
-                }
+                    register.PhaseKick(-1 * Math.PI / (1 << (i - j)), i, j);
+                //register.InverseCPhaseShift(i - j, i, j);
                 register.Hadamard(i);
             }
         }
 
         public static void AQFT(this QuantumComputer comp, Register register, double kMax)
         {
-            int width = register.Width;
-            for (int i = width - 1; i >= 0; i--)
+            var width = register.Width;
+            for (var i = width - 1; i >= 0; i--)
             {
                 register.Hadamard(i);
                 //for (int j = width - 1; j > i; j--)
-                for (int j = i - 1; j >= 0; j--)
-                {
+                for (var j = i - 1; j >= 0; j--)
                     //HACK przerobić na phasekick
-                    if ((i - j) < kMax)
-                    {
-                        register.PhaseKick(Math.PI / (double)(1 << (i - j)), i, j);
-                    }
-                    
-                    //register.CPhaseShift(i - j, i, j);
-                }
+                    if (i - j < kMax)
+                        register.PhaseKick(Math.PI / (1 << (i - j)), i, j);
+                //register.CPhaseShift(i - j, i, j);
                 //register.Hadamard(i);
             }
         }
+
         public static void InverseAQFT(this QuantumComputer comp, Register register, double kMax)
         {
-            int width = register.Width;
-            for (int i = 0; i < width; i++)
+            var width = register.Width;
+            for (var i = 0; i < width; i++)
             {
                 //register.Hadamard(i);
 
                 //for (int j = i + 1; j < width; j++)
-                for (int j = i - 1; j >= 0; j--)
-                {
+                for (var j = i - 1; j >= 0; j--)
                     //HACK przerobić na phasekick (odwrotny argument!!)
-                    if ((i - j) < kMax)
-                    {
-                        register.PhaseKick(((double)-1) * Math.PI / (double)(1 << (i - j)), i, j);
-                    }
-                    
-                    //register.InverseCPhaseShift(i - j, i, j);
-                }
+                    if (i - j < kMax)
+                        register.PhaseKick(-1 * Math.PI / (1 << (i - j)), i, j);
+                //register.InverseCPhaseShift(i - j, i, j);
                 register.Hadamard(i);
             }
         }

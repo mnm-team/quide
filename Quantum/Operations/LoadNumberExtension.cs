@@ -19,9 +19,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Quantum.Operations
 {
@@ -30,44 +27,39 @@ namespace Quantum.Operations
         // controlled loading a number into register
         // using Toffoli gates
         // if controlBits are empty, the number is loaded unconditionally
-        public static void LoadNumber(this QuantumComputer comp, Register target, ulong number, params RegisterRef[] controlBits)
+        public static void LoadNumber(this QuantumComputer comp, Register target, ulong number,
+            params RegisterRef[] controlBits)
         {
             Validate(target, number);
 
-            int controlLength = controlBits.Length;           
+            var controlLength = controlBits.Length;
 
-            int i = 0;
-            ulong tmpN = number;
+            var i = 0;
+            var tmpN = number;
             while (tmpN > 0)
             {
-                int rest = (int)(tmpN % 2);
+                var rest = (int)(tmpN % 2);
                 tmpN = tmpN / 2;
 
                 if (rest == 1)
                 {
                     if (controlLength > 1)
-                    {
                         comp.Toffoli(target[i], controlBits);
-                    }
                     else if (controlLength > 0)
-                    {
                         comp.CNot(target[i], controlBits[0]);
-                    }
                     else
-                    {
                         target.SigmaX(i);
-                    }
                 }
+
                 i++;
             }
         }
 
         private static void Validate(Register target, ulong number)
         {
-            if ((number >> target.Width) > 0)
-            {
-                throw new System.ArgumentException("Target register is too small. It must have enough space to store loaded number.");
-            }
+            if (number >> target.Width > 0)
+                throw new ArgumentException(
+                    "Target register is too small. It must have enough space to store loaded number.");
         }
     }
 }

@@ -662,14 +662,22 @@ public partial class MainWindowViewModel : ViewModelBase
             foreach (var pair in oldComposites.Where(pair => !newComposites.ContainsKey(pair.Key)))
                 newComposites[pair.Key] = pair.Value;
         }
+        
+        try
+        {
+            _model = model;
+            CircuitGrid = new CircuitGridViewModel(_model, _dialogManager);
 
-        _model = model;
-
-        CircuitGrid = new CircuitGridViewModel(_model, _dialogManager);
-
-        var eval = CircuitEvaluator.GetInstance();
-        _outputModel = eval.InitFromModel(_model);
-        OutputGrid.LoadModel(_model, _outputModel);
+            var eval = CircuitEvaluator.GetInstance();
+            _outputModel = eval.InitFromModel(_model);
+            OutputGrid.LoadModel(_model, _outputModel);
+        }
+        catch (NullReferenceException)
+        {
+            SimpleDialogHandler.ShowSimpleMessage("No circuit to build.","Warning");
+            ClearCircuit(true);
+        }
+        
     }
 
     private void _consoleWriter_TextChanged(object sender, EventArgs eventArgs)

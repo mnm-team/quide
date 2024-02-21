@@ -19,75 +19,65 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Quantum.Operations
 {
     public static class ControlledUGateExtension
     {
-        public static void ControlledUaGate(this QuantumComputer comp, ulong a, ulong N, Register x, RegisterRef control)
+        public static void ControlledUaGate(this QuantumComputer comp, ulong a, ulong N, Register x,
+            RegisterRef control)
         {
-            Register ctrl = comp.NewRegister(0, 1);
-            Register reg0 = comp.NewRegister(0, x.Width + 1); //TODO fix width
+            var ctrl = comp.NewRegister(0, 1);
+            var reg0 = comp.NewRegister(0, x.Width + 1); //TODO fix width
             comp.ControlledUaGate(a, N, ctrl, x, reg0, control);
         }
 
-        public static void ControlledUaGate(this QuantumComputer comp, ulong a, ulong N, RegisterRef ctrl, Register x, Register reg0, RegisterRef control)
+        public static void ControlledUaGate(this QuantumComputer comp, ulong a, ulong N, RegisterRef ctrl, Register x,
+            Register reg0, RegisterRef control)
         {
             Validate(x, N);
 
-            int? invA = Utils.InversionModulo((int)a, (int)N);
+            var invA = Utils.InversionModulo((int)a, (int)N);
 
-            if (invA == null)
-            {
-                throw new ArgumentException("No inversion for specified a = " + a);
-            }
+            if (invA == null) throw new ArgumentException("No inversion for specified a = " + a);
 
             //Console.WriteLine("ControlledUa a = {0}, N = {1}", a, N);
 
             comp.MultModuloQFT(a, N, ctrl, x, reg0, control);
             comp.Swap(x, reg0[0, reg0.Width - 1], control);
             comp.InverseMultModuloQFT((ulong)invA, N, ctrl, x, reg0, control);
-
         }
 
-        public static void InverseControlledUaGate(this QuantumComputer comp, ulong a, ulong N, Register x, RegisterRef control)
+        public static void InverseControlledUaGate(this QuantumComputer comp, ulong a, ulong N, Register x,
+            RegisterRef control)
         {
-            Register ctrl = comp.NewRegister(0, 1);
-            Register reg0 = comp.NewRegister(0, x.Width + 1);
+            var ctrl = comp.NewRegister(0, 1);
+            var reg0 = comp.NewRegister(0, x.Width + 1);
             comp.InverseControlledUaGate(a, N, ctrl, x, reg0, control);
         }
 
-        public static void InverseControlledUaGate(this QuantumComputer comp, ulong a, ulong N, RegisterRef ctrl, Register x, Register reg0, RegisterRef control)
+        public static void InverseControlledUaGate(this QuantumComputer comp, ulong a, ulong N, RegisterRef ctrl,
+            Register x, Register reg0, RegisterRef control)
         {
             Validate(x, N);
 
-            int? invA = Utils.InversionModulo((int)a, (int)N);
+            var invA = Utils.InversionModulo((int)a, (int)N);
 
-            if (invA == null)
-            {
-                throw new ArgumentException("No inversion for specified a");
-            }
+            if (invA == null) throw new ArgumentException("No inversion for specified a");
 
             //Console.WriteLine("InverseControlledUa a = {0}, N = {1}", a, N);
 
             comp.MultModuloQFT((ulong)invA, N, ctrl, x, reg0, control);
             comp.Swap(reg0[0, reg0.Width - 1], x, control);
             comp.InverseMultModuloQFT(a, N, ctrl, x, reg0, control);
-
         }
 
         private static void Validate(Register b, ulong N)
         {
-
             if (b.Width < Utils.CalculateRegisterWidth(N) + 1)
             {
                 //throw new System.ArgumentException("Register b must be able to contain N + 1 bit");
             }
         }
-
     }
 }

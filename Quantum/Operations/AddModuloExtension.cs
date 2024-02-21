@@ -19,9 +19,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Quantum.Operations
 {
@@ -45,8 +42,8 @@ namespace Quantum.Operations
             Register N,
             ulong valueN)
         {
-            RegisterRef carry = b[b.Width - 1];
-            RegisterRef overflow = c[c.Width - 1];
+            var carry = b[b.Width - 1];
+            var overflow = c[c.Width - 1];
 
             comp.Add(a, b, c);
             comp.InverseAdd(N, b, c);
@@ -84,11 +81,11 @@ namespace Quantum.Operations
         {
             Validate(a, b, valueN);
 
-            Register c = comp.NewRegister(0, a.Width + 1);
-            Register N = comp.NewRegister(valueN, a.Width);
-            
+            var c = comp.NewRegister(0, a.Width + 1);
+            var N = comp.NewRegister(valueN, a.Width);
+
             comp.AddModulo(a, b, c, N, valueN);
-            
+
             comp.DeleteRegister(ref N);
             comp.DeleteRegister(ref c);
         }
@@ -102,8 +99,8 @@ namespace Quantum.Operations
             Register N,
             ulong valueN)
         {
-            RegisterRef carry = b[b.Width - 1];
-            RegisterRef overflow = c[c.Width - 1];
+            var carry = b[b.Width - 1];
+            var overflow = c[c.Width - 1];
 
             comp.InverseAdd(a, b, c);
             comp.CNot(overflow, carry);
@@ -134,8 +131,8 @@ namespace Quantum.Operations
         {
             Validate(a, b, valueN);
 
-            Register c = comp.NewRegister(0, a.Width + 1);
-            Register N = comp.NewRegister(valueN, a.Width);
+            var c = comp.NewRegister(0, a.Width + 1);
+            var N = comp.NewRegister(valueN, a.Width);
 
             comp.InverseAddModulo(a, b, c, N, valueN);
 
@@ -149,27 +146,16 @@ namespace Quantum.Operations
             ulong valueN)
         {
             if (b.Width != a.Width + 1)
-            {
-                throw new System.ArgumentException("Register b must be exactly one bit wider than register a to store carry bit.");
-            }
-            if ((valueN >> a.Width) > 0)
-            {
-                throw new System.ArgumentException("Register a is too small. It must have enough space to store N.");
-            }
+                throw new ArgumentException(
+                    "Register b must be exactly one bit wider than register a to store carry bit.");
+            if (valueN >> a.Width > 0)
+                throw new ArgumentException("Register a is too small. It must have enough space to store N.");
             foreach (var pair in a.GetProbabilities())
-            {
                 if (pair.Key >= valueN)
-                {
-                    throw new System.ArgumentException("There is a >= N.");
-                }
-            }
+                    throw new ArgumentException("There is a >= N.");
             foreach (var pair in b.GetProbabilities())
-            {
                 if (pair.Key >= valueN)
-                {
-                    throw new System.ArgumentException("There is b >= N.");
-                }
-            }
+                    throw new ArgumentException("There is b >= N.");
         }
     }
 }

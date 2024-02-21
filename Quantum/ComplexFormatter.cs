@@ -20,65 +20,52 @@
 
 using System;
 using System.Numerics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Quantum.Helpers
 {
     /// <summary>
-    /// The class based on an example from Microsoft MSDN Library -
-    /// API reference of the System.Numerics.Complex structure.
-    /// http://msdn.microsoft.com/en-us/library/system.numerics.complex(v=vs.110).aspx
+    ///     The class based on an example from Microsoft MSDN Library -
+    ///     API reference of the System.Numerics.Complex structure.
+    ///     http://msdn.microsoft.com/en-us/library/system.numerics.complex(v=vs.110).aspx
     /// </summary>
     public class ComplexFormatter : IFormatProvider, ICustomFormatter
     {
-        public object GetFormat(Type formatType)
-        {
-            if (formatType == typeof(ICustomFormatter))
-                return this;
-            else
-                return null;
-        }
-
         public string Format(string format, object arg,
-                             IFormatProvider provider)
+            IFormatProvider provider)
         {
             if (arg is Complex)
             {
-                Complex c1 = (Complex)arg;
+                var c1 = (Complex)arg;
                 // Check if the format string has a precision specifier. 
                 int precision;
-                string fmtString = String.Empty;
+                var fmtString = string.Empty;
                 if (format.Length > 1)
                 {
                     try
                     {
-                        precision = Int32.Parse(format.Substring(1));
+                        precision = int.Parse(format.Substring(1));
                     }
                     catch (FormatException)
                     {
                         precision = 0;
                     }
-                    fmtString = "N" + precision.ToString();
+
+                    fmtString = "N" + precision;
                 }
 
-                bool trimZeros = (format.Substring(0, 1).Equals("K", StringComparison.OrdinalIgnoreCase));
+                var trimZeros = format.Substring(0, 1).Equals("K", StringComparison.OrdinalIgnoreCase);
 
-                string toReturn = c1.Real.ToString(fmtString);
+                var toReturn = c1.Real.ToString(fmtString);
                 if (trimZeros)
                 {
                     toReturn = toReturn.TrimEnd('0');
                     toReturn = toReturn.TrimEnd('.');
                 }
 
-                if (c1.Real >= 0)
-                {
-                    toReturn = " " + toReturn;
-                }
+                if (c1.Real >= 0) toReturn = " " + toReturn;
                 if (c1.Imaginary < 0)
                 {
-                    double absI = -c1.Imaginary;
+                    var absI = -c1.Imaginary;
                     toReturn += " - " + absI.ToString(fmtString);
                 }
                 else
@@ -95,20 +82,23 @@ namespace Quantum.Helpers
                 if (format.Substring(0, 1).Equals("I", StringComparison.OrdinalIgnoreCase) ||
                     format.Substring(0, 1).Equals("K", StringComparison.OrdinalIgnoreCase))
                     return toReturn + "i";
-                else if (format.Substring(0, 1).Equals("J", StringComparison.OrdinalIgnoreCase))
+                if (format.Substring(0, 1).Equals("J", StringComparison.OrdinalIgnoreCase))
                     return toReturn + "j";
-                else
-                    return c1.ToString(format, provider);
+                return c1.ToString(format, provider);
             }
-            else
-            {
-                if (arg is IFormattable)
-                    return ((IFormattable)arg).ToString(format, provider);
-                else if (arg != null)
-                    return arg.ToString();
-                else
-                    return String.Empty;
-            }
+
+            if (arg is IFormattable)
+                return ((IFormattable)arg).ToString(format, provider);
+            if (arg != null)
+                return arg.ToString();
+            return string.Empty;
+        }
+
+        public object GetFormat(Type formatType)
+        {
+            if (formatType == typeof(ICustomFormatter))
+                return this;
+            return null;
         }
     }
 }

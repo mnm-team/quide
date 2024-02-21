@@ -28,6 +28,9 @@ jobs:
       run: dotnet publish QuIDE/QuIDE.csproj -r linux-x64 -f net8.0 -p:PublishSingleFile=true --self-contained false -o out/
     - name: Build Windows-single-file-app
       run: dotnet publish QuIDE/QuIDE.csproj -r win-x64 -f net8.0 -p:PublishSingleFile=true --self-contained false -o out/
+#    - name: Build macOS-single-file-app
+#      run: dotnet publish QuIDE/QuIDE.csproj -r osx-arm64 -f net8.0 -p:PublishSingleFile=true --self-contained false -o out/QuIDE.app
+    
 
     - name: Upload Linux artifact
       uses: actions/upload-artifact@v3

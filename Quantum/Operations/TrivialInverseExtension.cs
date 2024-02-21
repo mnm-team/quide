@@ -18,12 +18,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Quantum.Operations
 {
     public static class TrivialInverseExtension
@@ -34,7 +28,8 @@ namespace Quantum.Operations
             comp.Sum(refA, refB, refTarget);
         }
 
-        public static void InverseLoadNumber(this QuantumComputer comp, Register target, ulong number, params RegisterRef[] controlBits)
+        public static void InverseLoadNumber(this QuantumComputer comp, Register target, ulong number,
+            params RegisterRef[] controlBits)
         {
             comp.LoadNumber(target, number, controlBits);
         }

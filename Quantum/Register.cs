@@ -88,7 +88,7 @@ namespace Quantum
         /// <param name="index">Describes qubit's offset in this Register. Index = 0 means the Least Significant Bit.</param>
         /// <returns>Returns reference to single qubit in register.</returns>
         public RegisterRef this[int index] =>
-            new RegisterRef
+            new()
             {
                 Register = this,
                 Offset = index

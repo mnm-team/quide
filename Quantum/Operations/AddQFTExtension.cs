@@ -19,10 +19,7 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Quantum.Operations
 {
@@ -32,32 +29,28 @@ namespace Quantum.Operations
         {
             Validate(a, b);
 
-            for (int j = b.Width - 1; j >= 0; j--)
+            for (var j = b.Width - 1; j >= 0; j--)
+            for (var i = j; i >= 0; i--)
             {
-                for (int i = j; i >= 0; i--)
-                {
-                    List<RegisterRef> list = controls.ToList<RegisterRef>();
-                    list.Add(a[i]);
-                    RegisterRef[] controls2 = list.ToArray();
-                    comp.CPhaseShift(Math.Abs(j - i), b[j], controls2);
-                }
+                var list = controls.ToList();
+                list.Add(a[i]);
+                var controls2 = list.ToArray();
+                comp.CPhaseShift(Math.Abs(j - i), b[j], controls2);
             }
-
         }
 
-        public static void InverseAddQFTPhi(this QuantumComputer comp, Register a, Register b, params RegisterRef[] controls)
+        public static void InverseAddQFTPhi(this QuantumComputer comp, Register a, Register b,
+            params RegisterRef[] controls)
         {
             Validate(a, b);
 
-            for (int j = 0; j < b.Width; j++)
+            for (var j = 0; j < b.Width; j++)
+            for (var i = 0; i <= j; i++)
             {
-                for (int i = 0; i <= j; i++)
-                {
-                    List<RegisterRef> list = controls.ToList<RegisterRef>();
-                    list.Add(a[i]);
-                    RegisterRef[] controls2 = list.ToArray();
-                    comp.InverseCPhaseShift(Math.Abs(j - i), b[j], controls2);
-                }
+                var list = controls.ToList();
+                list.Add(a[i]);
+                var controls2 = list.ToArray();
+                comp.InverseCPhaseShift(Math.Abs(j - i), b[j], controls2);
             }
         }
 
@@ -70,7 +63,8 @@ namespace Quantum.Operations
             comp.InverseQFT(b);
         }
 
-        public static void InverseAddQFT(this QuantumComputer comp, Register a, Register b, params RegisterRef[] controls)
+        public static void InverseAddQFT(this QuantumComputer comp, Register a, Register b,
+            params RegisterRef[] controls)
         {
             Validate(a, b);
             comp.QFT(b);
@@ -80,31 +74,27 @@ namespace Quantum.Operations
 
         public static void AddQFTPhi(this QuantumComputer comp, ulong a, Register b, params RegisterRef[] controls)
         {
-            bool[] aBin = Utils.getBinaryRepresentation(a, b.Width);
+            var aBin = Utils.getBinaryRepresentation(a, b.Width);
 
-            for (int i = b.Width - 1; i >= 0; i--)
+            for (var i = b.Width - 1; i >= 0; i--)
             {
                 //comp.ClassicalCPhaseShift(b[j], aBin[j], b.Width - j, controls);
-                double exp = 0.0;
+                var exp = 0.0;
 
-                for (int j = i; j >= 0; j--)
-                {
+                for (var j = i; j >= 0; j--)
                     //Console.WriteLine("InverseAdd i = {2}, N = {1}, a = {0}", a, j, i);
                     if (aBin[j])
-                    {
                         //comp.CPhaseShift(Math.Abs(i - j), b[i], controls);
-                        exp += (double)1 / ((double)(1 << (i - j)));
-                    }
-                }
+                        exp += 1 / (double)(1 << (i - j));
                 exp *= Math.PI;
                 comp.PhaseKick(exp, b[i], controls);
             }
-
         }
 
-        public static void InverseAddQFTPhi(this QuantumComputer comp, ulong a, Register b, params RegisterRef[] controls)
+        public static void InverseAddQFTPhi(this QuantumComputer comp, ulong a, Register b,
+            params RegisterRef[] controls)
         {
-            bool[] aBin = Utils.getBinaryRepresentation(a, b.Width);
+            var aBin = Utils.getBinaryRepresentation(a, b.Width);
             //for (int j = 0; j < b.Width; j++)
             //{
             //    for (int i = 0; i <= j; i++)
@@ -117,18 +107,14 @@ namespace Quantum.Operations
             //        }
             //    }
             //}
-            for (int i = 0; i < b.Width; i++)
+            for (var i = 0; i < b.Width; i++)
             {
-                double exp = 0.0;
+                var exp = 0.0;
 
-                for (int j = i; j >= 0; j--)
-                {
+                for (var j = i; j >= 0; j--)
                     if (aBin[j])
-                    {
-                        exp += (double)1 / ((double)(1 << (i - j)));
-                    }
-                }
-                exp *= ((double)-1) * Math.PI;
+                        exp += 1 / (double)(1 << (i - j));
+                exp *= -1 * Math.PI;
                 comp.PhaseKick(exp, b[i], controls);
             }
         }
@@ -152,18 +138,15 @@ namespace Quantum.Operations
         private static void Validate(Register a, Register b)
         {
             if (b.Width != a.Width)
-            {
-                throw new System.ArgumentException("Register b must be exactly the same size as register a.");
-            }
+                throw new ArgumentException("Register b must be exactly the same size as register a.");
         }
+
         private static void Validate(ulong a, Register b)
         {
-
             if (b.Width < Utils.CalculateRegisterWidth(a) + 1)
             {
                 //throw new System.ArgumentException("Register b must be larger or the same size as register a.");
             }
         }
     }
-
 }

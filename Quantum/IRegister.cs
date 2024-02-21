@@ -18,24 +18,29 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace Quantum
 {
-    interface IRegister
+    internal interface IRegister
     {
+        int OffsetToRoot { get; }
+        RegisterRef this[int index] { get; }
+        Register this[int offset, int width] { get; }
+        int Width { get; }
         void CNot(int target, int control);
         void CPhaseShift(int dist, int target, params int[] controls);
-        void Gate1(System.Numerics.Complex[,] matrix, int target, int? control = null);
+        void Gate1(Complex[,] matrix, int target, int? control = null);
         ulong? GetValue();
-        System.Collections.Generic.IReadOnlyDictionary<ulong, System.Numerics.Complex> GetAmplitudes();
-        System.Collections.Generic.IReadOnlyDictionary<ulong, double> GetProbabilities();
-        System.Numerics.Complex[] GetVector();
+        IReadOnlyDictionary<ulong, Complex> GetAmplitudes();
+        IReadOnlyDictionary<ulong, double> GetProbabilities();
+        Complex[] GetVector();
         void Hadamard(int target, int? control = null);
         void InverseCPhaseShift(int dist, int target, params int[] controls);
         void Reset(ulong newValue = 0);
         ulong Measure();
         byte Measure(int position);
-        int OffsetToRoot { get; }
         void PhaseKick(double gamma, int target, params int[] controls);
         void PhaseScale(double gamma, int target, int? control = null);
         void RotateX(double gamma, int target, int? control = null);
@@ -45,10 +50,7 @@ namespace Quantum
         void SigmaY(int target, int? control = null);
         void SigmaZ(int target, int? control = null);
         void SqrtX(int target, int? control = null);
-        RegisterRef this[int index] { get; }
-        Register this[int offset, int width] { get; }
         void Toffoli(int target, params int[] controls);
         string ToString();
-        int Width { get; }
     }
 }

@@ -18,17 +18,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Quantum.Algorithms
 {
     public interface Shor
     {
-
         int FindPeriod();
         void Initialize();
         void ClassicalPreprocess();

@@ -19,9 +19,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Quantum.Operations
 {
@@ -45,10 +42,10 @@ namespace Quantum.Operations
             ulong valueN)
         {
             ulong power2 = 1;
-            for (int i = 0; i < x.Width; i++, power2 *= 2)
+            for (var i = 0; i < x.Width; i++, power2 *= 2)
             {
                 // loading A register with (2^i * a) mod N
-                ulong toLoad = (valueA * power2) % valueN;
+                var toLoad = valueA * power2 % valueN;
                 comp.LoadNumber(a, toLoad, control, x[i]);
 
                 // adding [(2^i * a) + B] modulo N
@@ -62,10 +59,7 @@ namespace Quantum.Operations
             // then B register contains still 0
             // so we copy X register into B register
             comp.SigmaX(control);
-            for (int i = 0; i < x.Width; i++)
-            {
-                comp.Toffoli(b[i], control, x[i]);
-            }
+            for (var i = 0; i < x.Width; i++) comp.Toffoli(b[i], control, x[i]);
             comp.SigmaX(control);
         }
 
@@ -83,9 +77,9 @@ namespace Quantum.Operations
         {
             Validate(x, b, valueN);
 
-            Register a = comp.NewRegister(0, x.Width - 1);
-            Register c = comp.NewRegister(0, x.Width);
-            Register N = comp.NewRegister(valueN, x.Width - 1);
+            var a = comp.NewRegister(0, x.Width - 1);
+            var c = comp.NewRegister(0, x.Width);
+            var N = comp.NewRegister(valueN, x.Width - 1);
 
             comp.CMultModulo(a, b, c, N, x, control, valueA, valueN);
 
@@ -110,19 +104,16 @@ namespace Quantum.Operations
             // then the X register is copied into B register
             // so we uncopy it remaining 0
             comp.SigmaX(control);
-            for (int i = 0; i < x.Width; i++)
-            {
-                comp.Toffoli(b[i], control, x[i]);
-            }
+            for (var i = 0; i < x.Width; i++) comp.Toffoli(b[i], control, x[i]);
             comp.SigmaX(control);
 
-            ulong power2 = (ulong)(Math.Pow(2, x.Width - 1));
-            for (int i = x.Width - 1;
-                i >= 0;
-                i--, power2 /= 2)
+            var power2 = (ulong)Math.Pow(2, x.Width - 1);
+            for (var i = x.Width - 1;
+                 i >= 0;
+                 i--, power2 /= 2)
             {
                 // loading A register with (2^i * a) mod N
-                ulong toLoad = (valueA * power2) % valueN;
+                var toLoad = valueA * power2 % valueN;
                 comp.LoadNumber(a, toLoad, control, x[i]);
 
                 // inverse adding [(2^i * a) + B] modulo N
@@ -144,9 +135,9 @@ namespace Quantum.Operations
         {
             Validate(x, b, valueN);
 
-            Register a = comp.NewRegister(0, x.Width - 1);
-            Register c = comp.NewRegister(0, x.Width);
-            Register N = comp.NewRegister(valueN, x.Width - 1);
+            var a = comp.NewRegister(0, x.Width - 1);
+            var c = comp.NewRegister(0, x.Width);
+            var N = comp.NewRegister(valueN, x.Width - 1);
 
             comp.InverseCMultModulo(a, b, c, N, x, control, valueA, valueN);
 
@@ -160,14 +151,10 @@ namespace Quantum.Operations
             Register b,
             ulong valueN)
         {
-            if (b.Width != x.Width)
-            {
-                throw new System.ArgumentException("Registers b and x must have the same width.");
-            }
-            if ((valueN >> x.Width - 1) > 0)
-            {
-                throw new System.ArgumentException("Register x is too small. It must have enough space to store N, and one qubit more.");
-            }
+            if (b.Width != x.Width) throw new ArgumentException("Registers b and x must have the same width.");
+            if (valueN >> (x.Width - 1) > 0)
+                throw new ArgumentException(
+                    "Register x is too small. It must have enough space to store N, and one qubit more.");
         }
     }
 }

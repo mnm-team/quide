@@ -18,31 +18,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 namespace Quantum.Operations
 {
     /// <summary>
-    /// Simple extension for applying Hadamard gates on each qubit in <see cref="Quantum.Register"/>. 
-    /// Such operation is called Walsh-Hadamard transform.
+    ///     Simple extension for applying Hadamard gates on each qubit in <see cref="Quantum.Register" />.
+    ///     Such operation is called Walsh-Hadamard transform.
     /// </summary>
     public static class WalshExtension
     {
         /// <summary>
-        /// Applies the Walsh-Hadamard transform on given register. 
-        /// In other words, applies Hadamard gate on every qubit in the register.
+        ///     Applies the Walsh-Hadamard transform on given register.
+        ///     In other words, applies Hadamard gate on every qubit in the register.
         /// </summary>
-        /// <param name="comp">The <see cref="Quantum.QuantumComputer"/> instance.</param>
-        /// <param name="register">The <see cref="Quantum.Register"/> on which the operation is performed.</param>
+        /// <param name="comp">The <see cref="Quantum.QuantumComputer" /> instance.</param>
+        /// <param name="register">The <see cref="Quantum.Register" /> on which the operation is performed.</param>
         public static void Walsh(this QuantumComputer comp, Register register)
         {
-            for (int i = 0; i < register.Width; i++)
-            {
-                register.Hadamard(i);
-            }
+            for (var i = 0; i < register.Width; i++) register.Hadamard(i);
         }
     }
 }

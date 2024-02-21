@@ -19,28 +19,25 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Quantum.Operations
 {
     /// <summary>
-    /// Extensions performing Swap operations.
+    ///     Extensions performing Swap operations.
     /// </summary>
     public static class SwapExtension
     {
         /// <summary>
-        /// Swaps the values of two given qubits.
+        ///     Swaps the values of two given qubits.
         /// </summary>
-        /// <param name="comp">The <see cref="Quantum.QuantumComputer"/> instance.</param>
+        /// <param name="comp">The <see cref="Quantum.QuantumComputer" /> instance.</param>
         /// <param name="r1">The reference to the first swapped qubit.</param>
         /// <param name="r2">The reference to the second swapped qubit.</param>
         public static void Swap(this QuantumComputer comp, RegisterRef r1, RegisterRef r2)
         {
-            Register root = comp.GetRootRegister(r1, r2);
-            int target1 = r1.OffsetToRoot;
-            int target2 = r2.OffsetToRoot;
+            var root = comp.GetRootRegister(r1, r2);
+            var target1 = r1.OffsetToRoot;
+            var target2 = r2.OffsetToRoot;
 
             root.CNot(target1, target2);
             root.CNot(target2, target1);
@@ -48,9 +45,9 @@ namespace Quantum.Operations
         }
 
         /// <summary>
-        /// The controlled Swap. Swaps the values of two given qubits, if the control qubit is set.
+        ///     The controlled Swap. Swaps the values of two given qubits, if the control qubit is set.
         /// </summary>
-        /// <param name="comp">The <see cref="Quantum.QuantumComputer"/> instance.</param>
+        /// <param name="comp">The <see cref="Quantum.QuantumComputer" /> instance.</param>
         /// <param name="r1">The reference to the first swapped qubit.</param>
         /// <param name="r2">The reference to the second swapped qubit.</param>
         /// <param name="control">The reference to the control qubit.</param>
@@ -58,12 +55,12 @@ namespace Quantum.Operations
         {
             Validate(r1, r2);
 
-            Register root = comp.GetRootRegister(r1, r2, control);
-            int target1 = r1.OffsetToRoot;
-            int target2 = r2.OffsetToRoot;
-            int ctrl = control.OffsetToRoot;
+            var root = comp.GetRootRegister(r1, r2, control);
+            var target1 = r1.OffsetToRoot;
+            var target2 = r2.OffsetToRoot;
+            var ctrl = control.OffsetToRoot;
 
-            for (int i = 0; i < r1.Width; i++)
+            for (var i = 0; i < r1.Width; i++)
             {
                 //comp.Toffoli(root[target1 + i], root[target2 + i], root[ctrl]);
                 //comp.Toffoli(root[target2 + i], root[target1 + i], root[ctrl]);
@@ -76,18 +73,13 @@ namespace Quantum.Operations
 
         public static void Reverse(this QuantumComputer comp, Register a)
         {
-            for (int i = 0; i < a.Width / 2; i++)
-            {
-                comp.Swap(a[i], a[a.Width - 1 - i]);
-            }
+            for (var i = 0; i < a.Width / 2; i++) comp.Swap(a[i], a[a.Width - 1 - i]);
         }
 
         private static void Validate(Register a, Register b)
         {
             if (b.Width != a.Width)
-            {
-                throw new System.ArgumentException("Register b must be exactly the same size as register a.");
-            }
+                throw new ArgumentException("Register b must be exactly the same size as register a.");
         }
     }
 }

@@ -18,15 +18,17 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace Quantum
 {
-    interface IQuantumComputer
+    internal interface IQuantumComputer
     {
         void DeleteRegister(ref Register register);
         Register GetRootRegister(params RegisterRef[] refs);
         Register TensorProduct(Register r1, Register r2);
-        Register NewRegister(System.Collections.Generic.IDictionary<ulong, System.Numerics.Complex> initStates, int width);
+        Register NewRegister(IDictionary<ulong, Complex> initStates, int width);
         Register NewRegister(ulong initval, int width, int? size = null);
     }
 }
