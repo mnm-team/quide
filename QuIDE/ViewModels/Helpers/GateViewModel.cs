@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -17,8 +15,6 @@ using QuIDE.QuantumParser;
 using QuIDE.ViewModels.Controls;
 using QuIDE.ViewModels.Dialog;
 using QuIDE.Views.Dialog;
-
-#endregion
 
 namespace QuIDE.ViewModels.Helpers;
 

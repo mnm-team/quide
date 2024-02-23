@@ -452,6 +452,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
+    // TODO: what is object parameter?
     private void ClearCircuit(object parameter)
     {
         InitFromModel(ComputerModel.CreateModelForGUI());

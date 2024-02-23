@@ -206,7 +206,6 @@ public partial class Parser
         catch (NullReferenceException)
         {
             Console.WriteLine();
-            Console.WriteLine(@"No Register values to show");
         }
     }
 
