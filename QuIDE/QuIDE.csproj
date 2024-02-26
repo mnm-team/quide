@@ -41,6 +41,7 @@
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.9" />
         <PackageReference Include="AvaloniaEdit.TextMate" Version="11.0.6" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+        <PackageReference Include="DotNet.Bundle" Version="0.9.13" />
         <PackageReference Include="MessageBox.Avalonia" Version="3.1.5.1" />
         <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.8.0" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" />
@@ -118,4 +119,13 @@
     <ItemGroup>
         <ProjectReference Include="..\Quantum\Quantum.csproj"/>
     </ItemGroup>
+
+    <!-- Define things for dotnet-bundle for macOS-App -->
+    <PropertyGroup>
+        <CFBundleName>QuIDE</CFBundleName>
+        <CFBundleShortVersionString>2.1-dev</CFBundleShortVersionString>
+        <NSPrincipalClass>NSApplication</NSPrincipalClass>
+        <CFBundlePackageType>AAPL</CFBundlePackageType>
+        <NSRequiresAquaSystemAppearance>false</NSRequiresAquaSystemAppearance>
+    </PropertyGroup>
 </Project>

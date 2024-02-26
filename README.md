@@ -1,9 +1,9 @@
-# QuIDE 2.0
+# QuIDE 2
 
 Quantum Integrated Development Environment
 
 - fork of QuIDE 1.0.0 from [quide.eu](http://quide.eu/)
-- refactored with [Avalonia](https://www.avaloniaui.net/) to be cross-compilable on Linux and Windows
+- refactored with [Avalonia](https://www.avaloniaui.net/) to be cross-compilable on Linux, Windows and macOS.
 
 ## Run the app
 
@@ -22,8 +22,9 @@ Quantum Integrated Development Environment
 
 ### Build single-file-app
 
-- To build a single-file-app you can use dotnet publish, e.g.: `dotnet publish QuIDE/QuIDE.csproj -r <linux/win>-x64 -f net8.0 -p:PublishSingleFile=true --self-contained false -o out/`, then the App is at `out/QuIDE<.exe>` and all shared libraries (except dotnet-runtime) are included.
+- To build a single-file-app (Linux & Windows) you can use dotnet publish, e.g.: `dotnet publish QuIDE/QuIDE.csproj -r <linux/win>-x64 -p:PublishSingleFile=true --self-contained false -o out/`, then the App is at `out/QuIDE<.exe>` and all shared libraries (except dotnet-runtime) are included.
+- To build a .app on macOS you need two commands: `dotnet publish QuIDE/QuIDE.csproj -r osx-arm64` and `dotnet msbuild QuIDE/QuIDE.csproj -t:BundleApp -p:RuntimeIdentifier=osx-arm64`.
 
 ## Documentation
 
-- User Documentation for Version 1.0.0 can be found [here](https://bitbucket.org/quide/quide/downloads/UserManual_EN.pdf), which should also be suitable for newer versions. 
+- User Documentation of version 1.0.0 can be found [here](https://bitbucket.org/quide/quide/downloads/UserManual_EN.pdf), it should be suitable for newer versions too. 
