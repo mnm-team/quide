@@ -25,20 +25,30 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --configuration Release
     - name: Build Linux-single-file-app
-      run: dotnet publish QuIDE/QuIDE.csproj -r linux-x64 -f net8.0 -p:PublishSingleFile=true --self-contained false -o out/
-    - name: Build Windows-single-file-app
-      run: dotnet publish QuIDE/QuIDE.csproj -r win-x64 -f net8.0 -p:PublishSingleFile=true --self-contained false -o out/
-#    - name: Build macOS-single-file-app
-#      run: dotnet publish QuIDE/QuIDE.csproj -r osx-arm64 -f net8.0 -p:PublishSingleFile=true --self-contained false -o out/QuIDE.app
-    
+      run: dotnet publish QuIDE/QuIDE.csproj -r linux-x64 -f net8.0 -p:PublishSingleFile=true --self-contained false
 
+    - name: Build Windows-single-file-app
+      run: dotnet publish QuIDE/QuIDE.csproj -r win-x64 -f net8.0 -p:PublishSingleFile=true --self-contained false
+
+    - name: Build macOS
+      run: dotnet publish QuIDE/QuIDE.csproj -r osx-arm64
+    - name: build macOS app
+      run: dotnet msbuild QuIDE/QuIDE.csproj -t:BundleApp -p:Configuration=Release -p:RuntimeIdentifier=osx-arm64
+    
     - name: Upload Linux artifact
       uses: actions/upload-artifact@v3
       with:
         name: Linux App
-        path: out/QuIDE
+        path: QuIDE/bin/Release/net8.0/linux-x64/publish/QuIDE
+
     - name: Upload Windows artifact
       uses: actions/upload-artifact@v3
       with:
         name: Windows App
-        path: out/QuIDE.exe
+        path: QuIDE/bin/Release/net8.0/win-x64/publish/QuIDE.exe
+
+    - name: Upload macOS artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: macOS App
+        path: QuIDE/bin/Release/net8.0/osx-arm64/publish/QuIDE.app

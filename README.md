@@ -7,7 +7,7 @@ Quantum Integrated Development Environment
 
 ## Run the app
 
-- simply download the program in [Releases](https://github.com/mnm-team/quide/releases) section, there is a version for Windows and Linux precompiled
+- simply download the program in [Releases](https://github.com/mnm-team/quide/releases) section, there is a version for Windows, Linux (amd64) and macOS (arm64) precompiled.
 - to run the program on your machine, you only need the dotnet-8.0-runtime. It can be obtained by [Microsoft](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) or at your local packet manager, e.g. `dotnet-runtime-8.0` on Ubuntu.
 
 ## Compile everything by yourself
