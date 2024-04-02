@@ -15,9 +15,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
@@ -36,19 +36,19 @@ jobs:
       run: dotnet msbuild QuIDE/QuIDE.csproj -t:BundleApp -p:Configuration=Release -p:RuntimeIdentifier=osx-arm64
     
     - name: Upload Linux artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Linux App
         path: QuIDE/bin/Release/net8.0/linux-x64/publish/QuIDE
 
     - name: Upload Windows artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Windows App
         path: QuIDE/bin/Release/net8.0/win-x64/publish/QuIDE.exe
 
     - name: Upload macOS artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: macOS App
         path: QuIDE/bin/Release/net8.0/osx-arm64/publish/QuIDE.app

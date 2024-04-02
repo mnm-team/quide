@@ -1,4 +1,5 @@
 # QuIDE 2
+[![.NET](https://github.com/mnm-team/quide/actions/workflows/dotnet.yml/badge.svg)](https://github.com/mnm-team/quide/actions/workflows/dotnet.yml)
 
 Quantum Integrated Development Environment
 
