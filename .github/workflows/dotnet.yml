@@ -38,17 +38,17 @@ jobs:
     - name: Upload Linux artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Linux App
+        name: QuIDE Linux amd64
         path: QuIDE/bin/Release/net8.0/linux-x64/publish/QuIDE
 
     - name: Upload Windows artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Windows App
+        name: QuIDE Windows amd64
         path: QuIDE/bin/Release/net8.0/win-x64/publish/QuIDE.exe
 
     - name: Upload macOS artifact
       uses: actions/upload-artifact@v4
       with:
-        name: macOS App
+        name: QuIDE macOS arm64
         path: QuIDE/bin/Release/net8.0/osx-arm64/publish/QuIDE.app
