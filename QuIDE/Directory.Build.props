@@ -2,6 +2,6 @@
   <PropertyGroup>
     <Version>2.1</Version>
     <FileVersion>2.1</FileVersion>
-    <InformationalVersion>2.1-dev</InformationalVersion>
+    <InformationalVersion>2.1</InformationalVersion>
   </PropertyGroup>
 </Project>

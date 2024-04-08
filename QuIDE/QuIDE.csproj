@@ -123,7 +123,7 @@
     <!-- Define things for dotnet-bundle for macOS-App -->
     <PropertyGroup>
         <CFBundleName>QuIDE</CFBundleName>
-        <CFBundleShortVersionString>2.1-dev</CFBundleShortVersionString>
+        <CFBundleShortVersionString>2.1</CFBundleShortVersionString>
         <NSPrincipalClass>NSApplication</NSPrincipalClass>
         <CFBundlePackageType>AAPL</CFBundlePackageType>
         <NSRequiresAquaSystemAppearance>false</NSRequiresAquaSystemAppearance>
