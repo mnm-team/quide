@@ -1,15 +1,14 @@
 ﻿#region
 
+using QuIDE.QuantumModel;
+using QuIDE.QuantumModel.Gates;
+using QuIDE.QuantumParser;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Reflection;
 using System.Text;
-using QuIDE.QuantumModel;
-using QuIDE.QuantumModel.Gates;
-using QuIDE.QuantumParser;
 
 #endregion
 
@@ -17,121 +16,99 @@ namespace QuIDE.CodeHelpers;
 
 public class CodeGenerator
 {
-    private bool _rootNeeded = false;
+    private bool _rootNeeded;
 
-    public string GenerateCompositeExtensions(ComputerModel model, Dictionary<string, List<MethodCode>> methods)
+    private string GenerateCompositeExtensions(ComputerModel model, Dictionary<string, List<MethodCode>> methods)
     {
-        if (methods is { Count: > 0 } ||
-            model.CompositeGates.Count > 0)
+        if (methods is not { Count: > 0 } &&
+            model.CompositeGates.Count <= 0) return null;
+
+        var builder = new StringBuilder();
+
+        builder.AppendLine("\tpublic static class CompositeExtension");
+        builder.AppendLine("\t{");
+
+        if (methods != null)
+            foreach (var list in methods.Values)
+                foreach (var code in list)
+                    builder.Append("\t\t").AppendLine(code.Code);
+
+        foreach (var pair in model.CompositeGates)
         {
-            StringBuilder builder = new StringBuilder();
+            if (methods != null && methods.ContainsKey(pair.Key)) continue;
 
-            builder.AppendLine("\tpublic static class CompositeExtension");
-            builder.AppendLine("\t{");
+            const string regName = "regA";
 
-            if (methods != null)
+            builder.Append("\t\tpublic static void ").Append(pair.Key);
+            builder.Append("(this QuantumComputer comp, Register ");
+            builder.Append(regName).AppendLine(")");
+            builder.AppendLine("\t\t{");
+
+            const string indent = "\t\t\t";
+
+            var column = 0;
+            foreach (var gate in pair.Value)
             {
-                foreach (List<MethodCode> list in methods.Values)
-                {
-                    foreach (MethodCode code in list)
-                    {
-                        builder.Append("\t\t").AppendLine(code.Code);
-                    }
-                }
+                var gateString = GenerateGateCode(model, gate, column, indent, regName);
+                if (gateString.Length > 0) builder.Append(indent).AppendLine(gateString);
+
+                column++;
             }
 
-            foreach (var pair in model.CompositeGates)
-            {
-                if (methods == null || !methods.ContainsKey(pair.Key))
-                {
-                    string regName = "regA";
-
-                    builder.Append("\t\tpublic static void ").Append(pair.Key);
-                    builder.Append("(this QuantumComputer comp, Register ");
-                    builder.Append(regName).AppendLine(")");
-                    builder.AppendLine("\t\t{");
-
-                    string indent = "\t\t\t";
-
-                    int column = 0;
-                    foreach (Gate gate in pair.Value)
-                    {
-                        string gateString = GenerateGateCode(model, gate, column, indent, regName);
-                        if (gateString.Length > 0)
-                        {
-                            builder.Append(indent).AppendLine(gateString);
-                        }
-
-                        column++;
-                    }
-
-                    builder.AppendLine("\t\t}");
-                    builder.AppendLine();
-                }
-            }
-
-            builder.AppendLine("\t}");
-            return builder.ToString();
+            builder.AppendLine("\t\t}");
+            builder.AppendLine();
         }
-        else
-        {
-            return null;
-        }
+
+        builder.AppendLine("\t}");
+        return builder.ToString();
     }
 
     public string GenerateCode()
     {
-        CircuitEvaluator eval = CircuitEvaluator.GetInstance();
-        ComputerModel model = eval.Model;
-        Dictionary<string, List<MethodCode>> methodsCodes = eval.GetMethodsCodes();
+        var eval = CircuitEvaluator.GetInstance();
+        var model = eval.Model;
+        var methodsCodes = eval.GetMethodsCodes();
 
-        StringBuilder builder = new StringBuilder();
+        var builder = new StringBuilder();
         builder.AppendLine("using Quantum;");
         builder.AppendLine("using Quantum.Operations;");
         builder.AppendLine("using System;");
         builder.AppendLine("using System.Numerics;");
         builder.AppendLine("using System.Collections.Generic;");
         builder.AppendLine();
-        builder.AppendLine("namespace QuantumConsole");
+        builder.AppendLine("namespace QuantumConsole;");
+        builder.AppendLine();
+
+        var extensions = GenerateCompositeExtensions(model, methodsCodes);
+        if (!string.IsNullOrWhiteSpace(extensions)) builder.AppendLine(extensions);
+
+        builder.AppendLine("public class QuantumTest");
         builder.AppendLine("{");
-
-        string extensions = GenerateCompositeExtensions(model, methodsCodes);
-        if (!string.IsNullOrWhiteSpace(extensions))
-        {
-            builder.AppendLine(extensions);
-        }
-
-        builder.AppendLine("\tpublic class QuantumTest");
+        builder.AppendLine("\tpublic static void Main()");
         builder.AppendLine("\t{");
-        builder.AppendLine("\t\tpublic static void Main()");
-        builder.AppendLine("\t\t{");
-        builder.AppendLine("\t\t\tQuantumComputer comp = QuantumComputer.GetInstance();");
+        builder.AppendLine("\t\tQuantumComputer comp = QuantumComputer.GetInstance();");
 
-        string indent = "\t\t\t";
+        const string indent = "\t\t";
 
-        foreach (RegisterModel reg in model.Registers)
-        {
-            builder.AppendLine(GenerateRegisterCode(reg, indent));
-        }
+        foreach (var reg in model.Registers) builder.AppendLine(GenerateRegisterCode(reg, indent));
 
-        int rootDefPlace = builder.Length;
+        var rootDefPlace = builder.Length;
         _rootNeeded = false;
 
-        string stepCode;
-        for (int i = 0; i < model.Steps.Count; i++)
+        for (var i = 0; i < model.Steps.Count; i++)
         {
-            stepCode = GenerateStepCode(model, model.Steps[i], i, indent);
+            var stepCode = GenerateStepCode(model, model.Steps[i], i, indent);
             builder.Append(stepCode);
         }
 
         if (_rootNeeded)
         {
-            StringBuilder b = new StringBuilder();
+            var b = new StringBuilder();
             b.Append(indent).Append("Register root = comp.GetRootRegister(");
             b.Append(model.Registers[0].Name);
-            for (int i = 1; i < model.Registers.Count; i++)
+            for (var i = 1; i < model.Registers.Count; i++)
             {
-                RegisterModel reg = model.Registers[i];
+                var reg = model.Registers[i];
                 b.Append(" ,").Append(reg.Name);
             }
 
@@ -140,48 +117,43 @@ public class CodeGenerator
             builder.Insert(rootDefPlace, b.ToString());
         }
 
-        builder.AppendLine("\t\t}");
         builder.AppendLine("\t}");
         builder.AppendLine("}");
 
         return builder.ToString();
     }
 
-    private string GenerateRegisterCode(RegisterModel reg, string indent)
+    private static string GenerateRegisterCode(RegisterModel reg, string indent)
     {
         IDictionary<ulong, Complex> initStates = reg.InitStates;
         if (initStates.Count > 1)
         {
-            string initStatesName = reg.Name + "_initStates";
-            string initStatesDef = GenerateStatesDefinition(initStatesName, initStates, indent);
+            var initStatesName = reg.Name + "_initStates";
+            var initStatesDef = GenerateStatesDefinition(initStatesName, initStates, indent);
             return
                 $"{initStatesDef}{indent}Register {reg.Name} = comp.NewRegister({initStatesName}, {reg.Qubits.Count});";
         }
-        else if (initStates != null && initStates.Count > 0)
+
+        if (initStates is { Count: > 0 })
         {
-            ulong initState = initStates.Keys.First();
+            var initState = initStates.Keys.First();
             return $"{indent}Register {reg.Name} = comp.NewRegister({initState}, {reg.Qubits.Count});";
         }
-        else
-        {
-            return $"{indent}Register {reg.Name} = comp.NewRegister(0, {reg.Qubits.Count});";
-        }
+
+        return $"{indent}Register {reg.Name} = comp.NewRegister(0, {reg.Qubits.Count});";
     }
 
-    private string GenerateStatesDefinition(string varName, IDictionary<ulong, Complex> states, string indent)
+    private static string GenerateStatesDefinition(string varName, IDictionary<ulong, Complex> states, string indent)
     {
-        StringBuilder builder = new StringBuilder();
+        var builder = new StringBuilder();
         builder.Append(indent).Append("var ").Append(varName);
         builder.Append(" = new Dictionary<ulong, Complex>() {\n");
-        int i = 0;
-        foreach (KeyValuePair<ulong, Complex> pair in states)
+        var i = 0;
+        foreach (var pair in states)
         {
             builder.Append(indent).Append($"\t{{{pair.Key}, new Complex{pair.Value}}}");
             i++;
-            if (i < states.Count)
-            {
-                builder.Append(',');
-            }
+            if (i < states.Count) builder.Append(',');
 
             builder.AppendLine();
         }
@@ -193,17 +165,14 @@ public class CodeGenerator
 
     private string GenerateStepCode(ComputerModel model, StepModel step, int column, string indent)
     {
-        StringBuilder builder = new StringBuilder();
+        var builder = new StringBuilder();
         Gate lastGate = null;
-        foreach (Gate gate in step.Gates)
+        foreach (var gate in step.Gates)
         {
             if (gate != lastGate)
             {
                 var gateString = GenerateGateCode(model, gate, column, indent);
-                if (gateString.Length > 0)
-                {
-                    builder.Append(indent).AppendLine(gateString);
-                }
+                if (gateString.Length > 0) builder.Append(indent).AppendLine(gateString);
             }
 
             lastGate = gate;
@@ -219,8 +188,8 @@ public class CodeGenerator
         {
             if (g.Control.HasValue)
             {
-                string namedC = "control: ";
-                string namedT = "target: ";
+                var namedC = "control: ";
+                var namedT = "target: ";
                 if (g.Name != GateName.CNot)
                 {
                     namedC = "";
@@ -228,20 +197,13 @@ public class CodeGenerator
                 }
 
                 if (g.Control.Value.Register == g.Target.Register)
-                {
                     return
                         $"{GetRegName(g.Target.Register, defaultRegName)}.{begin}{namedT}{g.Target.Offset}, {namedC}{g.Control.Value.Offset});";
-                }
-                else
-                {
-                    return
-                        $"comp.{begin}{namedT}{GetRegName(g.Target.Register, defaultRegName)}[{g.Target.Offset}], {namedC}{GetRegName(g.Control.Value.Register, defaultRegName)}[{g.Control.Value.Offset}]);";
-                }
+                return
+                    $"comp.{begin}{namedT}{GetRegName(g.Target.Register, defaultRegName)}[{g.Target.Offset}], {namedC}{GetRegName(g.Control.Value.Register, defaultRegName)}[{g.Control.Value.Offset}]);";
             }
-            else
-            {
-                return $"{GetRegName(g.Target.Register, defaultRegName)}.{begin}{g.Target.Offset});";
-            }
+
+            return $"{GetRegName(g.Target.Register, defaultRegName)}.{begin}{g.Target.Offset});";
         }
 
         string AppendMoreControls(string begin, string beginComment, Gate g, RegisterRefModel[] controls)
@@ -249,19 +211,13 @@ public class CodeGenerator
             if (controls.All(x => x.Register == g.Target.Register) &&
                 (g.Control == null || g.Control.Value.Register == g.Target.Register))
             {
-                StringBuilder format = new StringBuilder(GetRegName(g.Target.Register, defaultRegName)).Append('.')
+                var format = new StringBuilder(GetRegName(g.Target.Register, defaultRegName)).Append('.')
                     .Append(begin);
                 format.Append(g.Target.Offset);
 
-                if (g.Control.HasValue)
-                {
-                    format.Append(", ").Append(g.Control.Value.Offset);
-                }
+                if (g.Control.HasValue) format.Append(", ").Append(g.Control.Value.Offset);
 
-                for (int i = 0; i < controls.Length; i++)
-                {
-                    format.Append(", ").Append(controls[i].Offset);
-                }
+                for (var i = 0; i < controls.Length; i++) format.Append(", ").Append(controls[i].Offset);
 
                 format.Append(");");
                 format.Append("\t\t// ").Append(beginComment).Append("<target_bit>, ... <control_bits> ...)");
@@ -269,29 +225,25 @@ public class CodeGenerator
             }
             else
             {
-                StringBuilder format = new StringBuilder("comp.").Append(begin);
+                var format = new StringBuilder("comp.").Append(begin);
                 format.Append(GetRegName(g.Target.Register, defaultRegName))
                     .Append('[')
                     .Append(g.Target.Offset)
                     .Append(']');
 
                 if (g.Control.HasValue)
-                {
                     format.Append(", ")
                         .Append(GetRegName(g.Control.Value.Register, defaultRegName))
                         .Append('[')
                         .Append(g.Control.Value.Offset)
                         .Append(']');
-                }
 
                 foreach (var rrm in controls)
-                {
                     format.Append(", ")
                         .Append(GetRegName(rrm.Register, defaultRegName))
                         .Append('[')
                         .Append(rrm.Offset)
                         .Append(']');
-                }
 
                 format.Append(");");
                 format.Append("\t\t// ").Append(beginComment).Append("<target_bit>, ... <control_bits> ...)");
@@ -312,119 +264,89 @@ public class CodeGenerator
             case GateName.SqrtX:
                 return AppendControlTarget("SqrtX(", gate);
             case GateName.RotateX:
-                RotateXGate rx = gate as RotateXGate;
+                var rx = gate as RotateXGate;
                 return AppendControlTarget($"RotateX({rx.Gamma}, ", gate);
             case GateName.RotateY:
-                RotateYGate ry = gate as RotateYGate;
+                var ry = gate as RotateYGate;
                 return AppendControlTarget($"RotateY({ry.Gamma}, ", gate);
             case GateName.RotateZ:
-                RotateZGate rz = gate as RotateZGate;
+                var rz = gate as RotateZGate;
                 return AppendControlTarget($"RotateZ({rz.Gamma}, ", gate);
             case GateName.PhaseKick:
-                PhaseKickGate pk = gate as PhaseKickGate;
+                var pk = gate as PhaseKickGate;
                 if (pk.Controls.Length > 0)
-                {
                     return AppendMoreControls(
                         $"PhaseKick({pk.Gamma}, ",
                         "PhaseKick(<gamma_value>, ",
                         gate,
                         pk.Controls);
-                }
-                else
-                {
-                    return AppendControlTarget($"PhaseKick({pk.Gamma}, ", gate);
-                }
+                return AppendControlTarget($"PhaseKick({pk.Gamma}, ", gate);
             case GateName.PhaseScale:
-                PhaseScaleGate ps = gate as PhaseScaleGate;
+                var ps = gate as PhaseScaleGate;
                 return AppendControlTarget($"PhaseScale({ps.Gamma}, ", gate);
             case GateName.CNot:
                 return AppendControlTarget("CNot(", gate);
             case GateName.CPhaseShift:
-                CPhaseShiftGate cps = gate as CPhaseShiftGate;
+                var cps = gate as CPhaseShiftGate;
                 if (cps.Controls.Length > 0)
-                {
                     return AppendMoreControls(
                         $"CPhaseShift({cps.Dist}, ",
                         "CPhaseShift(<phase_distance_value>, ",
                         gate,
                         cps.Controls);
-                }
-                else
-                {
-                    return AppendControlTarget($"CPhaseShift({cps.Dist}, ", gate);
-                }
+                return AppendControlTarget($"CPhaseShift({cps.Dist}, ", gate);
             case GateName.InvCPhaseShift:
-                InvCPhaseShiftGate icps = gate as InvCPhaseShiftGate;
+                var icps = gate as InvCPhaseShiftGate;
                 if (icps.Controls.Length > 0)
-                {
                     return AppendMoreControls(
                         $"InverseCPhaseShift({icps.Dist}, ",
                         "InverseCPhaseShift(<phase_distance_value>, ",
                         gate,
                         icps.Controls);
-                }
-                else
-                {
-                    return AppendControlTarget($"InverseCPhaseShift({icps.Dist}, ", gate);
-                }
+                return AppendControlTarget($"InverseCPhaseShift({icps.Dist}, ", gate);
             case GateName.Toffoli:
-                ToffoliGate t = gate as ToffoliGate;
+                var t = gate as ToffoliGate;
                 return AppendMoreControls(
                     "Toffoli(",
                     "Toffoli(",
                     gate,
                     t.Controls);
             case GateName.Measure:
-                MeasureGate m = gate as MeasureGate;
+                var m = gate as MeasureGate;
                 if (m.Begin == m.End)
-                {
                     return $"{GetRegName(m.Target.Register, defaultRegName)}.Measure({m.Target.Offset});";
-                }
-                else if (m.BeginRow.Register == m.EndRow.Register)
+
+                if (m.BeginRow.Register == m.EndRow.Register)
                 {
-                    string regName = GetRegName(m.BeginRow.Register, defaultRegName);
+                    var regName = GetRegName(m.BeginRow.Register, defaultRegName);
                     if (m.BeginRow.Register != null)
                     {
-                        if (m.End - m.Begin + 1 == m.BeginRow.Register.Qubits.Count)
-                        {
-                            return $"{regName}.Measure();";
-                        }
-                        else
-                        {
-                            StringBuilder builder = new StringBuilder();
-                            for (int i = m.BeginRow.Offset; i <= m.EndRow.Offset; i++)
-                            {
-                                builder.Append($"{regName}.Measure({i});\n");
-                            }
+                        if (m.End - m.Begin + 1 == m.BeginRow.Register.Qubits.Count) return $"{regName}.Measure();";
 
-                            return builder.ToString();
-                        }
+                        var builder = new StringBuilder();
+                        for (var i = m.BeginRow.Offset; i <= m.EndRow.Offset; i++)
+                            builder.Append($"{regName}.Measure({i});\n");
+
+                        return builder.ToString();
                     }
-                    else
-                    {
-                        if (m.End - m.Begin + 1 == model.TotalWidth)
-                        {
-                            return $"{regName}.Measure();";
-                        }
-                        else
-                        {
-                            StringBuilder builder = new StringBuilder();
-                            for (int i = m.BeginRow.Offset; i <= m.EndRow.Offset; i++)
-                            {
-                                builder.Append($"{regName}.Measure({i});\n");
-                            }
 
-                            return builder.ToString();
-                        }
+                    if (m.End - m.Begin + 1 == model.TotalWidth) return $"{regName}.Measure();";
+
+                    {
+                        var builder = new StringBuilder();
+                        for (var i = m.BeginRow.Offset; i <= m.EndRow.Offset; i++)
+                            builder.Append($"{regName}.Measure({i});\n");
+
+                        return builder.ToString();
                     }
                 }
-                else
+
                 {
-                    StringBuilder builder = new StringBuilder();
-                    int i = m.Begin;
+                    var builder = new StringBuilder();
+                    var i = m.Begin;
                     while (i <= m.End)
                     {
-                        RegisterRefModel regRef = model.GetRefFromOffset(i);
+                        var regRef = model.GetRefFromOffset(i);
                         if (i + regRef.Register.Qubits.Count < m.End + 2)
                         {
                             builder.Append($"{regRef.Register.Name}.Measure();\n");
@@ -440,10 +362,10 @@ public class CodeGenerator
                     return builder.ToString();
                 }
             case GateName.Unitary:
-                UnitaryGate u = gate as UnitaryGate;
-                string uMatrixName = "unitary_" + column + "_" + u.Target.OffsetToRoot;
-                string matrixDef = GenerateMatrixDefinition(uMatrixName, u.Matrix, indent);
-                string gateDef = AppendControlTarget($"Gate1({uMatrixName}, ", gate);
+                var u = gate as UnitaryGate;
+                var uMatrixName = "unitary_" + column + "_" + u.Target.OffsetToRoot;
+                var matrixDef = GenerateMatrixDefinition(uMatrixName, u.Matrix, indent);
+                var gateDef = AppendControlTarget($"Gate1({uMatrixName}, ", gate);
                 return $"{matrixDef}\n{indent}{gateDef}";
             case GateName.Parametric:
                 return GenerateParametricGateCode(gate as ParametricGate, defaultRegName);
@@ -451,13 +373,13 @@ public class CodeGenerator
                 return GenerateCompositeGateCode(gate as CompositeGate, defaultRegName);
             case GateName.Empty:
             default:
-                return String.Empty;
+                return string.Empty;
         }
     }
 
     private string GenerateMatrixDefinition(string varName, Complex[,] matrix, string indent)
     {
-        StringBuilder builder = new StringBuilder();
+        var builder = new StringBuilder();
 
         builder.Append("Complex[,] ").Append(varName);
         builder.Append(" = new Complex[2, 2];\n");
@@ -482,7 +404,7 @@ public class CodeGenerator
     {
         string AppendPar(object x)
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
 
             if (x is RegisterPartModel rm)
             {
@@ -505,16 +427,16 @@ public class CodeGenerator
             return builder.ToString();
         }
 
-        StringBuilder sb = new StringBuilder("comp.").Append(cg.FunctionName).Append('(');
+        var sb = new StringBuilder("comp.").Append(cg.FunctionName).Append('(');
 
-        ParameterInfo[] infos = cg.Method.GetParameters();
+        var infos = cg.Method.GetParameters();
 
-        for (int i = 1; i < cg.Parameters.Length; i++)
+        for (var i = 1; i < cg.Parameters.Length; i++)
         {
-            object par = cg.Parameters[i];
+            var par = cg.Parameters[i];
             if (infos[i].GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0)
             {
-                IEnumerable pars = par as IEnumerable;
+                var pars = par as IEnumerable;
                 foreach (var item in pars)
                 {
                     sb.Append(", ");
@@ -523,10 +445,7 @@ public class CodeGenerator
             }
             else
             {
-                if (i > 1)
-                {
-                    sb.Append(", ");
-                }
+                if (i > 1) sb.Append(", ");
 
                 sb.Append(AppendPar(par));
             }
@@ -539,10 +458,10 @@ public class CodeGenerator
 
     private string GenerateCompositeGateCode(CompositeGate cg, string defaultRegName = null)
     {
-        StringBuilder sb = new StringBuilder("comp.").Append(cg.FunctionName).Append('(');
-        RegisterPartModel rm = cg.TargetRegister;
+        var sb = new StringBuilder("comp.").Append(cg.FunctionName).Append('(');
+        var rm = cg.TargetRegister;
         sb.Append(GetRegName(rm.Register, defaultRegName));
-        if (rm.Register == null || (rm.Width != rm.Register.Qubits.Count))
+        if (rm.Register == null || rm.Width != rm.Register.Qubits.Count)
         {
             sb.Append('[').Append(rm.Offset).Append(", ");
             sb.Append(rm.Width).Append(']');
@@ -555,15 +474,9 @@ public class CodeGenerator
 
     private string GetRegName(RegisterModel reg, string defaultRegName)
     {
-        if (reg != null)
-        {
-            return reg.Name;
-        }
+        if (reg != null) return reg.Name;
 
-        if (defaultRegName != null)
-        {
-            return defaultRegName;
-        }
+        if (defaultRegName != null) return defaultRegName;
 
         _rootNeeded = true;
         return "root";
