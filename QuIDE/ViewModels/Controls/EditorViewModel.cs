@@ -1,13 +1,13 @@
+using Avalonia.Platform.Storage;
+using AvaloniaEdit.Document;
+using CommunityToolkit.Mvvm.Input;
+using QuIDE.CodeHelpers;
+using QuIDE.ViewModels.Helpers;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Platform.Storage;
-using AvaloniaEdit.Document;
-using QuIDE.CodeHelpers;
-using QuIDE.ViewModels.Helpers;
-using CommunityToolkit.Mvvm.Input;
 
 namespace QuIDE.ViewModels.Controls;
 
@@ -20,20 +20,19 @@ public partial class EditorViewModel : ViewModelBase
                                        using System.Numerics;
                                        using System.Collections.Generic;
 
-                                       namespace QuantumConsole
+                                       namespace QuantumConsole;
+
+                                       public class QuantumTest
                                        {
-                                           public class QuantumTest
+                                           public static void Main()
                                            {
-                                               public static void Main()
-                                               {
-                                                   QuantumComputer comp = QuantumComputer.GetInstance();
+                                               QuantumComputer comp = QuantumComputer.GetInstance();
                                        
-                                                   // create new register with initial value = 0, and width = 3
-                                                   Register x = comp.NewRegister(0, 3);
+                                               // create new register with initial value = 0, and width = 3
+                                               Register x = comp.NewRegister(0, 3);
                                        
-                                                   // example: apply Hadamard Gate on qubit number 0 (least significant)
-                                                   //x.Hadamard(0);
-                                               }
+                                               // example: apply Hadamard Gate on qubit number 0 (least significant)
+                                               //x.Hadamard(0);
                                            }
                                        }
                                        """;
@@ -121,8 +120,8 @@ public partial class EditorViewModel : ViewModelBase
         foreach (var storageFile in filesToOpen)
         {
             // dont open already opened files
-            if(Documents.Any(x => x.Editor.Document.FileName == storageFile.Name)) continue;
-            
+            if (Documents.Any(x => x.Editor.Document.FileName == storageFile.Name)) continue;
+
             await using var stream = await storageFile.OpenReadAsync();
             using var streamReader = new StreamReader(stream);
             // Reads all the content of file as a text.
@@ -138,14 +137,14 @@ public partial class EditorViewModel : ViewModelBase
         if (SelectedDocument is null) return;
 
         var location = SelectedDocument.Location;
-        
+
         // if file was not saved before, use saveAs to actually set location as well
         if (location is null)
         {
             await SaveDocumentAs();
             return;
         }
-        
+
         SelectedDocument.SaveDocument();
         NotifySaveCommands();
     }
