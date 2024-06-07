@@ -11,85 +11,107 @@
         x:DataType="vm:MainWindowViewModel"
         Title="QuIDE - Quantum Integrated Development Environment"
         WindowStartupLocation="CenterScreen">
-    <!-- Icon="/Assets/avalonia-logo.ico"> -->
-    <!-- SizeToContent="WidthAndHeight"> -->
+	<!-- Icon="/Assets/avalonia-logo.ico"> -->
+	<!-- SizeToContent="WidthAndHeight"> -->
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel />
-    </Design.DataContext>
+		<vm:MainWindowViewModel />
+	</Design.DataContext>
 
-    <Window.Resources>
-        <!-- TODO: styles -->
-        <!--Style x:Key="DefaultButton" Selector="Button" />
+	<Window.Resources>
+		<!-- TODO: styles -->
+		<!--Style x:Key="DefaultButton" Selector="Button" />
         <Style x:Key="FlatButton" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Selector="Button" />
         <Style x:Key="FlatRadioButton" BasedOn="{StaticResource {x:Static ToolBar.RadioButtonStyleKey}}" Selector="RadioButton" />
         <Style x:Key="FlatComboBox" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}" Selector="ComboBox" /-->
-    </Window.Resources>
+	</Window.Resources>
 
-    <Window.Styles>
-        <Style Selector="Border">
-            <Setter Property="BorderBrush" Value="LightGray" />
-        </Style>
-    </Window.Styles>
+	<Window.Styles>
+		<Style Selector="Border">
+			<Setter Property="BorderBrush" Value="LightGray" />
+		</Style>
 
-    <DockPanel Name="LayoutRoot">
-        <!-- Top level toolbar -->
-        <Border DockPanel.Dock="Top" BorderThickness="0 0 0 1">
-            <controls:TopLevelToolbar DataContext="{Binding }" />
-        </Border>
+		<Style Selector="GridSplitter">
+			<Setter Property="Background" Value="Gray" />
+		</Style>
+		<Style Selector="GridSplitter.verticalSplitter">
+			<Setter Property="MinWidth" Value="2" />
+			<!-- <Setter Property="Margin" Value="6,0" /> -->
+			<!-- <Setter Property="BorderBrush" Value="Transparent" /> -->
+			<!-- <Setter Property="BorderThickness" Value="3,0" /> -->
+			<!-- <Setter Property="HorizontalAlignment" Value="Stretch" /> -->
+		</Style>
+		<Style Selector="GridSplitter.horizontalSplitter">
+			<Setter Property="MinHeight" Value="2" />
+			<!-- <Setter Property="Margin" Value="0,6" /> -->
+		</Style>
+	</Window.Styles>
 
-        <DockPanel>
-            <DockPanel DockPanel.Dock="Right">
-                <!--########################################### Properties #############################################-->
-                <Border DockPanel.Dock="Bottom" BorderThickness="1 0 0 0">
-                    <ScrollViewer Padding="2">
-                        <controls:PropertiesPane
-                            x:Name="propertiesPane"
-                            DataContext="{Binding PropertiesPane}"
-                            HorizontalAlignment="Stretch"
-                            Margin="0"
-                            VerticalAlignment="Stretch" />
-                    </ScrollViewer>
-                </Border>
-                <!--########################################### OutputGrid #############################################-->
-                <Border BorderThickness="1 0 0 1">
-                    <controls:OutputGrid x:Name="outputGrid" DataContext="{Binding OutputGrid}"
-                                         HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" />
-                </Border>
-            </DockPanel>
+	<DockPanel Name="LayoutRoot">
+		<!-- Top level toolbar -->
+		<Border DockPanel.Dock="Top" BorderThickness="0 0 0 1">
+			<controls:TopLevelToolbar DataContext="{Binding }" />
+		</Border>
 
-            <Border DockPanel.Dock="Bottom" BorderThickness="0 1 0 0">
-                <TabControl TabStripPlacement="Bottom">
-                    <!--########################################### CircuitDesigner #############################################-->
-                    <TabItem Header="{x:Static p:Resources.CircuitDesigner}" x:Name="CircuitTab">
-                        <DockPanel>
-                            <controls:CircuitGridToolbar DataContext="{Binding}" DockPanel.Dock="Top" />
-                            <controls:CircuitGrid x:Name="circuitGrid" DataContext="{Binding CircuitGrid}"
+		<Grid ColumnDefinitions="*,2,Auto">
+			<!--########################################### Left Column #################################-->
+			<Grid Grid.Row="0" RowDefinitions="1.5*, 2, Auto">
+				<!--########################################### Editor ##############################################-->
+				<Panel Grid.Row="0">
+					<controls:Editor DataContext="{Binding EditorPane}" />
+				</Panel>
+
+				<GridSplitter Classes="horizontalSplitter" Grid.Row="1" ResizeDirection="Rows" />
+
+				<!--########################################### CircuitDesigner/Console #################################-->
+				<TabControl Grid.Row="2" TabStripPlacement="Bottom">
+					<!--########################################### CircuitDesigner #############################################-->
+					<TabItem Header="{x:Static p:Resources.CircuitDesigner}" x:Name="CircuitTab">
+						<DockPanel>
+							<controls:CircuitGridToolbar DataContext="{Binding}" DockPanel.Dock="Top" />
+							<controls:CircuitGrid x:Name="circuitGrid" DataContext="{Binding CircuitGrid}"
                                                   HorizontalAlignment="Stretch" Margin="0"
                                                   VerticalAlignment="Stretch" />
-                        </DockPanel>
-                    </TabItem>
+						</DockPanel>
+					</TabItem>
 
-                    <!--########################################### Console Output #############################################-->
-                    <TabItem Header="{x:Static p:Resources.ConsoleOutput}" x:Name="ConsoleTab">
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                            <TextBox
+					<!--########################################### Console Output #############################################-->
+					<TabItem Header="{x:Static p:Resources.ConsoleOutput}" x:Name="ConsoleTab">
+						<ScrollViewer HorizontalScrollBarVisibility="Auto">
+							<TextBox
                                 IsReadOnly="True"
                                 Text="{Binding ConsoleOutput, Mode=OneWay}"
                                 FontFamily="Consolas"
                                 Background="{DynamicResource {x:Static drawing:SystemColors.Info}}"
                                 Foreground="{DynamicResource {x:Static drawing:SystemColors.InfoText}}" />
-                        </ScrollViewer>
-                    </TabItem>
-                </TabControl>
-            </Border>
+						</ScrollViewer>
+					</TabItem>
+				</TabControl>
+			</Grid>
 
-            <Panel>
-                <!--########################################### Editor #############################################-->
-                <controls:Editor DataContext="{Binding EditorPane}" />
-            </Panel>
-        </DockPanel>
-    </DockPanel>
+			<GridSplitter Classes="verticalSplitter" Grid.Column="1" ResizeDirection="Columns" />
+
+			<!--########################################### Right Column #################################-->
+			<Grid Grid.Column="2" RowDefinitions="1.5*, 2, *">
+				<!--########################################### OutputGrid ##########################################-->
+				<controls:OutputGrid Grid.Row="0" x:Name="outputGrid" DataContext="{Binding OutputGrid}"
+                                     HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" />
+
+
+				<GridSplitter Classes="horizontalSplitter" Grid.Row="1" ResizeDirection="Rows" />
+
+				<!--########################################### Properties ##########################################-->
+				<ScrollViewer Grid.Row="2" Padding="2">
+					<controls:PropertiesPane
+                        x:Name="propertiesPane"
+                        DataContext="{Binding PropertiesPane}"
+                        HorizontalAlignment="Stretch"
+                        Margin="0"
+                        VerticalAlignment="Stretch" />
+				</ScrollViewer>
+			</Grid>
+		</Grid>
+	</DockPanel>
 </Window>
