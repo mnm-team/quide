@@ -1,11 +1,13 @@
 ﻿#region
 
 using System;
+using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Media;
+using QuIDE.CodeHelpers;
 using QuIDE.QuantumModel;
 using QuIDE.ViewModels;
 using QuIDE.ViewModels.Controls;
@@ -93,7 +95,16 @@ public partial class CircuitGrid : UserControl
         var dragData = new DataObject();
         dragData.Set(typeof(Tuple<int, RegisterRefModel>).ToString(), data);
 
-        DragDrop.DoDragDrop(e, dragData, DragDropEffects.Link);
+        try
+        {
+            DragDrop.DoDragDrop(e, dragData,DragDropEffects.Link);
+        }
+        catch (COMException exception)
+        {
+            var msg = exception.Message;
+            Console.WriteLine(exception);
+            // SimpleDialogHandler.ShowSimpleMessage(msg);
+        }
     }
 
     private void ctrlPoint_Drop(object sender, PointerEventArgs pointerEventArgs)
