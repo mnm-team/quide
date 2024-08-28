@@ -8,6 +8,8 @@
         <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
         <!-- for Parser.cs we need an unsafe block for a pointer to get the assemblies in a single-file-app -->
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <!-- needed for macOS App -->
+        <UseAppHost>true</UseAppHost>
     </PropertyGroup>
 
     <ItemGroup>
@@ -41,7 +43,7 @@
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.10" />
         <PackageReference Include="AvaloniaEdit.TextMate" Version="11.0.6" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-        <PackageReference Include="DotNet.Bundle" Version="0.9.13" />
+        <PackageReference Include="DotNet.Bundle" Version="*" />
         <PackageReference Include="MessageBox.Avalonia" Version="3.1.5.1" />
         <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.10.0" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.10.0" />
@@ -122,10 +124,13 @@
 
     <!-- Define things for dotnet-bundle for macOS-App -->
     <PropertyGroup>
-        <CFBundleName>QuIDE</CFBundleName>
+        <CFBundleName>QuIDE 2</CFBundleName>
         <CFBundleShortVersionString>2.2-dev</CFBundleShortVersionString>
         <NSPrincipalClass>NSApplication</NSPrincipalClass>
         <CFBundlePackageType>AAPL</CFBundlePackageType>
         <NSRequiresAquaSystemAppearance>false</NSRequiresAquaSystemAppearance>
+        <NSHighResolutionCapable>true</NSHighResolutionCapable>
+        <CFBundleSignature>????</CFBundleSignature>
+        <CFBundleExecutable>QuIDE</CFBundleExecutable>
     </PropertyGroup>
 </Project>
