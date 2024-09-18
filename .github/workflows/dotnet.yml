@@ -30,21 +30,6 @@ jobs:
     - name: Build Windows-single-file-app
       run: dotnet publish QuIDE/QuIDE.csproj -r win-x64 -f net8.0 -p:PublishSingleFile=true --self-contained false
     
-    - name: Build macOS software
-      run: dotnet publish QuIDE/QuIDE.csproj -r osx-arm64
-
-    - name: build macOS single-file-app
-      run: dotnet msbuild QuIDE/QuIDE.csproj -t:BundleApp -p:Configuration=Release -p:RuntimeIdentifier=osx-arm64  -p:UseAppHost=true
-    
-      # will later be put in .dmg
-    - name: Upload macOS App
-      uses: actions/upload-artifact@v4
-      with:
-        name: QuIDE.app
-        path: QuIDE/bin/Release/net8.0/osx-arm64/publish/QuIDE.app
-        compression-level: 0
-        retention-days: 1
-
     - name: Upload Linux artifact
       uses: actions/upload-artifact@v4
       with:
@@ -57,24 +42,33 @@ jobs:
         name: QuIDE Windows amd64
         path: QuIDE/bin/Release/net8.0/win-x64/publish/QuIDE.exe
 
-  build-dmg:
+  build-on-macos:
     # the dmg-step doesn't work on linux
     runs-on: macos-latest
-    needs: [build]
 
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
-          name: QuIDE.app
-          path: QuIDE.app
+          dotnet-version: 8.0.x
+      - name: Restore dependencies
+        run: dotnet restore
 
-      # here we could sign the app if we had a certificate
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Build macOS software
+        run: dotnet publish QuIDE/QuIDE.csproj -r osx-arm64
+
+      - name: build macOS app
+        run: dotnet msbuild QuIDE/QuIDE.csproj -t:BundleApp -p:Configuration=Release -p:RuntimeIdentifier=osx-arm64  -p:UseAppHost=true
   
       - name: create macOS dmg
         uses: L-Super/create-dmg-actons@v1.0.3
         with:
           dmg_name: QuIDE
-          src_dir: QuIDE.app
+          src_dir: QuIDE/bin/Release/net8.0/osx-arm64/publish/QuIDE.app
     
       - name: Upload macOS artifact
         uses: actions/upload-artifact@v4
