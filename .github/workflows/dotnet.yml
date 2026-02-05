@@ -19,28 +19,28 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 10.0.x
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore --configuration Release
     - name: Build Linux-single-file-app
-      run: dotnet publish QuIDE/QuIDE.csproj -r linux-x64 -f net8.0 -p:PublishSingleFile=true --self-contained false
+      run: dotnet publish QuIDE/QuIDE.csproj -r linux-x64 -f net10.0 -p:PublishSingleFile=true --self-contained false
 
     - name: Build Windows-single-file-app
-      run: dotnet publish QuIDE/QuIDE.csproj -r win-x64 -f net8.0 -p:PublishSingleFile=true --self-contained false
+      run: dotnet publish QuIDE/QuIDE.csproj -r win-x64 -f net10.0 -p:PublishSingleFile=true --self-contained false
     
     - name: Upload Linux artifact
       uses: actions/upload-artifact@v4
       with:
         name: QuIDE Linux amd64
-        path: QuIDE/bin/Release/net8.0/linux-x64/publish/QuIDE
+        path: QuIDE/bin/Release/net10.0/linux-x64/publish/QuIDE
 
     - name: Upload Windows artifact
       uses: actions/upload-artifact@v4
       with:
         name: QuIDE Windows amd64
-        path: QuIDE/bin/Release/net8.0/win-x64/publish/QuIDE.exe
+        path: QuIDE/bin/Release/net10.0/win-x64/publish/QuIDE.exe
 
   build-on-macos:
     # the dmg-step doesn't work on linux
@@ -51,7 +51,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 10.0.x
       - name: Restore dependencies
         run: dotnet restore
 
@@ -68,7 +68,7 @@ jobs:
         uses: L-Super/create-dmg-actons@v1.0.3
         with:
           dmg_name: QuIDE
-          src_dir: QuIDE/bin/Release/net8.0/osx-arm64/publish/QuIDE.app
+          src_dir: QuIDE/bin/Release/net10.0/osx-arm64/publish/QuIDE.app
     
       - name: Upload macOS artifact
         uses: actions/upload-artifact@v4

@@ -2,7 +2,7 @@
     <PropertyGroup>
         <OutputType>Library</OutputType>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <DocumentationFile>bin\Debug\Quantum.XML</DocumentationFile>
@@ -24,7 +24,6 @@
         <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
         <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0"/>
         <PackageReference Include="MathNet.Numerics" Version="5.0.0"/>
     </ItemGroup>

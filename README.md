@@ -11,24 +11,24 @@ Cross Platform Quantum Circuit Simulator
 ## Run the app
 
 - simply download the application in the [Releases](https://github.com/mnm-team/quide/releases) section, there is a version for Windows, Linux (amd64) and macOS (arm64) precompiled.
-- to run the program on your machine, you need the dotnet-8.0-runtime. It can be obtained by [Microsoft](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) or at your local packet manager, e.g. `dotnet-runtime-8.0` on Ubuntu.
+- to run the program on your machine, you need the dotnet-8.0-runtime. It can be obtained by [Microsoft](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) or at your local packet manager, e.g. `dotnet-runtime-10.0` on Ubuntu.
 - on Linux it can be necessary to set the file as executable for your user (`chmod +x QuIDE`) after unzipping.
 - we don't have a developer ID for macOS, so you may need to use the following command: `xattr -cr /Applications/QuIDE.app` after installation (especially when macOS tells the app is broken).
 
 ## Compile by yourself
 
-- Install the .NET-SDK 8.0, which can be found at [Microsoft](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) or at your local packet manager, e.g. `dotnet-sdk-8.0` on Ubuntu.
+- Install the .NET-SDK 10.0, which can be found at [Microsoft](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) or at your local packet manager, e.g. `dotnet-sdk-10.0` on Ubuntu.
 - Run `dotnet build --configuration Release` in the repository
 
 ### Start program
 
-- Run `QuIDE/bin/Release/net8.0/QuIDE<.exe/.app>`
-- You can find the Quantum.dll at `Quantum/bin/Release/net8.0/Quantum.dll`
+- Run `QuIDE/bin/Release/net10.0/QuIDE<.exe/.app>`
+- You can find the Quantum.dll at `Quantum/bin/Release/net10.0/Quantum.dll`
 
 ### Build single-file-app
 
 - To build a single-file-app (Linux & Windows) you can use dotnet publish, e.g.: `dotnet publish QuIDE/QuIDE.csproj -r <linux/win>-x64 -p:PublishSingleFile=true --self-contained false -o out/`, then the App is at `out/QuIDE<.exe>` and all shared libraries (except dotnet-runtime) are included.
-- To build a .app on macOS you need two commands: `dotnet publish QuIDE/QuIDE.csproj -r osx-arm64` and `dotnet msbuild QuIDE/QuIDE.csproj -t:BundleApp -p:RuntimeIdentifier=osx-arm64 -property:Configuration=Release -p:UseAppHost=true`. Then you find it at `QuIDE/bin/Release/net8.0/osx-arm64/publish/QuIDE.app`.
+- To build a .app on macOS you need two commands: `dotnet publish QuIDE/QuIDE.csproj -r osx-arm64` and `dotnet msbuild QuIDE/QuIDE.csproj -t:BundleApp -p:RuntimeIdentifier=osx-arm64 -property:Configuration=Release -p:UseAppHost=true`. Then you find it at `QuIDE/bin/Release/net10.0/osx-arm64/publish/QuIDE.app`.
 
 ## Documentation
 
